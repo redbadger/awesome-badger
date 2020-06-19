@@ -1,4 +1,4 @@
-![Sally](./sally.svg | width=100)
+<img src="./sally.svg" width="50"/>
 
 # Awesome Badger
 
