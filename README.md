@@ -1,4 +1,6 @@
-# <img src="./sally.svg" style="height: 1em; margin-bottom: 0.2em;"/> Awesome Badger
+<img src="./sally.svg" style="height: 2em;"/>
+
+# Awesome Badger
 
 Assorted thinking (mostly) about technology written by the Badgers.
 
