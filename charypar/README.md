@@ -4,7 +4,7 @@ I'm a Tech Director in Cell A. At some point I'll write more about what I do and
 
 ## Writing
 
-### Extending Istio with Rust and WebAssembly
+### [Extending Istio with Rust and WebAssembly](proxy-wasm-1)
 
 20th April 2020
 
