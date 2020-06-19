@@ -1,6 +1,6 @@
 # Extending Istio with Rust and WebAssembly
 
-_Viktor Charypar — 20th April 2020_
+_[Viktor Charypar](../) — 20th April 2020_
 
 [Istio](https://istio.io) recently released version 1.5, and one of the major changes in it is the [deprecation of Mixer](https://istio.io/docs/tasks/policy-enforcement/) in favour of [WebAssembly Envoy filters](https://istio.io/blog/2020/wasm-announce/). If none of that sentence made sense to you, but you want to extend Istio or Envoy with custom behaviour, read that last link for some more context, it's a very good summary of the thinking behind the change.
 
