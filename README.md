@@ -1,3 +1,5 @@
+<img src="./sally.svg" width="50"/>
+
 # Awesome Badger
 
 Assorted thinking (mostly) about technology written by the Badgers.
