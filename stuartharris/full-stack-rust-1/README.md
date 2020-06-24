@@ -44,7 +44,7 @@ These are some of the [crates][crates] we used in each component:
 
   - [`sqlx`][sqlx] – I moved here from [`diesel`][diesel] because I don't really like ORMs. Instead I get to specify the actual SQL queries, which are type-checked at compile-time against the schema, and results are automatically deserialized into my types. It's really cool, as I hope you'll see below.
 
-  - [`tide`][tide] – this is an idiomatic Rust web server, and very familiar if you're used to Express in JS-land. I also really like its sister HTTP client: [`surf`][surf], which is has a really nice API.
+  - [`tide`][tide] – this is an idiomatic Rust web server, and very familiar if you're used to Express in JS-land. I also really like its sister HTTP client, [`surf`][surf], which has a really nice API.
 
   - [`smol`][smol] – this crate is pure genius! I've used [`tokio`][tokio] and [`async-std`][async-std], both of which are excellent async runtimes, but `smol` takes it to another level. Small, fast, complete, flexible and simple, with no `unsafe` – *and* it integrates seemlessly with crates that are already in either of the `tokio` or `async-std` camps.
 
@@ -196,7 +196,7 @@ impl QueryRoot {
 }
 ```
 
-If you ignore the lifetime type parameter on `Context`, I think you could probably say that this is simpler than the JavaScript equivalent! And this code includes full error handling (it's easy to miss the `?` operator).
+If you ignore the lifetime type parameter on `Context`, I think you could probably say that this is simpler than the JavaScript equivalent! And this code generates the schema, and includes full error handling (it's easy to miss the `?` operator).
 
 Mutations follow the same pattern and are just as simple.
 
@@ -239,6 +239,33 @@ pub async fn create_app(database_url: &str) -> Result<Server<graphql::State>> {
     Ok(app)
 }
 ```
+
+And then all that's left to do is instantiate the web server (this is `main.js`):
+
+```rust
+use anyhow::Result;
+use dotenv::dotenv;
+use std::env;
+
+fn main() -> Result<()> {
+    dotenv().ok();
+    env_logger::init();
+
+    smol::run(start(
+        &env::var("DATABASE_URL").expect("the environment variable DATABASE_URL is not set"),
+    ))
+}
+
+async fn start(database_url: &str) -> Result<()> {
+    let app = todomvc_api::create_app(database_url).await?;
+    app.listen("0.0.0.0:3030").await?;
+    Ok(())
+}
+```
+
+That's actually it! There is literally nothing more to it.
+
+A GraphQL API with queries and mutations (not shown here, but just as easy), backed onto a SQL database, that can turn around queries in 2ms – in just 227 lines of Rust. Check out the full source code at https://github.com/redbadger/feature-targeting/samples/todomvc_api.
 
 [async-graphql]: https://docs.rs/async-graphql/1.16.0/async_graphql/
 [async-std]: https://docs.rs/async-std
