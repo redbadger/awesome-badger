@@ -32,7 +32,7 @@ but some of them may be usefull already. The more you harrass me about them, the
 - [Monobuild](https://github.com/charypar/monobuild) - a lightweight build orchestration tool for monorepos, which can tell you which components to build depending on changes made on a branch.
 - [Github Projects tracking for delivery](https://github.com/charypar/github-projects-reporting) - a simple service fetching staticstics about moves in GitHub projects kanban boards and exporting them as CSV, so they can be used in tracking spreadsheets.
 - [Badger Map](https://github.com/redbadger/badger-map) - a map of where all the Badgers live (if they chose to share their location)
-- [Immutable Versioning](https://imver.github.io/) - A proposal for a versioning scheme that is less complicated and more practically useful then SemVer.
+- [Immutable Versioning](https://imver.github.io/) - A proposal for a versioning scheme that is less complicated and more practically useful than SemVer.
 
 ## Writing
 
