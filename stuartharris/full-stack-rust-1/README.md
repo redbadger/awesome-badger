@@ -46,7 +46,7 @@ These are some of the [crates][crates] we used in each component:
 
   - [`tide`][tide] – this is an idiomatic Rust web server, and very familiar if you're used to Express in JS-land. I also really like its sister HTTP client, [`surf`][surf], which has a really nice API.
 
-  - [`smol`][smol] – this crate is pure genius! I've used [`tokio`][tokio] and [`async-std`][async-std], both of which are excellent async runtimes, but `smol` takes it to another level. Small, fast, complete, flexible and simple, with no `unsafe` – *and* it integrates seemlessly with crates that are already in either of the `tokio` or `async-std` camps.
+  - [`smol`][smol] – this crate is pure genius! I've used [`tokio`][tokio] and [`async-std`][async-std], both of which are excellent async runtimes, but `smol` takes it to another level. Small, fast, complete, flexible and simple, with no `unsafe` – *and* it integrates seamlessly with crates that are already in either of the `tokio` or `async-std` camps.
 
 - _The Web Server_
 
@@ -149,7 +149,7 @@ RETURNING id,
 
 Nothing stands still in the Rust ecosystem. Not long ago, [`juniper`][juniper] was the go to choice for a GraphQL server. But I had to specify the github repo in my `Cargo.toml` to get async support, and it all feels a bit messy now. I was happy to find [`async-graphql`][async-graphql], which is similar and more modern, easy to switch to, and has a nicer and simpler API.
 
-The introduction of `SimpleObject` for objects whose fields don't, themselves, have resolvers is a nice touch. The new [GraphQL Playground][graphql-playground], which is the default, is a much improved experience (when compared to the older [GrapiQL][graphiql] UI), and makes working with the API a dream.
+The introduction of `SimpleObject` for objects whose fields don't, themselves, have resolvers is a nice touch. The new [GraphQL Playground][graphql-playground], which is the default, is a much improved experience (when compared to the older [GraphiQL][graphiql] UI), and makes working with the API a dream.
 
 When we need to handle an incoming GraphQL query, we simply increment the reference count on the schema (which is in the request's state) and pass it into the executor:
 
@@ -265,13 +265,215 @@ async fn start(database_url: &str) -> Result<()> {
 
 That's actually it! There is literally nothing more to it.
 
-A GraphQL API with queries and mutations (not shown here, but just as easy), backed onto a SQL database, that can turn around queries in 2ms – in just 227 lines of Rust. Check out the full source code at https://github.com/redbadger/feature-targeting/samples/todomvc_api.
+A GraphQL API with queries and mutations (not shown here, but just as easy), backed onto a SQL database, that can turn around queries in 2ms – and it comes in at under 200 lines of Rust. Check out the full source code at [https://github.com/redbadger/feature-targeting/samples/todomvc_api][todomvc_api].
+
+### Web UI
+
+This is the fun bit!
+
+All modern web browsers support [WebAssembly][wasm], and Firefox has supported it since March 2017. Currently [91.39%][caniuse] of requests made globally are from browsers that support WASM. This might not be enough for every use-case, especially internal apps at Microsoft shops (IE 11 is, as always, the main offender here), but it does feel to me that the time has come for us to be able to have WASM web apps, and I would flippantly suggest that those using IE11 should use something else instead!
+
+Additionally, there is currently a beautiful love affair ❤️ going on between Rust and WASM. The toolchain is superb, with `wasm-*` targets fully supported. And as with all things Rust, there is a [book about it][rust-and-wasm-book].
+
+When I was adding auth support to the Todo MVC app, I figured it'd be nice to do [OAuth2 implicit flow][oauth2-implicit]. I wanted to generate a real [`JWT`][jwt] token, so that we can use the claims inside it (e.g. email) to control both client-side and server-side features. Strictly speaking, these days, we should, instead, use the [OAuth2 authorization code flow][oauth2-code] with the [PKCE][pkce] (pronounced like the word "pixie") extension. As with the implicit flow, we don't need to give the client secret to the browser. But because this is only a demo I decided to not worry too much (I don't even validate or renew expired tokens, but you definitely should in a real app).
+
+OK let's get on with it.
+
+#### Bootstrapping a Rust WASM app
+
+I guess the place to start is with the `Cargo.toml` which needs to specify that we need a C-compatible dynamic library, and that we want `wasm-bindgen` to generate the interface for the WASM runtime. Here are the relevant bits:
+
+```toml
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2.63"
+```
+
+Then we just need to annotate a function as our entry-point:
+
+```rust
+#[wasm_bindgen(start)]
+pub fn create_app() {
+    // App::builder(update, view)
+    //     .after_mount(after_mount)
+    //     .build_and_start();
+}
+```
+
+This is where we will create the [`seed`][seed] app. In the meantime, we need to load the binary in the web page and mount our app on a DOM node (the default `id` for the mount-point is `app`). These are the relevant parts of `index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-framework="rust">
+  <body>
+    <section id="app" class="todoapp"></section>
+    <script type="module">
+      import init from "/pkg/todomvc.js";
+      init("/pkg/todomvc_bg.wasm");
+    </script>
+  </body>
+</html>
+```
+
+We can easily build the WASM module using [`wasm-pack`][wasm-pack] (by default into a file named after the crate, and in a directory named `pkg`):
+
+```sh
+wasm-pack build --target web
+```
+
+and host it using a simple static webserver (for now):
+
+```sh
+npm install -g httpserver
+httpserver&
+```
+
+#### The `seed` application
+
+It's good that there are a few choices of web frameworks in the Rust ecosystem. We mentioned [`yew`][yew], which is probably the most popular. We're using [`seed`][seed] here because I don't feel the need for `jsx` syntax. IMO it complicates the boundaries between the declarative and imperative parts of the view. It seems clearer just to stay in pure Rust syntax as much as possible. Rust has a very powerful macro subsystem, and I think `seed` makes good use of its macros.
+
+For example, in the screenshot, look at the "All", "Active" and "Completed" filter buttons, and at how they are implemented in the code-box below:
+
+![ui screenshot](ui.png)
+
+```rust
+fn view_filters(current_filter: TodoFilter) -> Node<Msg> {
+    ul![
+        C!["filters"],
+        view_filter("All", TodoFilter::All, current_filter),
+        view_filter("Active", TodoFilter::Active, current_filter),
+        view_filter("Completed", TodoFilter::Completed, current_filter),
+    ]
+}
+
+fn view_filter(title: &str, filter: TodoFilter, current_filter: TodoFilter) -> Node<Msg> {
+    li![a![
+        C![IF!(filter == current_filter => "selected")],
+        attrs! {
+            At::Href => format!("/{}", filter.to_url_path())
+        },
+        style! {St::Cursor => "pointer"},
+        title
+    ]]
+}
+```
+
+Notice how the filter-button component, `view_filter`, is literally just a function. The macros take any number, of any type of arguments, in any order. There's a macro for each HTML element and you can have `svg!`, `md!` and `custom!` elements, amongst others, for SVG, Markdown and custom elements respectively. The `C!` macro is used to specify the `class` name, and the special `IF!` macro is just a short-cut that returns an `Option` of the expression value if the predicate is true. There are enums for attributes, styles, events etc.
+
+The `view_clear_completed` component, below, counts the completed todos and renders a button that will emit the `ClearCompletedTodos` message when clicked.
+
+```rust
+fn view_clear_completed(todos: &IndexMap<TodoId, Todo>) -> Option<Node<Msg>> {
+    let completed_count = todos.values().filter(|todo| todo.completed).count();
+
+    IF!(completed_count > 0 => {
+        button![
+            C!["clear-completed"],
+            ev(Ev::Click, |_| Msg::ClearCompletedTodos),
+            format!("Clear completed ({})", completed_count),
+        ]
+    })
+}
+```
+
+You can see, with the `ev()` function call and the call to `format!`, how easy it is to mix in vanilla Rust syntax , and, since everything in Rust is an expression anyway, views become really easy to assemble.
+
+So, for example, instead of using the `IF!` macro in the `view_filter` component above, we could have written:
+
+```rust
+fn view_filter(title: &str, filter: TodoFilter, current_filter: TodoFilter) -> Node<Msg> {
+    li![a![
+        C![if filter == current_filter {
+            Some("selected")
+        } else {
+            None
+        }],
+        attrs! {
+            At::Href => format!("/{}", filter.to_url_path())
+        },
+        style! {St::Cursor => "pointer"},
+        title
+    ]]
+}
+```
+
+The click event handler for the `view_clear_completed` component simply emitted an enum variant as a message. These are declared just like ordinary enums. These are ours:
+
+```rust
+enum Msg {
+    TodosFetched(fetch::Result<Response<get_todos::ResponseData>>),
+    UrlChanged(subs::UrlChanged),
+
+    NewTodoTitleChanged(String),
+
+    ClearCompletedTodos,
+
+    CreateNewTodo,
+    NewTodoCreated(fetch::Result<Response<create_todo::ResponseData>>),
+
+    ToggleTodo(TodoId),
+    TodoToggled(fetch::Result<Response<update_todo::ResponseData>>),
+    ToggleAll,
+
+    RemoveTodo(TodoId),
+    TodoRemoved(fetch::Result<Response<delete_todo::ResponseData>>),
+
+    StartTodoEdit(TodoId),
+    EditingTodoTitleChanged(String),
+    SaveEditingTodo,
+    EditingTodoSaved(fetch::Result<Response<update_todo::ResponseData>>),
+    CancelTodoEdit,
+
+    Login(),
+    LoggedIn(Option<auth::Claims>),
+    Logout(),
+}
+```
+
+You can see some of these are in pairs (one to initiate a call to the API and one to process the response). They're handled in a single `match` in the `update` function. This is just like the [Elm][elm] architecture and, I guess, similar to [`Redux`][redux] in the [`React`][react] world.
+
+The `match` in the `update` function, below, is not exhaustive so it won't compile against the above `enum`, but for illustrative purposes, you can see how we asynchronously call the GraphQL API and then emit (return) another message when it's done, in order to process the response (in the second match arm). Incidentally, the `.skip()` allows us to prevent the next render because nothing changed. A third match arm handles
+
+```rust
+fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
+    let data = &mut model.data;
+    use Msg::*;
+    match msg {
+        RemoveTodo(todo_id) => {
+            let id = todo_id.to_string();
+            orders.skip().perform_cmd(async {
+                let request = DeleteTodo::build_query(delete_todo::Variables { id });
+                let response = send_graphql_request(&request).await;
+                TodoRemoved(response)
+            });
+        }
+        TodoRemoved(Ok(Response {
+            data: Some(response_data),
+            ..
+        })) => match Uuid::parse_str(response_data.delete_todo.id.as_str()) {
+            Ok(deleted_id) => {
+                data.todos.shift_remove(&deleted_id);
+            }
+            Err(e) => error!("Failed to parse id of deleted todo as Uuid::V4 ({:?})", e),
+        },
+        TodoRemoved(error) => error!(error),
+    }
+}
+```
+
+OK that's probably enough already! I hope you are getting a feel for what writing a web front-end in Rust is like. I, personally, think it's a pleasant experience. Obviously it's a fairly new (and frequently changing) ecosystem, but I like the way it's going, and it's incredible how fast it is maturing.
+
+You can check out all the source code in the samples directory of our [`feature-targeting` project][feature-targeting]. Feel free to raise issues if you have questions (or raise a PR if you're up for it) ❤️
 
 [async-graphql]: https://docs.rs/async-graphql/1.16.0/async_graphql/
 [async-std]: https://docs.rs/async-std
+[caniuse]: https://caniuse.com/#feat=wasm
 [charypar]: https://twitter.com/charypar
 [crates]: https://crates.io
 [diesel]: https://github.com/diesel-rs/diesel
+[elm]: https://elm-lang.org/
 [envoy]: https://www.envoyproxy.io/
 [excalidraw]: https://excalidraw.com/
 [feature-targeting]: https://github.com/redbadger/feature-targeting
@@ -280,13 +482,21 @@ A GraphQL API with queries and mutations (not shown here, but just as easy), bac
 [graphql-playground]: https://github.com/prisma-labs/graphql-playground
 [istio]: https://istio.io/
 [juniper]: https://github.com/graphql-rust/juniper
+[jwt]: https://jwt.io/
+[oauth2-code]: https://oauth.net/2/grant-types/authorization-code/
+[oauth2-implicit]: https://oauth.net/2/grant-types/implicit/
+[pkce]: https://oauth.net/2/pkce/
 [proxy-wasm]: https://github.com/proxy-wasm/spec
+[react]: https://reactjs.org/
+[redux]: https://redux.js.org/
+[rust-and-wasm-book]: https://rustwasm.github.io/docs/book/
 [rust]: https://www.rust-lang.org/
 [seed]: https://github.com/seed-rs/seed
 [smol]: https://github.com/stjepang/smol
 [sqlx]: https://github.com/launchbadge/sqlx
 [surf]: https://github.com/http-rs/surf
 [tide]: https://github.com/http-rs/tide
+[todomvc_api]: https://github.com/redbadger/feature-targeting/samples/todomvc_api
 [todomvc]: http://todomvc.com/
 [tokio]: https://docs.rs/tokio
 [wasm-pack]: https://rustwasm.github.io/wasm-pack/
