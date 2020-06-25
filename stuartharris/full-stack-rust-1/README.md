@@ -434,7 +434,7 @@ enum Msg {
 
 You can see some of these are in pairs (one to initiate a call to the API and one to process the response). They're handled in a single `match` in the `update` function. This is just like the [Elm][elm] architecture and, I guess, similar to [`Redux`][redux] in the [`React`][react] world.
 
-The `match` in the `update` function, below, is not exhaustive so it won't compile against the above `enum`, but for illustrative purposes, you can see how we asynchronously call the GraphQL API and then emit (return) another message when it's done, in order to process the response (in the second match arm). Incidentally, the `.skip()` allows us to prevent the next render because nothing changed. A third match arm handles
+The `match` in the `update` function, below, is not exhaustive so it won't compile against the above `enum`, but for illustrative purposes, you can see how we asynchronously call the GraphQL API and then emit (return) another message when it's done, in order to process the response (in the second match arm). Incidentally, the `.skip()` allows us to prevent the next render because nothing changed. A third match arm logs errors (and, indeed, malformed responses) to the developer console.
 
 ```rust
 fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
