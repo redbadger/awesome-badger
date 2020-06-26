@@ -2,6 +2,8 @@
 
 # Awesome Badger
 
+[awesome.red-badger.com][awesome-badger]
+
 Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
@@ -12,3 +14,4 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 [stu]: ./stuartharris/
 [viktor]: ./charypar
+[awesome-badger]: https://awesome.red-badger.com
