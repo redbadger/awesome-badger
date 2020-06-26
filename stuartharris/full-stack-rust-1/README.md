@@ -2,7 +2,7 @@
 
 _[Stuart Harris](../) — 23rd June 2020_
 
-For a while I've been wondering how practical it is to use [Rust][rust] both for web applications (and services) on the server _and_ for web UI in the browser. So I've been spending quite a lot of time exploring the developer experience, whilst trying to understand whether Rust in the browser is actually a good idea! TLDR; it just works and it's a wonderful experience!.
+For a while I've been wondering how practical it is to use [Rust][rust] both for web applications (and services) on the server _and_ for web UI in the browser. So I've been spending quite a lot of time exploring the developer experience, whilst trying to understand whether Rust in the browser is actually a good idea! TLDR; it just works and it's a wonderful experience!
 
 ## Some background
 
