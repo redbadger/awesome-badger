@@ -12,7 +12,7 @@ Next, add any writing you want to publish for others to read and add a link to t
 
 ## 2. Get a review (optional)
 
-You can push straight to master if you want to, but it's probably a good idea to get someone to review your post. Just open pull request like you would in a software project and get someone to have a look.
+You can push straight to master if you want to, but it's probably a good idea to get someone to review your post. Just open a pull request like you would in a software project and get someone to have a look.
 
 ## 3. Have fun
 
@@ -25,3 +25,5 @@ In no particular order:
 * If you've got post ideas or requests, you can open an issue suggesting them. 
 * Include working code alongside your writing, why not
 * Add any sort of helpful automation you think is a good idea
+
+[stu]: stuartharris/
