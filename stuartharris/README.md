@@ -6,7 +6,7 @@ Hello! I'm [Stu](https://red-badger.com/people/stuart-harris/), one of 3 founder
 
 I am a proud Rustacean...
 
-<img src=./rustacean-flat-happy.svg width=80/>
+<img src="./rustacean-flat-happy.svg" width=80/>
 
 ...which means I like [Rust](https://www.rust-lang.org/). A lot!
 
