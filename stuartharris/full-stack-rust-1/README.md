@@ -16,7 +16,7 @@ This is a rough diagram of the setup (drawn in the excellent [excalidraw][excali
 
 ![architecture](./architecture.svg)
 
-The browser runs the TODO client, which is compiled to WASM. The Envoy filter is also compiled to wasm and injected (by Istio) into either the ingress gateway or the relevant sidecar (either approach is sound). The GraphQL API and the Web server are lightweight and fast. Locally, round trips through the API release build and the database are about 2ms (not a typo!).
+The browser runs the TODO client, which is compiled to WASM. The Envoy filter is also compiled to wasm and injected (by Istio) into either the ingress gateway or the relevant sidecar (either approach is sound). The GraphQL API and the Web server are lightweight and fast. Locally, round trips through the API release build and the database take roughly a millisecond.
 
 ## The crates
 
@@ -265,7 +265,11 @@ async fn start(database_url: &str) -> Result<()> {
 
 That's actually it! There is literally nothing more to it.
 
-A GraphQL API with queries and mutations (not shown here, but just as easy), backed onto a SQL database, that can turn around queries in 2ms – and it comes in at under 200 lines of Rust. Check out the full source code at [https://github.com/redbadger/feature-targeting/samples/todomvc_api][todomvc_api].
+A GraphQL API with queries and mutations (not shown here, but just as easy), backed onto a SQL database, that can turn around queries in a millisecond...
+
+![round-trip times](./round-trip.png)
+
+... and it comes in at under 200 lines of Rust. Check out the full source code at [https://github.com/redbadger/feature-targeting/samples/todomvc_api][todomvc_api].
 
 ### Web UI
 
@@ -281,7 +285,7 @@ OK let's get on with it.
 
 #### Bootstrapping a Rust WASM app
 
-I guess the place to start is with the `Cargo.toml` which needs to specify that we need a C-compatible dynamic library, and that we want `wasm-bindgen` to generate the interface for the WASM runtime. Here are the relevant bits:
+I guess the place to start is with the `Cargo.toml` which needs to specify that our library will use C-like FFI, and that we want `wasm-bindgen` to generate the interface for the WASM runtime. Here are the relevant bits:
 
 ```toml
 [lib]
