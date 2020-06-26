@@ -2,7 +2,7 @@
 
 _[Stuart Harris](../) — 23rd June 2020_
 
-For a while I've been wondering how practical it is to use [Rust][rust] both for web applications (and services) on the server _and_ for web UI in the browser. So I've been spending quite a lot of time exploring the developer experience, whilst trying to understand whether Rust in the browser is actually a good idea! TLDR; I think it _is_, but with a few caveats.
+For a while I've been wondering how practical it is to use [Rust][rust] both for web applications (and services) on the server _and_ for web UI in the browser. So I've been spending quite a lot of time exploring the developer experience, whilst trying to understand whether Rust in the browser is actually a good idea! TLDR; it just works and it's a wonderful experience!.
 
 ## Some background
 
@@ -12,11 +12,11 @@ The demo application expands on the ubiquitous [TODO MVC][todomvc] application, 
 
 ## The architecture
 
-This is a rough diagram of the setup (drawn in the excellent [excalidraw][excalidraw], where all the orange boxes are either fully, or partially (in the case of the gateway), written in Rust:
+This is a rough diagram of the setup (drawn in the excellent [excalidraw][excalidraw]), where all the orange boxes are either fully, or partially (in the case of the gateway), written in Rust:
 
 ![architecture](./architecture.svg)
 
-The browser runs the TODO client, which is compiled to WASM. The Envoy filter is also compiled to wasm and injected (by Istio) into either the ingress gateway or the relevant sidecar (either approach is sound). The GraphQL API and the Web server are lightweight and fast. Locally, round trips through the API release build and the database take roughly a millisecond.
+The browser runs the TODO client, which is compiled to WASM. The Envoy filter is also compiled to wasm and injected (by Istio) into either the ingress gateway or the relevant sidecar (either approach is sound). The GraphQL API and the Web server are lightweight and fast. On my laptop, round trips through a release build of the API and a PostgreSQL database, take roughly a millisecond!
 
 ## The crates
 
@@ -24,7 +24,7 @@ These are some of the [crates][crates] we used in each component:
 
 - _The Web UI_
 
-  - [`seed`][seed] – I moved from [`yew`][yew] (which is also an Elm-like framework) as I found `seed` to be "rustier", with less magic and more power from using macros instead of JSX, which seemed to only be there for the comfort of those used to React.
+  - [`seed`][seed] – I moved from [`yew`][yew] (which is also an [Elm][elm]-like framework) as I found `seed` to be "rustier", with less magic and more power from using macros instead of JSX (which seemed to only be there for the comfort of those used to React).
 
   - [`graphql-client`][graphql-client] – This gives us macros that create derived types on the client side (based on the queries and the GraphQL schema) and an integrated client.
 
@@ -44,7 +44,7 @@ These are some of the [crates][crates] we used in each component:
 
   - [`sqlx`][sqlx] – I moved here from [`diesel`][diesel] because I don't really like ORMs. Instead I get to specify the actual SQL queries, which are type-checked at compile-time against the schema, and results are automatically deserialized into my types. It's really cool, as I hope you'll see below.
 
-  - [`tide`][tide] – this is an idiomatic Rust web server, and very familiar if you're used to Express in JS-land. I also really like its sister HTTP client, [`surf`][surf], which has a really nice API.
+  - [`tide`][tide] – this is an idiomatic Rust web server, and very familiar if you're used to [Express][express] in JS-land. I also really like its sister HTTP client, [`surf`][surf], which has a really nice API.
 
   - [`smol`][smol] – this crate is pure genius! I've used [`tokio`][tokio] and [`async-std`][async-std], both of which are excellent async runtimes, but `smol` takes it to another level. Small, fast, complete, flexible and simple, with no `unsafe` – *and* it integrates seamlessly with crates that are already in either of the `tokio` or `async-std` camps.
 
@@ -58,7 +58,7 @@ These are some of the [crates][crates] we used in each component:
 
 ### Envoy filter
 
-You can read all about the [Envoy][envoy] proxy filter in our [`feature-targeting`][feature-targeting] repo, so I won't repeat that here. Have a read though, because it's super interesting to now be able to extend the [Istio][istio] data plane in this way.
+You can read all about the [Envoy][envoy] proxy filter in our [`feature-targeting`][feature-targeting] repo, so I won't repeat that here. Have a read though, because it's super interesting that we can now extend the [Istio][istio] data plane with Rust and WebAssembly.
 
 ### GraphQL API
 
@@ -295,18 +295,18 @@ crate-type = ["cdylib"]
 wasm-bindgen = "0.2.63"
 ```
 
-Then we just need to annotate a function as our entry-point:
+Then we just need to annotate a function as our entry point. This is where we create the [`seed`][seed] app:
 
 ```rust
 #[wasm_bindgen(start)]
 pub fn create_app() {
-    // App::builder(update, view)
-    //     .after_mount(after_mount)
-    //     .build_and_start();
+    App::builder(update, view)
+        .after_mount(after_mount)
+        .build_and_start();
 }
 ```
 
-This is where we will create the [`seed`][seed] app. In the meantime, we need to load the binary in the web page and mount our app on a DOM node (the default `id` for the mount-point is `app`). These are the relevant parts of `index.html`:
+We also need to load the binary in the web page and mount our app on a DOM node (the default `id` for the mount-point is `app`). These are the relevant parts of `index.html`:
 
 ```html
 <!DOCTYPE html>
@@ -364,7 +364,7 @@ fn view_filter(title: &str, filter: TodoFilter, current_filter: TodoFilter) -> N
 }
 ```
 
-Notice how the filter-button component, `view_filter`, is literally just a function. The macros take any number, of any type of arguments, in any order. There's a macro for each HTML element and you can have `svg!`, `md!` and `custom!` elements, amongst others, for SVG, Markdown and custom elements respectively. The `C!` macro is used to specify the `class` name, and the special `IF!` macro is just a short-cut that returns an `Option` of the expression value if the predicate is true. There are enums for attributes, styles, events etc.
+Notice how the filter-button component, `view_filter`, is literally just a function. The macros take any number, of any type of arguments, in any order. There's a macro for each HTML element and you can have `svg!`, `md!` and `custom!` elements, amongst others, for SVG, Markdown and custom elements respectively. The `C!` macro is used to specify the CSS `class` name, and the special `IF!` macro is just a short-cut that returns an `Option` of the expression value if the predicate is true. There are enums for attributes, styles, events etc.
 
 The `view_clear_completed` component, below, counts the completed todos and renders a button that will emit the `ClearCompletedTodos` message when clicked.
 
@@ -467,7 +467,9 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
 }
 ```
 
-OK that's probably enough already! I hope you are getting a feel for what writing a web front-end in Rust is like. I, personally, think it's a pleasant experience. Obviously it's a fairly new (and frequently changing) ecosystem, but I like the way it's going, and it's incredible how fast it is maturing.
+OK that's probably enough already! I hope you are getting the feeling that writing a web front-end in Rust is pretty straightforward. I, personally, think it's a pleasant experience. Obviously it's a fairly new (and frequently changing) ecosystem, but I like the way it's going, and it's incredible how fast it's maturing.
+
+Rust is proving itself as an extremely competent contender for Web UI and services, as it is doing in many other spaces – it's not just a systems programming language.
 
 You can check out all the source code in the samples directory of our [`feature-targeting` project][feature-targeting]. Feel free to raise issues if you have questions (or raise a PR if you're up for it) ❤️
 
@@ -480,6 +482,7 @@ You can check out all the source code in the samples directory of our [`feature-
 [elm]: https://elm-lang.org/
 [envoy]: https://www.envoyproxy.io/
 [excalidraw]: https://excalidraw.com/
+[express]: https://expressjs.com/
 [feature-targeting]: https://github.com/redbadger/feature-targeting
 [graphiql]: https://github.com/graphql/graphiql
 [graphql-client]: https://github.com/graphql-rust/graphql-client
