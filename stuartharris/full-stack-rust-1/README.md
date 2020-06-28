@@ -269,7 +269,7 @@ A GraphQL API with queries and mutations (not shown here, but just as easy), bac
 
 ![round-trip times](./round-trip.png)
 
-... and it comes in at under 200 lines of Rust. Check out the full source code at [https://github.com/redbadger/feature-targeting/samples/todomvc_api][todomvc_api].
+... and it comes in at under 200 lines of Rust. Check out the full source code at [https://github.com/redbadger/feature-targeting/tree/master/examples/todomvc][todomvc_api].
 
 ### Web UI
 
@@ -471,7 +471,7 @@ OK that's probably enough already! I hope you are getting the feeling that writi
 
 Rust is proving itself as an extremely competent contender for Web UI and services, as it is doing in many other spaces – it's not just a systems programming language.
 
-You can check out all the source code in the samples directory of our [`feature-targeting` project][feature-targeting]. Feel free to raise issues if you have questions (or raise a PR if you're up for it) ❤️
+You can check out all the source code in the examples directory of our [`feature-targeting` project][feature-targeting]. Feel free to raise issues if you have questions (or raise a PR if you're up for it) ❤️
 
 [async-graphql]: https://docs.rs/async-graphql/1.16.0/async_graphql/
 [async-std]: https://docs.rs/async-std
@@ -503,7 +503,7 @@ You can check out all the source code in the samples directory of our [`feature-
 [sqlx]: https://github.com/launchbadge/sqlx
 [surf]: https://github.com/http-rs/surf
 [tide]: https://github.com/http-rs/tide
-[todomvc_api]: https://github.com/redbadger/feature-targeting/samples/todomvc_api
+[todomvc_api]: https://github.com/redbadger/feature-targeting/tree/master/examples/todomvc
 [todomvc]: http://todomvc.com/
 [tokio]: https://docs.rs/tokio
 [wasm-pack]: https://rustwasm.github.io/wasm-pack/
