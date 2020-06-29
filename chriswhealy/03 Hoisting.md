@@ -160,7 +160,7 @@ undefined
 
 Hang on!  Why does this even work?
 
-If hoisting causes the name of the variable `myPet` to become known, but without a value, then shouldn't function `write` be known but also have no value (I.E. not become executable until we reach the actual declaration)?
+If hoisting causes the name of the variable `myPet` to become known, but without a value, then shouldn't the function `write` also be known but have no value (I.E. not become executable until we reach the actual declaration)?
 
 No.  This is the difference between ***early activation*** and ***partial*** early activation.
 
@@ -281,7 +281,7 @@ This is all fine.  But there is an important case in which the name of the class
 class MyNewClass extends SomeOtherClass {}
 ```
 
-It is perfect;y valid to say this instead:
+It is perfectly valid to say this instead:
 
 ```javascript
 class MyNewClass extends dynamicallyChooseClassToExtend() {}

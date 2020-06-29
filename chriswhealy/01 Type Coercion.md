@@ -6,6 +6,8 @@ This set of blogs is aimed at developers who are either learning JavaScript or h
 
 Type Coercion is a standard feature in JavaScript (and many other scripting languages); however, it has some unusual characteristics that need to be understood in order to avoid some potentially nasty surprises!
 
+This is a somewhat light-hearted explanation of how type coercion works in JavaScript.  :-)
+
 | | Description |
 |---|---|
 | [Part 1](./01/01.1%20Type%20Coercion.md) | So, How Hard Do You Hit the Keyboard?
