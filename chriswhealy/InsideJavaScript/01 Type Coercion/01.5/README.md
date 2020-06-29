@@ -2,7 +2,7 @@
 
 | Previous | Current | Next |
 |---|---|---|
-| [Type Coercion: The Unusual Bits](./01.4%20Type%20Coercion.md) | Type Coercion: The Very Silly Bits
+| [Type Coercion: The Unusual Bits](../01.4/README.md) | Type Coercion: The Very Silly Bits
 
 
 # Type Coercion: The Very Silly Bits...
@@ -60,7 +60,7 @@ But as with empty object `{}`, empty array `[]` is also arbitrarily coerced to `
 +[1,"2"]   // NaN - because it just does alright!!
 ```
 
-![WAT](../img/wat.jpeg)
+![WAT](../../img/wat.jpeg)
 
 With apologies to [Gary Bernhardt](https://www.destroyallsoftware.com/talks/wat)
 
@@ -114,11 +114,11 @@ This bizarre behaviour is the basis for the [Hieroglyphy](https://github.com/alc
 
 This app takes any block of browser-based JavaScript and transforms it into equally valid, executable JavaScript but composed of only the characters `()[]{}+!`.
 
-![Very silly!](../img/very_silly.png)
+![Very silly!](../../img/very_silly.png)
 
 
 
 | Previous | Current | Next |
 |---|---|---|
-| [Type Coercion: The Unusual Bits](./01.4%20Type%20Coercion.md) | Type Coercion: The Very Silly Bits
+| [Type Coercion: The Unusual Bits](../01.4/README.md) | Type Coercion: The Very Silly Bits
 

@@ -2,7 +2,7 @@
 
 | Previous | Current | Next |
 |---|---|---|
-| | So, How Hard Do You Hit the Keyboard? | [Type Coercion: The Sensible Bits](./01.2%20Type%20Coercion.md)
+| | So, How Hard Do You Hit the Keyboard? | [Type Coercion: The Sensible Bits](../01.2/README.md)
 
 ## So, How Hard Do You Hit the Keyboard?
 
@@ -15,7 +15,7 @@ True, there are many more subtleties involved here than simply these two generic
 
 When people less familiar with programming hear that a language uses "strong typing", they can be forgiven for thinking that something like this is going on:
 
-![Strong Typing?](../img/Strong%20Typing.jpg)
+![Strong Typing?](../../img/Strong%20Typing.jpg)
 
 The terms ***strong*** or ***weak*** typing have nothing to do with how hard you hit the keys on the keyboard; instead languages are either:
 
@@ -50,7 +50,7 @@ Type coercion exists as a direct consequence of weak type enforcement.  In weakl
 
 | Previous | Current | Next |
 |---|---|---|
-| | So, How Hard Do You Hit the Keyboard? | [Type Coercion: The Sensible Bits](./01.2%20Type%20Coercion.md)
+| | So, How Hard Do You Hit the Keyboard? | [Type Coercion: The Sensible Bits](../01.2/README.md)
 
 ---
 ***Endnotes***

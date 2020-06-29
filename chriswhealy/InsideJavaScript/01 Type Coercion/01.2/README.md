@@ -2,7 +2,7 @@
 
 | Previous | Current | Next |
 |---|---|---|
-| [So, How Hard Do You Hit the Keyboard?](./01.1%20Type%20Coercion.md) | Type Coercion: The Sensible Bits | [Type Coercion: The Mostly Sensible Bits](./01.3%20Type%20Coercion.md) 
+| [So, How Hard Do You Hit the Keyboard?](../01.1/README.md) | Type Coercion: The Sensible Bits | [Type Coercion: The Mostly Sensible Bits](../01.3/README.md) 
 
 
 # Type Coercion: The Sensible Bits
@@ -39,7 +39,7 @@ var strValue = "cat"   // strValue is a character string
 +strValue              // Returns the special value NaN (Not a number)
 ```
 
-![I Can Haz Integer?](../img/I%20Can%20Haz%20Integer.png)
+![I Can Haz Integer?](../../img/I%20Can%20Haz%20Integer.png)
 
 Sorry, not this time!
 
@@ -185,7 +185,7 @@ As soon as `n` becomes zero, zero coerces to `false` and the loop terminates.
 
 | Previous | Current | Next |
 |---|---|---|
-| [So, How Hard Do You Hit the Keyboard?](./01.1%20Type%20Coercion.md) | Type Coercion: The Sensible Bits | [Type Coercion: The Mostly Sensible Bits](./01.3%20Type%20Coercion.md) 
+| [So, How Hard Do You Hit the Keyboard?](../01.1/README.md) | Type Coercion: The Sensible Bits | [Type Coercion: The Mostly Sensible Bits](../01.3/README.md) 
 
 
 ---

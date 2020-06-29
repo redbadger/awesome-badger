@@ -2,7 +2,7 @@
 
 | Previous | Current | Next |
 |---|---|---|
-| [Type Coercion: The Mostly Sensible Bits](./01.3%20Type%20Coercion.md) | Type Coercion: The Unusual Bits | [Type Coercion: The Very Silly Bits](./01.5%20Type%20Coercion.md)
+| [Type Coercion: The Mostly Sensible Bits](../01.3/README.md) | Type Coercion: The Unusual Bits | [Type Coercion: The Very Silly Bits](../01.5/README.md)
 
 # Unusual Tricks With Logical Operators
 
@@ -106,7 +106,7 @@ The `person` function expects to receive an argument call `fName`, so two option
 
 | Previous | Current | Next |
 |---|---|---|
-| [Type Coercion: The Mostly Sensible Bits](./01.3%20Type%20Coercion.md) | Type Coercion: The Unusual Bits | [Type Coercion: The Very Silly Bits](./01.5%20Type%20Coercion.md)
+| [Type Coercion: The Mostly Sensible Bits](../01.3/README.md) | Type Coercion: The Unusual Bits | [Type Coercion: The Very Silly Bits](../01.5/README.md)
 
 
 

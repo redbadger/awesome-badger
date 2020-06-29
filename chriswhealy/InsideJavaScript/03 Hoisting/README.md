@@ -314,6 +314,6 @@ Hope that helps
 
 Chris W
 
-[![Red Badger Logo - Small](./img/Red%20Badger%20Small.png)](https://red-badger.com/)
+[![Red Badger Logo - Small](../img/Red%20Badger%20Small.png)](https://red-badger.com/)
 
 

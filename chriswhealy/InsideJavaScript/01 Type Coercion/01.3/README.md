@@ -2,7 +2,7 @@
 
 | Previous | Current | Next |
 |---|---|---|
-| [Type Coercion: The Sensible Bits](./01.2%20Type%20Coercion.md) | Type Coercion: The Mostly Sensible Bits | [Type Coercion: The Unusual Bits](./01.4%20Type%20Coercion.md) 
+| [Type Coercion: The Sensible Bits](../01.2/README.md) | Type Coercion: The Mostly Sensible Bits | [Type Coercion: The Unusual Bits](../01.4/README.md) 
 
 
 # Type Coercion: The Mostly Sensible Bits
@@ -183,7 +183,7 @@ const isNodeJsGlobal  = isOfType("global")
 
 | Previous | Current | Next |
 |---|---|---|
-| [Type Coercion: The Sensible Bits](./01.2%20Type%20Coercion.md) | Type Coercion: The Mostly Sensible Bits | [Type Coercion: The Unusual Bits](./01.4%20Type%20Coercion.md) 
+| [Type Coercion: The Sensible Bits](../01.2/README.md) | Type Coercion: The Mostly Sensible Bits | [Type Coercion: The Unusual Bits](../01.4/README.md) 
 
 
 
