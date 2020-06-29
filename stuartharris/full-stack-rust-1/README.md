@@ -66,7 +66,7 @@ I've written many APIs in my time, and I can honestly say that this (as simple a
 
 #### Data layer
 
-For example, the data layer is super thin when using [`sqlx`][sqlx]:
+For example, the data layer is super thin when using [`sqlx`][sqlx]. This is `db.rs`:
 
 ```rust
 use anyhow::Result;
@@ -151,7 +151,7 @@ Nothing stands still in the Rust ecosystem. Not long ago, [`juniper`][juniper] w
 
 The introduction of `SimpleObject` for objects whose fields don't, themselves, have resolvers is a nice touch. The new [GraphQL Playground][graphql-playground], which is the default, is a much improved experience (when compared to the older [GraphiQL][graphiql] UI), and makes working with the API a dream.
 
-When we need to handle an incoming GraphQL query, we simply increment the reference count on the schema (which is in the request's state) and pass it into the executor:
+When we need to handle an incoming GraphQL query, we simply increment the reference count on the schema (which is in the request's state) and pass it into the executor. Extracts from `graphql.rs`:
 
 ```rust
 pub async fn handle_graphql(req: Request<State>) -> tide::Result {
