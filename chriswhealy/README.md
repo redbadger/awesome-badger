@@ -3,7 +3,7 @@
 [@LogaRhythm](https://twitter.com/LogaRhythm)
 
 
-> Senior Engineer and Developer
+> Senior Engineer and Developer  
 > Outside work I play the drums, do audio engineering/post production/FOH and tinker with room acoustics
 
 
