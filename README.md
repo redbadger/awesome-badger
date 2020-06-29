@@ -12,6 +12,13 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 - 2020-06-19 – [Extending Istio with Rust and WebAssembly](./charypar/proxy-wasm-1) by [Viktor][viktor]
 
+- 2020-05-08 - [Understanding JavaScript: Hoisting](./chriswhealy/03%20Hoisting.md) by [Chris W][chrisw]
+
+- 2020-05-07 - [Understanding JavaScript: Objects and Arrays](./chriswhealy/02%20Objects%20and%20Arrays.md) by [Chris W][chrisw]
+
+- 2020-05-05 - [Understanding JavaScript: Type Coercion](./chriswhealy/01%20Type%20Coercion.md) by [Chris W][chrisw]
+
 [stu]: ./stuartharris/
 [viktor]: ./charypar
+[chrisw]: ./chriswhealy
 [awesome-badger]: https://awesome.red-badger.com
