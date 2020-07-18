@@ -1,6 +1,6 @@
 # Guiding principles for agile technology choices
 
-_[Viktor Charypar](../) — 11th July 2020_
+_[Viktor Charypar](../) — 20th July 2020_
 
 For several years now I've had a fairly strong gut feel for making technology choices. I'm talking about picking tools and tech stacks, but also making larger architecture decisions. Choices one is typically forced to make with relatively little information to use as input, which generally have a pretty big impact on the future direction of what you're building.
 

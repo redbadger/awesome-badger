@@ -26,7 +26,7 @@ I generally have more ideas than time (and sense) so all of these things are in 
 
 ### [Guiding principles for agile technology choices](tech-principles)
 
-11th July 2020
+20th July 2020
 
 An attempt to capture some guiding principles for making technology choices - picking tools, tech stacks and making architecture decisions.
 
