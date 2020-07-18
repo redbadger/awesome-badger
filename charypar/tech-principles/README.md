@@ -8,11 +8,21 @@ I've normally made those decisions "by feel" - when presented with a set of choi
 
 Initially, I thought this is going to be really hard, because that gut feel is simply an accumulation of experience of what worked in the past, but then I sat down, tried writing some guidelines down, and found there is actually a set of general rules of thumb I tend to follow. So I wrote them down and suggested them. They've gone down well not only with the client, but also with other Badgers, including some, currently attempting to make a reasoned set of big tech choices in their projects, and they seem to have helped. It made me think it might be helpful to write a slightly longer version of my thinking.
 
-So, here are my principles for making tech decisions, in case you're looking for some guidelines that might help you. If they resonate with you, let me know. If they raise all kinds of red flags for you, definitely let me know, I'd like to hear your thoughts!
+So, here are my principles for making tech decisions, in case you're looking for some guidelines that might help you.
+
+1. Be user-centric
+1. Minimise time to market
+1. As simple as possible
+1. Validate assumptions and adapt
+1. Defer and minimise commitment
+1. Buy small
+1. Prefer open source software
+
+If they resonate with you, let me know. If they raise all kinds of red flags for you, definitely let me know, I'd like to hear your thoughts! Now, let's look at them in detail.
 
 ## 1. Be user-centric
 
-Choices should be informed by our understanding of the users and their needs. This should be the chief motivation among all of the reasons to make a technical choice. There are many possible business and "architectural" reasons to go with a particular choice, especially one considered tactical: sticking with an existing vendor, because your engineers are familiar with that option, because it's considered best practice, etc. All those motivations are valid inputs into a decision, but they must not be in conflict with meeting our users' needs, as soon as we can.
+Choices should be informed by our understanding of the users and their needs. This should be the main motivation among all of the reasons to make a technical choice. There are many possible business and "architectural" reasons to go with a particular choice, especially one considered tactical: sticking with an existing vendor, because your engineers are familiar with that option, because it's considered best practice, etc. All those motivations are valid inputs into a decision, but they must not be in conflict with meeting your users' needs within a reasonable timeframe.
 
 There will always be a large number of forces at play in these decisions, especially in large businesses, and the internal business reasons will always have louder voices behind them, because our users are not in the room. They are the easiest to ignore. They are also the most important stakeholder of all. Ignore them for too long and none of the other stakeholders will matter any more.
 
@@ -28,7 +38,7 @@ Pick the simplest solution possible to meet the needs we know today.
 
 Complexity is the main opposing force in software development. We should be striving to minimise it at every step, because it will only ever grow. Complexity is the reason why software development slows down, as we have to navigate around existing choices and their consequences. We must do all we can to avoid building in more complexity than is absolutely necessary.
 
-There is complexity in the product itself, some of which is inherent, and some is based on assumption, which should be challenged. Similarly, we let assumptions affect technology choices, especially in picking tools which offer a lot of features out of the box. Unfortunately, for each of those features, the authors had to make a number of choices, which will limit our options later - they increase complexity. We don't need those features today, we can afford to wait until we do.
+There is complexity in the product itself, some of which is inherent, and some is based on assumptions. We should challenge those assumptions to make sure we're only building what is actually needed. We should avoid our own assumptions affect technology choices, especially when picking tools which offer a lot of features out of the box. Unfortunately, those tools greatly increase complexity: for each feature we won't use, the author had to make a number of choices, which will limit our options later. We don't need those features today, we can afford to wait until we do.
 
 ## 4. Validate assumptions and adapt
 
