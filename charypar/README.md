@@ -24,6 +24,12 @@ I generally have more ideas than time (and sense) so all of these things are in 
 
 ## Writing
 
+### [Guiding principles for agile technology choices](tech-principles)
+
+20th July 2020
+
+An attempt to capture some guiding principles for making technology choices - picking tools, tech stacks and making architecture decisions.
+
 ### [Extending Istio with Rust and WebAssembly](proxy-wasm-1)
 
 20th April 2020
