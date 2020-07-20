@@ -16,6 +16,7 @@ So, here are my principles for making tech decisions, in case you're looking for
 1. Validate assumptions and adapt
 1. Defer and minimise commitment
 1. Buy small
+1. Minimise long-term maintenance cost
 1. Prefer open source software
 
 If they resonate with you, let me know. If they raise all kinds of red flags for you, definitely let me know, I'd like to hear your thoughts! Now, let's look at them in detail.
