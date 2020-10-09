@@ -97,14 +97,14 @@ Now that this basic dependency has been stated, we can start to write some Rust 
 
 ### Define the Entry Points Visible to the WebAssembly Host Environment
 
-In the top-level `./src/lib.rs` file, we need to declare at least one function to act as the entry point for coding running in the host environment.
+In the top-level `./src/lib.rs` file, we need to declare at least one function to act as the entry point for code running in the host environment.
 
 In the case of this Porous Absorber Calculator app, there are four entry points - one for each type of absorption device:
 
 * Porous Absober
 * Slotted Panel Absorber
 * Perforated Panel Absorber
-* Micrperforated Panel Absorber
+* Microperforated Panel Absorber
 
 So in `./src/lib.rs` we define normal public Rust functions, but precede them with the `#[wasm-bindgen]` macro:
 
@@ -115,6 +115,8 @@ pub fn porous_absorber(wasm_arg_obj: JsValue) -> JsValue {
   do_porous_absorber_device(wasm_arg_obj)
 }
 ```
+
+This macro identifies a function as an entry point.  In other words, we're using this macro to construct the WebAssembly module's public API. 
 
 A more complete view of `lib.rs` looks like this:
 
