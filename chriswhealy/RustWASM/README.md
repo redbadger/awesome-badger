@@ -68,18 +68,89 @@ import init
 } from '../pkg/porous_absorber_calculator.js'
 ```
 
+## How to Start?
 
+### Declare a Rust Library Project
 
+Given that this type of application is going to run within the context of some larger host environment, you woudl start by creating a library project:
 
+```console
+$ cargo new --lib some_project
+     Created library `some_project` package
+```
 
+### Declare a Dependency on `wasm-bindgen`
 
+When writing a Rust application for WebAssembly, the first thing to do is declare a dependency on the `wasm-bindgen` crate.  As with all Rust dependencies, this declaration is made in your project's `Cargo.toml` file:
 
+```toml
+[dependencies.wasm-bindgen]
+version = "^0.2"
+features = ["serde-serialize"]
+```
 
+In addition to stating our dependency on the `wasm-bindgen` crate, the above statement additionally declares the use of the optional create feature `serde-serialize` (this feature will be needed when transferring information to and from JavaScript)
 
+Now that this basic dependency has been stated, we can start to write some Rust coding that is intended for invocation from the WebAssembly host environment.
 
+### Define the Entry Points Visible to the WebAssembly Host Environment
 
+In the top-level `./src/lib.rs` file, we need to declare at least one function to act as the entry point for coding running in the host environment.
 
+In the case of this Porous Absorber Calculator app, there are four entry points - one for each type of absorption device:
 
+* Porous Absober
+* Slotted Panel Absorber
+* Perforated Panel Absorber
+* Micrperforated Panel Absorber
+
+So in `./src/lib.rs` we define normal public Rust functions, but precede them with the `#[wasm-bindgen]` macro:
+
+```Rust
+#[wasm_bindgen]
+pub fn porous_absorber(wasm_arg_obj: JsValue) -> JsValue {
+  // SNIP
+  do_porous_absorber_device(wasm_arg_obj)
+}
+```
+
+A more complete view of `lib.rs` looks like this:
+
+```Rust
+extern crate wasm_bindgen;
+
+mod devices;
+
+use wasm_bindgen::prelude::*;
+
+use devices::{
+  microperforated_panel::do_microperforated_panel_device,
+  perforated_panel::do_perforated_panel_device,
+  porous_absorber::do_porous_absorber_device,
+  slotted_panel::do_slotted_panel_device,
+};
+
+#[wasm_bindgen]
+pub fn porous_absorber(wasm_arg_obj: JsValue) -> JsValue {
+  do_porous_absorber_device(wasm_arg_obj)
+}
+
+pub fn slotted_panel(wasm_arg_obj: JsValue) -> JsValue {
+  do_slotted_panel_device(wasm_arg_obj)
+}
+
+#[wasm_bindgen]
+pub fn perforated_panel(wasm_arg_obj: JsValue) -> JsValue {
+  do_perforated_panel_device(wasm_arg_obj)
+}
+
+#[wasm_bindgen]
+pub fn microperforated_panel(wasm_arg_obj: JsValue) -> JsValue {
+  do_microperforated_panel_device(wasm_arg_obj)
+}
+```
+
+Notice that whatever name is used by the public Rust function appears as the name seen in the JavaScript `import` statement shown above.
 
 
 
