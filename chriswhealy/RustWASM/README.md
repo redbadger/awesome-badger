@@ -111,53 +111,59 @@ So in `./src/lib.rs` we define normal public Rust functions, but precede them wi
 ```Rust
 #[wasm_bindgen]
 pub fn porous_absorber(wasm_arg_obj: JsValue) -> JsValue {
-  // SNIP
   do_porous_absorber_device(wasm_arg_obj)
 }
 ```
 
-This macro identifies a function as an entry point.  In other words, we're using this macro to construct the WebAssembly module's public API. 
+This macro identifies a function as an entry point.  In other words, we're using this macro to construct the WebAssembly module's public API.
 
-A more complete view of `lib.rs` looks like this:
+There are a couple of things to notice here:
+
+1. Whatever name is used by the public Rust function appears as the name seen in the JavaScript `import` statement shown above.
+1. The `porous_absorber` function takes a single argument of type `JsValue` and returns a result that is also of type `JsValue`.
+
+#### So, What Values are of Type `JsValue`?
+
+At the moment, the datatype `JsValue` is something of an untyped-type and does not exist as a specific datatype in Rust.  The actual transfer of data between Rust and the JavaScript host environment happens in the generated JavaScript coding.
+
+Suffice it to say, when you call the exposed `porous_absorber` function from JavaScript, all you need to do is pass in a regular JavScript object.  Then, when the data arrives on the Rust side of the interface, you will receive a serialized JSON object as a text string.
+
+This value must first be de-serialized into a Rust struct whose fields are all of type `String`.  Then if necessary, each `String` value must be parsed into the relevant Rust data type.
+
+In the case of the `porous_absorber` function, this passes the `wasm_arg_obj` parameter stright through to function `do_porous_absorber_device` which does the following.
+
+First the JSON string is deserialized into a predefined struct whose fields are all of type `String`:
 
 ```Rust
-extern crate wasm_bindgen;
-
-mod devices;
-
-use wasm_bindgen::prelude::*;
-
-use devices::{
-  microperforated_panel::do_microperforated_panel_device,
-  perforated_panel::do_perforated_panel_device,
-  porous_absorber::do_porous_absorber_device,
-  slotted_panel::do_slotted_panel_device,
-};
-
-#[wasm_bindgen]
-pub fn porous_absorber(wasm_arg_obj: JsValue) -> JsValue {
-  do_porous_absorber_device(wasm_arg_obj)
+#[derive(Deserialize)]
+struct PorousAbsorberArgs {
+  absorber_thickness_mm: String,
+  flow_resistivity: String,
+  air_gap_mm: String,
+  angle: String,
+  graph_start_freq: String,
+  smooth_curve: String,
+  subdivision: String,
+  show_diagram: String,
+  air_temp: String,
+  air_pressure: String,
 }
 
-pub fn slotted_panel(wasm_arg_obj: JsValue) -> JsValue {
-  do_slotted_panel_device(wasm_arg_obj)
-}
+pub fn do_porous_absorber_device(wasm_arg_obj: JsValue) -> JsValue {
+  // Parse object received from JavaScript
+  let arg_obj: PorousAbsorberArgs = wasm_arg_obj.into_serde().unwrap();
 
-#[wasm_bindgen]
-pub fn perforated_panel(wasm_arg_obj: JsValue) -> JsValue {
-  do_perforated_panel_device(wasm_arg_obj)
-}
-
-#[wasm_bindgen]
-pub fn microperforated_panel(wasm_arg_obj: JsValue) -> JsValue {
-  do_microperforated_panel_device(wasm_arg_obj)
+  // SNIP
 }
 ```
 
-Notice that whatever name is used by the public Rust function appears as the name seen in the JavaScript `import` statement shown above.
+We now have an `arg_obj` struct in which each of the individual values are `Strings` that next need to be parsed to the internal data type.  So for instance, when used in calculations, the `absorber_thickness_mm` argument is needed as a `u16` value, so whe next have the statement:
 
+```Rust
+  let absorber_thickness_mm = arg_obj.absorber_thickness_mm.parse::<u16>().unwrap();
+```
 
-
+Similarly, when we wish to send data back to JavaScript, the return value of type `JsValue` is created by passing our Rust struct through `JsValue::from_serde().unwrap()`.
 
 
 
