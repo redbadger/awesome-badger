@@ -72,7 +72,7 @@ import init
 
 ### Declare a Rust Library Project
 
-Given that this type of application is going to run within the context of some larger host environment, you woudl start by creating a library project:
+Given that this type of application is going to run within the context of some larger host environment, you start by creating a Rust library project:
 
 ```console
 $ cargo new --lib some_project
