@@ -1,8 +1,12 @@
 # Porous Absorber Calculator
 
+## Preamble
+
 The purpose of this blog is not to explain any of the principles of acoustics or how to interpret the data plotted on the graphs shown below, but rather to describe the architecture of a browser-based WebAssembly application written in Rust.
 
-## Preamble
+If you wish to see an explanation of the basic acoustic principles behind the Porous Absorber Calculator spreadsheet, please watch this [video](https://genomics.zoom.us/rec/share/QAOteL-hsuIyW4BgccBDIILheEHAiJigpxOoIkOFMyaEgnwxgEtVFi1uErxVayVJ.XC83qC8QKI0FpsSj).  The slides used in that presentation are available [here](http://whealy.com/acoustics/PA_Calculator/Porous%20Absorber%20(Print).pdf)
+
+## Introduction
 
 My interest in room acoustics started in 2003 when I became involved in the design and build of a recording studio control room.  As part of studying this subject, I implemented what I had learnt in two Excel spreadsheets: the first was a general purpose tool for determining the [reverberation time of a rectilinear control room](http://whealy.com/acoustics/Control%20Room%20Calculator%20V2.67%20XL2007.zip), and the second was a tool for plotting the [absorption curve of a porous absorber](http://whealy.com/acoustics/Porous%20Absorber%20Calculator%20V1.59.xlsm.zip)
 
@@ -157,7 +161,7 @@ pub fn do_porous_absorber_device(wasm_arg_obj: JsValue) -> JsValue {
 }
 ```
 
-We now have an `arg_obj` struct in which each of the individual values are `Strings` that next need to be parsed to the internal data type.  So for instance, when used in calculations, the `absorber_thickness_mm` argument is needed as a `u16` value, so whe next have the statement:
+We now have an `arg_obj` struct in which each of the individual values are `Strings` that next need to be parsed to the internal data type.  So for instance, when used in calculations, the `absorber_thickness_mm` argument is needed as a `u16` value, so we next have the statement:
 
 ```Rust
   let absorber_thickness_mm = arg_obj.absorber_thickness_mm.parse::<u16>().unwrap();
@@ -165,7 +169,142 @@ We now have an `arg_obj` struct in which each of the individual values are `Stri
 
 Similarly, when we wish to send data back to JavaScript, the return value of type `JsValue` is created by passing our Rust struct through `JsValue::from_serde().unwrap()`.
 
+### Calling JavaScript Functionality from Rust
 
+In order for the Ruist coding to invoke functionality in the host environment, we need to use the `#[wasm-bindgen]` macro in conjunction with Rust's Foreign Function Interface (FFI)
+
+A typical task for a Web-based application ti to be able to write trace/debug output to the Browser's console.  This can be done as follows:
+
+In any module that requires this functionality, declare the use of an FFI in conjunction with the `#[wasm-bindgen]` macro:
+
+```Rust
+#[wasm_bindgen]
+extern "C" {
+  #[wasm_bindgen(js_namespace = console)]
+  fn log(s: String);
+}
+```
+
+This declaration states that in some external library, there will be a function called `log` living in a namespace called `console`.  The `wasm-bindgen` functionality then links this declaration with the browser's `console.log` API and we can now write directly to the browser's console:
+
+```Rust
+  log(format!("Absorber thickness = {}mm", absorber_thickness_mm));
+```
+
+## Manipulating the Browser DOM from Rust
+
+Now that we have built a two-way bridge between Rust and JavaScript (via WebAssembly), we can look at writing code that directly manipulates the elements in the Browser's DOM.
+
+In the case of this Porous Absorber Calculator app, we need to plot a chart using an HTML5 `canvas` element.
+
+To do this, first need to declare the use of another crate: `web-sys`.
+
+The `web-sys` crate provides access to all aspects of the Browser's API; however, as you might well realise, this API contains a ***huge*** number of functions - most of which are probably not relevant for your immediate task.
+
+Therefore, the Rust crate `features` are used to avoid declaring dependencies on functions you'll never need.  Each one of the Browser's API functions is accessed as an optional `feature` (rather than an automatic dependency).  This means that for every part of teh Browser API that you wish to use, you must make an explicit declaration in `Cargo.toml`.
+
+So, your `Cargo.toml` entry for the `web-sys` dependency would look something like this:
+
+```toml
+[dependencies.web-sys]
+version = "^0.3.4"
+features = [
+  'CanvasRenderingContext2d'
+, 'Document'
+, 'Element'
+, 'HtmlCanvasElement'
+, 'HtmlImageElement'
+, 'TextMetrics'
+, 'Window'
+]
+```
+
+#### Accessing Specific DOM Elements
+
+Using these `web-sys` features, we are now able to access not only the HTML `canvas` element, but the 2D rendering context object within the `canvas` element.  The following code is taken from function `device_diagram` in the module `chart::render::draw`:
+
+```Rust
+pub fn device_diagram(
+  device: &GenericDeviceInfo,
+  widest_y_tick_label: f64,
+  y_axis_length: &f64,
+  y_axis_inset: &f64
+) {
+  // SNIP
+
+  let document = web_sys::window().unwrap().document().unwrap();
+  let canvas_el = document.get_element_by_id(render::constants::GRAPH_CANVAS_ID).unwrap();
+  let canvas = canvas_el.dyn_into::<web_sys::HtmlCanvasElement>().unwrap();
+  let ctx = get_2d_context(&canvas);
+  
+  // SNIP
+}
+```
+
+Right at the start, we can see that the call to `web_sys::window()` would not be possible if we had not first explicitly declared the use of the `web-sys` feature `Window` in `Cargo.toml`.
+
+> ***Aside***  
+> The coding that unloads the 2D rendering context from the `canvas` object is rather ugly, so it has been hidden away inside function `get_2d_context`
+> 
+> ```Rust
+> pub fn get_2d_context(canvas: &web_sys::HtmlCanvasElement) -> web_sys::CanvasRenderingContext2d {
+>  canvas
+>    .get_context("2d")
+>    .unwrap()
+>    .unwrap()
+>    .dyn_into::<web_sys::CanvasRenderingContext2d>()
+>    .unwrap()
+>}
+>```
+
+It is worth commenting on the use of function `dyn_into::<T>()`.
+
+Since JavaScript is an untyped language, when we call `get_element_by_id`, we just have to trust that returned object really is of the type we expect.
+
+So when the `canvas_el` object is created in the coding above, the Rust compiler cannot make any guarantees that that it really is an HTML `canvas` element.
+
+Consequently, we need to attempt a dynamic cast of `the_thing_that_claims_to_be_a_canvas_element` into a `thing_that_really_is_a_canvas_element`.  This is why from time to time, we have to call function `dyn_int::<T>()`.
+
+#### Manipulating the HTML Canvas
+
+If you have any familiarity with writing JavaScript code to manipulate an HTML `canvas` element, you will see some distinct similarities here.
+
+Now that we know how to access the 2D rendering context of the `canvas` element, we can create a function that takes this context as an argument, and then draws a circular plot point:
+
+```Rust
+fn draw_point(
+  ctx: &web_sys::CanvasRenderingContext2d,
+  point: &PlotPoint,
+  fill_style: &JsValue
+) {
+  ctx.begin_path();
+  ctx.save();
+
+  // Draw filled circle
+  ctx.set_fill_style(fill_style);
+  ctx
+    .arc(point.x, point.y, render::constants::PLOT_POINT_RADIUS, 0.0, TAU)
+    .unwrap();
+  ctx.fill();
+
+  // Draw black edge
+  ctx.set_line_width(0.5);
+  ctx.set_stroke_style(&JsValue::from(chart::constants::RGB_BLACK));
+  ctx.stroke();
+
+  ctx.restore();
+}
+```
+
+> ***Another Aside***  
+> If you're wondering why the constant `TAU` pops up every now and again instead of the expected value `2.0 * std::f64::consts::PI`, then please read the [Tau Manifesto](https://tauday.com/tau-manifesto/)
+
+
+## Conclusion
+
+In reality, writing a browser-based app in Rust is not much harder than writing a browser-based app in JavaScript.  There are of course fundamental differences in the language constructs being employed, but the additional steps of compiling a Rust app to WebAssembly, then consuming that WebAssembly module via its JavaScript polyfill are both very straight-forward.
+
+There are however, certain areas of Rust functionality that do not yet "play nicely" with the interface between WebAssembly and JavaScript &mdash; most noticably is the fact that the `JsValue` data type mentioned above cannot be used in multi-threaded coding.  Even with this restriction though, very useful and powerful applications can be written in Rust which, when compiled to WebAssembly, will run very smoothly in the browser.
 
 
 Chris W
