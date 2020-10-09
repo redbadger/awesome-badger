@@ -79,9 +79,11 @@ $ cargo new --lib some_project
      Created library `some_project` package
 ```
 
-### Declare a Dependency on `wasm-bindgen`
 
-When writing a Rust application for WebAssembly, the first thing to do is declare a dependency on the `wasm-bindgen` crate.  As with all Rust dependencies, this declaration is made in your project's `Cargo.toml` file:
+### Declare a Dependency on `wasm-bindgen`
+
+
+When writing a Rust application for WebAssembly, the first thing to do is declare a dependency on the [`wasm-bindgen`](https://rustwasm.github.io/docs/wasm-bindgen/introduction.html) crate.  As with all Rust dependencies, this declaration is made in your project's `Cargo.toml` file:
 
 ```toml
 [dependencies.wasm-bindgen]
