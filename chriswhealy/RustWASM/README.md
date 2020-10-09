@@ -18,11 +18,9 @@ Unfortunately due to their age, these spreadsheets will only function correctly 
 
 ### Fast Forward to 2019
 
-Having just been made redundant from my previous job and having lots of time on my hands, I decided to learn Rust &mdash; primarily because it compiles to WebAssembly.
+Having just been made redundant from my previous job and having lots of time on my hands, I decided to learn Rust &mdash; primarily because it compiles to WebAssembly.  After completing the simpler coding exercises, I needed a more real-life application to work on and decided to reimplement my Porous Absorber spreadsheet as a Web-based, WebAssembly app.  Seeing as this was my first real-life app, it took me a while to work out how to get all the pieces to fit together, but after a couple of months of battling my own inexperience, I was able to get this Web-based app up and running.
 
-Having completed all the simpler coding exercises, I was looking for a more real-life application to work on and decided to reimplement my Porous Absorber spreadsheet as a Web-based, WebAssembly app.  Seeing as this was my first real-life app, it took me a while to work out how to get all the pieces to fit together, but after a couple of months of battling my own inexperience, I was able to get this [Web-based app](http://whealy.com/acoustics/PA_Calculator/index.html) up and running.
-
-![Porous Absorber Web App](./img/Porous%20Abs%20Screenshot.png)
+[![Porous Absorber Web App](./img/Porous%20Abs%20Screenshot.png)](http://whealy.com/acoustics/PA_Calculator/index.html)
 
 
 ## General Architecture
@@ -31,13 +29,13 @@ The app was developed in Microsoft's Visual Studio and uses the following hierar
 
 ![High-level Architecture](./img/Rust%20Architecture.png)
 
-The objective here was to create an app that runs in the browser; however, since a browser cannot directly execute a native Rust application, it must be compiled into a format that a browser can execute &mdash; and this is where WebAssembly comes in.
+The objective here was to create an app that runs in the browser; however, since a browser cannot directly execute a native Rust application, it must first be compiled into a format that a browser can execute &mdash; and this is where WebAssembly comes in.
 
 ### Compiling Rust to WebAssembly
 
 To compile a Rust application into a WebAssembly module, you need to use a tool such as [`wasm-pack`](https://rustwasm.github.io/wasm-pack/installer/).  This tool acts as a wrapper around `cargo build` and generates a WebAssembly module (a `.wasm` file) from the compiled Rust code.
 
-However, WebAssembly modules can be executed in a wide variety host environments.  In our case, we wish to execute this WebAssembly module in a browser, so our specific host environment will be the JavaScript runtime environment within a browser.  This therefore means that the `--target` will be `web`.
+However, WebAssembly modules can be executed in a wide variety host environments.  In our case, we wish to execute this WebAssembly module in a browser, so our specific host environment will be the JavaScript runtime environment within a browser.  This therefore means that the `--target` parameter of `wasm-pack` must be set to `web`.
 
 ```console
 $ wasm-pack build --release --target web
@@ -57,7 +55,7 @@ The addition of the `--target web` parameter tells `wasm-pack` that we wish to r
 
 ![Generated WASM File](./img/Generated%20WASM%20File.png)
 
-The polyfill acts as a wrapper around the WebAssembly module and enables us to use teh `import` statement as we would for any other JavaScript module.
+The polyfill acts as a wrapper around the WebAssembly module and enables us to use the JavaScript `import` statement as we would for any other JavaScript module.
 
 This makes consumption of WebAssembly-based functionality super-easy.
 
