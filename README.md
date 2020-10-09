@@ -8,7 +8,7 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
-- 2020-10-12 – [Writing Browser-based WebAssembly Application in Rust](./chriswhealy/RustWASM) by [Chris W][chrisw]
+- 2020-10-12 – [Writing a Browser-based WebAssembly Application in Rust](./chriswhealy/RustWASM) by [Chris W][chrisw]
 
 - 2020-07-20 – [Guiding principles for agile technology choices](./charypar/tech-principles) by [Viktor][viktor]
 
