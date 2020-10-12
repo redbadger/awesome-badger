@@ -265,7 +265,7 @@ Since JavaScript is an untyped language, when we call `get_element_by_id`, we ju
 
 So when the `canvas_el` object is created in the coding above, the Rust compiler cannot make any guarantees that that it really is an HTML `canvas` element.
 
-Consequently, we need to attempt a dynamic cast of `the_thing_that_claims_to_be_a_canvas_element` into a `thing_that_really_is_a_canvas_element`.  This is why from time to time, we have to call function `dyn_int::<T>()`.
+Consequently, we need to attempt a dynamic cast of `the_thing_that_claims_to_be_a_canvas_element` into a `thing_that_really_is_a_canvas_element`.  This is why from time to time, we have to call function `dyn_into::<T>()`.
 
 #### Manipulating the HTML Canvas
 
@@ -312,4 +312,3 @@ There are however, certain areas of Rust functionality that do not yet "play nic
 Chris W
 
 [![Red Badger Logo - Small](./img/Red%20Badger%20Small.png)](https://red-badger.com/)
-
