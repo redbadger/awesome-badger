@@ -3,16 +3,27 @@
 [@LogaRhythm](https://twitter.com/LogaRhythm)
 
 
-> Senior Engineer and Developer working as much as possible with Rust and WebAssembly  
+> Senior Engineer and Developer working as much as possible with Rust and WebAssembly
 > Outside work I play the drums, do audio engineering/post production/FOH and tinker with room acoustics
 
 
 ## Blogs
 
+### Porous Absorber Calculator
+
+This is a personal project that started in 2004 as an Excel spreadsheet, but has grown significantly since then.
+
+I became interested in room acoustics and, as part of my studying, developed a tool for calculation the absorption curve of a porous absorber.  This tool generates a graph that shows how well a layer of porous material such as Rockwool or glass fibre will absorb sound across the full frequency range.
+
+Then in 2019, when I started to learn Rust, I needed a real-life project to work on; so I decided to reimplement my Excel spreadhseet as a Web-based application written in Rust, then compiled to WebAssembly.
+
+The purpose of this blog is to describe how a Web-based app can be written in Rust, then compiled to WebAssembly and executed in the browser.
+
+[From Rust to the Browser via WebAssembly](./RustWASM/)
 
 ### Understanding JavaScript
 
-This is a work-in-progress series of blogs on understanding various internal features of JavaScript 
+This is a work-in-progress series of blogs on understanding various internal features of JavaScript
 
 1. [Type Coercion](./InsideJavaScript/01%20Type%20Coercion/)
 
