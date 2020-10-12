@@ -283,11 +283,11 @@ It is also worth commenting on the use of function `dyn_into::<T>()`.
 
 Since JavaScript is an untyped language, when we call `get_element_by_id`, we just have to trust that what we get back really is of the type we expect.
 
-So when the `canvas_el` object is created in the coding above, the Rust compiler cannot make any guarantees that it really is an HTML `canvas` element.  Consequently, we need to attempt a dynamic cast of the object ***might*** be a `canvas` element into an object that ***really is*** a `canvas` element.  This is why from time to time, we have to call function `dyn_into::<T>()`.
+So when the `canvas_el` object is created in the coding above, the Rust compiler cannot make any guarantees that it really is an HTML `canvas` element.  Consequently, we need to attempt a dynamic cast of the object that ***might*** be a `canvas` element into an object that ***really is*** a `canvas` element.  This is why from time to time, we have to call function `dyn_into::<T>()`.
 
 #### Manipulating the HTML Canvas
 
-If you have any familiarity with writing JavaScript code to manipulate an HTML `canvas` element, you will see some distinct similarities here.
+If you have any familiarity with writing JavaScript code to manipulate an HTML `canvas` element, then you will see some distinct similarities in the Rust code.
 
 Now that we know how to access the 2D rendering context of the `canvas` element, we can create a function that takes this context as an argument, and then draws a circular plot point:
 
