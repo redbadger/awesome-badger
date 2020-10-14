@@ -76,7 +76,7 @@ import init
   } from '../pkg/porous_absorber_calculator.js'
 ```
 
-## How to Start?
+## How to Start the Rust Development Process
 
 ### Declare a Rust Library Project
 
@@ -99,7 +99,7 @@ version = "^0.2"
 features = ["serde-serialize"]
 ```
 
-In addition to stating our dependency on the `wasm-bindgen` crate, the above statement additionally declares the use of the optional create feature `serde-serialize` (this feature will be needed when transferring information to and from JavaScript)
+In addition to stating our dependency on the `wasm-bindgen` crate, the above statement additionally declares the use of the optional crate feature `serde-serialize` (JSON (de)serialization functionality will be needed when transferring information to and from JavaScript)
 
 Now that this basic dependency has been stated, we can start to write some Rust coding that is intended for invocation from the WebAssembly host environment.
 
@@ -116,14 +116,14 @@ In the case of this Porous Absorber Calculator app, there are four entry points 
 
 So in `./src/lib.rs` we define normal public Rust functions, but precede them with the `#[wasm-bindgen]` macro:
 
-```Rust
+```rust
 #[wasm_bindgen]
 pub fn porous_absorber(wasm_arg_obj: JsValue) -> JsValue {
   do_porous_absorber_device(wasm_arg_obj)
 }
 ```
 
-This macro identifies a function as an entry point.  In other words, we're using this macro to construct the WebAssembly module's public API.
+This macro identifies the subsequent function as an entry point for coding running in the WebAssembly host environment.  In other words, we're using this macro to construct the WebAssembly module's public API.
 
 There are a couple of things to notice here:
 
@@ -148,7 +148,7 @@ In the case of the `porous_absorber` function, this receives the `wasm_arg_obj` 
 
 1. First the JSON string is deserialized into a predefined struct whose fields are all of type `String`:
 
-    ```Rust
+    ```rust
     #[derive(Deserialize)]
     struct PorousAbsorberArgs {
       absorber_thickness_mm: String,
@@ -171,22 +171,22 @@ In the case of the `porous_absorber` function, this receives the `wasm_arg_obj` 
     }
     ```
 
-    We now have an `arg_obj` struct in which each of the individual values are `Strings`
+    We now have an `arg_obj` struct in which each of the individual fields are of type `String`
 
 1. Next, where necessary, the `String` values need to be parsed to the correct Rust data type.  
 
     So for instance, when the `absorber_thickness_mm` argument is used in calculations, it is needed as a `u16` value, so we next have the statement:
 
-    ```Rust
-      let absorber_thickness_mm = arg_obj.absorber_thickness_mm.parse::<u16>().unwrap();
+    ```rust
+    let absorber_thickness_mm = arg_obj.absorber_thickness_mm.parse::<u16>().unwrap();
     ```
 
 #### Preparing Rust Data to be Sent to JavaScript
 
 When we wish to send data back to JavaScript, the return value of type `JsValue` is created simply by serializing the outgoing Rust struct:
 
-```Rust
-  JsValue::from_serde(&chart_info).unwrap()
+```rust
+JsValue::from_serde(&chart_info).unwrap()
 ```
 
 ### Calling JavaScript Functionality from Rust
@@ -197,7 +197,7 @@ A typical task for a Web-based application is to be able to write trace/debug ou
 
 In any module that requires this functionality, declare the use of an FFI in conjunction with the `#[wasm-bindgen]` macro:
 
-```Rust
+```rust
 #[wasm_bindgen]
 extern "C" {
   #[wasm_bindgen(js_namespace = console)]
@@ -209,8 +209,8 @@ This declaration states that in some external library, there will be a function 
 
 The `wasm-bindgen` functionality then links this declaration with the browser's `console.log` API and we can now write directly to the browser's console:
 
-```Rust
-  log(format!("Absorber thickness = {}mm", absorber_thickness_mm));
+```rust
+log(format!("Absorber thickness = {}mm", absorber_thickness_mm));
 ```
 
 ## Manipulating the Browser DOM from Rust
@@ -245,7 +245,7 @@ features = [
 
 Using these `web-sys` features, we are now able to access not only the HTML `canvas` element, but the 2D rendering context object within the `canvas` element.  The following code is taken from function [`device_diagram`](https://github.com/ChrisWhealy/porous_absorber/blob/32ed616b3f613a96d2182ac7941c67f885164e91/src/chart/render/draw.rs#L47) in the module `chart::render::draw`:
 
-```Rust
+```rust
 pub fn device_diagram(
   device: &GenericDeviceInfo,
   widest_y_tick_label: f64,
@@ -268,7 +268,7 @@ Right at the start, we can see that the call to `web_sys::window()` would not be
 > ***Aside***  
 > The coding that unloads the 2D rendering context from the `canvas` object is rather ugly, so it has been hidden away inside function `get_2d_context`
 > 
-> ```Rust
+> ```rust
 > pub fn get_2d_context(canvas: &web_sys::HtmlCanvasElement) -> web_sys::CanvasRenderingContext2d {
 >  canvas
 >    .get_context("2d")
@@ -281,9 +281,9 @@ Right at the start, we can see that the call to `web_sys::window()` would not be
 
 It is also worth commenting on the use of function `dyn_into::<T>()`.
 
-Since JavaScript is an untyped language, when we call `get_element_by_id`, we just have to trust that what we get back really is of the type we expect.
+Since JavaScript is an untyped language, when we call `get_element_by_id`, we just have to trust that the object we get back really is of the type we expect.
 
-So when the `canvas_el` object is created in the coding above, the Rust compiler cannot make any guarantees that it really is an HTML `canvas` element.  Consequently, we need to attempt a dynamic cast of the object that ***might*** be a `canvas` element into an object that ***really is*** a `canvas` element.  This is why from time to time, we have to call function `dyn_into::<T>()`.
+So when the `canvas_el` object is created in the coding above, the Rust compiler is unable to make any guarantees that the returned object really is an HTML `canvas` element.  Consequently, we need to perform a dynamic cast of the object that ***might*** be a `canvas` element into an object that ***really is*** a `canvas` element.  This is why from time to time, we have to call function `dyn_into::<T>()`.
 
 #### Manipulating the HTML Canvas
 
@@ -291,7 +291,7 @@ If you have any familiarity with writing JavaScript code to manipulate an HTML `
 
 Now that we know how to access the 2D rendering context of the `canvas` element, we can create a function that takes this context as an argument, and then draws a circular plot point:
 
-```Rust
+```rust
 fn draw_point(
   ctx: &web_sys::CanvasRenderingContext2d,
   point: &PlotPoint,
@@ -324,7 +324,7 @@ fn draw_point(
 
 In reality, writing a browser-based app in Rust is not much harder than writing a browser-based app in JavaScript.  There are of course fundamental differences in the language constructs being employed, but the additional steps of compiling a Rust app to WebAssembly, then consuming that WebAssembly module via its JavaScript polyfill are both very straight-forward.
 
-There are however, certain areas of Rust functionality that do not yet "play nicely" with the interface between WebAssembly and JavaScript &mdash; most noticably is the fact that the `JsValue` data type mentioned above cannot be used in multi-threaded coding.  Even with this restriction though, very useful and powerful applications can be written in Rust which, when compiled to WebAssembly, will run very smoothly in the browser.
+There are however, certain areas of Rust functionality that do not yet *"play nicely"* with the interface between WebAssembly and JavaScript &mdash; most noticably is the fact that the `JsValue` data type mentioned above cannot be used in multi-threaded coding.  Even with this restriction though, very useful and powerful applications can be written in Rust which, when compiled to WebAssembly, will run very smoothly in the browser.
 
 
 Chris W
