@@ -4,9 +4,9 @@ _[Stuart Harris](../) — 4th January 2021_
 
 Some _good_ things came out of 2020! An exciting one, for me, was the progress that the global collective of open source software engineers has been making towards the future of services in the Cloud.
 
-Microservices are continuing to gain traction for Cloud applications and [Kubernetes][kubernetes] has, without question, become their de facto hosting environment. But I think that is all about to change.
+Microservices are continuing to gain traction for Cloud applications and [Kubernetes][kubernetes] has, without question, become their de facto hosting environment. But I think that could be all about to change.
 
-Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code, e.g. our core business logic, to non-functional code, e.g. talking to a database, is way too low. If you open up the code of any microservice, or ask any cross-functional team, you'll see what I mean. You can't see the functional wood for the non-functional trees. As an industry, we're spending way too much time and effort on things that really don't matter (but are still needed to get the job done). This means that we can't move fast enough (or build enough features) to outpace our competitors.
+Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code (e.g. our core business logic) to non-functional code (e.g. talking to a database) is way too low. If you open up the code of any microservice, or ask any cross-functional team, you'll see what I mean. You can't see the functional wood for the non-functional trees. As an industry, we're spending way too much time and effort on things that really don't matter (but are still needed to get the job done). This means that we can't move fast enough (or build enough features) to outpace our competitors.
 
 In this post, I first of all want to explore the Onion architecture, how it applies to microservices and how we might peel off the outer, non-functional layers of the onion, so that we can focus on the functional core.
 
@@ -119,7 +119,7 @@ So today, we typically host our microservices in Kubernetes, something like this
 
 ![Microservices in Kubernetes](./microservices.svg)
 
-If each microservice talks to its own database in a cloud hosted service such as Azure CosmosDB, then each would include the same libraries and similar glue code in order to talk to the DB. Worse, if each service is written in a different language, then we would be including (and maintaining) different libraries and glue code for each language.
+If each microservice talks to its own database in a cloud hosted service such as Azure CosmosDB, then each would include the same libraries and similar glue code in order to talk to the DB. Even worse, if each service is written in a different language, then we would be including (and maintaining) different libraries and glue code for each language.
 
 This problem is addressed today, for networking-related concerns, by a Service Mesh such as [Istio][istio] or [Linkerd][linkerd]. These products abstract away traffic, security, policy and instrumentation into a sidecar container in each pod. This helps a lot because we now no longer need to implement this functionality in each service (and in each service's language).
 
@@ -147,21 +147,27 @@ Once the outer layers have been shed, we're left with a much smaller service, th
 
 So what is the [Actor Model][actor-model]? Briefly, it's an architectural pattern that allows small pieces of business logic to run (and maintain own state) by receiving and sending messages. Actors are inherently concurrent because they process messages in series. They can only send messages to other actors, create other actors and determine how to handle the next message (e.g. by keeping state). The canonical example is an actor that represents your bank account. When you send it a withdrawal message, it deducts from your balance. The way that the next message is handled will depend on the new balance.
 
-[Erlang OTP][erlang-otp] is probably the most famous example of an actor (or "process") runtime organised in supervisor trees. It turns out that this pattern is reliable, safe, and massively concurrent. Which is why it's so good for telecoms applications.
+[Erlang OTP][erlang-otp] is probably the most famous example of an actor (or "process") runtime organised in supervisor trees. Processes are allowed to crash, and errors propagate up the tree. It turns out that this pattern is reliable, safe, and massively concurrent. Which is why it's been so good, for so long, in telecoms applications.
 
 The Dapr Virtual Actor building block can place actors on suitable nodes, hydrating and dehydrating them (and their state) as required. There may be thousands of actors running (or memoised) at any one time.
 
 Depending on what type of application we are building, we can run our logic as a service behind the Dapr sidecar, or as actors supervised by the runtime. Or both. Either way, we have written the logic in the language that is most appropriate for the job, and we haven't had to pollute this code with concerns about how it talks with the outside world.
 
+There's only one thing that can make this code even more portable: [WebAssembly][webassembly] (Wasm). Since December 2019 WebAssembly has been the fourth language of the Web, since it [became a W3C recommendation][wasm-w3c].
+
+Imagine if, instead of using Docker containers to wrap our service in its own operating system, we could just compile it to Wasm and run it anywhere.
+
 ## 4. WasmCloud
 
+[actor-model]: https://en.wikipedia.org/wiki/Actor_model
 [clean-architecture]: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 [dapr]: https://dapr.io/
+[erlang-otp]: https://en.wikipedia.org/wiki/Erlang_(programming_language)
 [hexagonal-architecture]: https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
 [istio]: https://istio.io/
 [kubernetes]: https://kubernetes.io
 [linkerd]: https://linkerd.io/
 [onion-architecture]: https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/
 [onion-code]: https://github.com/StuartHarris/onion
-[actor-model]: https://en.wikipedia.org/wiki/Actor_model
-[erlang-otp]: https://en.wikipedia.org/wiki/Erlang_(programming_language)
+[wasm-w3c]: https://www.w3.org/2019/12/pressrelease-wasm-rec.html.en
+[webassembly]: https://webassembly.org/
