@@ -89,7 +89,7 @@ mod api {
 }
 ```
 
-We'll need an entrypoint for our service:
+We'll need an entry-point for our service:
 
 ```rust
 fn main() {
@@ -131,11 +131,11 @@ Amazingly, there is an open source product available today that does just this! 
 
 Dapr abstracts away IO-related concerns (i.e. those in our _infra_ and _api_ layers) and adds distributed application capabilities. If you use Dapr in Kubernetes, it is also implemented as a sidecar:
 
-![Microservices with DAPR](./dapr.svg)
+![Microservices with Dapr](./dapr.svg)
 
 In fact, we can use Dapr and a Service Mesh together, ending up with 2 sidecars and our service (with no networking or IO concerns) in each pod:
 
-![Microservices with Service Mesh and DAPR](./servicemesh_and_dapr.svg)
+![Microservices with Service Mesh and Dapr](./servicemesh_and_dapr.svg)
 
 Now we're getting somewhere! Our service becomes business logic and nothing else! This is incredibly important! Now, when we look at the source code for our service, we can see the wood — because all the non-functional, non-core, non-business-logic, dull, repetitive, boilerplate code is no longer there.
 
@@ -145,29 +145,53 @@ What's more, our service is now much more portable. It can literally run anywher
 
 Once the outer layers have been shed, we're left with a much smaller service, that concerns itself only with doing a job. It's beginning to look a bit like an Actor. Incidentally, Dapr has support for Virtual Actors as well as the services that we already described. This gives us a flexible deployment model for our core logic.
 
-So what is the [Actor Model][actor-model]? Briefly, it's an architectural pattern that allows small pieces of business logic to run (and maintain own state) by receiving and sending messages. Actors are inherently concurrent because they process messages in series. They can only send messages to other actors, create other actors and determine how to handle the next message (e.g. by keeping state). The canonical example is an actor that represents your bank account. When you send it a withdrawal message, it deducts from your balance. The way that the next message is handled will depend on the new balance.
+So what is the [Actor Model][actor-model]? Briefly, it's an architectural pattern that allows small pieces of business logic to run (and maintain own state) by receiving and sending messages. Actors are inherently concurrent because they process messages in series. They can only process messages, send messages to other actors, create other actors, and determine how to handle the next message (e.g. by keeping state). The canonical example is an actor that represents your bank account. When you send it a withdrawal message, it deducts from your balance. The way that the next message is handled will depend on the new balance.
 
-[Erlang OTP][erlang-otp] is probably the most famous example of an actor (or "process") runtime organised in supervisor trees. Processes are allowed to crash, and errors propagate up the tree. It turns out that this pattern is reliable, safe, and massively concurrent. Which is why it's been so good, for so long, in telecoms applications.
+[Erlang OTP][erlang-otp] is probably the most famous example of an actor (or "process") runtime organised in supervisor trees. Processes are allowed to crash and errors propagate up the tree. It turns out that this pattern is reliable, safe, and massively concurrent. Which is why it's been so good, for so long, in telecoms applications.
 
-The Dapr Virtual Actor building block can place actors on suitable nodes, hydrating and dehydrating them (and their state) as required. There may be thousands of actors running (or memoised) at any one time.
+The Dapr Virtual Actor building block can place actors on suitable nodes, hydrating and dehydrating them (with their state) as required. There may be thousands of actors running (or memoised) at any one time.
 
-Depending on what type of application we are building, we can run our logic as a service behind the Dapr sidecar, or as actors supervised by the runtime. Or both. Either way, we have written the logic in the language that is most appropriate for the job, and we haven't had to pollute this code with concerns about how it talks with the outside world.
+Depending on what type of application we are building, we can run our logic as a service behind the Dapr sidecar, or as actors supervised by the runtime. Or both. Either way, we have written the logic in the language that is most appropriate for the job, and we haven't had to pollute our code with concerns about how it talks with the outside world.
 
-There's only one thing that can make this code even more portable: [WebAssembly][webassembly] (Wasm). Since December 2019 WebAssembly has been the fourth language of the Web, since it [became a W3C recommendation][wasm-w3c].
+## 4. WebAssembly
 
-Imagine if, instead of using Docker containers to wrap our service in its own operating system, we could just compile it to Wasm and run it anywhere.
+There's one thing that can make our code even more portable: [WebAssembly][webassembly] (Wasm). In December 2019 WebAssembly [became a W3C recommendation][wasm-w3c] and is now the fourth language of the Web (alongside HTML, CSS and JS).
 
-## 4. WasmCloud
+Wasm is great in the browser; all modern browsers support it. But, in my opinion, it becomes really useful on the server, where there are already [tens of different Wasm runtimes][awesome-wasm-runtimes] that we can choose from, each with different characteristics (such as just-in-time vs ahead-of-time compilation, etc). Arguably, the most popular runtime is [Wasmtime][wasmtime], which implements a specification called [WebAssembly System Interface (WASI)][wasi] from the [Bytecode Alliance][bytecode-alliance] that is specifically designed to run untrusted code safely in a Wasm sandbox on the server.
+
+This safety is important — modern microservices are assembled from multiple open source libraries and frameworks and it seems irresponsible to run this code as though we trust it. Yet that's what we do, all the time. Docker containers everywhere could be hosting malicious code that is just hanging around, hiding, and waiting for someone with a black hat to trigger its exploit.
+
+We should be building security _in_, rather than building it _on_. Today, we wrap our containerised microservices with a CyberSecurity industry, instead of making it impossible, in the first instance, for code to do anything that we haven't specifically said it can do. Shifting security left, like this, is called [DevSecOps][devsecops], which is more than just [DevOps][devops] — it's about designing security into our applications from the ground up.
+
+## 5. WasmCloud
+
+So to recap, we want to reduce our code to just the functional business logic — the _core_ — without having to worry about how it talks with the outside world. We want to run this, safely, in a sandbox — e.g. Wasmtime. We need a reliable, secure orchestration framework to supervise and manage our small code components (or Actors). We want location transparency and full portability, so we don't have to worry about whether we're deploying to the cloud, on-prem, or at the edge. And we want to design all this security in, from the ground up.
+
+I think [WasmCloud][wasmcloud] (in the process of being renamed from [waSCC][wasmcloud] – the WebAssembly Secure Capabilities Connector) is heading in this direction. Something like this will be what comes next, after Kubernetes.
+
+![A waSCC host](./wascc-host.svg)
+
+A WasmCloud (or waSCC) host securely connects cryptographically signed Wasm actors to the declared capabilities of well-known providers. The actors are placed and managed by the host nodes, which can self-form a Lattice when connected as [NATs][nats] leaf nodes. Actors can be placed near to suitable providers or distributed across heterogeneous networks that span on-prem, Cloud, edge, IoT, embedded devices, etc.
+
+![A waSCC Lattice](./wascc-lattice.svg)
 
 [actor-model]: https://en.wikipedia.org/wiki/Actor_model
+[awesome-wasm-runtimes]: https://github.com/appcypher/awesome-wasm-runtimes
+[bytecode-alliance]: https://bytecodealliance.org/
 [clean-architecture]: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 [dapr]: https://dapr.io/
+[devops]: https://en.wikipedia.org/wiki/DevOps
+[devsecops]: https://www.redhat.com/en/topics/devops/what-is-devsecops
 [erlang-otp]: https://en.wikipedia.org/wiki/Erlang_(programming_language)
 [hexagonal-architecture]: https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
 [istio]: https://istio.io/
 [kubernetes]: https://kubernetes.io
 [linkerd]: https://linkerd.io/
+[nats]: https://nats.io/
 [onion-architecture]: https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/
 [onion-code]: https://github.com/StuartHarris/onion
+[wasi]: https://wasi.dev/
 [wasm-w3c]: https://www.w3.org/2019/12/pressrelease-wasm-rec.html.en
+[wasmcloud]: https://wascc.dev/
+[wasmtime]: https://github.com/bytecodealliance/wasmtime
 [webassembly]: https://webassembly.org/
