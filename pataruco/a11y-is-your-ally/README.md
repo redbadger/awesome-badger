@@ -6,7 +6,7 @@ I am going to talk about Accessibility for the Web by offering a software engine
 
 For instance, product designers could ensure that colours have an adequate contrast ratio. QA engineers could use end to end tools to test whether pages can be used with assistive technologies (AT), and so on.
 
-To continue with this exercise, I will use the [Five Ws](five-w)
+To continue with this exercise, I will use the [Five Ws][five-w]
 
 ## What?
 
