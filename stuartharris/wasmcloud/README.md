@@ -179,6 +179,8 @@ WasmCloud is not the only thing out there that is following this path. [Lunatic]
 
 It may be a while before the Wasm actor model becomes viable for production applications, but it's definitely one to watch. Personally, I can't wait for the time when we can literally write distributed applications by just concentrating on the real work we need to do. In the meantime, we can get going now by using [Dapr][dapr], which is good for production workloads today.
 
+By the way, [I made a small side-project][side-project] that creates a WasmCloud Lattice across my MacBook and a Raspberry Pi, and wrote a Wasm actor that controls an OLED display via a native provider running on the Pi host. WasmCloud is moving fast and I will try to keep this up to date, but if you fancy it, have a play, and raise an issue if you want to chat.
+
 [actor-model]: https://en.wikipedia.org/wiki/Actor_model
 [awesome-wasm-runtimes]: https://github.com/appcypher/awesome-wasm-runtimes
 [bytecode-alliance]: https://bytecodealliance.org/
@@ -197,6 +199,7 @@ It may be a while before the Wasm actor model becomes viable for production appl
 [onion-code]: https://github.com/StuartHarris/onion
 [rust-post]: https://blog.red-badger.com/now-is-a-really-good-time-to-make-friends-with-rust
 [rust]: https://www.rust-lang.org/
+[side-project]: https://github.com/redbadger/rpi-wascc-demo
 [wasi]: https://wasi.dev/
 [wasm-w3c]: https://www.w3.org/2019/12/pressrelease-wasm-rec.html.en
 [wasmcloud]: https://wascc.dev/
