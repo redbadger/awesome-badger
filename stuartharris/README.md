@@ -26,6 +26,18 @@ Infrastructure support to enable feature targeting in microservices based web sy
 
 ## Writing
 
+### [What's next, after Kubernetes?](./wasmcloud/README.md)
+
+14th January 2021
+
+Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code (e.g. our core business logic) to non-functional code (e.g. talking to a database) is way too low. 
+
+In this post, I first explore the Onion architecture, how it applies to microservices and how we might peel off the outer, non-functional layers of the onion, so that we can focus on the functional core.
+
+Then we look at how Kubernetes can be augmented to support this idea (with a service mesh, and a distributed application runtime).
+
+Finally, and most importantly we ask what comes after Kubernetes (spoiler: a WebAssembly actor runtime) that can support core business logic more natively, allowing us to write that logic in any language, run it literally anywhere, and securely connect it to capability providers that we don't have to write ourselves (but could if we needed to).
+
 ### [Full-stack Rust](./full-stack-rust-1/README.md)
 
 23rd June 2020
