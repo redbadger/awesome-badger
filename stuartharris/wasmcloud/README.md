@@ -24,7 +24,7 @@ I've augmented each layer's description with a simple code example. I've used [R
 
 ![Onion Architecture](./onion.svg)
 
-The _core_ is pure in the functional sense, i.e. it has no side-effects. This is where our business logic resides. It is exceptionally easy to test because its pure functions only take and return values. In our example, our _core_ just a single function that takes 2 integers and adds them together. In the _core_, we don't think about IO at all.
+The _core_ is pure in the functional sense, i.e. it has no side-effects. This is where our business logic resides. It is exceptionally easy to test because its pure functions only take and return values. In our example, our _core_ is just a single function that takes 2 integers and adds them together. In the _core_, we don't think about IO at all.
 
 ```rust
 /// 1. Pure. Don't think about IO at all
