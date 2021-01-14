@@ -8,6 +8,8 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
+- 2021-01-14 – [a11y is your ally](./pataruco/a11y-is-your-ally) by [Pedro][pedro]
+
 - 2021-01-14 – [What's next, after Kubernetes?](./stuartharris/wasmcloud) by [Stu][stu]
 
 - 2020-10-12 – [Writing a Browser-based WebAssembly Application in Rust](./chriswhealy/RustWASM) by [Chris W][chrisw]
@@ -28,3 +30,4 @@ Assorted thinking (mostly) about technology written by the Badgers.
 [viktor]: ./charypar
 [chrisw]: ./chriswhealy
 [awesome-badger]: https://awesome.red-badger.com
+[pedro]: ./pataruco
