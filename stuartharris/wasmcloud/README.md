@@ -1,18 +1,18 @@
-# What comes after Kubernetes?
+# What's next, after Kubernetes?
 
-_[Stuart Harris](../) — 4th January 2021_
+_[Stuart Harris](../) — 14th January 2021_
 
 Some _good_ things came out of 2020! An exciting one, for me, was the progress that the global collective of open source software engineers has been making towards the future of services in the Cloud.
 
-Microservices are continuing to gain traction for Cloud applications and [Kubernetes][kubernetes] has, without question, become their de facto hosting environment. But I think that could be all about to change.
+Microservices are continuing to gain traction for Cloud applications and [Kubernetes][kubernetes] has, without question, become their de facto hosting environment. But I think that could all be about to change.
 
-Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code (e.g. our core business logic) to non-functional code (e.g. talking to a database) is way too low. If you open up the code of any microservice, or ask any cross-functional team, you'll see what I mean. You can't see the functional wood for the non-functional trees. As an industry, we're spending way too much time and effort on things that really don't matter (but are still needed to get the job done). This means that we can't move fast enough (or build enough features) to outpace our competitors.
+Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code (e.g. our core business logic) to non-functional code (e.g. talking to a database) is way too low. If you open up the code of any microservice, or ask any cross-functional team, you'll see what I mean. You can't see the functional wood for the non-functional trees. As an industry, we're spending way too much time and effort on things that really don't matter (but are still needed to get the job done). This means that we can't move fast enough (or build enough features) to provide enough _real_ value.
 
 In this post, I first of all want to explore the Onion architecture, how it applies to microservices and how we might peel off the outer, non-functional layers of the onion, so that we can focus on the functional core.
 
 We'll also see how Kubernetes can be augmented to support this idea (with a service mesh like [Istio][istio] or [Linkerd][linkerd], and a distributed application runtime like [Dapr][dapr]).
 
-Finally, and most importantly we'll ask what comes after Kubernetes (spoiler: a WebAssembly actor runtime) that can support core business logic more natively, allowing us to write that logic in any language and securely connect it to capability providers that we don't have to write ourselves (but could if we needed to).
+Finally, and most importantly we'll ask what comes after Kubernetes (spoiler: a WebAssembly actor runtime, possibly something like [WasmCloud][wasmcloud]) that can support core business logic more natively, allowing us to write that logic in any language, run it literally anywhere, and securely connect it to capability providers that we don't have to write ourselves (but could if we needed to).
 
 ## 1. The Onion Architecture
 
@@ -20,7 +20,7 @@ Similar to [Hexagonal Architecture][hexagonal-architecture] (also known as "Port
 
 Imagine the concentric layers of an onion where you can only call inwards (i.e. from an outer layer to an inner layer). Let's see how this might work by starting at its core.
 
-I've augmented each layer's description with a simple code example. I've used Rust for this, because it's awesome! Fight me. Even if you don't know Rust, it should be easy to understand this example, but I've added a commentary that may help, just in case. You can try out the example from this [Github repository][onion-code].
+I've augmented each layer's description with a simple code example. I've used [Rust][rust] for this, because it's awesome! [Fight me][rust-post]. Even if you don't know Rust, it should be easy to understand this example, but I've added a commentary that may help, just in case. You can try out the example from this [Github repository][onion-code].
 
 ![Onion Architecture](./onion.svg)
 
@@ -37,7 +37,7 @@ mod core {
 
 Surrounding the _core_ is the _domain_, where we do think about IO, but not its implementation. This layer orchestrates our logic, providing hooks to the outside world, whilst having no knowledge of that world (databases etc.).
 
-In our code example, we have to use an asynchronous function. Calling out to a database (or something else, we don't actually care yet) will take some milliseconds, so it's not something we want to stop for. The `async` keyword tells the compiler to return a `Future` which may complete at some point. The `Result` is implicitly wrapped in this `Future`.
+In our code example, we have to use an asynchronous function. Calling out to a database (or something else, we actually don't care yet) will take some milliseconds, so it's not something we want to stop for. The `async` keyword tells the compiler to return a `Future` which may complete at some point. The `Result` is implicitly wrapped in this `Future`.
 
 Importantly, our function takes another function as an argument. It's this latter function that will actually do the work of going to the database, so it will also need to return a `Future` and we will need to `await` for it to be completed. Incidentally, the question mark after the `await` allows the function to exit early with an error if something went wrong.
 
@@ -58,9 +58,9 @@ mod domain {
 }
 ```
 
-Those 2 layers are where all our application logic resides. Ideally we wouldn't write any other code. However, in real life, we have to talk to databases, an event bus, or another service. So the outer 2 layers of the onion are, sadly, necessary.
+Those 2 inner layers are where all our application logic resides. Ideally we wouldn't write any other code. However, in real life, we have to talk to databases, an event bus, or another service, for example. So the outer 2 layers of the onion are, sadly, necessary.
 
-The _infra_ layer is where our IO code goes. This is the code that knows how to call the database, for example.
+The _infra_ layer is where our IO code goes. This is the code that knows how to do things like calling a database.
 
 ```rust
 /// 3. IO implementation
@@ -119,7 +119,7 @@ So today, we typically host our microservices in Kubernetes, something like this
 
 ![Microservices in Kubernetes](./microservices.svg)
 
-If each microservice talks to its own database in a cloud hosted service such as Azure CosmosDB, then each would include the same libraries and similar glue code in order to talk to the DB. Even worse, if each service is written in a different language, then we would be including (and maintaining) different libraries and glue code for each language.
+If each microservice talks to its own database, say in a cloud hosted service such as Azure CosmosDB, then each would include the same libraries and similar glue code in order to talk to the DB. Even worse, if each service is written in a different language, then we would be including (and maintaining) different libraries and glue code for each language.
 
 This problem is addressed today, for networking-related concerns, by a Service Mesh such as [Istio][istio] or [Linkerd][linkerd]. These products abstract away traffic, security, policy and instrumentation into a sidecar container in each pod. This helps a lot because we now no longer need to implement this functionality in each service (and in each service's language).
 
@@ -127,7 +127,7 @@ This problem is addressed today, for networking-related concerns, by a Service M
 
 But, and this is where the fun starts, we can also apply the same logic to abstracting away other application concerns such as those in the outer 2 layers of our onion.
 
-Amazingly, there is an open source product available today that does just this! It's called [Dapr][dapr] (Distributed Application Runtime) from the Microsoft stable and is currently approaching its 1.0 release (v1.0.0-rc.2). Although it's only a year old, it has a very active community and has come a long way already with many community-built components that interface with a wide variety of popular cloud products.
+Amazingly, there is an open source product available today that does just this! It's called [Dapr][dapr] (Distributed Application Runtime). It's from the Microsoft stable and is currently approaching its 1.0 release (v1.0.0-rc.2). Although it's only a year old, it has a very active community and has come a long way already with many community-built components that interface with a wide variety of popular cloud products.
 
 Dapr abstracts away IO-related concerns (i.e. those in our _infra_ and _api_ layers) and adds distributed application capabilities. If you use Dapr in Kubernetes, it is also implemented as a sidecar:
 
@@ -139,7 +139,7 @@ In fact, we can use Dapr and a Service Mesh together, ending up with 2 sidecars 
 
 Now we're getting somewhere! Our service becomes business logic and nothing else! This is incredibly important! Now, when we look at the source code for our service, we can see the wood — because all the non-functional, non-core, non-business-logic, dull, repetitive, boilerplate code is no longer there.
 
-What's more, our service is now much more portable. It can literally run anywhere, because how it connects to the world around it is the responsibility of Dapr, and is configured declaratively (in Yaml files, just like a service mesh). If you wanted to move the service from Azure to AWS, or even to the edge, you could, without any code changes.
+What's more, our service is now much more portable. It can literally run anywhere, because how it connects to the world around it is the responsibility of Dapr, and is configured declaratively (in Yaml files, just like a service mesh). If you wanted to move the service from Azure to AWS, or even to the edge, you could, without _any_ code changes.
 
 ## 3. The Actor model
 
@@ -175,6 +175,10 @@ A WasmCloud (or waSCC) host securely connects cryptographically signed Wasm acto
 
 ![A waSCC Lattice](./wascc-lattice.svg)
 
+WasmCloud is not the only thing out there that is following this path. [Lunatic][lunatic] is also interesting (and also written in Rust). Go check it out.
+
+It may be a while before the Wasm actor model becomes viable for production applications, but it's definitely one to watch. Personally, I can't wait for the time when we can literally write distributed applications by just concentrating on the real work we need to do. In the meantime, we can get going now by using [Dapr][dapr], which is good for production workloads today.
+
 [actor-model]: https://en.wikipedia.org/wiki/Actor_model
 [awesome-wasm-runtimes]: https://github.com/appcypher/awesome-wasm-runtimes
 [bytecode-alliance]: https://bytecodealliance.org/
@@ -187,9 +191,12 @@ A WasmCloud (or waSCC) host securely connects cryptographically signed Wasm acto
 [istio]: https://istio.io/
 [kubernetes]: https://kubernetes.io
 [linkerd]: https://linkerd.io/
+[lunatic]: https://github.com/lunatic-lang/lunatic
 [nats]: https://nats.io/
 [onion-architecture]: https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/
 [onion-code]: https://github.com/StuartHarris/onion
+[rust-post]: https://blog.red-badger.com/now-is-a-really-good-time-to-make-friends-with-rust
+[rust]: https://www.rust-lang.org/
 [wasi]: https://wasi.dev/
 [wasm-w3c]: https://www.w3.org/2019/12/pressrelease-wasm-rec.html.en
 [wasmcloud]: https://wascc.dev/
