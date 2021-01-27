@@ -161,7 +161,7 @@ In our example, we don't have any intermediate CAs so the bundle would contain o
 
 - `cat badger-facts.crt root_certificate.crt >> badger-facts-bundle.crt` to combine both certificates into a single bundle.
 
-Your certificates may be suffixed with `.pem` to indicate that they are in `PEM` format (bas64 text compared to `DER` binary) - this is a valid format for a `.crt` file so you should be able to copy the contents in without conversion.
+Your certificates may be suffixed with `.pem` to indicate that they are in `PEM` format ([bas64 text compared to `DER` binary](https://en.wikipedia.org/wiki/X.509#Certificate_filename_extensions)) - this is a valid format for a `.crt` file so you should be able to copy the contents in without conversion.
 
 ### Enabling HTTPS on Nginx
 
