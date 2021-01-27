@@ -1,5 +1,7 @@
 # Networking with a Raspberry
 
+![Raspberry Pi logo](./raspberry-pi-logo.webp)
+
 _[Tim Lee](../) — 21st January 2021_
 
 Want to learn about networking, proxies and web servers? Read on.
@@ -25,7 +27,9 @@ To do that we'll need to cover off a few things:
 
 ### What you will need
 
-A Raspberry Pi (I used a [Raspberry Pi 4b](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)) connected to your local WiFi network. However, it works just as well using pretty much any other machine on your network.
+A Raspberry Pi (I used a [Raspberry Pi 4b](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)) connected to your local WiFi network. However, if you don't have a Pi to hand, you can use pretty much any other machine on your network.
+
+![Raspberry Pi circuit illustration](./raspberry-pi.svg)
 
 ## Step 1: Web server
 
@@ -34,6 +38,8 @@ If you want people to be able to access your site then you need to have a way of
 ### What is a web server?
 
 A web server is just some software running on a networked machine. It can be dumb, like a file server used to serve static documents (might sound familiar if you've ever used an AWS S3 bucket) or a bit smarter, interpreting requests and doing some processing to dynamically render web pages (termed server-side rendering) or providing results to API requests (for example, a GraphQL API running on a NodeJS server).
+
+![Servers](./servers.png)
 
 ### Server options
 
@@ -55,7 +61,7 @@ The following terminal commands on your Raspberry Pi should do the trick:
 
 You can then go to `http://localhost` on the Pi and see the default `Welome to ngingx!` page!
 
-And if you find the IP address of your Raspberry Pi (eg by typing `ifconfig` in the terminal) then you should be able to access it from your own machine by going to that IP in the browser.
+And if you find the IP address of your Raspberry Pi (e.g. by typing `ifconfig` in the terminal) then you should be able to access it from your own machine by going to that IP in the browser.
 
 The base configuration file for the server can be found at `/etc/nginx/nginx.conf`.
 
@@ -63,9 +69,9 @@ The settings for serving the default site on localhost are within the file `/etc
 
 ## Step 2: DNS
 
-So we can now access our site from any device on the network by using the IP address of our Raspberry Pi. But an IP address isn't the most ergonomic way to reach a site - all of our keen badger enthusiasts aren't going to want to type that in every time they want to get some badger facts. Better would be a memorable name, like... `badger.lover`, right? So how do we make that happen?
+So we can now access our site from any device on the network by using the IP address of our Raspberry Pi. But an IP address isn't the most ergonomic way to reach a site - all of our keen badger enthusiasts aren't going to want to type that in every time they want to get some badger facts. Better would be a memorable name, like... `badger.facts`, right? So how do we make that happen?
 
-We need to provide a mechanism to convert that memorable name a user enters into an IP address so their computers can know where to go. We need DNS.
+We need to provide a mechanism to convert that memorable name that a user enters into an IP address so their computers can know where to go. We need DNS.
 
 ### What is DNS?
 
@@ -77,19 +83,19 @@ You can go to your computer settings and view the DNS servers that you've got co
 
 ### Configuring DNS
 
-For our example, we need a way of telling each device on our local network that `badger.lover` can be found on this network at the IP address of your Raspberry Pi. We need a local DNS server.
+For our example, we need a way of telling each device on our local network that `badger.facts` can be found on this network at the IP address of your Raspberry Pi. We need a local DNS server.
 
 [DNSMasq](https://wiki.debian.org/dnsmasq) is a simple, lightweight DNS server that will do this nicely. To get set-up, enter the following in the terminal of your Raspberry Pi:
 
 - `sudo apt update && sudo apt upgrade` to ensure you have the latest package references and are fully up to date
 - `sudo apt install dnsmasq` to install DNSMasq
 - `sudo nano /etc/dnsmasq.conf` and uncomment the `domain-needed` and `bogus-priv` lines - these prevent packets with malformed domain names and packets with private IP addresses from leaving your network
-- `sudo nano /etc/hosts` and add a line at the bottom `192.168.100.100 badger.lover`, where the exact IP address should be replaced by that of your Raspberry Pi. The hosts file on any machine is used to convert domain searches to IP addresses, like a local DNS - in fact, it will be used here by the DNS server to resolve IP queries. We are saying that any queries for `badger.lover` should be answered with the IP address for your Pi, to reach the web server we set up earlier
+- `sudo nano /etc/hosts` and add a line at the bottom `192.168.100.100 badger.facts`, where the exact IP address should be replaced by that of your Raspberry Pi. The hosts file on any machine is used to convert domain searches to IP addresses, like a local DNS - in fact, it will be used here by the DNS server to resolve IP queries. We are saying that any queries for `badger.facts` should be answered with the IP address for your Pi, to reach the web server we set up earlier
 - `sudo service dnsmasq restart` will restart the server to bring these changes into effect
 
-You now need to tell your own machine that it should use this new DNS server. Go to your DNS server settings and add your Pi IP as the first option in the list, so that it is asked first (public DNS servers won't know where to find `badger.lover`, of course).
+You now need to tell your own machine that it should use this new DNS server. Go to your DNS server settings and add your Pi IP as the first option in the list, so that it is asked first (public DNS servers won't know where to find `badger.facts`, of course).
 
-Now go to your browser, type `http://badger.lover` and you should be greeted with a lovely page about badgers! Your machine is first going to your new DNS server on your Raspberry Pi to get the IP, querying that IP address and reaching the web server we set up in step 1 and receiving your lovely web page. Except... it's on http, not https. Yuck!
+Now go to your browser, type `http://badger.facts` and you should be greeted with a lovely page about badgers! Your machine is first going to your new DNS server on your Raspberry Pi to get the IP, querying that IP address and reaching the web server we set up in step 1 and receiving your lovely web page. Except... it's on http, not https. Yuck!
 
 ## Step 3: SSL certificates
 
@@ -121,7 +127,7 @@ The public key used in this process is contained within the SSL certificate for 
 
 #### Certificates for site authentication
 
-So you can talk securely to a site calling itself `badger.lover` - great. But what if, without realising it, you're actually communicating with a devious hAXxoR who wants to steal your information?
+So you can talk securely to a site calling itself `badger.facts` - great. But what if, without realising it, you're actually communicating with a devious hAXxoR who wants to steal your information?
 
 In addition to containing a public key, an SSL certificate is used to prove a site is who it says it is. Each certificate is _digitally signed_ by a **Certificate Authority** (CA) - a company that specialises in signing certificates to confirm sites are who they say they are. But how can we trust them - who authorises the authorisers?!
 
@@ -131,7 +137,7 @@ Each CA holds their own certificate signed by a **Root Certificate Authority** (
 
 To acquire an SSL certificate you need to prove that you actually own the domain so you can't pretend to be, like, Facebook or something.
 
-So, what does that mean for our internal little site - do we need to prove that we own `badger.lover` so we can get a signed certificate? To do that, we would need to buy the domain name and expose the site to the internet for the CA's to confirm it exists and that we run it. Seems like a lot of work considering the site is only available on our network.
+So, what does that mean for our internal little site - do we need to prove that we own `badger.facts` so we can get a signed certificate? To do that, we would need to buy the domain name and expose the site to the internet for the CA's to confirm it exists and that we run it. Seems like a lot of work considering the site is only available on our network.
 
 Instead, we can create our own root CA called _Certificates On Me_ (or something) and get all the devices on the network to agree that they trust this CA so that any certificates it signs will be accepted by the browsers.
 
@@ -141,7 +147,7 @@ There are quite a few steps involved in this, so best if I hand off to an [artic
 
 - configuring your root CA and generating a root CA certificate, which you can do on your Raspberry Pi
 - adding this root CA certificate to the trusted list on your own machine
-- generating certificates signed by this root CA for your website (e.g. `badger.lover`)
+- generating certificates signed by this root CA for your website (e.g. `badger.facts`)
 
 Now the SSL certificate you just created, along with any others you create in the future, should be accepted by your machine.
 
@@ -153,7 +159,7 @@ You can create a bundle by inserting the certificates into a single file, starti
 
 In our example, we don't have any intermediate CAs so the bundle would contain only 2 certificates.
 
-- `cat badger-lover.crt root_certificate.crt >> badger-lover-bundle.crt` to combine both certificates into a single bundle.
+- `cat badger-facts.crt root_certificate.crt >> badger-facts-bundle.crt` to combine both certificates into a single bundle.
 
 Your certificates may be suffixed with `.pem` to indicate that they are in `PEM` format (bas64 text compared to `DER` binary) - this is a valid format for a `.crt` file so you should be able to copy the contents in without conversion.
 
@@ -168,8 +174,8 @@ server {
   listen 443;
   server_name _;
   ssl on;
-  ssl_certificate /etc/ssl/badger-lover-bundle.crt;
-  ssl_certificate_key /etc/ssl/badger-lover.key;
+  ssl_certificate /etc/ssl/badger-facts-bundle.crt;
+  ssl_certificate_key /etc/ssl/badger-facts.key;
   location / {
     root /var/www/html;
     index index.nginx-debian.html
@@ -181,7 +187,7 @@ server {
 
 We now have a secure route defined on the standard HTTPS port (443), enabled with SSL and using our generated certificates to serve the site index file!
 
-You should be able to go to a browser on your own device and reach your site at `https://badger.lover` over HTTPS!
+You should be able to go to a browser on your own device and reach your site at `https://badger.facts` over HTTPS!
 
 ### HTTPS only
 
@@ -190,7 +196,7 @@ As a bonus, we can add a redirect from the original HTTP endpoint to HTTPS to en
 - `sudo nano /etc/nginx/sites-available/default` and edit the original rule for port 80 to remove the entire `location` subsection and replace it with the single line `return 301 https://$host$request_uri;`
 - `sudo /etc/init.d/nginx restart` to restart the server
 
-Now try reaching the site over HTTP (`http://badger.lover`) and watch as it magically gets upgraded to HTTPS. Lovely!
+Now try reaching the site over HTTP (`http://badger.facts`) and watch as it magically gets upgraded to HTTPS. Lovely!
 
 ## Step 4: Reverse proxy
 
@@ -223,29 +229,29 @@ At the moment, we have a single site configured, listening on ports 80 and 443 t
 
 Let's update that to create a dedicated configuration for our site.
 
-- Make a copy of the `default` file and name it according to your website, eg `badger.lover.conf`
-- Update the configuration for the `server_name` (which is used to match the domain on incoming requests) from `_` (a wildcard) to that of your site (ie `badger.lover`). Do this for both the port 80 and port 443 server sections
-- Replace the contents of the `location` section for the 443 server to `proxy_pass http://badger.lover:8888`. This will tell Nginx that this server will act as a reverse proxy, passing the request transparently through to a server listening on port 8888
+- Make a copy of the `default` file and name it according to your website, eg `badger.facts.conf`
+- Update the configuration for the `server_name` (which is used to match the domain on incoming requests) from `_` (a wildcard) to that of your site (i.e. `badger.facts`). Do this for both the port 80 and port 443 server sections
+- Replace the contents of the `location` section for the 443 server to `proxy_pass http://badger.facts:8888;`. This will tell Nginx that this server will act as a reverse proxy, passing the request transparently through to a server listening on port 8888
 - Create a new `server` section at the bottom of the file, which will act as the new internal web server that will respond to requests that are passed through from the reverse proxy. It should listen on port 8888 and respond with the index page
 
 ```
 server {
   listen 443;
-  server_name badger.lover;
+  server_name badger.facts;
   ssl on;
-  ssl_certificate /etc/ssl/badger-lover-bundle.crt;
-  ssl_certificate_key /etc/ssl/badger-lover.key;
+  ssl_certificate /etc/ssl/badger-facts-bundle.crt;
+  ssl_certificate_key /etc/ssl/badger-facts.key;
   location / {
-    proxy_pass http://badger.lover:8888
+    proxy_pass http://badger.facts:8888;
   }
 }
 
 server {
   listen 8888;
-  server_name badger.lover;
+  server_name badger.facts;
   location / {
     root /var/www/html;
-    index index.nginx-debian.html
+    index index.nginx-debian.html;
   }
 }
 ```
@@ -254,7 +260,7 @@ Notice how the proxy server communicates with the internal server over HTTP - TL
 
 In order to 'activate' this new configuration, we need to tell Nginx that this new site is now active and ready to be served. To do that, we create a symlink from the file in the `sites-available` directory to the `sites-enabled` directory:
 
-- `ln -s /etc/nginx/sites-available/badger.lover.conf /etc/nginx/sites-enabled/badger.lover.conf` to create the symlink
+- `ln -s /etc/nginx/sites-available/badger.facts.conf /etc/nginx/sites-enabled/badger.facts.conf` to create the symlink
 - `sudo /etc/init.d/nginx restart` to restart the server
 
 You should be able to reach your site from your own machine, as before, but now all traffic is going through the reverse proxy. As a user of the site, nothing has changed for you.
@@ -265,9 +271,9 @@ We could easily host multiple sites on our Raspberry Pi (or on other network dev
 
 In this post, we've gone overboard in our attempts to serve an internal site on a network in order to demonstrate some of the key concepts regarding servers and networking.
 
-You can take this further by adding caching to the reverse proxy, setting up the Raspberry Pi as a forward proxy using something like [Privoxy](https://www.howtogeek.com/683971/how-to-use-a-raspberry-pi-as-a-proxy-server-with-privoxy/) or by going public and exposing your Raspberry Pi to the wider world. Go forth and network.
+You can take this further by [adding caching to the reverse proxy](https://www.nginx.com/blog/nginx-caching-guide/), setting up the Raspberry Pi as a forward proxy using something like [Privoxy](https://www.howtogeek.com/683971/how-to-use-a-raspberry-pi-as-a-proxy-server-with-privoxy/) or by going public and exposing your Raspberry Pi to the wider world. Go forth and network.
 
-(NB: If you spot any mistakes in this post please let me know or open a pull request!)
+(N.B. If you spot any mistakes in this post please let me know or open a pull request!)
 
 ## References
 
