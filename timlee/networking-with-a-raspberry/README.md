@@ -43,7 +43,7 @@ A web server is just some software running on a networked machine. It can be dum
 
 ### Server options
 
-So which server software to use? There are many popular options including<sup>[1](#1)</sup>:
+For our purposes, we'll need a simple, static file server. There are many popular options including<sup>[1](#1)</sup>:
 
 - **[Apache](https://httpd.apache.org/)** - open source, around since 1995, serves around 25% of the web
 - **[Nginx](https://www.nginx.com/)** - open source, released in 2004, more performant than Apache and has been growing in popularity, stealing a significant market share from Apache, serves around 37% of the web
