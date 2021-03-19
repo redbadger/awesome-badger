@@ -10,7 +10,7 @@ As described in [this article](https://martinfowler.com/articles/micro-frontends
 
 ## An example
 
-Let's imagine a dashboard for users of a SaaS product. Each page of the dashboard has a header on the top (blue), a navigation bar on the right (yellow), and a main content area (red).
+Let's imagine a dashboard for users of a SaaS product. Each page of the dashboard has a header on the top (blue), a navigation bar on the left (yellow), and a main content area (red).
 
 ![Dashboard example](./dashboard.png)
 
