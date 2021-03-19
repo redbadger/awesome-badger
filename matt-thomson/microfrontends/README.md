@@ -133,7 +133,7 @@ One of the major drawbacks of the microfrontend approach is that, if we generate
 
 There are a few options for alleviating this pain. The simplest approach might be to load a single global copy of commonly used libraries; however, doing this means that all microfrontends will depend on the same version of those libraries, which makes upgrading them more challenging, as all of the microfrontends will need to be upgraded together.
 
-A better option might be to use bundle splitting to separate large libraries into their own files, which can be loaded by multiple microfrontends and cached by the browser. If there are a small number of frameworks (and versions of those frameworks) in use across the microfrontends, then this could be a significant saving. Alternatively, the problem could be mitigated by using smaller frameworks, such as [Svelte](https://svelte.dev/).
+A better option might be to use bundle splitting to separate large libraries into their own files, which can be loaded by multiple microfrontends and cached by the browser. If there are a small number of frameworks (and versions of those frameworks) in use across the microfrontends, then this could be a significant saving. Webpack's [module federation](https://webpack.js.org/concepts/module-federation/) feature could be a good way to achieve this. Alternatively, the problem could be mitigated by using smaller frameworks, such as [Svelte](https://svelte.dev/).
 
 ## Conclusion
 
