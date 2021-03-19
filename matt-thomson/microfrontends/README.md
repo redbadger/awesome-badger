@@ -6,7 +6,7 @@ As we build larger and larger single page apps, it becomes increasingly difficul
 
 On the backend, there are increasingly established patterns for decomposing large monolithic services into [microservices](https://martinfowler.com/articles/microservices.html), but less has been said about solving the similar problem for frontend monoliths. However, the idea of **microfrontends** is starting to gain some traction.
 
-As described in [this article](https://martinfowler.com/articles/micro-frontends.html), microfrontends is an approach for decomposing a monolithic frontend application into smaller components, which come together to form the whole app. I've recently been experimenting with this approach, and this post describes some things I learned along the way.
+Microfrontends is an approach for decomposing a monolithic frontend application into smaller components, which come together to form the whole app. I've recently been experimenting with this approach, and this post describes some things I learned along the way.
 
 ## An example
 
@@ -138,3 +138,9 @@ A better option might be to use bundle splitting to separate large libraries int
 ## Conclusion
 
 Microfrontends are an interesting approach to the challenges of building and maintaining large single page apps, borrowing ideas from backend microservices that have proved useful in similar situations. I'll be keeping a close eye on this space and will have it in my toolbox the next time I'm building a complex frontend app.
+
+## Further reading
+
+- [Micro Frontends](https://martinfowler.com/articles/micro-frontends.html): article by Cam Jackson
+- [micro-frontends.org](https://micro-frontends.org/)
+- [Micro Frontends in Action](https://www.manning.com/books/micro-frontends-in-action): book by Michael Geers
