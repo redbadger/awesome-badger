@@ -8,6 +8,8 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
+- 2021-03-19 - [Microfrontends](./matt-thomson/microfrontends) by [Matt T][matt-thomson]
+
 - 2021-01-27 – [Networking with a Raspberry](./timlee/networking-with-a-raspberry) by [Tim L][timlee]
 
 - 2021-01-14 – [a11y is your ally](./pataruco/a11y-is-your-ally) by [Pedro][pedro]
@@ -34,3 +36,4 @@ Assorted thinking (mostly) about technology written by the Badgers.
 [awesome-badger]: https://awesome.red-badger.com
 [pedro]: ./pataruco
 [timlee]: ./timlee
+[matt-thomson]: ./matt-thomson
