@@ -8,6 +8,8 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
+- 2021-04-09 - [Platform (r)evolution](./stuartharris/platform-revolution) by [Stu][stu]
+
 - 2021-03-19 - [Microfrontends](./matt-thomson/microfrontends) by [Matt T][matt-thomson]
 
 - 2021-01-27 – [Networking with a Raspberry](./timlee/networking-with-a-raspberry) by [Tim L][timlee]
