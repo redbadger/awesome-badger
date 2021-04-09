@@ -26,11 +26,17 @@ Infrastructure support to enable feature targeting in microservices based web sy
 
 ## Writing
 
+### [Platform (r)evolution](./platform-revolution/README.md)
+
+9th April 2021
+
+A look at how platforms for distributed systems are evolving — how they are rising up to meet ever lighter workloads — and charting a journey from Kubernetes, through Istio and Dapr, to wasmcloud and beyond.
+
 ### [What's next, after Kubernetes?](./wasmcloud/README.md)
 
 14th January 2021
 
-Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code (e.g. our core business logic) to non-functional code (e.g. talking to a database) is way too low. 
+Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code (e.g. our core business logic) to non-functional code (e.g. talking to a database) is way too low.
 
 In this post, I first explore the Onion architecture, how it applies to microservices and how we might peel off the outer, non-functional layers of the onion, so that we can focus on the functional core.
 
