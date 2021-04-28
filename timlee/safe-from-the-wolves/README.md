@@ -19,9 +19,9 @@ It's also important to note up-front that security is a hard thing to get right 
 
 To put the various tools to the test, I created a template typescript [NextJS](https://nextjs.org/docs/api-reference/create-next-app) project with associated Github Action for CI and introduced a number of delicious, security-related bugs on a feature branch, including:
   - a selection of the most pernicious [according to OWASP](https://www.rapid7.com/blog/post/2019/12/06/hidden-helpers-security-focused-http-headers-to-protect-against-vulnerabilities/) (The Open Web Application Security Project)
-    - An "evil regex" that can lead to a RegEx denial of service attack
+    - an "evil regex" that can lead to a RegEx denial of service attack
     - `SELECT` SQL statement with user-generated content (SQL-injection attack)
-    - Returning raw server error messages to the client
+    - returning raw server error messages to the client
     - an outdated, insecure dependency (SSRI v6.0.1)
     - a hardcoded private key
   - some Javascript/React-specific issues
@@ -167,4 +167,4 @@ I didn't try it out, but it looks really nice and fits the belt-and-braces model
 
 This article covers only a partial cross-section of the wide and varied world of security tooling, but hopefully shows that there are many effective, light-weight options for identifying vulnerabilities as part of our existing development workflows that should help more than they hinder. 
 
-Of course, many security bugs will dip and dodge past the full aresenal of automated testing, meaning that we must always be attentive in our code reviews, studious in our security education and vigilent in production. However, by accepting and embracing security to bring the Sec into DevOps, we give ourselves, and our users, the best chance of protection from the wolves - that has to be worth the effort, right?
+Of course, many security bugs will dip and dodge past the full aresenal of automated testing, meaning that we must always be studious in our security education, attentive in our code reviews and vigilent in production. However, by accepting and embracing security to bring the Sec into DevOps, we give ourselves, and our users, the best chance of protection from the wolves - that has to be worth the effort, right?
