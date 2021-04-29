@@ -3,7 +3,7 @@ _[Tim Lee](../) — 27th April 2021_
 
 ![angry wolf](./img/wolf2.gif)
 
-Last week I virtually attended the reasonably interesting [DevOpsCon London](https://devopscon.io/london/) event. My main takeaway is that _Shift Left on Security_ is the current buzz-phrase in the DevOps community, with some suggesting an expansion of the existing merger to create _DevSecOps_. This throws open the door and welcomes in the cold and shivering form of Security, who's been guarding the front door this whole time and yet never once been offered a cup of tea by Automated Testing and Continuous Integration, who've been merrily sat around, warming their toes by the fire. And it's about time, too.
+Last week I virtually attended the reasonably interesting [DevOpsCon London](https://devopscon.io/london/) event. My main takeaway is that _Shift Left on Security_ is the current buzz-phrase in the DevOps community, with some suggesting an expansion of the existing merger to create _DevSecOps_. This throws open the door and welcomes in the cold and shivering form of Security, who's been guarding the entrance this whole time and yet never once been offered a cup of tea by Automated Testing and Continuous Integration, who've been merrily sat around, warming their toes by the fire. And it's about time, too.
 
 In a world where automation rules and there's an emphasis on checking for issues early and often to keep the feedback loop tight, it's only natural that security should be brought into the fold, especially when the number of wolves prowling the streets, looking for straw houses full of little piggies to blow over, continues to grow.
 
@@ -97,11 +97,11 @@ ES-lint > Trufflehog
 
 One of the biggest threats in most JS-based projects is the extensive use of third-party libraries, with little-to-no regulation or protection against malicious actors or compromised packages. With a constant cycle of patched versions being released, it's easy to fall behind and so end up with known vulnerabilities in your project.
 
-This is where dependency checkers come in, scanning your libraries for library versions with known issues.
+This is where dependency checkers come in, scanning your packages for versions with known issues.
 
 #### Dependabot
 
-[Dependabot](https://dependabot.com/#how-it-works) is one of the best known dependency checkers. It's easy to set up through Github and periodically checks the project's installed package versions against the latest problematic dependencies, notifying you when it finds anything and even (if configured) automatically creating a pull request to update to the latest, safest version.
+[Dependabot](https://dependabot.com/#how-it-works) is one of the best known dependency checkers. It's easy to set up through Github and periodically checks the project's installed package versions against the latest problematic dependencies, notifying you when it finds anything and even (if configured) automatically creating pull requests to update to the latest, safest versions.
 
 ![Dependabot alert in github](./img/dependabot.png)
 
@@ -111,7 +111,7 @@ This does not necessarily protect against the issue of [typosquatting](https://b
 
 #### yarn audit / npm audit
 
-Both `yarn` and `npm` package managers have a built-in function called `audit` to catch known issues, making it really easy to add as a pipeline step or pre-commit hook. 
+Both `yarn` and `npm` package managers have a built-in function called `audit` to catch known issues, making it really simple to add as a pipeline step or pre-commit hook. 
 
 ![yarn audit identifying a dodgy dependency in the terminal](./img/yarn-audit.png)
 
