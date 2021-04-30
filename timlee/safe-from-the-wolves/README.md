@@ -35,7 +35,7 @@ You can check out the code [here](https://github.com/TimboTambo/security-tooling
 
 ### Static Application Security Testing (SAST)
 
-Many security issues arise from bad but often-repeated patterns, meaning that we can scan the code using a list of rules written as regexes to identify likely vulnerabilities - this is esentially what static code analysers do. This kind of test is referred to as [white-box testing](https://en.wikipedia.org/wiki/White-box_testing), with _white_ as in transparent, since it tests from an internal perspective with access to the source-code.
+Many security issues arise from bad but often-repeated patterns, meaning that we can scan the code using a list of rules written as regexes to identify likely vulnerabilities - this is essentially what static code analysers do. This kind of test is referred to as [white-box testing](https://en.wikipedia.org/wiki/White-box_testing), with _white_ as in transparent, since it tests from an internal perspective with access to the source-code.
 
 There are a [large number of analysers recognised by OWASP](https://owasp.org/www-community/Source_Code_Analysis_Tools) that cover a range of languages, use cases and budgets.
 
@@ -167,4 +167,4 @@ I didn't try it out, but it looks really nice and fits the belt-and-braces model
 
 This article covers only a partial cross-section of the wide and varied world of security tooling, but hopefully shows that there are many effective, light-weight options for identifying vulnerabilities as part of our existing development workflows that should help more than they hinder. 
 
-Of course, many security bugs will dip and dodge past the full aresenal of automated testing, meaning that we must always be studious in our security education, attentive in our code reviews and vigilent in production. However, by accepting and embracing security to bring the Sec into DevOps, we give ourselves, and our users, the best chance of protection from the wolves - that has to be worth the effort, right?
+Of course, many security bugs will dip and dodge past the full arsenal of automated testing, meaning that we must always be studious in our security education, attentive in our code reviews and vigilent in production. However, by accepting and embracing security to bring the Sec into DevOps, we give ourselves, and our users, the best chance of protection from the wolves - that has to be worth the effort, right?
