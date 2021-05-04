@@ -18,7 +18,7 @@ It's also important to note up-front that security is a hard thing to get right 
 ## The challenge
 
 To put the various tools to the test, I created a template typescript [NextJS](https://nextjs.org/docs/api-reference/create-next-app) project with associated Github Action for CI and introduced a number of delicious, security-related bugs on a feature branch, including:
-  - a selection of the most pernicious [according to OWASP](https://www.rapid7.com/blog/post/2019/12/06/hidden-helpers-security-focused-http-headers-to-protect-against-vulnerabilities/) (The Open Web Application Security Project)
+  - a selection of the most pernicious [according to OWASP](https://owasp.org/www-project-top-ten/) (The Open Web Application Security Project)
     - an "evil regex" that can lead to a RegEx denial of service attack
     - `SELECT` SQL statement with user-generated content (SQL-injection attack)
     - returning raw server error messages to the client
