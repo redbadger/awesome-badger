@@ -18,3 +18,11 @@ I've been using [remark](https://github.com/gnab/remark) [excalidraw](https://ex
 
 - Some internal presentations.
 - [My home monitoring project](https://alsuren.github.io/mijia-homie/docs/presentation/) for Binary Solo, and updated for Rust London.
+
+## Writing
+
+### [Infrastructure Musings](./infrastructure-musings/README.md)
+
+Jun 2021
+
+Semi-structured musings about what my vision of infrastructure nirvana is, and what's available at the moment to help us on our way there.
