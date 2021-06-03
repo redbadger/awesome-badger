@@ -4,7 +4,13 @@
 
 Most of my open source contributions happen on [GitHub](https://github.com/alsuren/) and are tracked on [Trello](https://trello.com/b/oUj099Rh/oss-contributions-and-other-projects), with a [WIP limit](https://kanbanize.com/kanban-resources/getting-started/what-is-wip) to stop myself going insane.
 
-The biggest project that I own is [a home monitoring project](https://github.com/alsuren/mijia-homie/) which feeds temperature and humidity readings to Grafana.
+Highlights include:
+
+- [mijia-homie](https://github.com/alsuren/mijia-homie/) - A home monitoring project which feeds temperature and humidity readings to Grafana.
+  - This also spawned [bluez-async](https://github.com/bluez-rs/bluez-async - A BlueZ helper library which is useful in its own right.
+- [hoverkite](https://github.com/hoverkite/hoverkite) - A project to fly a kite using hoverboard motors.
+- [cargo-quickinstall](https://github.com/alsuren/cargo-quickinstall/) - A wrapper around `cargo install` that can fetch prebuilt executables to speed things up.
+  - The eventual aim is to make a `cargo quickbuild` command that wraps `cargo build`, and can bootstrap your dependency tree with prebuilt assets on first build. This is a bit of a moon-shot though. Progress is tracked in the [cargo-quick](https://github.com/cargo-quick/) organization.
 
 ## Presentations
 
