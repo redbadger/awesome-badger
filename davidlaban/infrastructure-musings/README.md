@@ -18,6 +18,18 @@ The thing that all of these providers have in common is the ability to scale to 
 
 The most prominent example of a service that will allow you to scale to zero is Amazon Lambda. The generic term for this is Function as a Service (FaaS). There are many implementations of this idea, including an open-source one called OpenFaaS.
 
+### Is this suitable for every project?
+
+It depends how your state is managed. In Excalidraw, all of the state is managed in the browser, so this is perfect. It gets more complicated as soon as you need to interact with databases, job queues and external services.
+
+<!-- TODO: talk to Carlos about how their state is managed --> If your service only ever reads from a database then you can probably get away with handing out read-only access to a DB that's shared between all preview sites.
+
+If your database migrations are enough to bring up a minimal database, and you have scripts that can populate it with example data, you're also in a good place, because you can create an empty database for each preview deployment, and write a script to delete old databases. Small unused databases don't cost much.
+
+In general, this problem is harder than the "give me a development environment on my local laptop" problem, because it needs to be multi-tenant, and it's not allowed to have any manual steps in it. You have to decide whether this is worth it.
+
+It's also worth mentioning that if you're following the recommendations in "Accelerate", you will be doing something close to trunk-based development anyway, and your pull requests will not diverge from the main branch very much, so they can reasonably be tested on localhost or staging (or even prod).
+
 ### Could you build something like this on your own infrastructure?
 
 Kind-of.
@@ -29,10 +41,6 @@ The go-to solution for private clouds is usually kubernetes. "One kubernetes clu
 Assuming that we're not going to hand out a kubernetes cluster per pull request, what other options do we have?
 
 If your web services and queue consumers were written in the FaaS style, you could potentially deploy your static web assets to CDN and then deploy OpenFaaS into your cluster and route traffic from each preview site into the appropriate function.
-
-### Is this suitable for every project?
-
-<!-- TODO: Explore the problem of populating a staging environment with reasonable data. -->
 
 <!-- TODO:
 * My dad's problem solving checklist:
