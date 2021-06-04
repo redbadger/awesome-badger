@@ -14,9 +14,15 @@ At my previous company, we had a set of "pre-live" web servers that you could de
 
 Excalidraw is using Vercel for their deployments, but Vercel isn't the only service that offers this capability. The ~Talent Compass~ SoMo team has been using Render with [a very similar workflow](https://github.com/redbadger/skills-database/pull/52#issuecomment-853287319). I found an article that lists a bunch of other options [here](https://bejamas.io/blog/jamstack-hosting-deployment/).
 
-The thing that all of these providers have in common is the ability to scale to zero. This is crucial. If you are providing this as a free-tier service, you can't afford to be wasting resources on PRs that stay open forever without anyone looking at them.
+The thing that all of these providers have in common is the ability to scale to zero (like how e.g. Amazon Lambda does). This is crucial. If you are providing this as a free-tier service, you can't afford to be wasting resources on PRs that stay open forever without anyone looking at them.
+
+### Aside on Function as a Service
 
 The most prominent example of a service that will allow you to scale to zero is Amazon Lambda. The generic term for this is Function as a Service (FaaS). There are many implementations of this idea, including an open-source one called OpenFaaS.
+
+<!-- As a further aside, when I was reading up on faas-cli, I noticed that both `faas-cli` and `dapr` cli both have an `invoke` method. I will have to explore how they compare -->
+
+<!-- I also noticed that openfaas relies on NATS for its queue, which is the same thing that Stu's Rust London wascc demo used. I should look into this more as well. There is already a demo of OpenFaaS+wascc, and the cold start times sound promising. -->
 
 ### Is this suitable for every project?
 
@@ -24,23 +30,21 @@ It depends how your state is managed. In Excalidraw, all of the state is managed
 
 <!-- TODO: talk to Carlos about how their state is managed --> If your service only ever reads from a database then you can probably get away with handing out read-only access to a DB that's shared between all preview sites.
 
-If your database migrations are enough to bring up a minimal database, and you have scripts that can populate it with example data, you're also in a good place, because you can create an empty database for each preview deployment, and write a script to delete old databases. Small unused databases don't cost much.
+If your database migrations are enough to bring up a minimal database, and you have scripts that can populate it with example data, you're also in a good place, because you can create an empty database for each preview deployment, and write a script to delete old databases. Small unused databases don't cost much. That said, you're already pushing the limits of reasonableness at this point.
 
-In general, this problem is harder than the "give me a development environment on my local laptop" problem, because it needs to be multi-tenant, and it's not allowed to have any manual steps in it. You have to decide whether this is worth it.
+In general, this problem is harder to set up than the "give me a development environment on my local laptop" problem (you should **definitely** get local development working first), but reduces friction once you have it. The difficulty arises mostly because it needs to be multi-tenant, and it's not allowed to have any manual steps in it. You have to decide whether this is worth it.
 
-It's also worth mentioning that if you're following the recommendations in "Accelerate", you will be doing something close to trunk-based development anyway, and your pull requests will not diverge from the main branch very much, so they can reasonably be tested on localhost or staging (or even prod).
+It's also worth mentioning that if you're following the recommendations in "Accelerate", you will be doing something close to trunk-based development anyway, and your pull requests will not diverge from the main branch very much, so they can reasonably be tested on localhost or staging (or even prod with feature flags).
+
+Talking to Sam Taylor about this, he convinced me that it's fine for stateless web components in a PaaS, but should probably be avoided for anything more complex. He also made the point that it doesn't help you at all with async services like queue consumers, or the interaction between web tier and async tier code. I would argue that you probably don't want to deploy any risky frontend-backend interactions as part of a single pull request anyway.
 
 ### Could you build something like this on your own infrastructure?
 
-Kind-of.
+I think this is what I want to find out.
 
-The go-to solution for private clouds is usually kubernetes. "One kubernetes cluster per pull request" is not something that will be able to scale to zero. Just running the kubernetes backplane with no services will probably use more resources than the services that you're deploying to it, especially at the start of the project<!-- [citation needed] -->.
+Assuming you have already bought into kubernetes, I wonder whether you could get your ingress to cooperate with OpenFaaS and give you subdomain-per-pull-request previews. I also wonder whether it would be reasonable to dump this into your production cluster, with appropriate resource limits.
 
-<!-- I tried to push in this direction at FutureNHS, and we got to "One cluster per developer" before realising that it was a terrible idea, because it cost too much and overcomplicated everything. -->
-
-Assuming that we're not going to hand out a kubernetes cluster per pull request, what other options do we have?
-
-If your web services and queue consumers were written in the FaaS style, you could potentially deploy your static web assets to CDN and then deploy OpenFaaS into your cluster and route traffic from each preview site into the appropriate function.
+Maybe this is how I will spend my bench time for the next month.
 
 <!-- TODO:
 * My dad's problem solving checklist:
