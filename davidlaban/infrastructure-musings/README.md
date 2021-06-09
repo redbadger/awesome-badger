@@ -48,10 +48,39 @@ Assuming you have already bought into kubernetes, I wonder whether you could get
 
 Maybe this is how I will spend my bench time.
 
+### First stab at this
+
+Note that OpenFaaS only gives you a single endpoint per docker image. This is probably fine if you're using graphql, but might be awkward if you're trying to serve a richer REST api.
+
+<!-- Dapr has a better story for exposing multiple endpoints, but I'm not so sure about scaling to zero. -->
+
+I think what you need to do is:
+
+- Decide on a mapping between pull request and function name
+- For each pull request:
+
+  - `faas-cli build --image $PREFIX/$IMAGE:$PR_ID-$COMMIT` docker image for the function
+  - `faas-cli push --image $PREFIX/$IMAGE:$PR_ID-$COMMIT`
+  - `faas-cli deploy --image $PREFIX/$IMAGE:$PR_ID-$COMMIT --name $PR_ID`
+  - Build and deploy static assets to CDN
+  - Make a new subdomain for the preview url
+  - Fiddle with your ingress configs:
+    - Arrange for the preview subdomain's static assets point at the CDN.
+    - Arrange for the preview subdomain's graphql url to point to `/function/$PR_ID`
+
+<!-- TODO: how do we clean this up when the PR is merged/closed? -->
+
+To scale to zero:
+
+<!-- This functionality is also available via faas-idler if you are using OpenFaaS PRO, but the logic is pretty simple, and is described here if you want to implement it yourself: https://www.openfaas.com/blog/zero-scale/ -->
+
+- Keep track of invocation count for each function (prometheus-style). This can be done with the `/system/functions` endpoint.
+- If a function has not been used for $timeout, scale it down by POSTing `{"replicas: 0}` to `/system/scale-function/${function}`.
+
 <!-- TODO:
 * My dad's problem solving checklist:
   * ~Where are we now?~
-  * Where could we be?
-  * Where should we be?
-  * How do we get there?
+  * ~Where could we be?~
+  * ~Where should we be?~
+  * ~How do we get there?~
  -->
