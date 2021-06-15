@@ -26,3 +26,9 @@ I've been using [remark](https://github.com/gnab/remark) [excalidraw](https://ex
 Jun 2021
 
 Semi-structured musings about what my vision of infrastructure nirvana is, and what's available at the moment to help us on our way there.
+
+### [Dapr Impressions](./dapr-impressions/README.md)
+
+Jun 2021
+
+Early impressions on dapr, its tooling, and how it fits into the universe.
