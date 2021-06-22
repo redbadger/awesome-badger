@@ -22,6 +22,8 @@ dapr is intended to be bolted on to kubernetes pods as sidecars, so it defers th
 
 Having a local dev environment that hooks into zipkin by default is really promising. On the FutureNHS project, we ended up struggling with our distributed tracing setup because we weren't using it for local debugging, so when we found a bug on the deployed cluster, we couldn't debug it very easily, because the tracing hadn't been set up correctly.
 
+It turns out that having distributed tracing enabled in the Dapr load balancer isn't a magic bullet. You still need to thread the tracing context through your app (which will take you a day or two to work out how to do, because the opentelemetry libraries want to give you control of **everything**, rather than giving you a simple entrypoint function that will Just Work).
+
 ## Placement
 
 TODO: what is this placement thing that I keep hearing about?
