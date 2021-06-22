@@ -17,3 +17,15 @@ Dapr is intended to sit on top of kubernetes for production deployment, but it a
 docker-compose adds your project name as a prefix when creating containers, so you get something approximating namespaces. Dapr does not appear to have anything like this, so everything running on your machine lives in the same namespace, as far as I can tell. If dapr becomes popular for open-source projects, I can imagine this causing problems.
 
 dapr is intended to be bolted on to kubernetes pods as sidecars, so it defers the job of process supervision to kubernetes in production. This means that `dapr run` needs to be combined with some other kind of process supervision when used locally.
+
+## Distributed tracing
+
+Having a local dev environment that hooks into zipkin by default is really promising. On the FutureNHS project, we ended up struggling with our distributed tracing setup because we weren't using it for local debugging, so when we found a bug on the deployed cluster, we couldn't debug it very easily, because the tracing hadn't been set up correctly.
+
+## Placement
+
+TODO: what is this placement thing that I keep hearing about?
+
+## http bindings
+
+Why have they decided to use json-over-http to describe http requests when they could just proxy http
