@@ -32,3 +32,9 @@ Semi-structured musings about what my vision of infrastructure nirvana is, and w
 Jun 2021
 
 Early impressions on dapr, its tooling, and how it fits into the universe.
+
+### [WasmCloud Impressions](./wasmcloud-impressions/README.md)
+
+Jun 2021
+
+Early impressions of WasmCloud.
