@@ -38,3 +38,9 @@ Early impressions on dapr, its tooling, and how it fits into the universe.
 Jun 2021
 
 Early impressions of WasmCloud.
+
+### [NATS Impressions](./nats-impressions/README.md)
+
+Jun 2021
+
+Early impressions on NATS, its tooling, and how it fits into the universe.
