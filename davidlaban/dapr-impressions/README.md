@@ -26,7 +26,7 @@ It turns out that having distributed tracing enabled in the Dapr load balancer i
 
 ## Placement
 
-TODO: what is this placement thing that I keep hearing about?
+Placement has to do with dapr virtual actors. In our badger-brian investigations, we don't really use actors, but the service is up anyway. As I start reading into it, the dapr virtual actors concept is actually really interesting.
 
 ## http bindings
 
