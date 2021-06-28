@@ -68,3 +68,7 @@ I wonder how the `ngs.echo` topic works (whether it's patched into the server, o
 ## Default connections and hidden context
 
 `nsc tool pub` implicitly reaches into some configs somewhere and works out where it needs to connect. Legacy tools like `nats-pub` don't do this, and neither do client libraries (or tools that use them, like wasmcloud).
+
+## Leaf nodes
+
+It feels like everyone wants you to install a nats leaf node as a sidecar (wasmcloud's wash cli tool doesn't even have a way to configure it to connect directly to NGS as a control plane). Following along with https://docs.nats.io/nats-server/configuration/leafnodes#leaf-node-example-using-a-remote-global-service shows you how to do it. You need a verified email address and payment method in order to do this.
