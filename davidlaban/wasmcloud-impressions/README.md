@@ -57,3 +57,29 @@ I didn't get any indication that my second capability provider was in a non-func
 ## What next?
 
 Probably try starting a wasmcloud host inside docker, and retry the above dance.
+
+In order to do this, I made an excursion into setting up the appropriate security creds for my own NATS cluster. This ended up defeating me. I might try again following a tutorial, rather than going it alone in a docker-compose sandbox. I ended up creating an NGS Developer account.
+
+## Connecting via NGS
+
+If you want to connect via a leaf node, follow along with this tutorial to get a leaf node set up: https://docs.nats.io/nats-server/configuration/leafnodes#leaf-node-example-using-a-remote-global-service
+
+If you want to do it all in a single process, you can do it via command-line arguments or environment variables (thanks `structopt`):
+
+```bash
+CONTROL_HOST=connect.ngs.global \
+RPC_HOST=connect.ngs.global \
+CONTROL_CREDS=$HOME/.nkeys/creds/synadia/leaftest/leaftestuser.creds \
+RPC_CREDS=$HOME/.nkeys/creds/synadia/leaftest/leaftestuser.creds \
+wasmcloud
+```
+
+## `wash` control plane access
+
+Connecting `wash` to a local leaf node seems to be a supported configuration. There doesn't seem to be a way to specify a control-plane credentials file.
+
+- [ ] Maybe I will make a patch for this.
+
+It seems that control plane access from the wasm host is typically passwordless via the leaf node. This makes me nervous. Control-plane access feels like it's equivalent to root access to your entire cluster. If anyone manages to compromise the wasm sandbox, or any of your capability providers then they just need to write `pub $some.topic $some.payload` to tcp localhost:4222.
+
+- [ ] work out what `$some.topic $some.payload` needs to look like to be sufficiently scary
