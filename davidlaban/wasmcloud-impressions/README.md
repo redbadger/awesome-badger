@@ -10,9 +10,11 @@ You start at wasmcloud.dev ("Docs Home"), and can follow a getting started guide
 
 The rest of the documentation is not particularly polished. There are broken links in a few places, and a handful of typos, including:
 
-- `$ ctl link MCUDTMOOZCVAM5EBNN4U3X2OGHNIY3BKPEW66HY4RTCYYVWXOE7ESVDQ VAG3QITQQ2ODAOWB5TTQSDJ53XK3SHBEIFNK4A YJ5RKAX2UNSCAPHA5M wasmcloud:httpserver PORT=8080` in https://github.com/wasmcloud/examples/tree/main/echo (probably caused by copy-pasta out of the wash shell tui)
-- Both Architecture sections are missing (https://wasmcloud.dev/reference/host-runtime/architecture/ and https://wasmcloud.dev/reference/lattice/architecture/). This feels like a job for excalidraw.
-- s/on-premise/on-premises/ - https://wasmcloud.dev/reference/lattice/leaf-nodes/
+- [ ] `$ ctl link MCUDTMOOZCVAM5EBNN4U3X2OGHNIY3BKPEW66HY4RTCYYVWXOE7ESVDQ VAG3QITQQ2ODAOWB5TTQSDJ53XK3SHBEIFNK4A YJ5RKAX2UNSCAPHA5M wasmcloud:httpserver PORT=8080` in https://github.com/wasmcloud/examples/tree/main/echo (probably caused by copy-pasta out of the wash shell tui)
+- [ ] Both Architecture sections are missing (https://wasmcloud.dev/reference/host-runtime/architecture/ and https://wasmcloud.dev/reference/lattice/architecture/). This feels like a job for excalidraw.
+- [ ] s/on-premise/on-premises/ - https://wasmcloud.dev/reference/lattice/leaf-nodes/
+- [ ] https://crates.io/crates/wash-cli "control-interface" links to https://github.com/wasmcloud/wasmcloud/tree/main/crates/control-interface, which is a broken link.
+- [ ] Get some CI to check that they don't have any broken links?
 
 ## `wash`
 
@@ -78,7 +80,7 @@ wasmcloud
 
 Connecting `wash` to a local leaf node seems to be a supported configuration. There doesn't seem to be a way to specify a control-plane credentials file.
 
-- [ ] Maybe I will make a patch for this.
+- [x] Maybe I will make a patch for this. Done: https://github.com/wasmCloud/wash/pull/146
 
 It seems that control plane access from the wasm host is typically passwordless via the leaf node. This makes me nervous. Control-plane access feels like it's equivalent to root access to your entire cluster. If anyone manages to compromise the wasm sandbox, or any of your capability providers then they just need to write `pub $some.topic $some.payload` to tcp localhost:4222.
 
