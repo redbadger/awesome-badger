@@ -45,9 +45,9 @@ The NATS ecosystem is full of bullshit acronyms. I think the maintainers think t
 So far, we have:
 
 - NATS: "Neural Autonomic Transport System" -- https://docs.nats.io/faq#what-does-the-nats-acronym-stand-for
-- NGS: ??? (maybe "NATS Gateway/Global Service"?)
+- NGS: ??? (maybe "NATS Global Service"?)
 - From https://docs.nats.io/nats-tools/nats-tools:
-  - ​nats - Interact with and manage NATS
+  - nats - Interact with and manage NATS
   - nk - Generate NKey - nsc - Configure Operators, Accounts and Users
   - nsc - Configure Operators, Accounts and Users **(What does NSC mean? This tool also appears to include functionality from the nats and nk tools. Feels like one or more of these tools should be deprecated)**
   - nats account server - Serve Account JWTs **(this is sometimes abbreviated as `nas` in the docs, which collides in my head with "network attached storage". This also sounds like it is a deprecated way to do auth with nats, since it is inlined)**
