@@ -24,7 +24,9 @@ Can I just run wash in a daemon mode, and inject commands into it from bash? Whe
 
 ## wasmcloud
 
-my instinct is always to live in the root of a git repo, so when following along with https://github.com/wasmcloud/examples/tree/main/echo, I did `wasmcloud -m echo/manifest.yaml`. When I got to the point where you
+My instinct is always to live in the root of a git repo, so when following along with https://github.com/wasmcloud/examples/tree/main/echo, I did `wasmcloud -m echo/manifest.yaml`. This caused wasmcloud to try resolving .wasm filenames in the root of the repo rather than in the echo dir. It would be much cleaner for imports to be relative to the manifest file rather than wasmcloud's `$PWD`.
+
+- [ ] This probably isn't a very difficult fix. I should open an issue or make a PR at some point.
 
 ## docker-compose
 
@@ -60,7 +62,7 @@ I didn't get any indication that my second capability provider was in a non-func
 
 Probably try starting a wasmcloud host inside docker, and retry the above dance.
 
-In order to do this, I made an excursion into setting up the appropriate security creds for my own NATS cluster. This ended up defeating me. I might try again following a tutorial, rather than going it alone in a docker-compose sandbox. I ended up creating an NGS Developer account.
+> In order to do this, I made an excursion into setting up the appropriate security creds for my own NATS cluster. This ended up defeating me. I might try again following a tutorial, rather than going it alone in a docker-compose sandbox. I ended up creating an NGS Developer account.
 
 ## Connecting via NGS
 
@@ -85,3 +87,39 @@ Connecting `wash` to a local leaf node seems to be a supported configuration. Th
 It seems that control plane access from the wasm host is typically passwordless via the leaf node. This makes me nervous. Control-plane access feels like it's equivalent to root access to your entire cluster. If anyone manages to compromise the wasm sandbox, or any of your capability providers then they just need to write `pub $some.topic $some.payload` to tcp localhost:4222.
 
 - [ ] work out what `$some.topic $some.payload` needs to look like to be sufficiently scary
+
+## Developer experience Experiment
+
+Let's make a TodoMVC demo
+
+https://github.com/redbadger/wasmcloud-examples/projects/1
+
+There are a bunch of things in our backlog that were paper cuts that are probably easy to fix.
+
+### Adding a logging capability
+
+> [2021-07-01T12:53:03Z ERROR] The target wasmcloud:logging was not found as an actor public key, an actor call alias, or as the contract ID in an existing link from source actor MBQ3PZKT6JSEAL4UH7WPZDR2OK7WESH352XH56ORRFC6EE4YPYE5JAEX
+
+This happened because I wrote a `warn!()` line in my `#[actor::init]` function. There could probably be some diagnostic hints for this.
+
+### Actor ids
+
+It's very frustrating that you have to find a way to take the actor id from `target/*/*/whatever_s.wasm` or `wasmcloud.azurecr.io/kvcounter:0.2.0` and paste it into your `manifest.yaml` (or side-loading it via `${VAR:default}` environment variable hackery)
+
+Really, I feel like the manifest format wants a way to say "whatever id you find at the following path/container registry url", and then you could store the mappings from path to signature in a lockfile, that you can optionally check in. I should make a ticket for this.
+
+### `wash` again
+
+We ended up using `wash --watch` in our example's Makefile. This gave the hot-reloading experience, but also forced us to use `wash`. It makes sense that `wasmcloud --watch` isn't a thing, since it's not really a thing that you would expect to need in production, but `wash`'s TUI is really terrible. A reasonable middle-ground might be to have a mode similar to `bluetoothctl` on linux, where there is a prompt at the bottom, and logs are printed above the prompt, so `wash --no-tui` becomes a repl with streaming logs above. I think there is some black magic involved in making this work though, so I'm not expecting anything soon.
+
+## Scaling
+
+In wasmcloudland, the unit of scale is wasmcloud host (like it is a pod in kubernetesland). There is no way to scale actors within a single wasmcloud host. There is a ticket about this already, at https://github.com/wasmCloud/wasmCloud/issues/54. It's definitely worth waiting for them to get this right before adopting wasmcloud for real applications.
+
+## Conclusions
+
+(Yes: I'm introducing things in my conclusion section that don't appear anywhere else in the document. Sue me.)
+
+I think that most of the things above are paper-cuts, and symptoms of the fact that wasmcloud isn't very mature yet. The wasmcloud team is small, and they seem to be focussing on the big architectural decisions, so we can expect a bit of a lack of polish as the big ticket items are figured out.
+
+Architecturally, wasmcloud feels like it's what the future will look like. In the next couple of years, I expect that either wasmcloud will get there or something will come along that looks surprisingly like wasmcloud and get to a polished platform first. Either way, learning wasmcloud has given me a glimpse into the future.
