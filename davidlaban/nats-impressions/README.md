@@ -2,7 +2,9 @@
 
 _[David Laban](../) — June 2021_
 
-NATS is a distributed queueing system.
+First impressions of technologies are quite important for driving adoption, so I've started writing down my early impressions as I explore different technologies.
+
+NATS is a distributed messaging system.
 
 ## Protocol
 
@@ -72,3 +74,17 @@ I wonder how the `ngs.echo` topic works (whether it's patched into the server, o
 ## Leaf nodes
 
 It feels like everyone wants you to install a nats leaf node as a sidecar (wasmcloud's wash cli tool doesn't even have a way to configure it to connect directly to NGS as a control plane). Following along with https://docs.nats.io/nats-server/configuration/leafnodes#leaf-node-example-using-a-remote-global-service shows you how to do it. You need a verified email address and payment method in order to do this.
+
+## Messaging vs Queueing systems
+
+In its most basic configuration, NATS is not a queueing system, because it doesn't have persistence or retries. It is more reasonable to think of it as a messaging system. I suppose in some ways it's like UDP, but wrapped in TLS+auth, and with `foo.bar.baz`-style broadcast addresses. It's a good fit for writing your app cluster's backplane in, but not necessarily your job scheduler.
+
+There is a mode in NATS (`req`) where you can send a return-address with your message, and the receiver[s] can respond to that return address. This primitive can be used to build reliable systems (like how TCP is built on top of IP packets).
+
+On top of this NATS backplane, you can add a bunch of applications, and connect them up. The NATS server comes bundled with a JetStream application, that you can enable with the `-js` flag. This is basically rabbitmq-over-NATS, but it can get away with being a lot simpler, because its communication protocol is NATS rather than TCP.
+
+## Conclusions
+
+I can see why WasmCloud chose NATS for its "lattice" backplane. The basic protocol feels simple and solid. It feels like the kind of protocol that you'd expect to see described in an RFC. Once you have this communication system in place, the work of doing inter-process communication feels like it will have a lot less friction. The difference between using HTTPS and NATS is like the difference between setting up unix domain sockets for each of your process vs using D-Bus (although D-Bus is terrible in ways that NATS manages to sidestep).
+
+It is a reasonable initial reaction that the basic NATS protocol doesn't quite get you all the way. I think that the JetStream covers some of those holes, but I'm not sure whether it belongs in the core NATS server implementation. I'm hoping that the nats-server implementation continues to gain traction without adding too much bloat (or if it does get bloated, that they release a tiny-nats-server binary that can be used as a low-overhead kubernetes sidecar).

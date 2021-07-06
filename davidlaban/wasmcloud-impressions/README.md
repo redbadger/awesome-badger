@@ -2,7 +2,9 @@
 
 _[David Laban](../) — June 2021_
 
-First impressions of technologies are quite important for driving adoption, so I've started writing down my early impressions as I explore different technologies
+First impressions of technologies are quite important for driving adoption, so I've started writing down my early impressions as I explore different technologies.
+
+WasmCloud is an application platform built on WASM (like erlang's BEAM, but you deploy WASM to it rather than erlang).
 
 ## Documentation
 
