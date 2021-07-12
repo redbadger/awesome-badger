@@ -78,6 +78,8 @@ I wonder how something like bazel would interact with a compiler that holds its 
 
 <!-- TODO: discuss the tricks that pnpm/parcel2 do, that might/might not work with bazel? -->
 
+<!-- TODO: look into distributed build cache. Could you abuse github-releases || ghcr.io for cached build artifacts like cargo-quickinstall/homebrew do? -->
+
 ## Conclusions
 
 Bazel is definitely an improvement over the `make`-style systems that it replaces. As you dig deeper into language-specific integrations, you start to find that `bazel` is able to wrap `make`-style compilation behavior really well, and has useful opinions about what `make test` should do. It also has reasonable tooling for converting language-specific build files into BUILD dependency rules. At the end of the day, it is closely wedded to the `make` model of compilation, and I am not expecting it to integrate with all of the clever tricks that these language tools use to make incremental recompilation fast. Maybe this is an okay trade-off if you want to use a distributed build cache, and have jenkins builds that are fast and that you can trust.
