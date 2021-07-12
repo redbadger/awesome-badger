@@ -2,6 +2,8 @@
 
 _[David Laban](../) — June 2021_
 
+Bazel is a buildsystem from google, based on their internal `blaze` buildsystem. I decided to take a look and see how it fits into the landscape, and which things tripped me up while I was exploring.
+
 ## iOS tutorial
 
 I decided to follow along with their iOS tutorial: https://docs.bazel.build/versions/4.1.0/tutorial/ios-app.html. I have never done any iOS development before, but it seems like a reasonable place to start.
@@ -74,4 +76,10 @@ My assumption is that all bazel-like build-systems will have some kind of query 
 
 I wonder how something like bazel would interact with a compiler that holds its own query cache in memory. If it wanted to be hermetically sealed, it would need to throw away any speed-up gained by a compiler in this daemon mode. It sounds like it can still do useful things with on-disk incremental compilation caches if it knows about them (although in non-sandboxed mode, they mention that the typescript compiler will get confused by any incremental compilation cache files that are left lying around).
 
-Build systems are hard.
+<!-- TODO: discuss the tricks that pnpm/parcel2 do, that might/might not work with bazel? -->
+
+## Conclusions
+
+Bazel is definitely an improvement over the `make`-style systems that it replaces. As you dig deeper into language-specific integrations, you start to find that `bazel` is able to wrap `make`-style compilation behavior really well, and has useful opinions about what `make test` should do. It also has reasonable tooling for converting language-specific build files into BUILD dependency rules. At the end of the day, it is closely wedded to the `make` model of compilation, and I am not expecting it to integrate with all of the clever tricks that these language tools use to make incremental recompilation fast. Maybe this is an okay trade-off if you want to use a distributed build cache, and have jenkins builds that are fast and that you can trust.
+
+Also, build systems are hard.
