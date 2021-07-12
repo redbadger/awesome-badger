@@ -31,7 +31,7 @@ Semi-structured musings about what my vision of infrastructure nirvana is, and w
 
 Jun 2021
 
-Early impressions on dapr, its tooling, and how it fits into the universe.
+Early impressions of dapr, its tooling, and how it fits into the universe.
 
 ### [WasmCloud Impressions](./wasmcloud-impressions/README.md)
 
@@ -43,4 +43,10 @@ Early impressions of WasmCloud.
 
 Jun 2021
 
-Early impressions on NATS, its tooling, and how it fits into the universe.
+Early impressions of NATS, its tooling, and how it fits into the universe.
+
+### [Bazel Impressions](./bazel-impressions/README.md)
+
+Jul 2021
+
+Early impressions of bazel.
