@@ -135,8 +135,8 @@ to the environment of the CI runners: the Netlify site ID and an auth token to
 authorize the deployment operation. On Github, go to your repository Settings,
 then Secrets so you can add your new repository secrets:
 
- - NETLIFY_SITE_ID: which is shown on your site settings on Netlify as `API ID`
- - NETLIFY_AUTH_TOKEN: you can generate one from your [user
+ - `NETLIFY_SITE_ID`: which is shown on your site settings on Netlify as `API ID`
+ - `NETLIFY_AUTH_TOKEN`: you can generate one from your [user
    page](https://app.netlify.com/user/applications) (they call it Personal
    Access Tokens)
 
@@ -304,7 +304,7 @@ Deployments API](https://docs.github.com/en/rest/reference/repos#deployments)
 and parsing the URL of the preview deployment from the output of the `netlify
 deploy` command (this is similar to how the [Netlify Github
 Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does
-it, that's where I got those beautiful regexs from!). Your PRs (that
+it, that's where I got those ~crazy~ beautiful regexs from!). Your PRs (that
 successfully build!) will now display a button from where you can access your
 preview deployment directly:
 
