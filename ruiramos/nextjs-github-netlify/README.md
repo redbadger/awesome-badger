@@ -1,4 +1,4 @@
-# Next.js deployment on Netlify through Github Actions
+# Next.js deployment on Netlify with Github Actions
 
 ## Introduction
 

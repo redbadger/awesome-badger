@@ -11,7 +11,7 @@ You can find me on [Github](https://github.com/ruiramos) and [Twitter](https://t
 
 ## Writing
 
-### [Next.js deployment on Netlify through Github Actions](./nextjs-github-netlify/README.md)
+### [Next.js deployment on Netlify with Github Actions](./nextjs-github-netlify/README.md)
 
 Aug 2021
 
