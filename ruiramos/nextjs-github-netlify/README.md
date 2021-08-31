@@ -20,7 +20,7 @@ a quite powerful web framework supporting different architectures, from
 completely staticly generated sites to server-side rendered ones. It also has a
 convention for serverless routes that can easily be deployed to popular
 serverless functions FaaS providers -- this seems to be my prefered way of using
-it, the "JAM stack" way, where you have a completely static single-page
+it, the "JAM stack" way, where you have a completely static/pre-rendered single-page
 application front-end backed by serverless functions when you need them.
 
 There's currently a couple of options on where to deploy such an app - from AWS
@@ -28,8 +28,8 @@ There's currently a couple of options on where to deploy such an app - from AWS
 plugin](https://www.serverless.com/blog/serverless-nextjs)) to
 [Heroku](https://levelup.gitconnected.com/deploy-your-next-js-app-to-heroku-in-5-minutes-255e829a9966),
 but for our use case, static hosting providers with some sort of FaaS offering
-work well, and Netlify is one of the best players there, with a huge community
-and decent tooling. Netlify supports Next.js deployments out of the box by
+are simple and work well, and Netlify fits the bill perfectly, having with a huge community
+and decent tooling around their platform. Netlify supports Next.js deployments out of the box by
 converting API routes (and server-side rendered pages) into [Netlify
 Functions](https://www.netlify.com/products/functions/), something that's done
 behind the scenes via a
@@ -43,12 +43,11 @@ and deploy process and have it run on a CI/CD pipeline you manage - like Github
 Actions! This way, you have flexibility to run whatever other steps your site
 requires - from code formatting and linting tools to tests and other 3rd party
 service configuration. This presents the problem of us having to recreate some
-of that Netlify magic, but as we'll see it's quite manageable.
+of that Netlify magic, but as we'll see it's quite simple.
 
 We'll create a new Next.js site, deploy it to Github, connect it to Netlify and
 finally implement the needed Github Action workflows to get our continuous
-deployment ball rolling. We'll also integrate some other tools that will improve
-developer experience (DX).
+deployment ball rolling.
 
 If you're after the code you can find it [here](), forking that repository will
 give you a functional setup and a great starting point for full stack web
@@ -61,9 +60,9 @@ development.
 
 First off, we'll use
 [create-next-app](https://nextjs.org/docs/api-reference/create-next-app) to
-bootstrap our Next.js application:
+bootstrap our Next.js application. In a shell, run:
 
-```bash 
+```sh
 npx create-next-app your-app-name-here 
 ```
 
@@ -73,7 +72,7 @@ not the case there's a `--use-npm` flag you can pass it.
 Assuming we've created a Github repository by this point, we simply add the
 remote and push to the `main` branch:
 
-```bash 
+```sh 
 cd your-app-name-here
 git remote add origin YOUR_REPO_URL
 git push -u origin main
@@ -81,7 +80,7 @@ git push -u origin main
 
 Finally, create a new Netlify site and hook it up to your Github repository
 (here's a [guide how to do so](https://www.netlify.com/blog/2016/09/29/a-step-by-step-guide-deploying-on-netlify/)).
-You'll see it automatically detects it's a Next.js website and sets the right
+You'll see it automatically knows it's a Next.js website and sets the right
 build commands and plugins, although we're not going to need that as we'll build
 and deploy from Github Actions shortly.
 
@@ -117,7 +116,7 @@ plugin](https://github.com/netlify/netlify-plugin-nextjs) so the server side
 bits are turned into Netlify functions. This is a good time to make sure we have
 this plugin installed so CI can run it:
 
-```bash
+```sh
 yarn add -D @netlify/plugin-nextjs
 ```
 
@@ -125,7 +124,7 @@ We should also install the
 [netlify-cli](https://docs.netlify.com/cli/get-started/) as a dev dependency so
 we're pinned to the same version locally and on CI:
 
-```bash
+```sh
 yarn add -D netlify-cli
 ```
 
