@@ -358,7 +358,7 @@ about our deployment. This will enrich our PR page with the status and link to
 our preview deployment:
 
 ![Github Pull Request with Deployment info](./img/github-pr-view-deployment.png)
-*Github Pull Request with Deployment info*
+*Github Pull Request with Deployment info* ([link](https://github.com/ruiramos/nextjs-netlify-ghactions/pull/1))
 
 You might have noticed there's a slightly weird thing going on with environment
 names: we have `branch-deploy` as the environment for the whole job but we're
