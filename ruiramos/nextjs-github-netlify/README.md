@@ -1,58 +1,62 @@
 # Next.js deployment on Netlify with Github Actions
 
+
 ## Introduction
 
-Recently, I've been involved in a couple of projects where we've had to quickly
-deliver proof-of-concepts of web applications or simple products, and I've been
-trying to align on a tech stack and setup that would allow a team to hit the
-ground running and deliver web apps in a quick and productive way.
+Recently, I've been involved in a couple of fast-paced projects where we've
+been asked to quickly deliver proof-of-concepts or simple web applications, and
+I've been trying to align on a tech stack and setup that would allow a team to
+hit the ground running and deliver web apps in a quick, productive, even fun way.
 
 As you might have guessed by the title of this post, this will include
 [Next.js](https://nextjs.org), a framework for serverless full-stack apps using
-React and deployments on [Netlify](https://netlify.com), using the CI/CD
+React, and deployments on [Netlify](https://netlify.com), using the CI/CD
 offering of Github, [Github Actions](https://github.com/features/actions). I'll
-talk briefly about the reasoning behind each one next.
+talk briefly about the why for using each one next.
 
-Next.js is currently the quickest way to bootstrap a full-stack web app using
-React (specially if you're using
-[create-next-app](https://nextjs.org/docs/api-reference/create-next-app)). It's
-a quite powerful web framework supporting different architectures, from
-completely staticly generated sites to server-side rendered ones. It also has a
-convention for serverless routes that can easily be deployed to popular
-serverless functions FaaS providers -- this seems to be my prefered way of using
-it, the "JAM stack" way, where you have a completely static/pre-rendered single-page
-application front-end backed by serverless functions when you need them.
+Next.js is arguably the quickest way to bootstrap a full-stack web app using
+React, specially if you're using their
+[create-next-app](https://nextjs.org/docs/api-reference/create-next-app). It's
+a very powerful and smart web framework, supporting different architectures,
+from completely staticly generated sites to server-side rendered ones. It also
+has a convention for serverless routes that can easily be deployed to popular
+serverless functions FaaS providers -- this seems to be my prefered way of
+using it, the _JAM stack_ way I suppose, where you have a completely
+static/pre-rendered single-page application front-end backed by serverless
+functions when you need server-side functionality.
 
 There's currently a couple of options on where to deploy such an app - from AWS
 (using for instance the [serverless
 plugin](https://www.serverless.com/blog/serverless-nextjs)) to
 [Heroku](https://levelup.gitconnected.com/deploy-your-next-js-app-to-heroku-in-5-minutes-255e829a9966),
 but for our use case, static hosting providers with some sort of FaaS offering
-are simple and work well, and Netlify fits the bill perfectly, having with a huge community
-and decent tooling around their platform. Netlify supports Next.js deployments out of the box by
-converting API routes (and server-side rendered pages) into [Netlify
+are simple and work well, and Netlify fits the bill perfectly, having with a
+huge community and decent tooling around their platform. Netlify supports
+Next.js deployments out of the box by converting API routes (and server-side
+rendered pages) into [Netlify
 Functions](https://www.netlify.com/products/functions/), something that's done
 behind the scenes via a
 [plugin](https://www.npmjs.com/package/@netlify/plugin-nextjs). Basically, it
 just works: create a Next.js app, push it to a Github repository, connect that
 repository with a Netlify site and you'll have a working continuous delivery
-pipeline, including branch and preview (pull request) deployments.
+pipeline, including branch and preview deployments (from pull requests and,
+optionally, branch commits).
 
 Although this works quite well, it's often better to take control of the build
-and deploy process and have it run on a CI/CD pipeline you manage - like Github
+and deploy process and have it run on a CI/CD pipeline you can extend - like Github
 Actions! This way, you have flexibility to run whatever other steps your site
 requires - from code formatting and linting tools to tests and other 3rd party
 service configuration. This presents the problem of us having to recreate some
-of that Netlify magic, but as we'll see it's quite simple.
+of that Netlify magic, but, as we'll see, it is not that bad!
 
 We'll create a new Next.js site, deploy it to Github, connect it to Netlify and
 finally implement the needed Github Action workflows to get our continuous
 deployment ball rolling.
 
-If you're after the code you can find it
-[here](https://github.com/ruiramos/nextjs-netlify-ghactions), forking that
-repository will give you a functional setup and a great starting point for full
-stack web development.
+If you're after the end result [you can find it
+here](https://github.com/ruiramos/nextjs-netlify-ghactions), forking that
+repository will give you a functional local setup and a great starting point
+for full stack web development!
 
 
 ## Putting it all together
@@ -68,31 +72,36 @@ npx create-next-app your-app-name-here
 ```
 
 Next.js will assume you'll want to use `yarn` as a package manager, if that's
-not the case there's a `--use-npm` flag you can pass it.
+not the case there's a `--use-npm` flag you can use.
 
 Assuming we've created a Github repository by this point, we simply add the
 remote and push to the `main` branch:
 
 ```sh 
 cd your-app-name-here
-git remote add origin YOUR_REPO_URL
+git remote add origin git@github.com:$YOUR_REPO_URL.git
 git push -u origin main
 ```
 
-Finally, create a new Netlify site and hook it up to your Github repository
-(here's a [guide how to do so](https://www.netlify.com/blog/2016/09/29/a-step-by-step-guide-deploying-on-netlify/)).
-You'll see it automatically knows it's a Next.js website and sets the right
-build commands and plugins, although we're not going to need that as we'll build
-and deploy from Github Actions shortly.
+Finally, create a new Netlify site [using their
+UI](https://app.netlify.com/start) and hook it up to your Github repository -
+here's a [guide how to do
+so](https://www.netlify.com/blog/2016/09/29/a-step-by-step-guide-deploying-on-netlify/).
+There is a [CLI](https://www.npmjs.com/package/netlify-cli) as well, and we'll
+be using it later, however at this stage it doesn't really make things any
+simpler. When connecting Netlify to your repository, you'll see it
+automatically knows it's a Next.js website and sets the right build commands
+and plugins, which is nice, although we're shortly going to be overriding some
+of that configuration when deploying from Github Actions.
 
-So we'll head off to our `Site Settings` on Netlify and disable builds and
+After creating the site, open your `Site Settings` on Netlify and disable builds and
 preview deploys:
 
 ![Netlify build settings off](./img/netlify-build-settings.png)
 *Netlify build settings off*
 
 ![Netlify deploy previews off](./img/netlify-deploy-previews.png)
-*Netlify deploy previews off*
+*Netlify deploy previews off, thanks though!*
 
 
 ### Configuring Github Actions
@@ -121,9 +130,10 @@ this plugin installed so CI can run it:
 yarn add -D @netlify/plugin-nextjs
 ```
 
-We should also install the
-[netlify-cli](https://docs.netlify.com/cli/get-started/) as a dev dependency so
-we're pinned to the same version locally and on CI:
+We're also going to need the great
+[netlify-cli](https://docs.netlify.com/cli/get-started/), as that's what we
+will be using to build and deploy our website. Install it as a dev dependency
+so we're pinned to the same version locally and on CI:
 
 ```sh
 yarn add -D netlify-cli
@@ -132,8 +142,8 @@ yarn add -D netlify-cli
 The last bit of config has to do with Github secrets and environment variables.
 As we're deploying our Netlify site from Github, we'll need to add two secrets
 to the environment of the CI runners: the Netlify site ID and an auth token to
-authorize the deployment operation. On Github, go to your repository Settings,
-then Secrets so you can add your new repository secrets:
+authorize the deployment operation. On Github, go to your repository `Settings`,
+then `Secrets` so you can expose the following secrets:
 
  - `NETLIFY_SITE_ID`: which is shown on your site settings on Netlify as `API ID`
  - `NETLIFY_AUTH_TOKEN`: you can generate one from your [user
@@ -200,6 +210,9 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      # Using `netlify build` to build the website.
+      # It will run the command specified on `netlify.toml` (`npm run build`)
+      # and use the necessary plugin
       - name: Build project
         id: build-netlify
         run: |
@@ -208,6 +221,8 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
+      # Deploys the website to Netlify extracting the deploy metadata.
+      # Adapted from the Netlify Github Action.
       - name: Production deployment
         id: deploy-netlify
         run: |
@@ -271,7 +286,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Cache node modules and next folder
       - name: Caching
         uses: actions/cache@v2
         with:
@@ -310,6 +324,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
+      # Slightly different regexes and var names here
       - name: Preview deployment
         id: deploy-netlify
         run: | 
@@ -338,18 +353,18 @@ jobs:
 
 ```
 
-We're using the same Deployments Github action to provide Github with
-information about our deployment. This will augment our PR with the status and
-link to our preview deployment:
+We're using the same deployments action to provide Github with information
+about our deployment. This will enrich our PR page with the status and link to
+our preview deployment:
 
 ![Github Pull Request with Deployment info](./img/github-pr-view-deployment.png)
 *Github Pull Request with Deployment info*
 
-You might have noticed that the thing around environment names for this
-deployment is a bit iffy: we have `branch-deploy` as the environment for the
-whole job but we're passing `branch-deploy-${{ github.head_ref }}` (meaning the
-branch name in this case) to the Deployment created by the action. This is
-because we will want to use [Github
+You might have noticed there's a slightly weird thing going on with environment
+names: we have `branch-deploy` as the environment for the whole job but we're
+passing `branch-deploy-${{ github.head_ref }}` (meaning the branch name in this
+case) to the Deployment created by the action. This is because we will want to
+use [Github
 Environments](https://docs.github.com/en/actions/reference/environments) to be
 able to, for instance, specify different environment variables depending if
 we're on a branch or production deployment. On the other hand, we want to keep
@@ -362,40 +377,60 @@ definition](https://docs.github.com/en/actions/reference/workflow-syntax-for-git
 also takes a `url` besides the name, which would work fine for `production` and
 other non-transient environments, however that information doesn't seem to be
 surfaced on the Github UI (I opened a ticket with them and will update this
-post if anything changes!).
+post if this changes!), so for now we're using that deployment action on both
+workflows.
+
+One of the cool things about this setup is that you can easily override the
+Github secrets per environment, which might become useful if you're dealing
+with 3rd parties and have different "dev" vs "production" accounts, for
+instance. You can find the UI to do this on your project `Settings` >
+`Environments`.
+
 
 ## Other tools that go well together
 
-On the [example
+In the [example
 repository](https://github.com/ruiramos/nextjs-netlify-ghactions) put together
-to exemplify this setup, I've included some other tools and configuration that
-I'd want more often than not to include:
+as an example/starting point, I've configured some other tools that I'd want
+more often than not to include:
 
  - [Jest](https://jestjs.io/) has been setup as the testing framework to run
    your unit and integration tests. There's a very basic unit test that checks
-   if the main title renders, as a proof of concept.
+   if the main title renders on the index page as a proof of concept.
  - [Prettier](https://prettier.io/) has been included as a dev dependency so
-   code formatting is automated and consistent within the team (IDE allowing!)
+   code formatting is automated and consistent within the team (IDE allowing!).
+
 
 On short-lived, _proof-of-concept like_ projects, we've also been often drawn
-to the following 3rd parties:
+to the following 3rd parties and tools:
 
  - [Firebase](https://firebase.com/), specifically for their
-   database-as-a-service (Firestore)
- - [Auth0](https://auth0.com/) for user management
+   database-as-a-service (Firestore). It's a decent document store, with a generous
+   free tier plan and SDKs for everything. One of the killer features is the ability to 
+   query the database directly from the front-end JS SDK, made possible by configuring a set
+   of rules that allow or deny each read/write request, depending on the operation and optionally
+   user authentication. This can be managed as code and included in your CI/CD pipeline (stuff
+   for another blog post!)
+ - [Auth0](https://auth0.com/), a very comprehensive, solid service for user
+   management and authentication. You could just use [Firebase
+   Authentication](https://firebase.google.com/docs/auth), specially if you're
+   making use of rules for authenticated users, but making both work together
+   [is not difficult
+   either](https://auth0.com/blog/developing-real-time-apps-with-firebase-and-firestore/).
  - [TailwindCSS](https://tailwindui.com/) for component styling or, if needing
    more out of the box functionality, [Chakra UI](https://chakra-ui.com/) as a
-   component library
+   component library.
 
-As always, there's a lot to consider when choosing a tech stack, and
-particularly for fast paced projects familiarity plays a big role, so this
+As always, there's a lot to consider when picking your tech stack, and
+particularly for fast-paced projects familiarity plays a big role, so this
 doesn't intend to be in any way prescriptive! I do hope that by either starting
 [from the project
-template](https://github.com/ruiramos/nextjs-netlify-ghactions) or just by taking
-some ideas out of this blog post you get from zero to production even quicker!
+template](https://github.com/ruiramos/nextjs-netlify-ghactions) or just by
+taking some ideas out of this blog post you get from zero to a fully-working
+production grade web app even quicker!
 
-Any feedback is welcome, you can find me on [Twitter](https://twitter.com/ruimramos?lang=en)
-or on the [Hacker News post]() for this article.
+Feedback is welcome, you can find me on [Twitter](https://twitter.com/ruimramos?lang=en)
+or drop a line on the [HN post]() for this article.
 
-Rui
+[Rui](/ruiramos)
 
