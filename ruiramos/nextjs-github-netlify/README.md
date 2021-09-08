@@ -407,10 +407,10 @@ to the following 3rd parties and tools:
  - [Firebase](https://firebase.com/), specifically for their
    database-as-a-service (Firestore). It's a decent document store, with a generous
    free tier plan and SDKs for everything. One of the killer features is the ability to 
-   query the database directly from the front-end JS SDK, made possible by configuring a set
-   of rules that allow or deny each read/write request, depending on the operation and optionally
+   query the database directly from the front-end JS SDK, made possible by configuring a rule engine
+   that allows or denies each read/write request depending on the operation and, optionally,
    user authentication. This can be managed as code and included in your CI/CD pipeline (stuff
-   for another blog post!)
+   for another blog post!).
  - [Auth0](https://auth0.com/), a very comprehensive, solid service for user
    management and authentication. You could just use [Firebase
    Authentication](https://firebase.google.com/docs/auth), specially if you're
