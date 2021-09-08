@@ -49,9 +49,10 @@ We'll create a new Next.js site, deploy it to Github, connect it to Netlify and
 finally implement the needed Github Action workflows to get our continuous
 deployment ball rolling.
 
-If you're after the code you can find it [here](), forking that repository will
-give you a functional setup and a great starting point for full stack web
-development.
+If you're after the code you can find it
+[here](https://github.com/ruiramos/nextjs-netlify-ghactions), forking that
+repository will give you a functional setup and a great starting point for full
+stack web development.
 
 
 ## Putting it all together
@@ -140,6 +141,8 @@ then Secrets so you can add your new repository secrets:
    Access Tokens)
 
 
+### Github Actions Workflows
+
 Now that the setup is complete, we'll be creating two different workflows - one
 for pull requests that will trigger preview deploys (the preview of a branch on
 a new, temporary environment) and another one for production deploys from the
@@ -162,7 +165,6 @@ on:
 
 jobs:
   deploy:
-    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -182,6 +184,14 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Setup deployment
+        uses: bobheadxi/deployments@v0.6.0
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: production
+
       - name: Install dependencies
         run: |
           npm install -g yarn
@@ -198,23 +208,52 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: Deploy to live site!
+      - name: Production deployment
         id: deploy-netlify
         run: |
-          netlify deploy -m 'Production deploy - ${{ github.sha }}' --prod
+          COMMAND="netlify deploy --prod"
+          OUTPUT=$(sh -c "$COMMAND")
+
+          NETLIFY_LOGS_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://app.netlify.com/[a-zA-Z0-9./?=_-]*') # Unique key: app.netlify.com
+          NETLIFY_LIVE_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*' | grep -Ev "netlify.com|(--)") # Unique key: doesn't contain -- and app.netlify.com
+
+          echo "::set-output name=netlify_logs_url::$NETLIFY_LOGS_URL"
+          echo "::set-output name=netlify_live_url::$NETLIFY_LIVE_URL"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v0.6.0
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
+          env_url: ${{ steps.deploy-netlify.outputs.netlify_live_url }}
+
 ```
 
-So after our environment and dependencies are installed, we're running tests
+So after our environment and dependencies are set up, we're running tests
 (I'm assuming you have them!) and building the project using the Netlify CLI,
 and finally deploying with the `--prod` flag, which makes it a production
 deployment to the live site. We're using the TOKEN and ID secrets we've defined
 earlier on the `build` and `deploy` commands.
 
-The preview workflow is similar, but adds a few steps so Github can show a link
-to the deployment on the pull request:
+We're using [this Github Action](https://github.com/bobheadxi/deployments) to
+handle [Github
+Deployments](https://developer.github.com/v3/repos/deployments/), parsing the
+URL of the deployment from the output of the `netlify deploy` command (this is
+similar to how the [Netlify Github
+Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does
+it, that's where I got those ~crazy~ beautiful regexs from!). Your
+(successfull) deployments will now include useful metadata like the deployment
+URL and the location of the deployment logs on Netlify (this is particularly
+useful for PRs as we'll see in a bit).
+
+The preview deployment workflow doesn't look too different:
 
 ```yaml
 name: Pull Request build+deploy
@@ -229,15 +268,6 @@ jobs:
     environment: branch-deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Starting deployment
-        uses: bobheadxi/deployments@v0.4.3
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: branch-${{ github.head_ref }}
-          ref: ${{ github.head_ref }}
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -255,6 +285,15 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Setup deployment
+        uses: bobheadxi/deployments@v0.6.0
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: branch-deploy-${{ github.head_ref }}
+          ref: ${{ github.head_ref }}
+
       - name: Install dependencies
         run: |
           npm install -g yarn
@@ -271,45 +310,92 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: Preview deploy to Netlify
-        id: preview-deploy
-        run: |
+      - name: Preview deployment
+        id: deploy-netlify
+        run: | 
           COMMAND="netlify deploy -m ${{ github.head_ref }} --alias ${{ github.head_ref }}"
           OUTPUT=$(sh -c "$COMMAND")
-          NETLIFY_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*(--)[a-zA-Z0-9./?=_-]*') #Unique key: --
-          NETLIFY_LOGS_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://app.netlify.com/[a-zA-Z0-9./?=_-]*') #Unique key: app.netlify.com
 
-          echo "::set-output name=NETLIFY_OUTPUT::$OUTPUT"
-          echo "::set-output name=NETLIFY_URL::$NETLIFY_URL"
-          echo "::set-output name=NETLIFY_LOGS_URL::$NETLIFY_LOGS_URL"
+          NETLIFY_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*(--)[a-zA-Z0-9./?=_-]*') # Unique key: --
+          NETLIFY_LOGS_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://app.netlify.com/[a-zA-Z0-9./?=_-]*') # Unique key: app.netlify.com
+
+          echo "::set-output name=netlify_preview_url::$NETLIFY_URL"
+          echo "::set-output name=netlify_logs_url::$NETLIFY_LOGS_URL"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Update deployment status
-        uses: bobheadxi/deployments@v0.4.3
+        uses: bobheadxi/deployments@v0.6.0
         if: always()
         with:
           step: finish
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.preview-deploy.outputs.NETLIFY_URL }}
-          logs: ${{ steps.preview-deploy.outputs.NETLIFY_LOGS_URL }}
+          logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
+          env_url: ${{ steps.deploy-netlify.outputs.netlify_preview_url }}
+
 ```
 
-The main difference is that we're using a Github action to deal with the [Github
-Deployments API](https://docs.github.com/en/rest/reference/repos#deployments)
-and parsing the URL of the preview deployment from the output of the `netlify
-deploy` command (this is similar to how the [Netlify Github
-Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does
-it, that's where I got those ~crazy~ beautiful regexs from!). Your PRs (that
-successfully build!) will now display a button from where you can access your
-preview deployment directly:
+We're using the same Deployments Github action to provide Github with
+information about our deployment. This will augment our PR with the status and
+link to our preview deployment:
 
 ![Github Pull Request with Deployment info](./img/github-pr-view-deployment.png)
 *Github Pull Request with Deployment info*
 
+You might have noticed that the thing around environment names for this
+deployment is a bit iffy: we have `branch-deploy` as the environment for the
+whole job but we're passing `branch-deploy-${{ github.head_ref }}` (meaning the
+branch name in this case) to the Deployment created by the action. This is
+because we will want to use [Github
+Environments](https://docs.github.com/en/actions/reference/environments) to be
+able to, for instance, specify different environment variables depending if
+we're on a branch or production deployment. On the other hand, we want to keep
+a [seperate deployment log per
+branch](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=branch-deploy-turn-german),
+with new deployments marking older ones as inactive on a per-branch basis.
 
-TODO:
- - Environments ?
+The [Github Actions environment
+definition](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment)
+also takes a `url` besides the name, which would work fine for `production` and
+other non-transient environments, however that information doesn't seem to be
+surfaced on the Github UI (I opened a ticket with them and will update this
+post if anything changes!).
+
+## Other tools that go well together
+
+On the [example
+repository](https://github.com/ruiramos/nextjs-netlify-ghactions) put together
+to exemplify this setup, I've included some other tools and configuration that
+I'd want more often than not to include:
+
+ - [Jest](https://jestjs.io/) has been setup as the testing framework to run
+   your unit and integration tests. There's a very basic unit test that checks
+   if the main title renders, as a proof of concept.
+ - [Prettier](https://prettier.io/) has been included as a dev dependency so
+   code formatting is automated and consistent within the team (IDE allowing!)
+
+On short-lived, _proof-of-concept like_ projects, we've also been often drawn
+to the following 3rd parties:
+
+ - [Firebase](https://firebase.com/), specifically for their
+   database-as-a-service (Firestore)
+ - [Auth0](https://auth0.com/) for user management
+ - [TailwindCSS](https://tailwindui.com/) for component styling or, if needing
+   more out of the box functionality, [Chakra UI](https://chakra-ui.com/) as a
+   component library
+
+As always, there's a lot to consider when choosing a tech stack, and
+particularly for fast paced projects familiarity plays a big role, so this
+doesn't intend to be in any way prescriptive! I do hope that by either starting
+[from the project
+template](https://github.com/ruiramos/nextjs-netlify-ghactions) or just by taking
+some ideas out of this blog post you get from zero to production even quicker!
+
+Any feedback is welcome, you can find me on [Twitter](https://twitter.com/ruimramos?lang=en)
+or on the [Hacker News post]() for this article.
+
+Rui
+
