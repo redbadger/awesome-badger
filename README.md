@@ -10,6 +10,8 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 - 2021-09-24 - [`toString || !toString`](./chriswhealy/toStringOrNotToString) by [Chris W][chrisw]
 
+- 2021-09-08 - [Next.js deployment on Netlify with Github Actions](./ruiramos/nextjs-github-netlify) by [Rui Ramos][ruiramos]
+
 - 2021-07-12 - [Bazel Impressions](./davidlaban/bazel-impressions/README.md) by [David L](./davidlaban)
 
 - 2021-07-06 - [NATS Impressions](./davidlaban/nats-impressions/README.md) by [David L](./davidlaban)
@@ -53,3 +55,4 @@ Assorted thinking (mostly) about technology written by the Badgers.
 [pedro]: ./pataruco
 [timlee]: ./timlee
 [matt-thomson]: ./matt-thomson
+[ruiramos]: ./ruiramos

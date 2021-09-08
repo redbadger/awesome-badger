@@ -13,6 +13,6 @@ You can find me on [Github](https://github.com/ruiramos) and [Twitter](https://t
 
 ### [Next.js deployment on Netlify with Github Actions](./nextjs-github-netlify/README.md)
 
-August 2021
+September 2021
 
 A practical, hands-on guide on how to deploy your Next.js app on Netlify using Github Actions as a CI/CD pipeline.
