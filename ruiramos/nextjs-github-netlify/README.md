@@ -445,3 +445,4 @@ or drop a line on the [HN post]() for this article.
 
 [Rui](/ruiramos)
 
+[More from awesome-badger](https://awesome.red-badger.com/) - [About Red Badger](https://red-badger.com)
