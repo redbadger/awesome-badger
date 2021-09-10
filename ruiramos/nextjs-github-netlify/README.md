@@ -398,7 +398,7 @@ instance. You can find the UI to do this on your project `Settings` >
 `Environments`.
 
 
-## Other tools that go well together
+## Other tools to throw in the mix
 
 In the [example
 repository](https://github.com/ruiramos/nextjs-netlify-ghactions) put together
