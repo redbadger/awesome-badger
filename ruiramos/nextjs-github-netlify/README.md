@@ -49,7 +49,7 @@ choices. Vercel, being built by the same team behind Next.js, has the added
 advantage of sharing the same conventions as Next.js does, which makes the
 build process simpler as we wouldn't need any special plugins for code
 transformation, as we will with Netlify.  I'm picking Netlify here mainly due
-to my familiarity with the platform and their tooling (UI, CLI, etc), but you
+to my own familiarity with the platform and their tooling (UI, CLI, etc), but you
 could easily adapt this setup to work with Vercel instead (let me know if
 there's interest, I'm happy to create a branch for this!).
 
