@@ -42,6 +42,17 @@ repository with a Netlify site and you'll have a working continuous delivery
 pipeline, including branch and preview deployments (from pull requests and,
 optionally, branch commits).
 
+Another of such platforms that's worth mentioning is
+[Vercel](https://vercel.com/). Vercel and Netlify feature sets are very
+similar, for the purposes of this tutorial, so both would be very valid
+choices. Vercel, being built by the same team behind Next.js, has the added
+advantage of sharing the same conventions as Next.js does, which makes the
+build process simpler as we wouldn't need any special plugins for code
+transformation, as we will with Netlify.  I'm picking Netlify here mainly due
+to my familiarity with the platform and their tooling (UI, CLI, etc), but you
+could easily adapt this setup to work with Vercel instead (let me know if
+there's interest, I'm happy to create a branch for this!).
+
 Although this works quite well, it's often better to take control of the build
 and deploy process and have it run on a CI/CD pipeline you can extend - like Github
 Actions! This way, you have flexibility to run whatever other steps your site
