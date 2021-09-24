@@ -18,7 +18,7 @@ This little blog post was developed out of [a tweet](https://twitter.com/mbostoc
 
 ## Why is `toString` the Question?
 
-Let's say you have created some custom object and you know that at some point, you will need that obejct represented as a string.
+Let's say you have created some custom object and you know that at some point, you will need the string representation of that object.
 
 Ok, fine.  Let's give the object an explicit `toString` function:
 
@@ -40,20 +40,20 @@ Another way to perform string conversion is to [overload the + operator](../Insi
 someObj + ""    // 'Blah'
 ```
 
-But this is JavaScript, so we should expect some inconsistencies...
+Fair enough; but this is JavaScript, so we should expect some inconsistencies...
 
 ## And Now, Without the `toString` Function
 
-Let's say that our custom object does not have a `toString` function, but instead, has a `valueOf` function.
+Let's say that our custom object no longer has a `toString` function, but instead, has a `valueOf` function.
 
 ```javascript
 let someObj = { valueOf: () => "Surprise!" }
 ```
 
-Again, let's try our two approaches to performing string conversion.  First, let's use a template literal:
+Again, let's try our two approaches for performing string conversion.  First, let's use a template literal:
 
 ```javascript
-`${someObj}`    // '[object Object]'  Uhhh, ok...
+`${someObj}`    // '[object Object]'  Uhhh, what!?
 ```
 
 Hmmm, that didn't work.  Let's try overloading the `+` operator:
@@ -64,7 +64,7 @@ someObj + ""    // 'Surprise!'  OK, that's better
 
 The problem here is that the template literal specifically calls an object's `toString` function, but if that function is missing, it simply gives up and prints `[object Object]`
 
-The overloaded `+` operator on the other hand, sees that the object does not contain a `toString` function, but instead of giving up, it calls the next best function &ndash; which is `valueOf` (then converts whatever value it receives into a string).
+The overloaded `+` operator on the other hand, appears to see that the object does not contain a `toString` function, and instead of giving up, calls the next best function &ndash; `valueOf` (then converts whatever value it receives into a string).
 
 Ok, so template literals and the overloaded `+` operator both perform string conversion, but according to different rules...
 
@@ -78,8 +78,7 @@ let someObj = { toString: () => "Blah", valueOf: () => "Surprise!" }
 someObj + ""   // 'Surprise!'    Huh?! Why wasn't toString() called?
 ```
 
-![Think](./Think.png)  
-And that’s just weird...
+![Think](./Think.png)
 
 ## Strange, but Consistent
 
@@ -107,7 +106,7 @@ Strange, but there you have it.
 
 ## Consistently Inconsistent
 
-Let's apply what we've learnt about string conversion to a good old `Date` object:
+Let's apply what we've learnt about string conversion to the good old `Date` object:
 
 ```javascript
 date = new Date()
