@@ -10,7 +10,7 @@ I decided to follow along with their iOS tutorial: https://docs.bazel.build/vers
 
 ## xcode license
 
-There was a warning about me not having accepted the license for xcode. This is because I'd not launched xcode before, and had accepted the license command-line utils only. In the end, I switched to xcode and accepted the license, but the bazel build server wsa spawned before me changing over, so it cached the failure. It might be worth adding some more explanatory text about nuking the server here.
+There was a warning about me not having accepted the license for xcode. This is because I'd not launched xcode before, and had accepted the license command-line utils only. In the end, I switched to xcode and accepted the license, but the bazel build server was spawned before me changing over, so it cached the failure. It might be worth adding some more explanatory text about nuking the server here.
 
 ## Old versions in the tutorial
 
@@ -68,7 +68,7 @@ Reading https://developers.facebook.com/blog/post/2021/07/01/future-of-buck/, I 
 
 > As for the big changes, our next-gen build system is built on a single incremental computation framework. This provides fine-grained tracking of computation dependencies and very high performance for incremental computations. It is heavily inspired by research like Adapton and implementations like Salsa, Skip and the Shake build system.
 
-Salsa is the query-based incremental compilation engine behind `rust-analyzer`. There is vague talk of porting the rust compiler over to use salsa, but progress is slow. Typically, incremental compilation engines make a lot of sense as daemons, where results can be kept in memory and are less effective if they have to serialize their state to disk between queries [I have no way to back this up. It may be that the overhead can be made insignificant here].
+Salsa is the query-based incremental compilation engine behind `rust-analyzer`. There is vague talk of porting the rust compiler over to use salsa, but progress is slow. Instinctively, incremental compilation engines make a lot of sense as daemons, where results can be kept in memory, and are less effective if they have to serialize their state to disk between queries [Note: I have no way to back this up. It may be that the overhead can be made insignificant here].
 
 Niko has a bunch of interesting videos about how salsa works in theory and in practice. My favourite surprising thing that I learned was that sometimes it's beneficial to compute a query and then only store its _hash_, and not store its _value_ in the query cache. An example of this would be when you want to ask "what is the type of the value under my cursor?", you ask a bunch of queries, and a bunch of them rely on "what is the source code of the file I'm in?". As soon as you run that query and realise that the file hasn't changed, you know that your cached value for the query "which names are in scope under my cursor?" is still valid. You don't actually need to store the value of the file anywhere, and you can also throw away the computed values of a bunch of intermediate results in your query tree, as long as you have enough information to prove that the expensive-to-compute results are still valid, you're golden. When you do end up making an edit to the file and invalidating your caches, the cost of rebuilding the tree of results often ends up being cheap, and you often end up short-circuiting ("what is the source code of the function I'm in?" will be the same if all you did was trim a trailing newline at the end of the file).
 
@@ -76,12 +76,14 @@ My assumption is that all bazel-like build-systems will have some kind of query 
 
 I wonder how something like bazel would interact with a compiler that holds its own query cache in memory. If it wanted to be hermetically sealed, it would need to throw away any speed-up gained by a compiler in this daemon mode. It sounds like it can still do useful things with on-disk incremental compilation caches if it knows about them (although in non-sandboxed mode, they mention that the typescript compiler will get confused by any incremental compilation cache files that are left lying around).
 
+[edit: I did a bit of digging, and found that bazel does have a concept of [persistent workers](https://docs.bazel.build/versions/main/persistent-workers.html), and uses them by default where it makes sense.]
+
 <!-- TODO: discuss the tricks that pnpm/parcel2 do, that might/might not work with bazel? -->
 
 <!-- TODO: look into distributed build cache. Could you abuse github-releases || ghcr.io for cached build artifacts like cargo-quickinstall/homebrew do? -->
 
 ## Conclusions
 
-Bazel is definitely an improvement over the `make`-style systems that it replaces. As you dig deeper into language-specific integrations, you start to find that `bazel` is able to wrap `make`-style compilation behavior really well, and has useful opinions about what `make test` should do. It also has reasonable tooling for converting language-specific build files into BUILD dependency rules. At the end of the day, it is closely wedded to the `make` model of compilation, and I am not expecting it to integrate with all of the clever tricks that these language tools use to make incremental recompilation fast. Maybe this is an okay trade-off if you want to use a distributed build cache, and have jenkins builds that are fast and that you can trust.
+Bazel is definitely an improvement over the `make`-style systems that it replaces. As you dig deeper into language-specific integrations, you start to find that `bazel` is able to wrap `make`-style compilation behavior really well, and has useful opinions about what `make test` should do. It also has reasonable tooling for converting language-specific build files into BUILD dependency rules. [edit: after reading about persistent workers, this bit of the conclusion might not be valid ~At the end of the day, it is closely wedded to the make model of compilation, and I am not expecting it to integrate with all of the clever tricks that these language tools use to make incremental recompilation fast. Maybe this is an okay trade-off if you want to use a distributed build cache, and have Jenkins builds that are fast and that you can trust.~ ]
 
 Also, build systems are hard.
