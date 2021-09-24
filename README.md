@@ -8,6 +8,8 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
+- 2021-09-24 - [`toString || !toString`](./chriswhealy/toStringOrNotToString) by [Chris W][chrisw]
+
 - 2021-04-14 - [Safe from the wolves - building security in](./timlee/safe-from-the-wolves) by [Tim L][timlee]
 
 - 2021-04-09 - [Platform (r)evolution](./stuartharris/platform-revolution) by [Stu][stu]
