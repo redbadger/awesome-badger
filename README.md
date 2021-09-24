@@ -8,6 +8,8 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
+- 2021-09-24 - [`toString || !toString`](./chriswhealy/toStringOrNotToString) by [Chris W][chrisw]
+
 - 2021-07-12 - [Bazel Impressions](./davidlaban/bazel-impressions/README.md) by [David L](./davidlaban)
 
 - 2021-07-06 - [NATS Impressions](./davidlaban/nats-impressions/README.md) by [David L](./davidlaban)

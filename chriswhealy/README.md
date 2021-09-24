@@ -4,10 +4,26 @@
 
 
 > Senior Engineer and Developer working as much as possible with Rust and WebAssembly
-> Outside work I play the drums, do audio engineering/post production/FOH and tinker with room acoustics
+> Outside work I play the drums, do audio engineering/live streaming/post production/FoH and tinker with room acoustics
 
 
 ## Blogs
+
+### `toString || !toString`
+
+> toString, or not toString? That is the question&mdash;  
+> Whether 'tis nobler in the mind to suffer  
+> the slings and arrows of outrageous type conversion,  
+> Or to take up arms against a sea of troublesome JavaScript behaviours,  
+> and by opposing end them? To Git, to blame&mdash;  
+> No more&mdash;and by a pull request to say we end  
+> The heartache and the thousand natural shocks  
+> That programmers are heir to&mdash;’tis a consummation  
+> Devoutly to be wished!...
+
+(with apologies to the Bard)
+
+[toString or not toString](./toStringOrNotToString/)
 
 ### Porous Absorber Calculator
 
