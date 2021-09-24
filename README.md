@@ -8,6 +8,16 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
+- 2021-07-12 - [Bazel Impressions](./davidlaban/bazel-impressions/README.md) by [David L](./davidlaban)
+
+- 2021-07-06 - [NATS Impressions](./davidlaban/nats-impressions/README.md) by [David L](./davidlaban)
+
+- 2021-07-06 - [WasmCloud Impressions](./davidlaban/wasmcloud-impressions/README.md) by [David L](./davidlaban)
+
+- 2021-06-28 - [Dapr Impressions](./davidlaban/dapr-impressions/README.md) by [David L](./davidlaban)
+
+- 2021-06-09 - [Infrastructure Musings](./davidlaban/infrastructure-musings/README.md) by [David L](./davidlaban)
+
 - 2021-04-14 - [Safe from the wolves - building security in](./timlee/safe-from-the-wolves) by [Tim L][timlee]
 
 - 2021-04-09 - [Platform (r)evolution](./stuartharris/platform-revolution) by [Stu][stu]
