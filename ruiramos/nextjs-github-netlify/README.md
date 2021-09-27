@@ -246,7 +246,7 @@ jobs:
 ```
 
 So after our environment and dependencies are set up, we're running tests
-(I'm assuming you have them!) and building the project using the Netlify CLI,
+(assuming you have them 😅) and building the project using the Netlify CLI,
 and finally deploying with the `--prod` flag, which makes it a production
 deployment to the live site. We're using the TOKEN and ID secrets we've defined
 earlier on the `build` and `deploy` commands.
@@ -257,12 +257,16 @@ indicating this workflow should run in `production`. Github offers a few useful
 features on a per-enviroment basis such as protection rules and the ability to
 override env variables (there's actually an example of that in the [example
 repository](https://github.com/ruiramos/nextjs-netlify-ghactions) if you look
-at the `Test with overriding secrets per env` action from the `main` branch vs
+at the `Test with overriding secrets per env` action output from the `main` branch vs
 other branches). We also specify the URL this deployment is going
 to live in, so Github knows where this lives and populates [activity
 log](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=production) accordingly.
 The way we're parsing the output of the Netlify deploy command to extract the live and log URLs is a bit scary,
-it was based on how the [official Netlify Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does it as well.
+it's based on how the [official Netlify Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does it.
+
+To access all the configuration for your enviroments, head to your project
+`Settings` and click `Environments` on the left hand side menu and, finally,
+the environemnt name.
 
 
 The preview deployment workflow currently looks like this:
@@ -353,7 +357,7 @@ jobs:
 
 We're now working in the `branch-deploy` environment, so that's where the
 configuration will be loaded from, but we're not specifying a URL this time as
-we'll potentially have multiple branch (also known as preview) deployments active at the
+we'll potentially have multiple branch (also known as "preview") deployments active at the
 same time, from different branches. That's why, for this workflow, we're using [a
 seperate Github Action](https://github.com/bobheadxi/deployments) to handle
 [deployments](https://developer.github.com/v3/repos/deployments/) manually,
@@ -376,9 +380,10 @@ case of having a class of deployments (ie, branch deployments) that would want
 to share some configuration like environment variables, while keeping releases
 independent. With the set-up shown here, we're kinda able to offer both -
 setting common configuration on the `branch-deploy` environment and checking
-deployment logs on "branch-deploy-`branch-name`" or the PR directly - but it
+deployment logs on "branch-deploy-`branch-name`" or on the PR directly - but it
 feels a bit hackish. Let me know if there is a better way of handling this that
 I've missed!
+
 
 ## Other tools to throw in the mix
 
