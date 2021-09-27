@@ -176,6 +176,7 @@ Starting by the production workflow, create a `.github/workflows/main.yml`
 with the following content:
 
 ```yaml
+{% raw %}
 name: Production build+deploy
 
 on:
@@ -189,7 +190,7 @@ jobs:
     name: Build and deploy
     environment:
       name: production
-      url: ${{ "{{ steps.deploy-netlify.outputs.NETLIFY_LIVE_URL" }}}}
+      url: ${{ steps.deploy-netlify.outputs.NETLIFY_LIVE_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -244,6 +245,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
+{% endraw %}
 ```
 
 So after our environment and dependencies are set up, we're running tests
@@ -273,6 +275,7 @@ the environment name.
 On the other hand, the preview deployment workflow currently looks like this:
 
 ```yaml
+{% raw %}
 name: Pull Request build+deploy
 
 on:
@@ -354,6 +357,7 @@ jobs:
           logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
           env_url: ${{ steps.deploy-netlify.outputs.netlify_preview_url }}
 
+{% endraw %}
 ```
 
 Here, we'll be deploying `pull_requests` that target the `main` branch on every update (more specifically, on
