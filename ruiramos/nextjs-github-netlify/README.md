@@ -18,7 +18,7 @@ offering of Github, [Github Actions](https://github.com/features/actions). I'll
 talk briefly about the why for using each one next.
 
 Next.js is arguably the quickest way to bootstrap a full-stack web app using
-React, specially if you're using their
+React, especially if you're using their
 [create-next-app](https://nextjs.org/docs/api-reference/create-next-app). It's
 a very powerful and smart web framework, supporting different architectures,
 from completely staticly generated sites to server-side rendered ones. It also
@@ -33,7 +33,7 @@ There's currently a couple of options on where to deploy such an app - from AWS
 plugin](https://www.serverless.com/blog/serverless-nextjs)) to
 [Heroku](https://levelup.gitconnected.com/deploy-your-next-js-app-to-heroku-in-5-minutes-255e829a9966),
 but for our use case, static hosting providers with some sort of FaaS offering
-are simple and work well, and Netlify fits the bill perfectly, having with a
+are simple and work well, and Netlify fits the bill perfectly, having a
 huge community and decent tooling around their platform. Netlify supports
 Next.js deployments out of the box by converting API routes (and server-side
 rendered pages) into [Netlify
@@ -119,7 +119,7 @@ preview deploys:
 There's two final setting up tasks we need to do before digging in to the CI
 pipeline. First, we need to define Netlify build configuration as code, so that
 the build command we run on Github Actions knows what to do. For that, create a
-`netlify.toml` file on your project folder with the following content:
+`netlify.toml` file in your project folder with the following content:
 
 ```toml
 [build]
@@ -249,10 +249,11 @@ jobs:
 <!-- {% endraw %} -->
 
 So after our environment and dependencies are set up, we're running tests
-(assuming you have them 😅) and building the project using the Netlify CLI,
-and finally deploying with the `--prod` flag, which makes it a production
-deployment to the live site. We're using the TOKEN and ID secrets we've defined
-earlier on the `build` and `deploy` commands.
+(assuming you have them 😅) and building the project using the Netlify CLI, and
+finally deploying with the `--prod` flag, which makes it a production
+deployment to the live site. We're using the NETLIFY_AUTH_TOKEN and
+NETLIFY_SITE_ID secrets we've defined earlier on the `build` and `deploy`
+commands.
 
 We're using [Github
 Environments](https://docs.github.com/en/actions/reference/environments) and
@@ -262,10 +263,9 @@ override env variables (there's actually an example of that in the [example
 repository](https://github.com/ruiramos/nextjs-netlify-ghactions) if you look
 at the `Test with overriding secrets per env` action output from the `main` branch vs
 other branches). We also specify the URL this deployment is going
-to live in, so Github knows where this lives and populates [activity
+to live in, so Github knows where this lives and populates the [activity
 log](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=production) accordingly.
-The way we're parsing the output of the Netlify deploy command to extract the live and log URLs might look bit scary,
-it's based on code from the [official Netlify Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) so I think we're ok.
+The way we're parsing the output of the Netlify `deploy` command to extract the live and log URLs might look bit scary, but it's based on code from the [official Netlify Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) so I think we're ok.
 
 To access all the configuration for your enviroments, head to your project
 `Settings` and click `Environments` on the left hand side menu and, finally,
@@ -372,7 +372,7 @@ seperate Github Action](https://github.com/bobheadxi/deployments) to handle
 creating a different "release" environment for each deployment so we can have a [seperate
 deployment log per
 branch](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=branch-deploy-turn-german), in the format
-"brach-deploy-`branch-name`".
+"branch-deploy-`branch-name`".
 
 This will also enrich our PR page with the status and a link to
 the live deployment:
@@ -383,7 +383,7 @@ the live deployment:
 
 Github Environments seem like a great tool for non-transient environments, like
 `production` or `staging`, where there's a single environment that persists and
-gets updated with each deploy.  It seem to be less targeted at this specific use
+gets updated with each deploy.  It seems to be less targeted at this specific use
 case of having a class of deployments (ie, branch deployments) that would want
 to share some configuration like environment variables, while keeping releases
 independent. With the set-up shown here, we're kinda able to have both -
@@ -419,7 +419,7 @@ to the following 3rd parties and tools:
    for another blog post!).
  - [Auth0](https://auth0.com/), a very comprehensive, solid service for user
    management and authentication. You could just use [Firebase
-   Authentication](https://firebase.google.com/docs/auth), specially if you're
+   Authentication](https://firebase.google.com/docs/auth), especially if you're
    making use of rules for authenticated users, but making both work together
    [is not difficult
    either](https://auth0.com/blog/developing-real-time-apps-with-firebase-and-firestore/).
@@ -437,6 +437,9 @@ production grade web app even quicker!
 
 Feedback is welcome, you can find me on [Twitter](https://twitter.com/ruimramos?lang=en)
 or drop a line on the [HN post]() for this article.
+
+Reviewed by [@siame](https://github.com/siame), many thanks 🙌.
+Thanks to [@braposo](https://twitter.com/braposo) and [@xade](https://xade.eu/) for your feedback as well.
 
 [Rui](/ruiramos)
 
