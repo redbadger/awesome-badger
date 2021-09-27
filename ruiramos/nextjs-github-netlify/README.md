@@ -1,6 +1,6 @@
 # Next.js deployment on Netlify with Github Actions
 
-*TLDR* - [Example working
+**TL;DR:** [Example working
 repository](https://github.com/ruiramos/nextjs-netlify-ghactions) with the end
 state configuration.
 
