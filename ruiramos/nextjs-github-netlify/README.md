@@ -261,15 +261,15 @@ at the `Test with overriding secrets per env` action output from the `main` bran
 other branches). We also specify the URL this deployment is going
 to live in, so Github knows where this lives and populates [activity
 log](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=production) accordingly.
-The way we're parsing the output of the Netlify deploy command to extract the live and log URLs is a bit scary,
-it's based on how the [official Netlify Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does it.
+The way we're parsing the output of the Netlify deploy command to extract the live and log URLs might look bit scary,
+it's based on code from the [official Netlify Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) so I think we're ok.
 
 To access all the configuration for your enviroments, head to your project
 `Settings` and click `Environments` on the left hand side menu and, finally,
-the environemnt name.
+the environment name.
 
 
-The preview deployment workflow currently looks like this:
+On the other hand, the preview deployment workflow currently looks like this:
 
 ```yaml
 name: Pull Request build+deploy
@@ -355,9 +355,12 @@ jobs:
 
 ```
 
+Here, we'll be deploying `pull_requests` that target the `main` branch on every update (more specifically, on
+`opened`, `synchronize` or `reopened` events).
+
 We're now working in the `branch-deploy` environment, so that's where the
 configuration will be loaded from, but we're not specifying a URL this time as
-we'll potentially have multiple branch (also known as "preview") deployments active at the
+we'll potentially have multiple preview deployments active at the
 same time, from different branches. That's why, for this workflow, we're using [a
 seperate Github Action](https://github.com/bobheadxi/deployments) to handle
 [deployments](https://developer.github.com/v3/repos/deployments/) manually,
@@ -375,10 +378,10 @@ the live deployment:
 
 Github Environments seem like a great tool for non-transient environments, like
 `production` or `staging`, where there's a single environment that persists and
-gets updated with each deploy.  It seem to work less well for this specific use
+gets updated with each deploy.  It seem to be less targeted at this specific use
 case of having a class of deployments (ie, branch deployments) that would want
 to share some configuration like environment variables, while keeping releases
-independent. With the set-up shown here, we're kinda able to offer both -
+independent. With the set-up shown here, we're kinda able to have both -
 setting common configuration on the `branch-deploy` environment and checking
 deployment logs on "branch-deploy-`branch-name`" or on the PR directly - but it
 feels a bit hackish. Let me know if there is a better way of handling this that
