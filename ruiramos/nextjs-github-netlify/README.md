@@ -1,5 +1,8 @@
 # Next.js deployment on Netlify with Github Actions
 
+*TLDR* - [Example working
+repository](https://github.com/ruiramos/nextjs-netlify-ghactions) with the end
+state configuration.
 
 ## Introduction
 
@@ -63,11 +66,6 @@ of that Netlify magic, but, as we'll see, it is not that bad!
 We'll create a new Next.js site, deploy it to Github, connect it to Netlify and
 finally implement the needed Github Action workflows to get our continuous
 deployment ball rolling.
-
-If you're after the end result [you can find it
-here](https://github.com/ruiramos/nextjs-netlify-ghactions), forking that
-repository will give you a functional local setup and a great starting point
-for full stack web development!
 
 
 ## Putting it all together
