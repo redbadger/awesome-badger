@@ -175,8 +175,8 @@ managing different values for your env variables.
 Starting by the production workflow, create a `.github/workflows/main.yml`
 with the following content:
 
+<!-- {% raw %} -->
 ```yaml
-{% raw %}
 name: Production build+deploy
 
 on:
@@ -245,8 +245,8 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-{% endraw %}
 ```
+<!-- {% endraw %} -->
 
 So after our environment and dependencies are set up, we're running tests
 (assuming you have them 😅) and building the project using the Netlify CLI,
@@ -274,8 +274,8 @@ the environment name.
 
 On the other hand, the preview deployment workflow currently looks like this:
 
+<!-- {% raw %} -->
 ```yaml
-{% raw %}
 name: Pull Request build+deploy
 
 on:
@@ -357,8 +357,8 @@ jobs:
           logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
           env_url: ${{ steps.deploy-netlify.outputs.netlify_preview_url }}
 
-{% endraw %}
 ```
+<!-- {% endraw %} -->
 
 Here, we'll be deploying `pull_requests` that target the `main` branch on every update (more specifically, on
 `opened`, `synchronize` or `reopened` events).
