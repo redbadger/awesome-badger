@@ -189,7 +189,7 @@ jobs:
     name: Build and deploy
     environment:
       name: production
-      url: ${{ steps.deploy-netlify.outputs.NETLIFY_LIVE_URL }}
+      url: ${{ "{{ steps.deploy-netlify.outputs.NETLIFY_LIVE_URL" }}}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
