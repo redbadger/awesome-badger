@@ -56,12 +56,13 @@ to my own familiarity with the platform and their tooling (UI, CLI, etc), but yo
 could easily adapt this setup to work with Vercel instead (let me know if
 there's interest, I'm happy to create a branch for this!).
 
-Although this works quite well, it's often better to take control of the build
-and deploy process and have it run on a CI/CD pipeline you can extend - like Github
-Actions! This way, you have flexibility to run whatever other steps your site
-requires - from code formatting and linting tools to tests and other 3rd party
-service configuration. This presents the problem of us having to recreate some
-of that Netlify magic, but, as we'll see, it is not that bad!
+Although these automated deploys work quite well, it's often better to take
+control of the build and deploy process and have it running on a CI/CD pipeline
+you can extend - like Github Actions! This way, you have flexibility to run
+whatever other steps your site requires - from code formatting and linting
+tools to tests and other 3rd party service configuration. This presents the
+problem of us having to recreate some of that Netlify magic, but, as we'll see,
+it is not that bad!
 
 We'll create a new Next.js site, deploy it to Github, connect it to Netlify and
 finally implement the needed Github Action workflows to get our continuous
