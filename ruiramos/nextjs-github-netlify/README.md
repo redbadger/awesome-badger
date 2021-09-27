@@ -436,7 +436,7 @@ taking some ideas out of this blog post you get from zero to a fully-working
 production grade web app even quicker!
 
 Feedback is welcome, you can find me on [Twitter](https://twitter.com/ruimramos?lang=en)
-or drop a line on the [HN post]() for this article.
+or drop a line on the [HN post](https://news.ycombinator.com/item?id=28671437) for this article.
 
 Reviewed by [@siame](https://github.com/siame), many thanks 🙌.
 Thanks to [@braposo](https://twitter.com/braposo) and [@xade](https://xade.eu/) for your feedback as well.
