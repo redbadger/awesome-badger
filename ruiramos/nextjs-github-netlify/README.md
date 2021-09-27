@@ -187,6 +187,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    name: Build and deploy
+    environment:
+      name: production
+      url: ${{ steps.deploy-netlify.outputs.NETLIFY_LIVE_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -204,14 +208,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-
-      - name: Setup deployment
-        uses: bobheadxi/deployments@v0.6.0
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: production
 
       - name: Install dependencies
         run: |
@@ -249,17 +245,6 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: Update deployment status
-        uses: bobheadxi/deployments@v0.6.0
-        if: always()
-        with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
-          env_url: ${{ steps.deploy-netlify.outputs.netlify_live_url }}
-
 ```
 
 So after our environment and dependencies are set up, we're running tests
@@ -268,18 +253,21 @@ and finally deploying with the `--prod` flag, which makes it a production
 deployment to the live site. We're using the TOKEN and ID secrets we've defined
 earlier on the `build` and `deploy` commands.
 
-We're using [this Github Action](https://github.com/bobheadxi/deployments) to
-handle [Github
-Deployments](https://developer.github.com/v3/repos/deployments/), parsing the
-URL of the deployment from the output of the `netlify deploy` command (this is
-similar to how the [Netlify Github
-Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does
-it, that's where I got those ~crazy~ beautiful regexs from!). Your
-(successfull) deployments will now include useful metadata like the deployment
-URL and the location of the deployment logs on Netlify (this is particularly
-useful for PRs as we'll see in a bit).
+We're using [Github
+Environments](https://docs.github.com/en/actions/reference/environments) and
+indicating this workflow should run in `production`. Github offers a few useful
+features on a per-enviroment basis such as protection rules and the ability to
+override env variables (there's actually an example of that in the [example
+repository](https://github.com/ruiramos/nextjs-netlify-ghactions) if you look
+at the `Test with overriding secrets per env` action from the `main` branch vs
+other branches). We also specify the URL this deployment is going
+to live in, so Github knows where this lives and populates [activity
+log](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=production) accordingly.
+The way we're parsing the output of the Netlify deploy command to extract the live and log URLs is a bit scary,
+it was based on how the [official Netlify Action](https://github.com/netlify/actions/blob/master/cli/entrypoint.sh) does it as well.
 
-The preview deployment workflow doesn't look too different:
+
+The preview deployment workflow currently looks like this:
 
 ```yaml
 name: Pull Request build+deploy
@@ -292,6 +280,7 @@ on:
 jobs:
   deploy:
     environment: branch-deploy
+    name: Build and deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -364,39 +353,34 @@ jobs:
 
 ```
 
-We're using the same deployments action to provide Github with information
-about our deployment. This will enrich our PR page with the status and link to
-our preview deployment:
+We're now working in the `branch-deploy` environment, so that's where the
+configuration will be loaded from, but we're not specifying a URL this time as
+we'll potentially have multiple branch (also known as preview) deployments active at the
+same time, from different branches. That's why, for this workflow, we're using [a
+seperate Github Action](https://github.com/bobheadxi/deployments) to handle
+[deployments](https://developer.github.com/v3/repos/deployments/) manually,
+creating a different "release" environment for each deployment so we can have a [seperate
+deployment log per
+branch](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=branch-deploy-turn-german), in the format
+"brach-deploy-`branch-name`".
+
+This will also enrich our PR page with the status and a link to
+the live deployment:
 
 ![Github Pull Request with Deployment info](./img/github-pr-view-deployment.png)
 *Github Pull Request with Deployment info* ([link](https://github.com/ruiramos/nextjs-netlify-ghactions/pull/1))
 
-You might have noticed there's a slightly weird thing going on with environment
-names: we have `branch-deploy` as the environment for the whole job but we're
-passing `branch-deploy-${{ github.head_ref }}` (meaning the branch name in this
-case) to the Deployment created by the action. This is because we will want to
-use [Github
-Environments](https://docs.github.com/en/actions/reference/environments) to be
-able to, for instance, specify different environment variables depending if
-we're on a branch or production deployment. On the other hand, we want to keep
-a [seperate deployment log per
-branch](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activity_log?environment=branch-deploy-turn-german),
-with new deployments marking older ones as inactive on a per-branch basis.
 
-The [Github Actions environment
-definition](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment)
-also takes a `url` besides the name, which would work fine for `production` and
-other non-transient environments, however that information doesn't seem to be
-surfaced on the Github UI (I opened a ticket with them and will update this
-post if this changes!), so for now we're using that deployment action on both
-workflows.
-
-One of the cool things about this setup is that you can easily override the
-Github secrets per environment, which might become useful if you're dealing
-with 3rd parties and have different "dev" vs "production" accounts, for
-instance. You can find the UI to do this on your project `Settings` >
-`Environments`.
-
+Github Environments seem like a great tool for non-transient environments, like
+`production` or `staging`, where there's a single environment that persists and
+gets updated with each deploy.  It seem to work less well for this specific use
+case of having a class of deployments (ie, branch deployments) that would want
+to share some configuration like environment variables, while keeping releases
+independent. With the set-up shown here, we're kinda able to offer both -
+setting common configuration on the `branch-deploy` environment and checking
+deployment logs on "branch-deploy-`branch-name`" or the PR directly - but it
+feels a bit hackish. Let me know if there is a better way of handling this that
+I've missed!
 
 ## Other tools to throw in the mix
 
