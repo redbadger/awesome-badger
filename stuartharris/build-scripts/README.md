@@ -6,7 +6,9 @@ _[Stuart Harris](../) — 11th November 2021_
 
 It's a challenging problem, with solutions that date back decades.
 
-One of the oldest tools is [`make`][make], which is still extremely popular (and for good reason). However, writing a `Makefile` can get complex quite quickly. It's arcane syntax is challenging, making them hard to write, and, in my opinion, even harder to read. And often, the best feature of `make` is not even used — the ability to only rebuild a target if it's inputs have changed (i.e. have a later modification time). Most people add `.PHONY` to targets and just use `make` as a task runner. This is because it has a built in mechanism for building a Directed Acyclic Graph of dependencies, which is useful, and because the original use case (building C or C++ projects) is not what most people are doing these days (the enlightened are using [Rust][rust] instead).
+One of the oldest tools is [`make`][make], which is still extremely popular (and for good reason). However, writing a `Makefile` can get complex quite quickly. Its arcane syntax is challenging, making it hard to write, and, in my opinion, even harder to read. And often, the best feature of `make` is not even used — the ability to only rebuild a target if it's inputs have changed (i.e. have a later modification time). Most people add `.PHONY` to targets and just use `make` as a task runner. This is because it has a built in mechanism for building a Directed Acyclic Graph of dependencies, which is useful, and because the original use case (building C or C++ projects) is not what most people are doing these days (the enlightened are using [Rust][rust] instead). :-)
+
+There are now many tools that have been inspired by `make`, including [`just`][just], and [`cargo-make`][cargo_make]. They attempt to improve on the syntax of `make` and are useful if you want a powerful task runner (and don't care about the change detection).
 
 At the other end of the spectrum, we have tools like [Bazel][bazel] and [Buck][buck]. These are great tools, that do exactly what we want (although they can be quite complex to configure). So why don't we use them instead? I think it's because they need you to go all in. If you want to use either tool, you have to use it everywhere — every dependency needs to be tracked and controlled by the tool. This can work well in some ecosystems, e.g. Java. Not so well for others, e.g. Rust. This is because modern languages typically have their own highly capable toolchains (Rust has [Cargo][cargo], for instance), and using Bazel, for example, on a Rust project means that you need to stop using Cargo (which is simple and mainstream) and use Bazel instead (which is complex and less widely used).
 
@@ -16,17 +18,17 @@ I really just need 3 things:
 
 1. a powerful scripting language that everyone knows (i.e. not an esoteric [DSL][dsl]), but one that makes it easy to orchestrate shell commands
 2. for local development, the ability to describe inputs and detect if they have changed since I last built
-3. for CI pipelines, a way to track changed dependencies in a monorepo, and create a build schedule
+3. for CI pipelines, a way to track newly changed dependencies in a monorepo, and create a build schedule
 
 That's really it.
 
 The [UNIX philosophy][unix_philosophy] is all about small, sharp tools that do one thing and do it well. So, instead of trying to find a single tool that does all three of those things, why not choose 3 tools and combine them in a flexible way to achieve the overall goal?
 
-Reluctant as I am to suggest it, the answer to the first need is probably JavaScript. It's by far the most widely known scripting language. But what about it being easy to orchestrate shell commands? This is where [`zx`][zx] comes into play. It's really cool, making it incredibly easy to orchestrate shell commands from within JavaScript. We'll dig into it shortly, but in a nutshell, I've been blown away by how simple, yet powerful, it is for this job.
+Reluctant as I am to suggest it, the answer to the first need is probably JavaScript. It's by far the most widely known scripting language. Arguably, you shouldn't use a Turing-complete language for this job, instead preferring a declarative, rules-based, DSL. But I think JavaScript's universality is too important to ignore, and it's really useful to be able to easily manipulate configuration data when building software. But what about it being easy to orchestrate shell commands? This is where [`zx`][zx] comes into play, making it incredibly easy to orchestrate shell commands from within JavaScript. We'll dig into it shortly, but in a nutshell, I've been blown away by how simple, yet powerful, it is for this job.
 
-Secondly, if I'm rebuilding over and over again on my laptop, I need a tool to describe my inputs and detect if they have changed. This is really quite simple. Everyone uses git now (thankfully) and so describing inputs should be as simple as "every file, under these directories, that is tracked by git". Detecting changes is as simple as "compute a hash of all these inputs, which I can compare with the hash from the last successful build". Fortunately, there is a tool that does precisely that (and it's written in Rust) — [`dirsh`][dirsh]. It's fast, and couldn't really be any simpler. We'll look at how to use this shortly.
+Secondly, if I'm rebuilding over and over again on my laptop, I need a tool to describe my inputs and detect if they have changed. This is really quite simple. Everyone uses git now (thankfully) and so describing inputs should be as simple as "every file, under these directories, that is tracked by git". Detecting changes is as simple as "compute a hash of all these inputs, which I can compare with the hash from the last successful build". Fortunately, there is a tool that does precisely that — it's called [`dirsh`][dirsh] — and it's written in Rust! (Have you worked out that I love Rust, yet?). Anyway, ignoring its unfortunate name, `dirsh` is fast and simple. We'll look at how to use this shortly.
 
-Finally, we need a way for my CI pipeline to know what it has to build and in which order. It's becoming more and more popular to use a [monorepo][monorepo], and I highly recommend doing so as a way to make it easier to build reliable software. In a monorepo, most of your immediate dependencies are in the same repository. You can commit changes, atomically, across your whole codebase. Versioning problems evaporate. Stability and reliability become much easier to achieve. If you have a monorepo, and you probably should, [monobuild][monobuild], written by my esteemed colleague, [Viktor Charypar][viktor], is is an incredibly useful tool that allows you to graph your dependencies and schedule builds based on what has changed in the current branch (it's also being [rewritten in rust][monobuild-rs], so will become even better). Monobuild is incredibly useful in a CI pipeline to ensure that everything that has changed (either directly, or because a dependency has changed) is rebuilt. This now gives us everything we need to build simple and efficient pipelines.
+Finally, we need a way for my CI pipeline to know what it has to build and in which order. It's becoming more and more popular to use a [monorepo][monorepo], and I highly recommend doing so as a way to make it easier to build reliable software. In a monorepo, most of your immediate dependencies are in the same repository. You can commit changes, atomically, across your whole codebase. Versioning problems evaporate. Stability and reliability become much easier to achieve. If you have a monorepo, and you probably should, [monobuild][monobuild], written by my esteemed colleague, [Viktor Charypar][viktor], is is an incredibly useful tool that allows you to graph your dependencies and schedule builds based on what has changed in the current branch (it's also being [rewritten in rust][monobuild-rs], so will become even better). Monobuild can help us create efficient build schedules and simple pipelines — we'll look at how to do that below.
 
 ## Using `zx`
 
@@ -36,7 +38,7 @@ First install `zx`:
 npm install --global zx
 ```
 
-Then create a file (e.g. `touch make.mjs`), make it executable (e.g. `chmod +x make.mjs`), and add this at the top:
+Then create a file (e.g. `touch make.mjs`), make it executable (e.g. `chmod +x make.mjs`), and add a [shebang][shebang] at the top:
 
 ```sh
 #!/usr/bin/env zx
@@ -52,7 +54,7 @@ Check this out:
 
 ![zx](./zx.png)
 
-This is the first run:
+This is the first run (because the hash changed, we run the build):
 
 ```bash
 ./make.mjs --build
@@ -85,7 +87,7 @@ $ wash claims inspect build/pass_through_s.wasm
   None
 ```
 
-And the second run:
+This is the second run (because the hash is the same, we can skip the build):
 
 ```bash
 ./make.mjs --build
@@ -112,7 +114,7 @@ $ wash claims inspect build/pass_through_s.wasm
   None
 ```
 
-Parsing JSON is a doddle:
+Also, parsing JSON is a doddle:
 
 ```js
 const metadata = JSON.parse(
@@ -131,14 +133,14 @@ First install `dirsh`:
 cargo install dirsh
 ```
 
-Calling `dirsh` on its own will walk recursively from the current directory, feeding file contents, with their modification times and modes, into the digest, and write it to stdout:
+Calling `dirsh`, on its own, will cause it to walk recursively from the current directory, feeding file contents, with their modification times and modes, into the digest, and write it to stdout:
 
 ```sh
 dirsh
 JLAU7VF3L5IXQ5L66AXEILCHE4
 ```
 
-This is how I'm calling it from `zx`:
+This is how I call it from `zx`:
 
 ![dirsh](./dirsh.png)
 
@@ -152,7 +154,7 @@ First install `monobuild`:
 cargo install --git https://github.com/charypar/monobuild
 ```
 
-Add some files called `Dependencies`, into your monorepo (I've made `interface` a strong dependency as it has some codegen that needs to run):
+Add some files, named `Dependencies`, into your monorepo (I've made `interface` a strong dependency — hence the `!` — because it has some codegen that needs to run):
 
 ```sh
 bat */Dependencies
@@ -177,7 +179,7 @@ Then get a build schedule based on what has changed (in git) since you cut your 
 monobuild diff --dot
 ```
 
-If only `interface` had changed, this would be the schedule:
+If only `interface` had changed, this is what the schedule would look like. Note that because `actor` and `provider` both depend on `interface`, and `interface` has changed, we need to rebuild both:
 
 ```dot
 digraph schedule {
@@ -199,11 +201,94 @@ digraph schedule {
 }
 ```
 
+Then all we have to do in our CI pipeline is call the relevant `zx` scripts according to the supplied graph. This is easier to parse if you don't specify `--dot`, for example:
+
+```sh
+monobuild diff
+```
+
+produces an adjacency list:
+
+```text
+actor: interface
+interface:
+provider: interface, another-dep
+```
+
+We can use the graph to decide in the CI pipeline what can be done in parallel and what needs to be done in series. At it's simplest, creating an ordered list of dependencies to build would require parsing the adjacency list, and using a depth-first algorithm on the graph. Here's an example that calls `./make.mjs` in each of the dependencies in the correct order (but in series):
+
+```js
+#!/usr/bin/env zx
+$.verbose = false;
+
+const schedule = getSchedule(parse((await $`monobuild diff`).stdout));
+
+$.verbose = true;
+for (const dep of schedule) {
+  cd(dep);
+  await $`./make.mjs ${getArgs()}`;
+}
+
+function parse(diff) {
+  return diff.split("\n").reduce((acc, line) => {
+    const [vertex, adjacents] = line.split(":");
+    if (vertex) {
+      acc[vertex] = adjacents
+        .split(",")
+        .map((a) => a.trim())
+        .filter((a) => a);
+    }
+    return acc;
+  }, {});
+}
+
+function getSchedule(adjacencyList) {
+  return Object.keys(adjacencyList)
+    .map((entryPoint) => {
+      const result = [];
+      const visited = {};
+      (function dfs(vertex) {
+        if (!vertex) return null;
+        visited[vertex] = true;
+        result.push(vertex);
+        adjacencyList[vertex].forEach((neighbour) => {
+          if (!visited[neighbour]) {
+            return dfs(neighbour);
+          }
+        });
+      })(entryPoint);
+      return result.reverse();
+    }) // depth-first
+    .flatMap((list) => list) // flatten
+    .filter((vertex, index, self) => self.indexOf(vertex) === index); // unique
+}
+
+function getArgs() {
+  return Object.keys(argv)
+    .filter((k) => k !== "_")
+    .flatMap((a) => [`--${a}`, argv[a]]);
+}
+```
+
+Wow, that's more code than we thought. But it's good that we can even do it — imagine doing something like that in a `Makefile`.
+
+Interestingly, even if we don't flatten our paths, and remove duplicates, we still wouldn't be doing extra work because of `dirsh`.
+
+In a real world, we'd wan't to project the graph onto a set of CI tasks that run in parallel where they can and series where they can't. Watch this space :-).
+
+## TLDR
+
+Build scripts need more flexibility than most declarative build configurations allow for, and, whilst I would always opt for declarative over imperative, I think the flexibility and widespread use of JavaScript gives us superpowers when building software. Especially when we hash out inputs, so that we don't repeat unnecessary work. Coupled with git-based change detection and dependency graphing in our CI pipelines, we have everything we need for simple, easy-to-grok, repeatable builds.
+
+LMK what you think!
+
 [bazel]: https://bazel.build/
 [buck]: https://buck.build/
+[cargo_make]: https://github.com/sagiegurari/cargo-make
 [cargo]: https://doc.rust-lang.org/cargo/
 [dirsh]: https://github.com/christian-blades-cb/dirsh
 [dsl]: https://en.wikipedia.org/wiki/Domain-specific_language
+[just]: https://github.com/casey/just
 [make]: https://www.gnu.org/software/make/
 [monobuild-rs]: https://github.com/charypar/monobuild/tree/master/rs
 [monobuild]: https://github.com/charypar/monobuild
@@ -212,3 +297,4 @@ digraph schedule {
 [unix_philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
 [viktor]: https://twitter.com/charypar
 [zx]: https://github.com/google/zx
+[shebang]: https://en.wikipedia.org/wiki/Shebang_(Unix)
