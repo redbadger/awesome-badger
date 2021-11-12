@@ -32,7 +32,7 @@ Finally, we need a way for my CI pipeline to know what it has to build and in wh
 
 ## Using `zx`
 
-First install `zx`:
+First install [`zx`][zx]:
 
 ```sh
 npm install --global zx
@@ -127,20 +127,25 @@ Anyway, you get the idea. Very powerful.
 
 ## Using `dirsh`
 
-First install `dirsh`:
+First install [`dirsh`][dirsh]:
 
 ```sh
 cargo install dirsh
 ```
 
-Calling `dirsh`, on its own, will cause it to walk recursively from the current directory, feeding file contents, with their modification times and modes, into the digest, and write it to stdout:
+Calling `dirsh`, on its own, will cause it to walk down recursively from the current directory (honouring your `.gitignore` files, and its own `.hashignore` if you need it), feeding file contents (with their modification times and modes) into the digest, and then write the digest to stdout:
 
 ```sh
 dirsh
+```
+
+produces something like this:
+
+```text
 JLAU7VF3L5IXQ5L66AXEILCHE4
 ```
 
-This is how I call it from `zx`:
+This is how I call it from `zx` (passing it an array on input directories):
 
 ![dirsh](./dirsh.png)
 
@@ -148,13 +153,13 @@ Pretty cool.
 
 ## Using `monobuild`
 
-First install `monobuild`:
+First install [`monobuild`][monobuild]:
 
 ```sh
 cargo install --git https://github.com/charypar/monobuild
 ```
 
-Add some files, named `Dependencies`, into your monorepo (I've made `interface` a strong dependency — hence the `!` — because it has some codegen that needs to run):
+Add some files, named `Dependencies`, into your monorepo. I've made `interface` a _strong_ dependency of both `actor` and `provider` — that's the `!` — because it has some codegen that needs to run:
 
 ```sh
 bat */Dependencies
@@ -215,7 +220,7 @@ interface:
 provider: interface, another-dep
 ```
 
-We can use the graph to decide in the CI pipeline what can be done in parallel and what needs to be done in series. At it's simplest, creating an ordered list of dependencies to build would require parsing the adjacency list, and using a depth-first algorithm on the graph. Here's an example that calls `./make.mjs` in each of the dependencies in the correct order (but in series):
+We can use this graph to decide in the CI pipeline what can be done in parallel and what needs to be done in series. At it's simplest, creating an ordered list of dependencies to build would require parsing the adjacency list, and using a depth-first algorithm on the graph. Here's an example that calls `./make.mjs` in each of the dependencies in the correct order (but in series):
 
 ```js
 #!/usr/bin/env zx
@@ -280,7 +285,9 @@ In a real world, we'd wan't to project the graph onto a set of CI tasks that run
 
 Build scripts need more flexibility than most declarative build configurations allow for, and, whilst I would always opt for declarative over imperative, I think the flexibility and widespread use of JavaScript gives us superpowers when building software. Especially when we hash out inputs, so that we don't repeat unnecessary work. Coupled with git-based change detection and dependency graphing in our CI pipelines, we have everything we need for simple, easy-to-grok, repeatable builds.
 
-LMK what you think!
+All the code examples can be found in [this repo][graphql_provider], which is a GraphQL provider for [wasmCloud][wasmcloud] that exposes a postgres database as a GraphQL API.
+
+[LMK][stu] what you think!
 
 [bazel]: https://bazel.build/
 [buck]: https://buck.build/
@@ -288,13 +295,16 @@ LMK what you think!
 [cargo]: https://doc.rust-lang.org/cargo/
 [dirsh]: https://github.com/christian-blades-cb/dirsh
 [dsl]: https://en.wikipedia.org/wiki/Domain-specific_language
+[graphql_provider]: https://github.com/StuartHarris/wasmcloud-graphql-provider
 [just]: https://github.com/casey/just
 [make]: https://www.gnu.org/software/make/
 [monobuild-rs]: https://github.com/charypar/monobuild/tree/master/rs
 [monobuild]: https://github.com/charypar/monobuild
 [monorepo]: https://blog.red-badger.com/why-dont-you-have-a-monorepo
 [rust]: https://www.rust-lang.org/
+[shebang]: https://en.wikipedia.org/wiki/Shebang_(Unix)
+[stu]: https://twitter.com/stuartharris
 [unix_philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
 [viktor]: https://twitter.com/charypar
+[wasmcloud]: https://wasmcloud.dev
 [zx]: https://github.com/google/zx
-[shebang]: https://en.wikipedia.org/wiki/Shebang_(Unix)
