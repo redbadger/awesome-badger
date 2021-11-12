@@ -26,6 +26,12 @@ Infrastructure support to enable feature targeting in microservices based web sy
 
 ## Writing
 
+### [Write better build scripts](./build-scripts/README.md)
+
+11th November 2021
+
+We need simple and efficient build automation both locally, when developing, and in CI pipelines. The use case is slightly different but the goals are the same — scripts need to be simple to write, simple to read and understand, and they need to be repeatable, but we don't want to repeat unnecessary work.
+
 ### [Platform (r)evolution](./platform-revolution/README.md)
 
 9th April 2021
