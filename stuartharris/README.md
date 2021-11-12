@@ -16,14 +16,6 @@ I'm also passionate about empowering organisations to create great software in d
 
 ---
 
-## Open Source projects
-
-### [feature-targeting](https://github.com/feature-targeting)
-
-Infrastructure support to enable feature targeting in microservices based web systems (and mobile apps).
-
----
-
 ## Writing
 
 ### [Write better build scripts](./build-scripts/README.md)
@@ -61,3 +53,15 @@ For a while now, I've been wondering how practical it is (as of right now) to us
 25th July 2018
 
 Microplatforms are an automation-based approach to provisioning and operating platforms running digital products and services, which emphasises autonomy of cross-functional product teams. We discuss the traditional approach of building a large-scale, shared platform and explore the resulting cost to the organisation, chief of which is the cost of coordination between teams. Instead, we offer the concept of each cross-functional team owning and operating a separate, self-contained platform. A key enabler for this approach is full automation - capturing all aspects of the product and the platform from provisioning to service orchestration and policy as source code. This approach results in significantly increased team autonomy and enables agile architecture, continuous deployment to production and ongoing innovation. Microplatforms allow organisations to move engineering effort higher up the value chain and focus on using technology to solve customer problems.
+
+## Open Source projects
+
+### [wasmcloud-graphql-provider](https://github.com/StuartHarris/wasmcloud-graphql-provider)
+
+Hosts PostGraphile as a wasmCloud 0.50 capability provider, exposing a postgres database as a GraphQL API for actors to consume.
+
+### [feature-targeting](https://github.com/redbadger/feature-targeting)
+
+Infrastructure support to enable feature targeting in microservices based web systems (and mobile apps).
+
+---
