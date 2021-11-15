@@ -1,6 +1,6 @@
 # Write better build scripts
 
-_[Stuart Harris](../) — 11th November 2021_
+_[Stuart Harris](../) — 12th November 2021_
 
 > We need simple and efficient build automation both locally, when developing, and in CI pipelines. The use case is slightly different but the goals are the same — scripts need to be simple to write, simple to read and understand, and they need to be repeatable, but we don't want to repeat unnecessary work.
 
@@ -283,7 +283,7 @@ In a real world, we'd wan't to project the graph onto a set of CI tasks that run
 
 ## TLDR
 
-Build scripts need more flexibility than most declarative build configurations allow for, and, whilst I would always opt for declarative over imperative, I think the flexibility and widespread use of JavaScript gives us superpowers when building software. Especially when we hash out inputs, so that we don't repeat unnecessary work. Coupled with git-based change detection and dependency graphing in our CI pipelines, we have everything we need for simple, easy-to-grok, repeatable builds.
+Build scripts need more flexibility than most declarative build configurations allow for, and, whilst I would always opt for declarative over imperative, I think the flexibility and widespread use of JavaScript gives us superpowers when building software. Especially when we hash our inputs, so that we don't repeat unnecessary work. Coupled with git-based change detection and dependency graphing in our CI pipelines, we have everything we need for simple, easy-to-grok, repeatable builds.
 
 All the code examples can be found in [this repo][graphql_provider], which is a GraphQL provider for [wasmCloud][wasmcloud] that exposes a postgres database as a GraphQL API.
 
