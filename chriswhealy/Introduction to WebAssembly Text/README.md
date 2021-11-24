@@ -15,17 +15,17 @@ This introduction to WebAssembly Text serves as the starting point for subsequen
 
 ## Table of Contents
 
-- [[00 Prerequisites]]
-- [[01 Benefits of WebAssembly]]
-- [[02 WebAssembly Module]]
-- [[03 Calling WebAssembly from a Host Environment]]
-- [[04 WAT Datatypes]]
-- [[05 Local Variables]]
-- [[06 Arrangement of WAT Instructions]]
-- [[07 Conditions]]
-- [[08 Loops]]
-- [[09 More About Functions]]
-- [[10 WASM and Shared Memory]]
+- [Prerequisites](00%20Prerequisites.md)
+- [Benefits of WebAssembly](01%20Benefits%20of%20WebAssembly)
+- [WebAssembly Module](02%20WebAssembly%20Module)
+- [Calling WebAssembly from a Host Environment](03%20Calling%20WebAssembly%20from%20a%20Host%20Environment)
+- [WAT Datatypes](04%20WAT%20Datatypes)
+- [Local Variables](05%20Local%20Variables)
+- [Arrangement of WAT Instructions](06%20Arrangement%20of%20WAT%20Instructions)
+- [Conditions](07%20Conditions)
+- [Loops](08%20Loops)
+- [More About Functions](09%20More%20About%20Functions)
+- [WASM and Shared Memory](10%20WASM%20and%20Shared%20Memory)
 
 
 
