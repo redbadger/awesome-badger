@@ -47,7 +47,7 @@ local.get $my_value      ;; Stack = [5]
 
 Strangely enough, you do not need to supply a name when declaring a local variable (or a function for that matter).
 
-This might sound pretty weird, but the point is that only humans benefit from human-readable names.  In a WAT program its, perfectly possible to declare two `i32` variables like this:
+This might sound pretty weird, but the point is that only humans benefit from human-readable names.  In a WAT program, its perfectly possible to declare two `i32` variables like this:
 
 ```wat
 (local i32 i32)     ;; Declare two, unnamed i32 variables
@@ -71,5 +71,5 @@ Us humans need meaningful variable names &mdash; so let's keep using them!
 
 
 
-[^1]: You can also declare variables that are global to the scope of the entire module. but won't won't worry about these for the time being
+[^1]: You can also declare variables that are global to the scope of the entire module, but we won't worry about these for the time being
 [^2]: Where the index number refers to the instantiation order

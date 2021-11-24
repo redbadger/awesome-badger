@@ -14,7 +14,7 @@ Now that we have a slightly less useless WebAssembly module that we can call fro
 
 ### Create a `.wasm` file
 
-When working from the command line, we used the `wasmer` tool to both compile and run the WebAssembly module in a single step.  Now we need simply compile the WebAssembly Text file and ensure that the generated `.wasm` file is accessible to our JavaScript runtime environment.
+When working from the command line, we used the `wasmer` tool to both compile and run the WebAssembly module in a single step.  Now we need simply to compile the WebAssembly Text file and ensure that the generated `.wasm` file is accessible to our JavaScript runtime environment.
 
 To compile the WebAssembly Text file, change into the same directory as the `.wat` file, then invoke the `wat2wasm` tool:
 
@@ -63,8 +63,8 @@ Answer = 42
 >  1. Your local Web Server must be correctly configured to transfer `.wasm` files using the MIME type `application/wasm`
 >  1. If you are developing a JavaScript program that uses Web Workers to create multiple instances of the same WebAssembly module, then your local Web Server must be additionally configured to include the following HTTP headers:
 >     ```
->    Cross-Origin-Embedder-Policy: require-corp  
->    Cross-Origin-Opener-Policy: same-origin
+>       Cross-Origin-Embedder-Policy: require-corp  
+>       Cross-Origin-Opener-Policy: same-origin
 >     ```
 
 Let's now take a more detailed look at how to write a useful WebAssembly Text program.

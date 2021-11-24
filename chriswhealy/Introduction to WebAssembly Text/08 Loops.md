@@ -46,4 +46,6 @@ Notice that a loop condition can be specified in two ways:
 
    If the loop should continue, we enter the `then` block, do whatever needs to be done, then finally, there is an explicit branch `br` statement that jumps back to the start of the loop.
 
-So what happens if the continuation condition evaluates to `false`?  We simply drop out at the bottom of the loop labeled `$do_it_again`.
+So what happens if the continuation condition evaluates to `false`?
+
+We simply drop out at the bottom of the loop labeled `$do_it_again`.

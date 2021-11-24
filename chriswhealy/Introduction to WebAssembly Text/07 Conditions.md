@@ -14,15 +14,15 @@ WebAssembly includes the high-level flow control statements `if/then/else/end` f
 
 ### Simple Value Test
 
-Using sequential notation, we can test if the local variable `$my_value` equals zero simply like this.   Place the `i32` value in question on top of the stack, then simply invoke the `if` statement (assuming `$my_value` is set to `5`):
+Using sequential notation, we can test if the local variable `$my_value` equals zero like this.   Place the `i32` value in question on top of the stack, then simply invoke the `if` statement (assuming `$my_value` is set to `5`):
 
 ```wat
 local.get $my_value      ;; Stack = [5]
 
 if
-  ;; True.  Top of stack contains a non-zero i32
+  ;; True if the top of the stack contains a non-zero i32
 else
-  ;; False. Top of stack contains a zero i32
+  ;; False if the of the stack contains a zero i32
 end
 ```
 
@@ -31,10 +31,10 @@ We could also write the same condition as an S-expression.  But notice some impo
 ```wat
 (if (local.get $my_value)
   (then
-    ;; True.  Top of stack contains a non-zero i32
+    ;; True if the top of the stack contains a non-zero i32
   )
   (else
-    ;; False. Top of stack contains a zero i32
+    ;; False if the of the stack contains a zero i32
   )
 )
 ```
@@ -44,7 +44,7 @@ When you fold an `if` statement into an S-expression:
 1. The entire `if` statement must be enclosed in parentheses
 1. Any expression can be used to evaluate the condition as long as an `i32` value is left on the top of the stack.
 1. Conditions are evaluated in the simple basis that zero means `false` and any non-zero value means `true`
-1. You must use the `then` branch is mandatory, the `else` branch is optional
+1. The `then` branch is mandatory, the `else` branch is optional
 1. The `then` and `else` branches must be enclosed in parentheses
 1. The `end` keyword is redundant now because its place is has been taken by the closing parenthesis
 
@@ -103,7 +103,7 @@ The important point to understand here is that the value assigned to the variabl
   ;; The (result i32) clause states that the if statement will leave an i32
   ;; value on the stack
   (if (result i32)
-    ;; We avoid running the escape time calculation if the point lies either
+    ;; We can avoid running the escape time calculation if the point lies either
     ;; in the main cardioid or the period-2 bulb
     (i32.or
       ;; Main cardioid check

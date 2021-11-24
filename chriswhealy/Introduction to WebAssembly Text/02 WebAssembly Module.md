@@ -55,7 +55,7 @@ Let's now compile and run this program:
 wasmer run ./src/02-slightly-less-useless.wat
 ```
 
-Fortunately, we are presented with an informative error message
+Hmmm, another error, but fortunately, we are presented with an informative message
 
 ```bash
 error: failed to run `./src/02-slightly-less-useless.wat`

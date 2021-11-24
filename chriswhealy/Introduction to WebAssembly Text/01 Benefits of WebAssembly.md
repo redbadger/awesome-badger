@@ -10,9 +10,9 @@
 
 ## 1: Benefits of WebAssembly
 
-As of late 2021, WebAssembly is the new kid on the block that is being touted and the answer a wide variety of computing problems.  Hype aside, WebAssembly does offer a great starting point for solving many computing problems that have previously only been partially solved, or worse still, inadequately solved.
+As of late 2021, WebAssembly is the new kid on the block that is being touted as the answer a wide variety of computing problems.  Hype aside, WebAssembly does offer a great starting point for solving many computing problems that have previously only been partially solved, or worse still, inadequately solved.
 
-Chief among these benefits is the fact that when packaged as a WebAssembly module, a server can have a much higher degree of confidence regarding the safety of running that code.  Arbitrary units of code can now be executed without worrying whether they contain anything malicious.  WebAssembly has achieved this by adopting the following design principles:
+Chief among these benefits is the fact that when packaged as a WebAssembly module, a server can have a much higher degree of confidence regarding the safety of running that code.  Arbitrary units of code can now be executed without worrying whether they contain anything that attempt to perform externally malicious acts.  WebAssembly has achieved this by adopting the following design principles:
 
 1. ***No Stand-Alone Execution***  
    A WebAssembly program cannot run stand-alone; it must be instantiated and then invoked by some host environment.  At the moment, the available host environments are either:
