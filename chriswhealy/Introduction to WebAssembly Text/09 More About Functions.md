@@ -5,7 +5,7 @@
     <th style="width: 45%">Next</th></tr>
 <tr><td style="text-align: center"><a href="./08%20Loops.md">Loops</a></td>
     <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./10%20Writing%20to%20Shared%20Memory.md">Writing to Shared Memory</a></td></tr>
+    <td style="text-align: center"><a href="./10%20WASM%20and%20Shared%20Memory.md">WASM and Shared Memory</a></td></tr>
 </table>
 
 ## 9: More About Functions

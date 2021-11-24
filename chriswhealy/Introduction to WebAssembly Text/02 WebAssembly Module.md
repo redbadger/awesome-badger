@@ -5,7 +5,7 @@
     <th style="width: 45%">Next</th></tr>
 <tr><td style="text-align: center"><a href="./01%20Benefits%20of%20WebAssembly.md">Benefits of WebAssembly</a></td>
     <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./03%20Calling%20WebAssembly%20From%20a%20Host%20Environment.md">Calling WebAssembly From a Host Environment</a></td></tr>
+    <td style="text-align: center"><a href="./03%20Calling%20WebAssembly%20from%20a%20Host%20Environment.md">Calling WebAssembly From a Host Environment</a></td></tr>
 </table>
 
 ## 2: Creating a WebAssembly Module
