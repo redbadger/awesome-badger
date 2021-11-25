@@ -90,7 +90,7 @@ let iters = isInMainCardioid(x, y) || isInPeriod2Bulb(x,y)
             : mjEscapeTime(x, y)
 ```
 
-The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `x` `y` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does fall within either of these areas, we can arbitrarily set the value of `iters` to the maximum iteration value.
+The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `x` `y` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does fall within either of these areas, we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
 
 **Q**: That's nice, but how do we replicate this construct in WebAssembly?  
 **A:** We can transform `if` from a *statement* into an *expression* by assigning it a return type
@@ -98,17 +98,17 @@ The important point to understand here is that the value assigned to the variabl
 ```wat
 ;; Set $iters to whatever i32 value is returned from the if expression
 (local.set $iters
-  ;; The (result i32) clause states that the if statement will leave an i32
+  ;; The "(result i32)" clause declares that the if statement will leave an i32
   ;; value on the stack
   (if (result i32)
     ;; We can avoid running the escape time calculation if the point lies either
     ;; in the main cardioid or the period-2 bulb
     (i32.or
-      ;; Main cardioid check
-      ;; snip
+      ;; Main cardioid check returns an i32
+      (call $is_in_main_cardioid (local.get $x) (local.get $y))
 
-      ;; Period-2 bulb check
-      ;; snip
+      ;; Period-2 bulb check returns an i32
+      (call $is_in_period_2_bulb (local.get $x) (local.get $y))
     )
     (then
       ;; Yup, so no need to run the escape time algorithm
@@ -121,6 +121,8 @@ The important point to understand here is that the value assigned to the variabl
   )
 )
 ```
+
+The `i32` value left on the stack by the `if` expression is then assigned to the local variable `$iters`.
 
 <hr>
 

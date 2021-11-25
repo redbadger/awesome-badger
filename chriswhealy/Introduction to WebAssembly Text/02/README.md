@@ -7,22 +7,22 @@
 
 ## 2: Creating a WebAssembly Module
 
-Remember that a WebAssembly program can only be invoked from a host environment.  This will typically be a language runtime such as JavaScript or Rust, or it could be the WebAssembly System Interface (WASI).  Either way, from the perspective of the host environment, the WebAssembly module is the basic unit of instantiation and execution.
+Remember that a WebAssembly program can only be invoked from a host environment.  This will typically be a language runtime such as JavaScript or Rust, or it could be the WebAssembly System Interface (WASI).  Either way, from the perspective of the host environment, the WebAssembly module is the basic unit of instantiation.
 
-Here's a completely useless WebAssembly module.
+Here's a syntactically correct, but completely useless WebAssembly module.
 
 [`02-useless.wat`](02-useless.wat)
 ```wat
 (module)
 ```
 
-Although this module contains zero functionality, we could compile and attempt to run it using `wasmer`:
+Although this module contains zero functionality, we can compile it and attempt to run it using `wasmer`:
 
 ```bash
 wasmer 02-useless.wat
 ```
 
-This however, produces the following error message:
+No prizes for guessing however that this produces an error message:
 
 ```bash
 error: failed to run `02-useless.wat`
@@ -41,9 +41,9 @@ Let's now make the above module slightly less useless by adding a function that 
   (func               ;; Declare a function that can be called from
     (export "answer") ;; outside the WASM module using the name "answer"
     (result i32)      ;; that returns a 32-bit integer
-    (i32.const 42)    ;; Push 42 onto the stack then exit the function
-  )                   ;; Any value left on the stack becomes the return value
-)
+    (i32.const 42)    ;; Push 42 onto the stack
+  )                   ;; Exit the function. Any value left on the stack becomes the function's return value
+)                     
 ```
 
 Let's now compile and run this program:
@@ -61,7 +61,7 @@ error: failed to run `02-slightly-less-useless.wat`
        Try with: wasmer 02-slightly-less-useless.wat -i answer
 ```
 
-OK, so let's rerun the program with the extra `-i` argument (meaning `invoke`)
+OK, let's rerun the program with the extra `-i` argument (meaning `invoke`)
 
 ```bash
 wasmer 02-slightly-less-useless.wat -i answer

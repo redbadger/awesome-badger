@@ -41,7 +41,7 @@ Notice that a loop condition can be specified in two ways:
    That's fine and you could certainly structure a loop this way in WAT...
    
 * ***Check for Continuation***  
-   In WAT however, it is more idiomatic to assume that the loop should **not** continue, then repeatedly ask "*Should I continue?*".
+   In WAT however, it is more idiomatic to assume that the loop should stop, then repeatedly ask "*Should I continue?*".
 
    If the loop should continue, we enter the `then` block and do whatever needs to be done.  At the end of the `then` block there is an explicit branch `br` statement that jumps back to the start of the loop.
 

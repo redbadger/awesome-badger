@@ -13,9 +13,9 @@ WebAssembly is a stack-based language.  This means that most instruction behave 
 
 ### Sequential WAT Instructions
 
-If you decompile a `.wasm` program using a tool such as `wasm2wat`, you will see the WAT instructions listed sequentially (that is, in [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation)).
+If you decompile a `.wasm` program using a tool such as `wasm2wat`, you will see the WAT instructions listed sequentially (that is, in the order described by [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation)).
 
-For instance, if we wish add up two numbers, we must first push both values onto the stack *then* call the `add` operation.  The `add` operation then pops the top two values off the stack, adds them up and pushes the result back onto the stack.
+For instance, if we wish add up two numbers, we must first push both values onto the stack *then* call the `add` operation.  The `add` operation then pops the top two values off the stack, adds them up and pushes the new value back onto the stack.
 
 ```wat
 i32.const 3    ;; Push 3.  Stack = [3]
@@ -40,5 +40,5 @@ Although the folded (or S-Expression) form of WAT is generally easier to read, y
 
 <hr>
 
-[^1]: Some instructions do not generate a new value that should be pushed onto the stack.  For instance `i32.store` consumes the top two values from the stack (an address and a value), but the result is that 4 bytes are written to memory.  Nothing is pushed back onto the stack.
+[^1]: Some instructions do not generate a new value.  For instance `i32.store` consumes the top two values from the stack (an address and a value), but the result is that 4 bytes are written to memory.  Nothing is pushed back onto the stack.
 [^2]: WebAssembly instructions cannot operate values of mixed datatype. The compiler will throw an error for instance if you attempt to use `i32.add` to add two values that are not both of type `i32`
