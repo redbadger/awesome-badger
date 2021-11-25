@@ -25,7 +25,7 @@ wasmer 02-useless.wat
 This however, produces the following error message:
 
 ```bash
-error: failed to run `01_useless.wat`
+error: failed to run `02-_useless.wat`
 ╰─> 1: The module has no exported functions to call.
 ```
 
@@ -55,10 +55,10 @@ wasmer 02-slightly-less-useless.wat
 Hmmm, another error, but fortunately, we are presented with an informative message
 
 ```bash
-error: failed to run `./src/02-slightly-less-useless.wat`
+error: failed to run `02-slightly-less-useless.wat`
 ╰─> 1: No export `_start` found in the module.
        Similar functions found: `answer`.
-       Try with: wasmer ./src/02-slightly-less-useless.wat -i answer
+       Try with: wasmer 02-slightly-less-useless.wat -i answer
 ```
 
 OK, so let's rerun the program with the extra `-i` argument (meaning `invoke`)

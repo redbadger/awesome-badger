@@ -18,7 +18,7 @@ local.get $my_value      ;; Stack = [5]
 if
   ;; True if the top of the stack contains a non-zero i32
 else
-  ;; False if the of the stack contains a zero i32
+  ;; False if the top of the stack contains a zero i32
 end
 ```
 
@@ -34,7 +34,7 @@ We could also write the same condition as an S-expression.  But notice some impo
     ;; True if the top of the stack contains a non-zero i32
   )
   (else
-    ;; False if the of the stack contains a zero i32
+    ;; False if the top of the stack contains a zero i32
   )
 )
 ```
@@ -122,5 +122,6 @@ The important point to understand here is that the value assigned to the variabl
 )
 ```
 
+<hr>
 
 [^1]: From here on, we will always use the S-expression notation, because this is easier to read.

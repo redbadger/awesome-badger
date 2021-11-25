@@ -24,9 +24,9 @@ Now that we have a local variable, we can store a value in it:
 ```
 
 > **IMPORTANT**  
-> `local.set` consumes the top value from the stack!
+> `local.set` consumes the top value from the stack and stores it in the named variable
 > 
-> Understanding this behaviour might become clearer if we use the sequential notation for the same assignment:
+> This behaviour might become clearer if we use the sequential notation for the same assignment:
 >
 > ```wat
 >i32.const 5              ;; Stack = [5]
@@ -43,17 +43,17 @@ local.get $my_value      ;; Stack = [5]
 
 Strangely enough, you do not need to supply a name when declaring a local variable (or a function for that matter).
 
-This might sound pretty weird, but the point is that only humans benefit from human-readable names.  In a WAT program, its perfectly possible to declare two `i32` variables like this:
+This might sound pretty weird, but the point is that only humans benefit from human-readable names.  In a WAT program, its perfectly possible to declare variables like this:
 
 ```wat
-(local i32 i32)     ;; Declare two, unnamed i32 variables
+(local i32 i32 f64)  ;; Declare three unnamed variables, two i32s and an f64
 ```
 
 Uh, OK....
 
-So how do you reference these local values?  Assuming these are the first two local variables declared in a function, then the first `i32` will be variable `0` and the second, variable `1`.  
+So how do you reference these local values?  Assuming these are the first local variables declared in a function, then the two `i32`s will be variables `0` and `1`, and the `f64` will be variable `2`.
 
-The point here is that even if you do not assign a meaningful name to a local variable, that variable will always be accessed using its index number.[^2]
+The point here is that even if you do not assign a human-readable name to a local variable, that variable can always be accessed using its index number.[^2]
 
 So if you want to store 5 in the second of your local variables (variable `1`), it is quite acceptable to write:
 
@@ -65,7 +65,7 @@ The problem is, you now need to remember what variable `1` holds.  And this is w
 
 Us humans need meaningful variable names &mdash; so let's keep using them!
 
-
+<hr>
 
 [^1]: You can also declare variables that are global to the scope of the entire module, but we won't worry about these for the time being
 [^2]: Where the index number refers to the declaration order
