@@ -6,10 +6,10 @@
 
 ## 8: Loops
 
-Let's now extend the previous code fragment to see how it could be used to control a loop.  The above condition is used to perform a basic loop that does something 5 times:
+Let's now extend the previous code fragment to see how it could be used to control a loop.  The condition we just looked at is now used to perform a basic loop that does something 5 times:
 
 ```wat
-(local %counter i32)
+(local %counter i32)  ;; Remember, local variables are automatically initialised to zero
 
 (loop $do_it_again
   ;; As long as the limit is greater than the counter, proceed with the loop
@@ -35,14 +35,14 @@ Let's now extend the previous code fragment to see how it could be used to contr
 
 Notice that a loop condition can be specified in two ways:
 
-* Most languages assume that the loop should always continue, then repeatedly check for a termination condition: "*Should the loop stop now?*".
+* ***Check for Termination***  
+   Most languages assume that the loop should continue, then repeatedly ask "*Should I stop now?*".
 
    That's fine and you could certainly structure a loop this way in WAT...
    
-* In WAT however, it is more idiomatic to assume that the loop should **not** continue, then repeatedly check a continuation condition: "*Should the loop continue?*".
+* ***Check for Continuation***  
+   In WAT however, it is more idiomatic to assume that the loop should **not** continue, then repeatedly ask "*Should I continue?*".
 
-   If the loop should continue, we enter the `then` block, do whatever needs to be done, then finally, there is an explicit branch `br` statement that jumps back to the start of the loop.
+   If the loop should continue, we enter the `then` block and do whatever needs to be done.  At the end of the `then` block there is an explicit branch `br` statement that jumps back to the start of the loop.
 
-So what happens if the continuation condition evaluates to `false`?
-
-We simply drop out at the bottom of the loop labeled `$do_it_again`.
+   Under all other conditions, we simply drop out at the bottom of the loop.

@@ -29,7 +29,7 @@ If we wish to call a WebAssembly function from inside the module, then the inter
 )
 ```
 
-If a WebAssembly function only needs to be called from outside the module, then the internal name can be omitted.  The external name is defined using the `export` keyword followed by some string.  This string then becomes the function's external (or exported name):
+If a WebAssembly function only needs to be called from outside the module, then the internal name can be omitted.  The external name is defined using the `export` keyword followed by some string that becomes the function's external (or exported) name:
 
 ```wat
 (func
@@ -39,7 +39,7 @@ If a WebAssembly function only needs to be called from outside the module, then 
 )
 ```
 
-if we need to call the WebAssembly module from both inside and outside the module, then specify both names:
+It also might be the case that we need to call this function from both inside and outside the module.  In this case, specify both names:
 
 ```wat
 (func $my_func       ;; The function's internal name
@@ -68,7 +68,7 @@ This function takes a complex number as an argument in the form of two, 64-bit f
 )
 ```
 
-The implementation of this function simply uses Pythagoras' formula to work out the length of the hypotenuse of the triangle having sides `$real` and `$imag`
+The implementation of this function simply uses Pythagoras' formula to work out the hypotenuse length of the right triangle having sides `$real` and `$imag`
 
 [09-single-return-value.wat](09-single-return-value.wat)
 ```wat
@@ -110,7 +110,7 @@ wasmer 09-single-return-value.wat -i mag 3 4
 
 WebAssembly functions that return multiple values can be invoked from JavaScript running in the browser or via `wasmer`
 
-Here's a simple example in which calculate the conjugate of complex number.  This is a very simple operation that transforms a complex number `a + bi` into `a - bi`.
+Here's a simple example in which we calculate the conjugate of complex number.  This is a very simple operation that transforms a complex number `a + bi` into `a - bi`.
 
 The WebAssembly function must be passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
 
@@ -129,7 +129,7 @@ The WebAssembly function must be passed a complex number in the form of two, 64-
 )
 ```
 
-The host environment then pops these two values off the stack to obtain the result of the function call
+After calling this function, the host environment pops these two values off the stack to obtain the result of the function call
 
 You can test this by running using `wasmer` to run [`09-multiple-return-values.wat`](09-multiple-return-values.wat)
 
@@ -139,13 +139,13 @@ wasmer 09-multiple-return-values.wat -i conj -- -5 3
 ```
 
 > Notice the double hyphens `--` between `-i conj` and the function arguments.
-> This is necessary to prevent the shell from interpreting the minus sign in front of `-5` an shell option
+> This is necessary to prevent the shell from interpreting the minus sign in front of `-5` as a shell option
 
 ### NodeJS Limitation
 
-At the time of writing (Nov 2021), NodeJS cannot yet invoke WebAssembly functions that return multiple values.  NodeJS currently throws a runtime error if you attempt to instantiate a WebAssembly module that exports a function with multiple return values.
+Versions of NodeJS lower than 16 cannot invoke WebAssembly functions that return multiple values.  Earlier NodeJS versions will throw a runtime error if you attempt to instantiate a WebAssembly module that exports a function with multiple return values.
 
-Just to demonstrate this problem, try running [`09-multiple-return-values.js`](09-multiple-return-values.js) from NodeJs.
+If you have Node 14 installed, try running [`09-multiple-return-values.js`](09-multiple-return-values.js) from NodeJs.
 
 ```bash
 node 09-multiple-return-values.js
@@ -153,6 +153,8 @@ node 09-multiple-return-values.js
 (Use `node --trace-warnings ...` to show where the warning was created)
 ```
 
-However, the exact same `.wasm` file can be executed successfully both by `wasmer` and from within a browser.
+In Node 16 or higher, this `.wasm` file runs fine as it will do by both in `wasmer` and from within a browser.
+
+<hr>
 
 [^1]: All functions (and local variables) are referenced by their index number, so you *could* choose not to use any human-readable function names; however, its now down to you to remember what function number `2` or `7` or `21` does.  Good luck with that one...

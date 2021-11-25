@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Calling WebAssembly from a Host Environment](../03/README.md) | [Top](../README.md) | [Local Variable](../05/README.md)
+| [Calling WebAssembly from a Host Environment](../03/README.md) | [Top](../README.md) | [Local Variables](../05/README.md)
 
 ## 4: WAT Datatypes
 
@@ -26,5 +26,6 @@ A floating point number always carries a sign value, but when examining an integ
 
 This means that when applied to integers, certain comparison instructions such as `gt` or `lt` must additionally state whether or not the most significant bit should be treated as the sign bit.
 
+<hr>
 
 [^1]: Don't be concerned at the lack of a specific Boolean datatype because this is, in fact, just syntactic sugar.  In WAT, the outcome of a condition is stored simply as an `i32` where zero means `false`, and any non-zero value means `true`.  It's that simple...

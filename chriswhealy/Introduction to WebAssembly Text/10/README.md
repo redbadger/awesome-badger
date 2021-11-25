@@ -143,8 +143,6 @@ const wasmObj   = await WebAssembly.instantiate(wasmBytes, hostEnv)
 const bytesWritten = wasmObj.instance.exports.expensive_calc(12,34)
 ```
 
-Although it is not the case with function `expensive_calc`, remember that currently, NodeJS is ***not*** able to instantiate WebAssembly modules containing exported functions that return multiple values
-
 #### Running in a Browser
 
 A browser reads the `.wasm` file asynchronously from the Web server using `fetch`
@@ -167,7 +165,6 @@ const wasmObj   = await WebAssembly.instantiate(wasmBytes, hostEnv)
 const bytesWritten = wasmObj.instance.exports.expensive_calc(12,34)
 ```
 
-Although it is not the case with function `expensive_calc`, remember that a browser ***is*** able to instantiate WebAssembly modules containing exported functions that return multiple values
 
 ### Using Host Environment Resources in WebAssembly
 
