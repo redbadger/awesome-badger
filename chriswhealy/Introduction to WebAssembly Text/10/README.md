@@ -306,6 +306,8 @@ const wasmData = wasmMemBuff.slice(hostEnv.js.data_offset, bytesWritten)
 
 Simples!
 
+<hr>
+
 [^1]: See the paper ["*Progressive Memory Safety for WebAssembly*"](https://cseweb.ucsd.edu/~dstefan/pubs/disselkoen:2019:ms-wasm.pdf) for more details
 [^2]: In other languages, such a block of memory is known as a "heap"
 [^3]: The WebAssembly Community Group has an ongoing proposal to make the page size variable based on the application’s needs.  This would allow WASM modules to run on small, low-power embedded devices that have as little as 32Kb of memory.
