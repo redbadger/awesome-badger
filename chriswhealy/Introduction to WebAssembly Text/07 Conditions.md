@@ -26,6 +26,10 @@ else
 end
 ```
 
+The point here is that any expression can be used to evaluate a condition as long as an `i32` value is left on the top of the stack.  The `if` statement then examines this `i32` value and if it is zero, this means `false`, and any non-zero value means `true`.
+
+It's as simple as that.
+
 We could also write the same condition as an S-expression.  But notice some important syntactical differences:
 
 ```wat
@@ -39,11 +43,9 @@ We could also write the same condition as an S-expression.  But notice some impo
 )
 ```
 
-When you fold an `if` statement into an S-expression:
+In sequential notation, the `then` keyword is not used but the `end` keyword is. However, if you fold an `if` statement into an S-expression then:
 
 1. The entire `if` statement must be enclosed in parentheses
-1. Any expression can be used to evaluate the condition as long as an `i32` value is left on the top of the stack.
-1. Conditions are evaluated in the simple basis that zero means `false` and any non-zero value means `true`
 1. The `then` branch is mandatory, the `else` branch is optional
 1. The `then` and `else` branches must be enclosed in parentheses
 1. The `end` keyword is redundant now because its place is has been taken by the closing parenthesis
@@ -80,7 +82,7 @@ In this case, it makes no sense to check whether we've gone round a loop a negat
 
 ### Using `if` as an Expression
 
-Up til now, the way we have used the `if` statement assumes that after it completes, no extra values have been left on the stack.
+Up til now, the way we have used the `if` statement assumes that does not leave any values behind on the stack.
 
 But what if we want to perform some sort of conditional assignment?
 

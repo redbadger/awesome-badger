@@ -53,7 +53,7 @@ node 03-wasm-host-env.js
 Answer = 42
 ```
 
-> ***IMPORTANT***
+> ***IMPORTANT***  
 > In this example, our Host Environment was written in JavaScript and then invoked using NodeJS.
 >
 > Should you wish to run this JavaScript from within a browser, you must be aware of the following differences and restrictions:

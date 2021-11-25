@@ -18,7 +18,8 @@ Let's now extend the previous code fragment to see how it could be used to contr
 (loop $do_it_again
   ;; As long as the limit is greater than the counter, proceed with the loop
   ;; Comparison statements leave an i32 value on the top of the stack.
-  ;; If the comparison is true, then the top of the stack = [1], else [0]
+  ;; If the top of the stack is [0], then this means false.
+  ;; Any other value means true
   (if (i32.gt_u (i32.const 5) (local.get $counter))
     (then
       ;; True. Top of stack contains a non-zero i32

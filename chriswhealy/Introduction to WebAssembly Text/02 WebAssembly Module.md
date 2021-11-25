@@ -22,7 +22,7 @@ Here's a completely useless WebAssembly module.
 Although this module contains zero functionality, we could compile and attempt to run it using `wasmer`:
 
 ```bash
-wasmer run ./src/01-useless.wat
+wasmer ./src/01-useless.wat
 ```
 
 This however, produces the following error message:
@@ -52,7 +52,7 @@ Let's now make the above module slightly less useless by adding a function that 
 Let's now compile and run this program:
 
 ```bash
-wasmer run ./src/02-slightly-less-useless.wat
+wasmer ./src/02-slightly-less-useless.wat
 ```
 
 Hmmm, another error, but fortunately, we are presented with an informative message
@@ -67,7 +67,7 @@ error: failed to run `./src/02-slightly-less-useless.wat`
 OK, so let's rerun the program with the extra `-i` argument (meaning `invoke`)
 
 ```bash
-wasmer run ./src/02-slightly-less-useless.wat -i answer
+wasmer ./src/02-slightly-less-useless.wat -i answer
 42
 ```
 

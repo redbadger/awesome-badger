@@ -18,7 +18,7 @@ As with any other programming language, you can declare variables.  These variab
 
 Here, we have declared a local variable called `$my_value` to be of type `i32`.
 
-> **IMPORTANT**
+> **IMPORTANT**  
 > Local variables are automatically initialised to zero
 
 Now that we have a local variable, we can store a value in it:
@@ -27,7 +27,7 @@ Now that we have a local variable, we can store a value in it:
 (local.set $my_value (i32.const 5))
 ```
 
-> **IMPORTANT**
+> **IMPORTANT**  
 > `local.set` consumes the top value from the stack!
 > 
 > Understanding this behaviour might become clearer if we use the sequential notation for the same assignment:
@@ -65,11 +65,11 @@ So if you want to store 5 in the second of your local variables (variable `1`), 
 (local.set 1 (i32.const 5))    ;; Store 5 in local variable 1
 ```
 
-The problem is, you now need to remember what variable `1` holds.  And this is where humans rapidly begin to struggle, because once we get beyond a small number variables, we simply can't remember what information we stored where.
+The problem is, you now need to remember what variable `1` holds.  And this is where humans rapidly begin to struggle, because once we get beyond a small number of abstract tokens, we simply can't remember what they mean.
 
 Us humans need meaningful variable names &mdash; so let's keep using them!
 
 
 
 [^1]: You can also declare variables that are global to the scope of the entire module, but we won't worry about these for the time being
-[^2]: Where the index number refers to the instantiation order
+[^2]: Where the index number refers to the declaration order
