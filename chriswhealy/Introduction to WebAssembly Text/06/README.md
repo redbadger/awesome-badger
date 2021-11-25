@@ -1,4 +1,5 @@
 # Introduction to WebAssembly Text
+
 | Previous | | Next
 |---|---|---
 | [Local Variables](../05/README.md) | [Top](../README.md) | [Conditions](../07/README.md)

@@ -1,4 +1,5 @@
 # Introduction to WebAssembly Text
+
 | Previous | | Next
 |---|---|---
 | [Conditions](../07/README.md) | [Top](../README.md) | [More About Functions](../09/README.md)

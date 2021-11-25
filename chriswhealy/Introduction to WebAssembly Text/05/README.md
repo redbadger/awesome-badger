@@ -1,4 +1,5 @@
 # Introduction to WebAssembly Text
+
 | Previous | | Next
 |---|---|---
 | [WAT Datatypes](../04/README.md) | [Top](../README.md) | [Arrangement of WAT Instructions](../06/README.md)

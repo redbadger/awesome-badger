@@ -1,4 +1,5 @@
 # Introduction to WebAssembly Text
+
 | Previous | | Next
 |---|---|---
 | [Loops](../08/README.md) | [Top](../README.md) | [WASM and Shared Memory](../10/README.md)
