@@ -18,11 +18,11 @@ So far, we have only looked at a very simple WebAssembly function &mdash; one th
 
 A function is declared using the keyword `func`.
 
-> ***IMPORTANT***
+> ***IMPORTANT***  
 >WebAssembly functions can be given two, possibly different, human-readable names:[^1]
 >
-> 1. The name used when calling the function from **inside** the WebAssembly module
-> 1. The name used when calling the function from **outside** the WebAssembly module
+> 1. A name used when calling the function from **inside** the WebAssembly module
+> 1. A name used when calling the function from **outside** the WebAssembly module
 
 If we wish to call a WebAssembly function from inside the module, then the internal name is declared as follows:
 
@@ -59,7 +59,7 @@ If a WebAssembly function needs to be passed any arguments, these must be specif
 
 Here's a real-life example.  Let's say we have a function that finds the magnitude (or hypotenuse length) of a complex number; that is, the distance from origin to the point on the complex plane.
 
-This function that takes two, 64-bit floating point numbers as arguments called `$real` and `$imag` (together, these value for the complex number) and since this answer is always real and positive, returns a single 64-bit floating point number:
+This function that a complex number as and argument in the form of two, 64-bit floating point numbers called `$real` and `$imag`.  Since the result is always real, the function returns a single 64-bit floating point number:
 
 ```wat
 (func $mag           ;; Internal name
@@ -85,7 +85,7 @@ The implementation of this function simply uses Pythagoras' formula to work out 
   ;; Find the square root of the top value on the stack, then push the result
   ;; back onto the stack
   (f64.sqrt
-    ;; Pop the top two value off the stack, add them up and push the result back
+    ;; Pop the top two values off the stack, add them up and push the result back
     ;; onto the stack
     (f64.add
       ;; Square the real part and push the result onto the stack
@@ -96,9 +96,8 @@ The implementation of this function simply uses Pythagoras' formula to work out 
     )
   )
   
-  ;; When we exit the function, the stack has a single f64 value left behind by
-  ;; the square root instruction.  This then becomes the function's implicit
-  ;; return value
+  ;; The square root operation leaves a single f64 value on the stack
+  ;; When we exit the function, this becomes the function's return value
 )
 ```
 
@@ -115,25 +114,26 @@ wasmer 09-single-return-value.wat -i mag 3 4
 
 WebAssembly functions that return multiple values can be invoked from JavaScript running in the browser or via `wasmer`
 
+Here's a simple example in which calculate the conjugate of complex number.  This is a very simple operation that transforms `a + bi` into `a - bi`.
+
+The WebAssembly function must be passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
+
 [`09-multiple-return-values.wat`](./src/09-multiple-return-values.wat)
 ```wat
 ;; Conjugate of a complex number
 ;; conj(a+bi) => (a-bi)
-(func $conj
-  (export "conj")
-  (param $a f64)
-  (param $b f64)
-  (result f64 f64)
+(func $conj                     ;; Internal name
+  (export "conj")               ;; External name
+  (param $a f64)                ;; 1st argument is an f64 known as $a
+  (param $b f64)                ;; 2nd argument is an f64 known as $b
+  (result f64 f64)              ;; Two f64s will be left behind on the stack
 
-  ;; Put the real part on the stack
-  (local.get $a)
-
-  ;; Negate the complex part then put it on the stack 
-  (f64.neg (local.get $b))
+  (local.get $a)                ;; Push $a. Stack = [$a]
+  (f64.neg (local.get $b))      ;; Push $b then negate its value.  Stack = [-$b, $a]
 )
 ```
 
-When we exit this little function, the stack has two values left on it.  The host environment then pops these off the stack to obtain the function's two return values.
+The host environment then pops these two values off the stack to obtain the result of the function call
 
 You can test this by running using `wasmer` to run [`09-multiple-return-values.wat`](./src/09-multiple-return-values.wat)
 
@@ -157,6 +157,6 @@ node 09-multiple-return-values.js
 (Use `node --trace-warnings ...` to show where the warning was created)
 ```
 
-However, the exact same `.wasm` file can be called successfully from within a browser.
+However, the exact same `.wasm` file can be executed successfully both by `wasmer` and from within a browser.
 
 [^1]: All functions (and local variables) are referenced by their index number, so you *could* choose not to use any human-readable function names; however, its now down to you to remember what function number `2` or `7` or `21` does.  Good luck with that one...
