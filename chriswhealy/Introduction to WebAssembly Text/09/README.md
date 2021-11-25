@@ -153,7 +153,7 @@ node 09-multiple-return-values.js
 (Use `node --trace-warnings ...` to show where the warning was created)
 ```
 
-In Node 16 or higher, this `.wasm` file runs fine as it will do by both in `wasmer` and from within a browser.
+In Node 16 or higher, this `.wasm` file runs fine as it will do in `wasmer` and from within a browser.
 
 <hr>
 
