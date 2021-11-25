@@ -1,12 +1,7 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./07%20Conditions.md">Conditions</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./09%20More%20About%20Functions.md">More About Functions</a></td></tr>
-</table>
+| Previous | | Next
+|---|---|---
+| [Conditions](../07/README.md) | [Top](../README.md) | [More About Functions](../09/README.md)
 
 ## 8: Loops
 

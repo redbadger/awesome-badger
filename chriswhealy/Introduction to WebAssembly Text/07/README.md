@@ -1,12 +1,7 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./06%20Arrangement%20of%20WAT%20Instructions.md">Arrangement of WAT Instructions</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./08%20Loops.md">Loops</a></td></tr>
-</table>
+| Previous | | Next
+|---|---|---
+| [Arrangement of WAT Instructions](../06/README.md) | [Top](../README.md) | [Loops](../08/README.md)
 
 ## 7: Conditions
 

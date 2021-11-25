@@ -1,12 +1,7 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./09%20More%20About%20Functions.md">More About Functions</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"></td></tr>
-</table>
+| Previous | | Next
+|---|---|---
+| [More About Functions](../09/README.md) | [Top](../README.md) |
 
 ## 10: WASM and Shared Memory
 
