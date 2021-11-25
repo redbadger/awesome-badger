@@ -8,6 +8,8 @@ Assorted thinking (mostly) about technology written by the Badgers.
 
 <!-- insert new posts at the top -->
 
+- 2021-11-24 - [Introduction to WebAssembly Text](./chriswhealy/Introduction%20to%20WebAssembly%20Text) by [Chris W][chrisw]
+
 - 2021-11-12 - [Write better build scripts](./stuartharris/build-scripts) by [Stu][stu]
 
 - 2021-09-24 - [`toString || !toString`](./chriswhealy/toStringOrNotToString) by [Chris W][chrisw]

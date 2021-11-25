@@ -3,11 +3,21 @@
 [@LogaRhythm](https://twitter.com/LogaRhythm)
 
 
-> Senior Engineer and Developer working as much as possible with Rust and WebAssembly
+> Senior Engineer and Developer working as much as possible with Kotlin, Rust and WebAssembly
 > Outside work I play the drums, do audio engineering/live streaming/post production/FoH and tinker with room acoustics
 
 
 ## Blogs
+
+### Introduction to WebAssembly Text
+
+WebAssembly is usually thought of as simply a compilation target.  The usualy workflow is that you write your application in some other language (such as Rust), then compile it to WebAssembly and have it run pretty much anywhere.
+
+This approach is fine&mdash;most of the time.
+
+However, there are circumstances in which you need to perform a highly repetitive, CPU-intensive task.  Under these conditions, you need to ensure that your application is as small and as fast as possible; and this is where you need to start writing in WebAssembly Text.
+
+[Introduction to WebAssembly Text](./Introduction%20to%20WebAssembly%20Text/)
 
 ### `toString || !toString`
 
@@ -31,7 +41,7 @@ This is a personal project that started in 2004 as an Excel spreadsheet, but has
 
 I became interested in room acoustics and, as part of my studying, developed a tool for calculation the absorption curve of a porous absorber.  This tool generates a graph that shows how well a layer of porous material such as Rockwool or glass fibre will absorb sound across the full frequency range.
 
-Then in 2019, when I started to learn Rust, I needed a real-life project to work on; so I decided to reimplement my Excel spreadhseet as a Web-based application written in Rust, then compiled to WebAssembly.
+Then in 2019, when I started to learn Rust, I needed a real-life project to work on; so I decided to re-implement my Excel spreadsheet as a Web-based application written in Rust, then compiled to WebAssembly.
 
 The purpose of this blog is to describe how a Web-based app can be written in Rust, then compiled to WebAssembly and executed in the browser.
 
