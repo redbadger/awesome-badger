@@ -1,4 +1,5 @@
 # Introduction to WebAssembly Text
+
 | Previous | | Next
 |---|---|---
 | [Arrangement of WAT Instructions](../06/README.md) | [Top](../README.md) | [Loops](../08/README.md)
