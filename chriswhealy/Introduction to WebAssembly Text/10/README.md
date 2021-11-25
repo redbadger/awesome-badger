@@ -16,13 +16,13 @@ WebAssembly is often touted as a language that offers complete memory-safety.  U
 
 It is true that a WebAssembly program has no access to the memory space outside its own sand-boxed environment; however, to conclude that this then makes a WebAssembly program truly memory-safe is to misunderstand the nature of memory safety.  True memory safety must provide the following three guarantees:
 
-* **Spatial Safety:** Out-of-bounds read/write access is prevented.  This applies both to the entire memory space in general, and to not going beyond the bounds of a particular data structure
-* **Temporal Safety:** Once freed, memory cannot be surreptitiously used for exploitative purposes
+* **Spatial Safety:** Out-of-bounds read/write access is prevented.  This applies both to the entire memory space in general, and to not writing beyond the bounds of a particular data structure.
+* **Temporal Safety:** Once designated as "free", memory cannot be surreptitiously used for exploitative purposes
 * **Pointer Integrity:** A memory address cannot be fabricated from a non-address value
 
-These guarantees are all met when looking a at WebAssembly from the outside, but within its own memory space however, a WebAssembly program is still vulnerable to the same types of memory issues as other programs.  Simple corruption or even explicitly malicious behaviour is still possible because a WebAssembly program can still:
+These guarantees are all met when looking at WebAssembly from the outside, but from within its own memory space however, a WebAssembly program is still vulnerable to the same types of memory issues as other programs.  Simple corruption or even explicitly malicious behaviour is still possible because a WebAssembly program can still:
 
-* Read or write values that are within the bounds of its own linear memory, but outside the bounds of its own data structures
+* Read or write values that are within the bounds of its own linear memory, but outside the bounds of its own data structures. In other words, it could trample on its own data
 * Not keep an accurate track of which areas of linear memory are or are not in use
 * Construct memory addresses from data that is not intended to represent an address
 
@@ -41,7 +41,7 @@ Given that the WebAssembly specification is currently in a state of development 
 1. Once allocated, a WebAssembly memory page cannot be deallocated until that program terminates.
 1. Memory allocated by the host environment can be shared with one or more WebAssembly modules.
     * A reference to the host memory must be supplied at the time the WebAssembly module is instantiated
-    * If multiple WebAssembly modules need access the same block of memory,[^4] this is  possible, but you must use the compiler option `--enable-threads`
+    * If multiple WebAssembly modules need access the same block of memory, this is  possible, but you must use the compiler option `--enable-threads`
 1. Memory allocated by the WebAssembly module can be shared with host environment, but only if it has been explicitly exported
 1. You, the developer, are responsible for keeping track of what data lives at which location within linear memory.  How you choose to do this is entirely up to you, but as mentioned in the section above on memory safety, you must take care of ensuring that:
     * `store` and `load` instructions remain within the bounds of your data structures
@@ -85,7 +85,7 @@ In addition to sharing memory, another common requirement is for the host enviro
 
 In this example, we will write some JavaScript code that makes three resources available to a WebAssembly module called `some_module.wasm`:
 1. One page of shared memory
-2. The JavaScript `Math` library[^5]
+2. The JavaScript `Math` library[^4]
 3. A variable containing the offset in shared memory at which WebAssembly should start writing its data
 
 So, first we allocate one page of WebAssembly memory:
@@ -94,7 +94,7 @@ So, first we allocate one page of WebAssembly memory:
 const wasmMemory = new WebAssembly.Memory({ initial : 1 })
 ```
 
-Next, we create an object whose structure represents a two-layer namespace:
+Next, we create an object whose structure represents a two-level namespace:
 
 ```javascript
 const hostEnv = {
@@ -106,7 +106,7 @@ const hostEnv = {
 }
 ```
 
-Other than representing a two-layer namespace, you are free to give this object any property names you like.  Whatever you choose however, try always to ensure that the names are self-documenting.
+Other than representing a two-level namespace, you are free to give this object any property names you like.  Whatever you choose however, try always to ensure that the names are self-documenting.
 
 * `hostEnv.math` points to JavaScript's entire mathematics library.  So WebAssembly now has access to functions such as `sin`, `cos` or `ln`
 * `hostEnv.js.shared_mem` points to the host environment's block of linear memory.  Both JavaScript and WebAssembly have full read/write access to this memory
@@ -186,7 +186,7 @@ Immediately after the `module` definition, we need to add the following declarat
 
 Three different types of declaration are made here:
 
-1. The JavaScript `Math.sin`, `Math.cos` and `Math.log` functions are identified using the two-layer namespace system.
+1. The JavaScript `Math.sin`, `Math.cos` and `Math.log` functions are identified using the two-level namespace system.
 1. These imported functions are given the names `$sin`, `$cos` and `$log` respectively and declared to be functions that each accept one `f64` as input and give back a single `f64`.
 1. The host environment's block of shared memory is imported from the object identified by `js.shared_memory`.
 1. Finally, we declare a global constant called `$data_offset` whose value is picked up by importing the `i32` in `js.data_offset`
@@ -242,7 +242,7 @@ Here's a minimal and unoptimized loop that performs some expensive but undescrib
     (i32.store
       ;; Offset = $data_offset + ($idx * 4)
       (i32.add
-        (global.get $mem_offset)
+        (global.get $data_offset)
         (i32.shl (local.get $idx) (i32.const 2))
       )
       ;; Value = the contents of $next_val
@@ -311,5 +311,4 @@ Simples!
 [^1]: See the paper ["*Progressive Memory Safety for WebAssembly*"](https://cseweb.ucsd.edu/~dstefan/pubs/disselkoen:2019:ms-wasm.pdf) for more details
 [^2]: In other languages, such a block of memory is known as a "heap"
 [^3]: The WebAssembly Community Group has an ongoing proposal to make the page size variable based on the application’s needs.  This would allow WASM modules to run on small, low-power embedded devices that have as little as 32Kb of memory.
-[^4]: Typically, where the host environment creates multiple instances of the same WebAssembly module, and each instance acts on the same block of memory
-[^5]: Sharing the `Math` library is often needed because WebAssembly lacks any instructions to perform numerical operations more advanced than square root.
+[^4]: Sharing the `Math` library is often needed because WebAssembly lacks any instructions to perform numerical operations more advanced than square root.

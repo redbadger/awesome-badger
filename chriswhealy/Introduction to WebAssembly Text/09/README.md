@@ -108,11 +108,9 @@ wasmer 09-single-return-value.wat -i mag 3 4
 
 ### Functions with Multiple Return Values
 
-WebAssembly functions that return multiple values can be invoked from JavaScript running in the browser or via `wasmer`
+WebAssembly functions can also return multiple values.  Here's a simple example in which we calculate the conjugate of complex number.  This is a very simple operation that transforms a complex number `a + bi` into `a - bi`.
 
-Here's a simple example in which we calculate the conjugate of complex number.  This is a very simple operation that transforms a complex number `a + bi` into `a - bi`.
-
-The WebAssembly function must be passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
+The WebAssembly function is passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
 
 [`09-multiple-return-values.wat`](09-multiple-return-values.wat)
 ```wat

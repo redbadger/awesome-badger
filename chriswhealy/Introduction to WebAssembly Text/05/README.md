@@ -29,8 +29,8 @@ Now that we have a local variable, we can store a value in it:
 > This behaviour might become clearer if we use the sequential notation for the same assignment:
 >
 > ```wat
->i32.const 5              ;; Stack = [5]
->local.set $my_value      ;; Stack = []
+>i32.const 5              ;; Stack = [5], $my_value = 0
+>local.set $my_value      ;; Stack = [],  $my_value = 5
 >```
 
 Assuming that we have just stored `5` in `$my_value`, then when we use `local.get` to fetch it, a copy of the value is placed onto the top of the stack:
@@ -43,7 +43,7 @@ local.get $my_value      ;; Stack = [5]
 
 Strangely enough, you do not need to supply a name when declaring a local variable (or a function for that matter).
 
-This might sound pretty weird, but the point is that only humans benefit from human-readable names.  In a WAT program, its perfectly possible to declare variables like this:
+This might sound pretty weird, but the point is that only humans benefit from human-readable names.  In a WAT program, it's perfectly possible to declare variables like this:
 
 ```wat
 (local i32 i32 f64)  ;; Declare three unnamed variables, two i32s and an f64
