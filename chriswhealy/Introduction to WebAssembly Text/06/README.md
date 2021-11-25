@@ -24,7 +24,7 @@ i32.const 5    ;; Push 5.  Stack = [5,3]
 i32.add        ;; Pop 2 values, add them and push the result.  Stack = [8]
 ```
 
-In addition to the fact that we have to issue instructions in this apparently backwards manner, we must also explicitly identify the datatype upon which instructions operates.  In this case, we are working with 32-bit integers; therefore, each instruction is prefixed with `i32`.[^1]
+In addition to the fact that we have to issue instructions in this apparently backwards manner, we must also explicitly identify the datatype upon which instructions operates.  In this case, we are working with 32-bit integers; therefore, each instruction is prefixed with `i32`.[^2]
 
 Similar prefixes exist for 64-bit integers (`i64`), and 32- and 64-bit floating points (`f32` and `f64`)
 

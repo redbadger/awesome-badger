@@ -25,7 +25,7 @@ wasmer 02-useless.wat
 This however, produces the following error message:
 
 ```bash
-error: failed to run `02-_useless.wat`
+error: failed to run `02-useless.wat`
 ╰─> 1: The module has no exported functions to call.
 ```
 
