@@ -1,12 +1,8 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./00%20Prerequisites.md">Prerequisites</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./02%20WebAssembly%20Module.md">WebAssembly Module</a></td></tr>
-</table>
+
+| Previous | | Next
+|---|---|---
+| [Prerequisites](../00/README.md) | [Top](../README.md) | [Creating a WebAssembly Module](../02/README.md)
 
 ## 1: Benefits of WebAssembly
 

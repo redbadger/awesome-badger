@@ -1,12 +1,7 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./03%20Calling%20WebAssembly%20from%20a%20Host%20Environment.md">Calling WebAssembly from a Host Environment</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./05%20Local%20Variables.md">Local Variables</a></td></tr>
-</table>
+| Previous | | Next
+|---|---|---
+| [Calling WebAssembly from a Host Environment](../03/README.md) | [Top](../README.md) | [Local Variable](../05/README.md)
 
 ## 4: WAT Datatypes
 

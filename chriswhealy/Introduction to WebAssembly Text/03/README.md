@@ -1,12 +1,8 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./02%20WebAssembly%20Module.md">WebAssembly Module</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./04%20WAT%20Datatypes.md">WAT Datatypes</a></td></tr>
-</table>
+
+| Previous | | Next
+|---|---|---
+| [Creating a WebAssembly Module](../02/README.md) | [Top](../README.md) | [WAT Datatypes](../04/README.md)
 
 ## 3: Calling WebAssembly from a Host Environment
 
@@ -26,7 +22,7 @@ This now creates a `.wasm` file that is a mere 39 bytes in size.
 
 ### Create a WebAssembly Host Environment in JavaScript
 
-[03-wasm-host-env.js](./src/03-wasm-host-env.js)
+[03-wasm-host-env.js](03-wasm-host-env.js)
 ```javascript
 import { readFileSync } from 'fs'
 

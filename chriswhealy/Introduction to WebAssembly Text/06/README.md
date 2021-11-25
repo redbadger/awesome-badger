@@ -1,12 +1,7 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./05%20Local%20Variables.md">Local Variables</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./07%20Conditions.md">Conditions</a></td></tr>
-</table>
+| Previous | | Next
+|---|---|---
+| [Local Variables](../05/README.md) | [Top](../README.md) | [Conditions](../07/README.md)
 
 ## 6: Arrangement of WAT Instructions
 WebAssembly is a stack-based language which means that almost every instruction we use will typically pop one or more values off the stack, do something with them, then push the result back onto the stack.

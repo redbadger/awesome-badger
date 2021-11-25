@@ -1,12 +1,7 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./08%20Loops.md">Loops</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./10%20WASM%20and%20Shared%20Memory.md">WASM and Shared Memory</a></td></tr>
-</table>
+| Previous | | Next
+|---|---|---
+| [Loops](../08/README.md) | [Top](../README.md) | [WASM and Shared Memory](../10/README.md)
 
 ## 9: More About Functions
 
@@ -74,7 +69,7 @@ This function takes a complex number as an argument in the form of two, 64-bit f
 
 The implementation of this function simply uses Pythagoras' formula to work out the length of the hypotenuse of the triangle having sides `$real` and `$imag`
 
-[09-single-return-value.wat](./src/09-single-return-value.wat)
+[09-single-return-value.wat](09-single-return-value.wat)
 ```wat
 (func $mag           ;; Internal name
   (export "mag")     ;; External name
@@ -118,7 +113,7 @@ Here's a simple example in which calculate the conjugate of complex number.  Thi
 
 The WebAssembly function must be passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
 
-[`09-multiple-return-values.wat`](./src/09-multiple-return-values.wat)
+[`09-multiple-return-values.wat`](09-multiple-return-values.wat)
 ```wat
 ;; Conjugate of a complex number
 ;; conj(a+bi) => (a-bi)
@@ -135,7 +130,7 @@ The WebAssembly function must be passed a complex number in the form of two, 64-
 
 The host environment then pops these two values off the stack to obtain the result of the function call
 
-You can test this by running using `wasmer` to run [`09-multiple-return-values.wat`](./src/09-multiple-return-values.wat)
+You can test this by running using `wasmer` to run [`09-multiple-return-values.wat`](09-multiple-return-values.wat)
 
 ```bash
 wasmer 09-multiple-return-values.wat -i conj -- -5 3

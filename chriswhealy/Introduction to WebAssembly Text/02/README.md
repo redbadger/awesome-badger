@@ -1,12 +1,9 @@
 # Introduction to WebAssembly Text
-<table style="table-width: fixed; width: 100%">
-<tr><th style="width: 45%">Previous</th>
-    <th style="width: 10%"></th>
-    <th style="width: 45%">Next</th></tr>
-<tr><td style="text-align: center"><a href="./01%20Benefits%20of%20WebAssembly.md">Benefits of WebAssembly</a></td>
-    <td style="text-align: center"><a href="./README.md">Top</a></td>
-    <td style="text-align: center"><a href="./03%20Calling%20WebAssembly%20from%20a%20Host%20Environment.md">Calling WebAssembly From a Host Environment</a></td></tr>
-</table>
+
+| Previous | | Next
+|---|---|---
+| [Benefits of WebAssembly](../01/README.md) | [Top](../README.md) | [Calling WebAssembly From a Host Environment](../03/README.md)
+
 
 ## 2: Creating a WebAssembly Module
 
@@ -14,7 +11,7 @@ Remember that a WebAssembly program can only be invoked from a host environment.
 
 Here's a completely useless WebAssembly module.
 
-[`02-useless.wat`](./src/02-useless.wat)
+[`02-useless.wat`](02-useless.wat)
 ```wat
 (module)
 ```
@@ -22,7 +19,7 @@ Here's a completely useless WebAssembly module.
 Although this module contains zero functionality, we could compile and attempt to run it using `wasmer`:
 
 ```bash
-wasmer ./src/01-useless.wat
+wasmer 02-useless.wat
 ```
 
 This however, produces the following error message:
@@ -38,7 +35,7 @@ Well, that's hardly surprising since the module doesn't contain any functions at
 
 Let's now make the above module slightly less useless by adding a function that does nothing more than return the number `42`
 
-[`02-slightly-less-useless.wat`](./src/02-slightly-less-useless.wat)
+[`02-slightly-less-useless.wat`](02-slightly-less-useless.wat)
 ```wat
 (module
   (func               ;; Declare a function that can be called from
@@ -52,7 +49,7 @@ Let's now make the above module slightly less useless by adding a function that 
 Let's now compile and run this program:
 
 ```bash
-wasmer ./src/02-slightly-less-useless.wat
+wasmer 02-slightly-less-useless.wat
 ```
 
 Hmmm, another error, but fortunately, we are presented with an informative message
@@ -67,7 +64,7 @@ error: failed to run `./src/02-slightly-less-useless.wat`
 OK, so let's rerun the program with the extra `-i` argument (meaning `invoke`)
 
 ```bash
-wasmer ./src/02-slightly-less-useless.wat -i answer
+wasmer 02-slightly-less-useless.wat -i answer
 42
 ```
 
