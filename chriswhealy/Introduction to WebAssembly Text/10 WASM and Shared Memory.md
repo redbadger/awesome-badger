@@ -10,17 +10,17 @@
 
 ## 10: WASM and Shared Memory
 
-One of the simplest and most efficient ways to transfer information between a WebAssembly program and its host environment is my means of shared memory.
+One of the simplest and most efficient ways to transfer information between a WebAssembly program and its host environment is by means of shared memory.
 
 But before we dive into the details of how this is done, we need to say something about the hype surrounding WebAssembly and memory safety.
 
 ### WebAssembly Memory Safety
 
-WebAssembly is often touted as a memory-safe language.  Unfortunately, this statement is true only in a naïve sense.
+WebAssembly is often touted as a language that offers complete memory-safety.  Unfortunately, this statement is true only in a naïve sense.
 
 It is true that a WebAssembly program has no access to the memory space outside its own sand-boxed environment; however, to conclude that this then makes a WebAssembly program truly memory-safe is to misunderstand the nature of memory safety.  True memory safety must provide the following three guarantees:
 
-* **Spatial Safety:** Out-of-bounds read/write access is prevented
+* **Spatial Safety:** Out-of-bounds read/write access is prevented.  This applies both to the entire memory space in general, and to not going beyond the bounds of a particular data structure
 * **Temporal Safety:** Once freed, memory cannot be surreptitiously used for exploitative purposes
 * **Pointer Integrity:** A memory address cannot be fabricated from a non-address value
 
@@ -45,7 +45,7 @@ Given that the WebAssembly specification is currently in a state of development 
 1. Once allocated, a WebAssembly memory page cannot be deallocated until that program terminates.
 1. Memory allocated by the host environment can be shared with one or more WebAssembly modules.
     * A reference to the host memory must be supplied at the time the WebAssembly module is instantiated
-    * If multiple WebAssembly modules need access the same block of memory,[^4] this is only possible by means of the compiler option `--enable-threads`
+    * If multiple WebAssembly modules need access the same block of memory,[^4] this is  possible, but you must use the compiler option `--enable-threads`
 1. Memory allocated by the WebAssembly module can be shared with host environment, but only if it has been explicitly exported
 1. You, the developer, are responsible for keeping track of what data lives at which location within linear memory.  How you choose to do this is entirely up to you, but as mentioned in the section above on memory safety, you must take care of ensuring that:
     * `store` and `load` instructions remain within the bounds of your data structures
@@ -73,7 +73,8 @@ The object passed to the `WebAssembly.Memory()` function has two further propert
 ```
 
 > ***IMPORTANT***  
-> If the `shared` flag is set to `true`, then the `maximum` value must be explicitly specified, even if it is the same as the `initial` value
+> If the `shared` flag is set to `true`, then the `maximum` value must be explicitly specified, even if it is the same as the `initial` value.  
+> Also, the WebAssembly module must be compiled with option `--enable-threads`
 
 ### Sharing the Host Environment with WebAssembly
 
@@ -84,7 +85,7 @@ In addition to sharing memory, another common requirement is for the host enviro
 > ***IMPORTANT***  
 > The term "OS level" has been deliberately placed in quotation marks to indicate the fact that such functionality might not be derived from the machine's actual operating system.
 > 
-> As far as WebAssembly is concerned, it needs access to functionality that lies outside the borders of its own little world.  Therefore such functionality must be supplied by the host environment in response to WebAssembly `import` statements.  Beyond this, WebAssembly really doesn't care whether that functionality came from the language runtime, or from the actual operating system.
+> As far as WebAssembly is concerned, it needs access to functionality that lies outside the borders of its own little world.  Therefore such functionality must be supplied by the host environment in response to WebAssembly `import` statements.  Beyond this, it's of little importance to WebAssembly whether that functionality came from the language runtime or from the actual operating system.
 
 In this example, we will write some JavaScript code that makes three resources available to a WebAssembly module called `some_module.wasm`:
 1. One page of shared memory
@@ -113,15 +114,15 @@ Other than representing a two-layer namespace, you are free to give this object 
 
 * `hostEnv.math` points to JavaScript's entire mathematics library.  So WebAssembly now has access to functions such as `sin`, `cos` or `ln`
 * `hostEnv.js.shared_mem` points to the host environment's block of linear memory.  Both JavaScript and WebAssembly have full read/write access to this memory
-* `hostEnv.js.data_offset` identifies the offset within shared memory at which the WebAssembly function `expensive_calc` will start to write is response data
+* `hostEnv.js.data_offset` identifies the offset within shared memory at which  WebAssembly will start to write its response data
 
 Now all we need to do is pass this object to WebAssembly at the time we instantiate the module.  This coding assumes that:
 
 * The WebAssembly module being instantiated is called `some_module.wasm` and lives in the same directory as the currently executing JavaScript file
-* Once the WebAssembly module has been instantiated, we will call a function called `expensive_calc` that takes two `i32` values are arguments
+* Once the WebAssembly module has been instantiated, we will call a function called `expensive_calc` that takes two `i32` values as arguments
 * Function `expensive_calc` returns an `i32` value that indicates the number of bytes it wrote to shared memory
 
-At this point, it is worth providing two version of the code because there is a slight difference between running this code in NodeJS and running in a browser.
+At this point, it is worth providing two versions of the code because there is a slight difference between running this code in NodeJS and running it in a browser.
 
 #### Running in NodeJS
 NodeJS reads the `.wasm` file synchronously from the filesystem using the imported function `readFileSync`
@@ -174,7 +175,7 @@ Although it is not the case with function `expensive_calc`, remember that a brow
 
 ### Using Host Environment Resources in WebAssembly
 
-Instantiating our fictitious WebAssembly module and supplying it with a host environment object is only half the story.  Now we must look at how the WebAssembly module declare it's use of these resources by means of `import` statements.
+Instantiating our fictitious WebAssembly module and supplying it with a host environment object is only half the story.  Now we must look at how the WebAssembly module declares its use of these resources by means of `import` statements.
 
 Immediately after the `module` definition, we need to add the following declarations:
 
@@ -199,11 +200,11 @@ Three different types of declaration are made here:
 
 ### Writing to Shared Memory in WebAssembly
 
-A WebAssembly instruction obtains it arguments by popping the required number of values off the stack.  The instruction to write a 4-byte `i32` value to memory is `i32.store` and it requires two arguments:
+A WebAssembly instruction obtains it arguments by popping the required number of values off the stack.  The instruction to write a 4-byte `i32` value to memory is `i32.store` and requires two arguments:
 * An `i32` holding the address
-* An `i32` holding the value that will be stored
+* An `i32` holding the value that will be stored at the specified address
 
-Therefore, prior to issuing the `i32.store` instruction, we must ensure that its argument value have already been pushed onto the stack.
+Therefore, prior to issuing the `i32.store` instruction, we must ensure that its arguments have already been pushed onto the stack.
 
 In our case, the actual implementation of our fictional `expensive_calc` function is of no importance, other than the fact that at some point in its execution, it will update shared memory, and return an `i32` holding the number of bytes it has written.
 
@@ -215,12 +216,16 @@ So to start with, we refer to the imported value `js.data_offset` in order to kn
 
 Here's a minimal and unoptimized loop that performs some expensive but undescribed task many times.  Each time around the loop we:
 * Keep a loop counter in local variable `$idx`
-* Call another WebAssembly function called `$some_func` that performs an expensive calculation with arguments `$x` and `$y` and stores the result in local variable `$next_val`
-* The memory offset at which we `store` our data is calculated by multiplying `$idx` by 4 (because each `i32` value is 4 bytes long) then adding this to the base address stored in `$data_offset`
+* Call another WebAssembly function called `$some_func` that performs an expensive calculation with arguments `$x` and `$y`
+* The result of calling `$some_func` is stored in the local variable `$next_val`
+* The memory offset at which we store `$next_val` is calculated by multiplying `$idx` by 4 (because each `i32` value is 4 bytes long) then adding this to the base address stored in `$data_offset`
 * The multiply by 4 could have been written as:  
-     `(i32.mul (local.get $idx) (i32.const 4))`  
-     But because `$idx` is an unsigned integer, it is much cheaper to perform a bit-shift left by 2 places:  
-     `(i32.shl (local.get $idx) (i32.const 2))`
+
+   `(i32.mul (local.get $idx) (i32.const 4))`  
+
+    But because `$idx` is an unsigned integer, multiplying by 4 can be implemented by using the much faster bit-shift left instruction, and shifting by 2 places:  
+
+   `(i32.shl (local.get $idx) (i32.const 2))`
 
 ```wat
 (global $data_offset (import "js" "data_offset") i32)
@@ -290,7 +295,7 @@ const wasmObj   = await WebAssembly.instantiate(wasmBytes, hostEnv)
 const bytesWritten = wasmObj.instance.exports.expensive_calc(12,34)
 ```
 
-This means after the call to `expensive_calc` has completed, we have an updated `wasmMemory` object an the number of updated bytes in `bytesWritten`
+After the call to `expensive_calc` has completed, we have an updated `wasmMemory` object, and the number of updated bytes in the constant `bytesWritten`
 
 We now need to get this data out of `wasmMemory`.
 
@@ -300,11 +305,10 @@ The easiest way to do this is to create an array of unsigned, 8-bit bytes and ov
 const wasmMemBuff = new Uint8ClampedArray(wasmMemory.buffer)
 ```
 
-We now read the first `bytesWritten` bytes from this array and we have obtained the data calculated by WebAssembly
+We can now read the `wasmMemBuff` array just like any other JavaScript array.  The only thing to bear in mind is that we must start reading from the offset we supplied to WebAssembly in the variable `hostEnv.js.data_offset`, then read for a length of `bytesWritten` bytes:
 
 ```javascript
-const wasmMemBuff = new Uint8ClampedArray(wasmMemory.buffer)
-const wasmData    = wasmMemBuff.slice(hostEnv.js.data_offset, bytesWritten)
+const wasmData = wasmMemBuff.slice(hostEnv.js.data_offset, bytesWritten)
 ```
 
 Simples!

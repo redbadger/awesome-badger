@@ -1,8 +1,8 @@
 (func $mag           ;; Internal name
   (export "mag")     ;; External name
-  (param $real f64)
-  (param $imag f64)
-  (result f64)
+  (param $real f64)  ;; 1st argument is an f64 known as $real
+  (param $imag f64)  ;; 2nd argument is an f64 known as $imag
+  (result f64)       ;; One f64 will be left on the stack
 
   ;; Find the square root of the top value on the stack, then push the result
   ;; back onto the stack
@@ -18,7 +18,6 @@
     )
   )
 
-  ;; When we exit the function, the stack has a single f64 value left behind by
-  ;; the square root instruction.  This then becomes the function's implicit
-  ;; return value
+  ;; The square root operation leaves a single f64 value on the stack
+  ;; We now exit and this becomes the function's return value
 )

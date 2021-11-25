@@ -59,14 +59,14 @@ If a WebAssembly function needs to be passed any arguments, these must be specif
 
 Here's a real-life example.  Let's say we have a function that finds the magnitude (or hypotenuse length) of a complex number; that is, the distance from origin to the point on the complex plane.
 
-This function that a complex number as and argument in the form of two, 64-bit floating point numbers called `$real` and `$imag`.  Since the result is always real, the function returns a single 64-bit floating point number:
+This function takes a complex number as an argument in the form of two, 64-bit floating point numbers (`$real` and `$imag`) and returns a single 64-bit floating point number:
 
 ```wat
 (func $mag           ;; Internal name
   (export "mag")     ;; External name
-  (param $real f64)
-  (param $imag f64)
-  (result f64)
+  (param $real f64)  ;; 1st argument is an f64 known as $real
+  (param $imag f64)  ;; 2nd argument is an f64 known as $imag
+  (result f64)       ;; One f64 will be left on the stack when the function terminates
 
   ;; Function body goes here
 )
@@ -78,9 +78,9 @@ The implementation of this function simply uses Pythagoras' formula to work out 
 ```wat
 (func $mag           ;; Internal name
   (export "mag")     ;; External name
-  (param $real f64)
-  (param $imag f64)
-  (result f64)
+  (param $real f64)  ;; 1st argument is an f64 known as $real
+  (param $imag f64)  ;; 2nd argument is an f64 known as $imag
+  (result f64)       ;; One f64 will be left on the stack when the function terminates
 
   ;; Find the square root of the top value on the stack, then push the result
   ;; back onto the stack
@@ -97,7 +97,7 @@ The implementation of this function simply uses Pythagoras' formula to work out 
   )
   
   ;; The square root operation leaves a single f64 value on the stack
-  ;; When we exit the function, this becomes the function's return value
+  ;; We now exit and this becomes the function's return value
 )
 ```
 
@@ -110,11 +110,11 @@ wasmer 09-single-return-value.wat -i mag 3 4
 5
 ```
 
-### Function with Multiple Return Values
+### Functions with Multiple Return Values
 
 WebAssembly functions that return multiple values can be invoked from JavaScript running in the browser or via `wasmer`
 
-Here's a simple example in which calculate the conjugate of complex number.  This is a very simple operation that transforms `a + bi` into `a - bi`.
+Here's a simple example in which calculate the conjugate of complex number.  This is a very simple operation that transforms a complex number `a + bi` into `a - bi`.
 
 The WebAssembly function must be passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
 
@@ -126,7 +126,7 @@ The WebAssembly function must be passed a complex number in the form of two, 64-
   (export "conj")               ;; External name
   (param $a f64)                ;; 1st argument is an f64 known as $a
   (param $b f64)                ;; 2nd argument is an f64 known as $b
-  (result f64 f64)              ;; Two f64s will be left behind on the stack
+  (result f64 f64)              ;; Two f64s will be left on the stack
 
   (local.get $a)                ;; Push $a. Stack = [$a]
   (f64.neg (local.get $b))      ;; Push $b then negate its value.  Stack = [-$b, $a]
@@ -142,7 +142,7 @@ wasmer 09-multiple-return-values.wat -i conj -- -5 3
 -5 -3
 ```
 
-> Notice the double hyphens `--` preceding the function arguments.
+> Notice the double hyphens `--` between `-i conj` and the function arguments.
 > This is necessary to prevent the shell from interpreting the minus sign in front of `-5` an shell option
 
 ### NodeJS Limitation
