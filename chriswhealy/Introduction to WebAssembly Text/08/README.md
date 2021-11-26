@@ -6,43 +6,55 @@
 
 ## 8: Loops
 
-Let's now extend the previous code fragment to see how it could be used to control a loop.  The condition we just looked at is now used to perform a basic loop that does something 5 times:
+Let's now extend the previous code fragment to see how it could be used to control a loop.  
+
+### It's a Loop Jim, but Not as we Know it..
+
+A loop in a WAT program is structured differently from loop constructs in other languages.  If we were to build a WAT loop like this, then it would not loop at all...
 
 ```wat
-(local %counter i32)  ;; Remember, local variables are automatically initialised to zero
-
-(loop $do_it_again
-  ;; As long as the limit is greater than the counter, proceed with the loop
-  ;; Comparison statements leave an i32 value on the top of the stack.
-  ;; If the top of the stack is [0], then this means false.
-  ;; Any other value means true
-  (if (i32.gt_u (i32.const 5) (local.get $counter))
-    (then
-      ;; True. Top of stack contains a non-zero i32
-      ;; Do something here
-      
-      ;; Increment the counter
-      (local.set $counter (i32.add (local.get $counter) (i32.const 1)))
-      
-      ;; Jump to the start of the loop
-      (br $start_again)
-    )
-  )
-) ;; end of loop $do_it_again
-
-;; More instructions after the loop...
+(loop %some_optional_label
+  ;; Do stuff here
+)
 ```
 
-Notice that a loop condition can be specified in two ways:
+Say what...?
 
-* ***Check for Termination***  
-   Most languages assume that the loop should continue, then repeatedly ask "*Should I stop now?*".
+The point here is that WAT makes the basic assumption that a loop should ***not*** continue unless we have specifically decided otherwise.  This means that unless otherwise instructed, when we hit the close parenthesis at the end of the loop body, we will simply drop out of the loop and continue with whatever instructions come next.
 
-   That's fine and you could certainly structure a loop this way in WAT...
-   
-* ***Check for Continuation***  
-   In WAT however, it is more idiomatic to assume that the loop should stop, then repeatedly ask "*Should I continue?*".
+> ***IMPORTANT***  
+> * A WAT loop is merely a block of code that has a labeled start point
+> * If you do not provide a human-readable label for the loop, as with local variables, the loop will be referenced by its index number
+> * A loop will ***not*** be repeated automatically
+> * If the coding in a loop body is to be repeated, you must explicitly issue a branch `br` instruction to jump back to the start of the loop
+> * You cannot branch to the start of a loop from outside the loop body
 
-   If the loop should continue, we enter the `then` block and do whatever needs to be done.  At the end of the `then` block there is an explicit branch `br` statement that jumps back to the start of the loop.
+Generally speaking therefore, WAT loops are structured like this:
 
-   Under all other conditions, we simply drop out at the bottom of the loop.
+```wat
+(loop $loop_label
+  ;; Do repetitive stuff here
+  
+  ;; Test for continuation, not termination
+  ;; As long as the loop limit is greater than the loop conter, then continue
+  (if (i32.gt_u (local.get $loop_limit) (local.get $loop_counter))
+    (then
+      ;; Increment $loop_counter
+      (local.set (i32.add (local.get $loop_counter) (i32.const 1)))
+      
+      ;; Jump back to the start of the loop
+      (br $loop_label)
+    )
+  ) ;; If the condition fails, we simply drop out of the loop
+)
+```
+
+The point to get used to here is the way in which loop execution is controlled
+
+***Check for Termination***  
+Most languages assume that the loop should continue, then repeatedly ask "*Should I stop now?*".
+
+That's fine and you could certainly structure a loop this way in WAT...
+
+***Check for Continuation***  
+In WAT however, it is more idiomatic to assume that the loop should stop, then repeatedly ask "*Should I continue?*".

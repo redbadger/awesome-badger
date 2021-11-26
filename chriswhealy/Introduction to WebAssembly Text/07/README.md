@@ -10,7 +10,7 @@ WebAssembly includes the high-level flow control statements `if/then/else/end` f
 
 ### Simple Value Test
 
-Using sequential notation, we can test if the local variable `$my_value` equals zero like this.   Place the `i32` value in question on top of the stack, then simply invoke the `if` statement (assuming `$my_value` is set to `5`):
+Using sequential notation, we can test if the local variable `$my_value` equals zero like this.   Place the `i32` value in question on top of the stack, then simply invoke the `if` statement:
 
 ```wat
 local.get $my_value      ;; Stack = [5]
@@ -44,7 +44,7 @@ In sequential notation, the `then` keyword is not used but the `end` keyword is.
 1. The entire `if` statement must be enclosed in parentheses
 1. The `then` branch is mandatory, the `else` branch is optional
 1. The `then` and `else` branches must be enclosed in parentheses
-1. The `end` keyword is redundant now because its place is has been taken by the closing parenthesis
+1. The `end` keyword is redundant now because its place has been taken by the closing parenthesis
 
 ### Simple Comparison Tests
 
@@ -74,11 +74,11 @@ Remember that we have a choice over how we interpret integer values.
 
 Consequently, all integer comparison statements must identify not only the type of comparison to be performed (`lt`, `gt`, `le`, `ge` etc), but must additionally specify whether the `i32` is to be treated as a signed or unsigned value.
 
-In this case, it makes no sense to check whether we've gone round a loop a negative number of times, so there is no need to treat it as a signed value: hence we test for `i32.gt_u` (greater than, unsigned) as opposed to `i32.gt_s` (greater than, signed)
+In this case, it makes no sense to check whether we've gone round a loop a negative number of times, so there is no need to treat `$counter` as a signed value: hence we test for `i32.gt_u` (greater than, unsigned) as opposed to `i32.gt_s` (greater than, signed)
 
 ### Using `if` as an Expression
 
-Up til now, the way we have used the `if` statement assumes that does not leave any values behind on the stack.
+Up til now, the way we have used the `if` statement assumes that it does not leave a new value behind on the stack.
 
 But what if we want to perform some sort of conditional assignment?
 
@@ -90,10 +90,12 @@ let iters = isInMainCardioid(x, y) || isInPeriod2Bulb(x,y)
             : mjEscapeTime(x, y)
 ```
 
-The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `x` `y` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does fall within either of these areas, we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
+The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `x` `y` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does, then we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
 
 **Q**: That's nice, but how do we replicate this construct in WebAssembly?  
 **A:** We can transform `if` from a *statement* into an *expression* by assigning it a return type
+
+The implementation of functions `$is_in_main_cardioid` and `$is_in_period_2_bulb` is not important here, suffice it to say that these functions both return `i32` values that can be treated as Booleans.
 
 ```wat
 ;; Set $iters to whatever i32 value is returned from the if expression
@@ -122,7 +124,7 @@ The important point to understand here is that the value assigned to the variabl
 )
 ```
 
-The `i32` value left on the stack by the `if` expression is then assigned to the local variable `$iters`.
+Whatever `i32` value the `if` expression leaves on the stack, is then assigned to the local variable `$iters`.
 
 <hr>
 
