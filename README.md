@@ -4,7 +4,7 @@
 
 [awesome.red-badger.com][awesome-badger]
 
-Assorted thinking (mostly) about technology written by the Badgers.
+Assorted thinking (mostly) about technology written by [the Badgers](https://red-badger.com/people/).
 
 <!-- insert new posts at the top -->
 
@@ -60,3 +60,7 @@ Assorted thinking (mostly) about technology written by the Badgers.
 [timlee]: ./timlee
 [matt-thomson]: ./matt-thomson
 [ruiramos]: ./ruiramos
+
+---
+
+[About Red Badger](https://red-badger.com)
