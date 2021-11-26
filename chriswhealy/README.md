@@ -4,6 +4,7 @@
 
 
 > Senior Engineer and Developer working as much as possible with Kotlin, Rust and WebAssembly
+> 
 > Outside work I play the drums, do audio engineering/live streaming/post production/FoH and tinker with room acoustics
 
 
@@ -11,7 +12,7 @@
 
 ### Introduction to WebAssembly Text
 
-WebAssembly is usually thought of as simply a compilation target.  The usualy workflow is that you write your application in some other language (such as Rust), then compile it to WebAssembly and have it run pretty much anywhere.
+WebAssembly is usually thought of as simply a compilation target.  The usual workflow is that you write your application in some other language (such as Rust), then compile it to WebAssembly and have it run pretty much anywhere.
 
 This approach is fine&mdash;most of the time.
 
