@@ -1,5 +1,7 @@
 ## 2.1: Basic Escape-Time Implementation
 
+### Basic Boundary Conditions
+
 First, we need to define the limits that will prevent us looping forever:
 
 ```javascript
@@ -7,16 +9,22 @@ const maxIters = 1000
 const bailout  = 4
 ```
 
-The helper functions that translate pixel locations to complex plane coordinates are available as `pixel2XCoord` and `pixel2YCoord`, and similarly, the function that transforms an iteration number into a colour is available as `iter2Colour`
+### Helper Functions
 
-So our starting point looks like this (where we don't care at the moment how these helper functions are implemented):
+We need a few helper functions:
+* `pixel2XCoord` and `pixel2YCoord`  
+   These functions translate pixel X and Y locations to complex plane X and Y coordinates
+* `iter2Colour`  
+   Transforms an iteration number into a colour
+
+At the moment, we don't care how these helper functions have been implemented
 
 ```javascript
 const maxIters = 1000
 const bailout  = 4
 
-const pixel2XCoord = x => ...
-const pixel2YCoord = y => ...
+const pixel2XCoord = pos => ...
+const pixel2YCoord = pos => ...
 const iter2Colour  = n => ...
 ```
 
@@ -49,11 +57,11 @@ let buf8  = new Uint8ClampedArray(buf)
 let buf32 = new Uint32Array(buf)
 ```
 
-`buf8` gives us access to the contents of the `ArrayBuffer` as an array of unsigned, 8-bit integers, and `buf32` gives up access to the `ArrayBuffer` as an array of unsigned, 32-bit integers.
+`buf8` gives us access to the contents of the `ArrayBuffer` as if it were an array of unsigned, 8-bit integers, and `buf32` gives up access to the `ArrayBuffer` as if it were an array of unsigned, 32-bit integers.
 
-So we now have two different ways to look at the same block of data.  We should also bear in mind that `buf8.length` will return a number 4 times larger than `buf32.length`, even though they are both reporting information about the same underlying data structure.
+So we now have two different ways to look at the same block of linear memory.  We should also bear in mind that the value returned by `buf8.length` will be 4 times larger than the value returned by `buf32.length`, even though they are both reporting information about the same underlying `ArrayBuffer`.
 
-### Calculating Each Pixel Value
+### Calculate the Colour of Each Canvas Pixel
 
 We now need to loop over each row in the image, and within each row, loop over each column.  Here is a badly unoptimised implementation of such a nested loop:
 
@@ -103,6 +111,6 @@ const escapeTime = (xPixel, yPixel) => {
 }
 ```
 
-Here is a working version of this unoptimized [basic implementation](02-basic-implementation.html)
+Here is a working version of this unoptimized [basic implementation](basic-implementation.html)
 
 As you can see, it takes several hundred milliseconds to render the entire image.

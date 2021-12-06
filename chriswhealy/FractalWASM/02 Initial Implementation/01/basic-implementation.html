@@ -17,8 +17,10 @@ const DEFAULT_Y_ORIGIN = 0
 const maxIters = 1000
 const bailout  = 4
 
-const pixel2XCoord = pos => DEFAULT_X_ORIGIN + ((pos - (CANVAS_WIDTH / 2)) / PPU)
-const pixel2YCoord = pos => DEFAULT_Y_ORIGIN + ((pos - (CANVAS_HEIGHT / 2)) / PPU)
+const pixelPos2Coord = (origin, dim) => pos => origin + ((pos - (dim / 2)) / PPU)
+
+const pixel2XCoord = pixelPos2Coord(DEFAULT_X_ORIGIN, CANVAS_WIDTH)
+const pixel2YCoord = pixelPos2Coord(DEFAULT_Y_ORIGIN, CANVAS_HEIGHT)
 
 const microPrecision = val => Math.round(val * 10000) / 10000
 
