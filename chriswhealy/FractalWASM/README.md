@@ -25,12 +25,8 @@ The results are encouraging.  I've got the `.wasm` file down to just 940 bytes..
 # Table of Contents
 1. [Plotting Fractals](./01%20Plotting%20Fractals/README.md)
 1. [Initial Implementation](./02%20Initial%20Implementation/README.md)
+1. [WAT: Basic Escape-Time Implementation](./03%20WAT%20Basic%20Implementation/README.md)
 
-
-
-## WAT: Basic Escape-Time Implementation
-
-Let's now take a look at implementing the basic escape-time loop in WebAssembly Text
 
 
 
