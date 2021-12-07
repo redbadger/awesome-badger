@@ -10,11 +10,13 @@ We know that our `canvas` image is 800 by 450 pixels in size and that each pixel
 800 * 450 * 4 bytes per pixel = 1,440,000 bytes
 ```
 
-However, we also know that WebAssembly memory can only be allocated in 64Kb pages.  Therefore, we will need 22, 64Kb memory pages
+However, we also know that WebAssembly memory can only be allocated in 64Kb pages
 
 ```javascript
 Math.ceil(1440000 / 65536) = 22 pages
 ```
+
+Therefore, we will need 22, 64Kb memory pages
 
 In addition to memory needed for the image, we need to allocate some memory for the colour palette information.[^1]  This is simply a precalculated lookup table to translate an iteration value into a colour.  Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
 
@@ -24,7 +26,7 @@ In addition to memory needed for the image, we need to allocate some memory for 
 
 So in total, we need to allocate `22 + 2 = 24` memory pages.
 
-Here's the code to implement this in a more generic manner:
+Here's the JavaScript code to implement this in a more generic manner:
 
 ```javascript
 const WASM_PAGE_SIZE = 1024 * 64
@@ -49,7 +51,7 @@ const wasmMemory = new WebAssembly.Memory({
 const wasmMemBuff = new Uint8ClampedArray(wasmMemory.buffer)
 ```
 
-In this case, we do not need to allocate a specific `ArrayBuffer` object, because one is created for us by `new WebAssembly.Memory()`.  We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer`.
+In this case, we do not need to allocate a specific `ArrayBuffer` object, because one is created for us when we call `new WebAssembly.Memory()`.  We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer`.
 
 ### Decide How Shared Memory Should be Used
 
@@ -76,7 +78,7 @@ Now that we have allocated enough memory and know where within that memory our t
 
 If the host environment needs to share any of its resources with a WebAssembly module, those resources must be made available at the time the WebAssembly module is instantiated.
 
-Sharing host resources with WebAssembly is done simply by creating an arbitrary object that is structured as a two layer namespace whose property names are entirely arbitrary.  For instance, here's a suitable object for sharing the memory and offset values we have created:
+Sharing host resources with WebAssembly is done simply by creating a JavaScript object structured as a two layer namespace, whose property names are entirely arbitrary.  For instance, below we create an object called `host_fns` for sharing the memory and offset values we have created:
 
 ```javascript
 const host_fns = {

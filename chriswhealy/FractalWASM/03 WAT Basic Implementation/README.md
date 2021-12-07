@@ -6,8 +6,6 @@ First of all, we need to look at the initial task we want to perform:
 1. The CPU-intensive task of calculating the fractal image will not be implemented in JavaScript, but rather delegated to a WebAssembly program
 1. Information will be transferred between JavaScript and WebAssembly by means of shared memory
 
-The first we need to look at is shared memory: how much will we need and which values should be stored at which locations?
-
 1. [Shared Memory](./01/README.md)
 1. [Create the WebAssembly Module](./02/README.md)
 1. [Generate the Colour Palette](./03/README.md)

@@ -1,8 +1,8 @@
 ## 3.4: Escape-Time Algorithm
 
-The next function to write the escape-time algorithm that actually calculates the iteration value of a given pixel in the fractal image.
+The next function we need to write is the escape-time algorithm that actually calculates the iteration value of a given pixel in the fractal image.
 
-To start with, we will simply implement the brute-force approach to this calculation.  Performance optimisations will be added later.
+To start with, we will not worry about performance optimisations and simply implement a brute-force calculation.  Optimisations will be added later.
 
 Since this particular algorithm can be used for plotting either the Mandelbrot or Julia Sets, we need a function whose signature is appropriate for either fractal.
 
@@ -39,16 +39,12 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
     
     ;; Only continue the loop if we're still within both the bailout value and the iteration limit
     (if
+      ;; Continue as long as $BAILOUT > ($x^2 + $y^2) and $max_iters > $iters
       (i32.and
-        ;; $BAILOUT > ($x^2 + $y^2)?
-        (f64.gt
-          (global.get $BAILOUT)
-          (f64.add (local.get $x_sqr) (local.get $y_sqr))
-        )
-        ;; $max_iters > iters?
+        (f64.gt (global.get $BAILOUT) (f64.add (local.get $x_sqr) (local.get $y_sqr)))
         (i32.gt_u (local.get $max_iters) (local.get $iters))
-      )
-      (then
+    )
+    (then
         ;; $new_x = $mandel_x + ($x^2 - $y^2)
         (local.set $new_x
           (f64.add
@@ -75,4 +71,6 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
 )
 ```
 
-The mechanics of the actual calculation implemented here is not particularly important; however, a significant difference between this function and the others we've written so far is that this ones takes floating point `f64` arguments, not integers.
+The mechanics of the actual calculation are not particularly important; however, a significant difference between this function and the others we've written so far is that this ones works with both `f64` floating point values and `i32` integer values.
+
+This means we must be careful how each value is used, because any particular instruction cannot use arguments of mixed datatype.

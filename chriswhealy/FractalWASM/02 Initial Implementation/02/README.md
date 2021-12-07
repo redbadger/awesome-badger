@@ -4,7 +4,7 @@ As previously implemented, the `escapeTime` function uses a brute-force approach
 
 ![Mandelbrot Regions](Mandelbrot%20Regions.png)
 
-If is does, then we already know that this value will escape to infinity and can therefore immediately colour it black.
+If it does, then we already know that this value will escape to infinity and can therefore immediately colour it black.
 
 All we need to do now is add a check that takes the (`x`,`y`) coordinates of the pixel location, and checks whether it lies within either of these two regions.
 

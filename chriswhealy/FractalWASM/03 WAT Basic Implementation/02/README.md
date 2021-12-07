@@ -13,6 +13,8 @@ Having created a file called `mandel_plot.wat`, start by defining the module and
   (global $image_offset   (import "js" "image_offset")   i32)
   (global $palette_offset (import "js" "palette_offset") i32)
 
+  (global $BAILOUT f64 (f64.const 4.0))
+  (global $BLACK   i32 (i32.const 0xFF000000))
 )
 ```
 

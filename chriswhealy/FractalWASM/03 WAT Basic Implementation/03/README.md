@@ -1,7 +1,7 @@
 ## 3.3: Generate the Colour Palette
 
 ### Transform an Iteration Value to an RGBA[^1] Colour Value
-The coding that generates the colour palette does not need to be described in detail, suffice it to say that a single iteration value can be translated into the red, green and blue colour components by multiplying it by 4 (implemented as a shift left instruction), then passing it through an 8-bit clamp algorithm that uses fixed thresholds for each colour component (0 for red, 128 for green, and 356 for blue)
+The coding that generates the colour palette does not need to be described in detail, suffice it to say that a single iteration value can be translated into the red, green and blue colour components by multiplying it by 4 (implemented as a shift left instruction), then passing it through an algorithm that derives an 8-bit value for each colour component using fixed thresholds.[^2]
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -45,7 +45,7 @@ With this 8-bit clamp in place, we create three colour functions:
 
 Finally, we take each of the colour component values, shift them left by the appropriate number of bits, then `OR` them all together to form the 32-bit colour value.
 
-> ***IMPORTANT***  
+> ***IMPORTANT***
 > Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
 
  ```wat
@@ -106,10 +106,13 @@ There are a couple of things to notice about this function:
 1. This function does not return a specific value, it writes to shared memory; therefore, it has no `result` clause.
 1. In [§3.2](../02/README.md), at the start of the module we defined a global constant called `$palette_offset` whose value is imported from the host environment as property `js.palette_offset`.  This value acts as the starting point for calculating where the next `i32` colour value will be written in memory
 1. The loop labeled `$next` continues until our index counter `$idx` exceeds the supplied value of `max_iters`
-1. The `i32.store` instruction writes a 4 byte value to memory.  The first argument is the memory offset and the second is the value being stored.  So we simply call function `$colour`, passing in the value of `$idx` and store the returned value at the memory location calculated from `$palette_offset + ($idx * 4)`[^2]
-1. When this function exits, shared memory (starting at the offset defined in `$palette_offset`) will contain the colour values for all iteration values from 0 to `max_iters`
+1. The `i32.store` instruction writes a 4 byte value to memory.  The first argument is the memory offset and the second is the value being stored.  
+
+   So we call function `$colour`, passing in the value of `$idx`, and store the returned value at the memory location calculated from `$palette_offset + ($idx * 4)`[^3]
+3. When this function exits, the block of shared memory starting at the offset defined in `$palette_offset` will contain the colours for all iteration values from 0 to `max_iters`
 
 
 
 [^1]: RGBA stands for the four values needed to fully define a pixel's colour: Red, Green, Blue and Alpha (opacity)
-[^2]: The cheapest way to implement multiplication by a power of 2 is to perform an `i32.shl` (shift left) instruction by the relevant number of binary places
+[^2]: 0 for red, 128 for green, and 356 for blue
+[^3]: The cheapest way to implement multiplication by a power of 2 is to perform an `i32.shl` (shift left) instruction by the relevant number of binary places
