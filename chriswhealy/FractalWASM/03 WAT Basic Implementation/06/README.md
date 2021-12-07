@@ -106,5 +106,5 @@ The JavaScript coding in this Web page does the following things:
     1. Instantiate the WebAssembly module
     1. Call the WebAssembly function to generate the colour palette
     1. Making a note of the start and end times, call the WebAssembly function to generate the Mandelbrot set and display the execution time
-    1. Display the rendered image by transferring relevant slice of shared memory to the HTML `canvas` element
+    1. Display the rendered image by transferring the relevant slice of shared memory to the HTML `canvas` element
 1. Calls the asynchronous `start()` function
