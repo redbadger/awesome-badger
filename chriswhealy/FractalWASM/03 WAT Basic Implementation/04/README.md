@@ -1,10 +1,8 @@
 ## 3.4: Escape-Time Algorithm
 
-The next function we need to write is the escape-time algorithm that actually calculates the iteration value of a given pixel in the fractal image.
+The next function we need to write is the escape-time algorithm that actually calculates the iteration value of a given pixel in the fractal image.  To start with, we will not worry about performance optimisations &mdash; these will be added later.
 
-To start with, we will not worry about performance optimisations and simply implement a brute-force calculation.  Optimisations will be added later.
-
-Since this particular algorithm can be used for plotting either the Mandelbrot or Julia Sets, we need a function whose signature is appropriate for either fractal.
+Since this particular algorithm can be used for plotting either the Mandelbrot or Julia Sets, we need a function whose signature is appropriate for either fractal.  This does mean however, that when plotting the Mandelbrot Set, two of the argument values will always be zero.
 
 | Argument | Description | Notes
 |---|---|---
@@ -14,6 +12,9 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
 | `$y` | Pointer Y position on Mandelbrot Set | Always zero when plotting the Mandelbrot Set
 | `$max_iters` | Iteration limit |
 
+If you have read [§8](Introduction%20to%20WebAssembly%20Text/08/README.md) on Loops from the blog series [Introduction to WebAssembly Text](Introduction%20to%20WebAssembly%20Text/README.md), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.
+
+This coding style is used here.
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -71,6 +72,6 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
 )
 ```
 
-The mechanics of the actual calculation are not particularly important; however, a significant difference between this function and the others we've written so far is that this ones works with both `f64` floating point values and `i32` integer values.
+The mechanics of the actual calculation are not particularly important; however, there is an important difference between this function and the others we've written so far; that is, this one works with both `f64` floating point values and `i32` integer values.
 
-This means we must be careful how each value is used, because any particular instruction cannot use arguments of mixed datatype.
+The point to understand here is that we must now be careful how we use each of the local variables, because any particular instruction cannot use arguments of mixed datatype.

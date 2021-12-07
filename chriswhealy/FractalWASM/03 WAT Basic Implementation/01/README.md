@@ -48,14 +48,14 @@ const wasmMemory = new WebAssembly.Memory({
   initial : mImagePages + palettePages
 })
 
-const wasmMemBuff = new Uint8ClampedArray(wasmMemory.buffer)
+const wasmMem8 = new Uint8ClampedArray(wasmMemory.buffer)
 ```
 
 In this case, we do not need to allocate a specific `ArrayBuffer` object, because one is created for us when we call `new WebAssembly.Memory()`.  We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer`.
 
 ### Decide How Shared Memory Should be Used
 
-Now that we have a block of linear memory large to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what lives where, and be careful to ensure we don't start trampling on our own data!
+Now that we have a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what lives where, and be careful to ensure we don't start trampling on our own data!
 
 In our case, the simplest way to do this is to say that the image data will start at offset 0 and the colour palette data will start at the full page boundary after the image data.  This does means that there will be a few bytes of wasted space, but this is not a particularly critical issue.
 

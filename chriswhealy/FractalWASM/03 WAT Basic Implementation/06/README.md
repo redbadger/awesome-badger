@@ -1,3 +1,17 @@
+## Displaying the Rendered Fractal Image
+
+Now that the WebAssembly side of the coding has been written, we need an HTML page to display the rendered image.
+
+> ***IMPORTANT***  
+> In order for the Web page shown below to function correctly, it must be served to your browser from a Web server.  WebAssembly `.wasm` files cannot be opened by a browser using the `file://` protocol.
+
+![Basic WAT Implementation](basic-rendered-mbset.png)
+
+In the above image, notice that without any optimisations, our basic implementation is pretty slow...
+
+[WAT Basic Implementation.html](wat-basic-implementation.html)
+
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +23,6 @@
   <div>Mandelbrot Set rendered in <span id="runtime"></span>ms</div>
   <script>
 const microPrecision = val => Math.round(val * 10000) / 10000
-
 const WASM_PAGE_SIZE    = 1024 * 64
 const DEFAULT_MAX_ITERS = 1000
 
@@ -20,7 +33,7 @@ const DEFAULT_Y_ORIGIN      = 0
 const DEFAULT_CANVAS_WIDTH  = 800
 const DEFAULT_CANVAS_HEIGHT = 450
 
-const PPU = DEFAULT_CANVAS_WIDTH / 4  // Pixels per unit in the complex plane
+const PPU = DEFAULT_CANVAS_WIDTH / 4 // Pixels per unit in the complex plane
 
 const mCanvas  = document.getElementById('mandelImage')
 mCanvas.width  = DEFAULT_CANVAS_WIDTH
@@ -69,6 +82,7 @@ const start = async () => {
     PPU,
     DEFAULT_MAX_ITERS,
   )
+
   document.getElementById("runtime").innerHTML = microPrecision(performance.now() - start_time)
 
   // Transfer the relevant slice of shared memory to the image, then display it in the canvas
@@ -80,3 +94,17 @@ start()
 </script>
 </body>
 </html>
+```
+
+The JavaScript coding in this Web page does the following things:
+
+1. Defines a helper function and various constant values
+1. Access the HTML `canvas` element called `mandelImage`, defines its dimensions and works out how many WebAssembly memory pages will be needed for an image of that particular size
+1. Allocates the required amount of WebAssembly memory
+1. Defines a two-layer object that references the various host resources shared with the WebAssembly module
+1. Within an asynchronous function called `start`:
+    1. The WebAssembly module is instantiated
+    1. The WebAssembly function to generate the colour palette is called
+    1. Making a note of the start and end times, the WebAssembly function to generate the Mandelbrot set is called and the execution time displayed on the screen
+    1. The rendered image is displayed by transferring relevant slice of shared memory to the HTML `canvas` element
+1. Calls the asynchronous `start()` function

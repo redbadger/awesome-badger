@@ -20,4 +20,4 @@ Having created a file called `mandel_plot.wat`, start by defining the module and
 
 Notice how the two-layer namespace is used to identify each property in the JavaScript object we created called `host_fns`.
 
-> We have kept the WebAssembly global names the same as the JavaScript property names, so `$image_offset` has the same name as the `host_fns` property `js.image_offset` from which it has been derived; however, this has only been done for the sake of simplicity.  It is not a requirement.
+> We have kept the WebAssembly global names the same as the JavaScript property names, so `$image_offset` has the same name as the `host_fns` property `js.image_offset` from which its value has been obtained; however, this has only been done for the sake of simplicity.  It is not a requirement.

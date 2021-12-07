@@ -8,19 +8,20 @@
   (global $BLACK   i32 (i32.const 0xFF000000))
 
   ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  ;; Utility function used for colour component generation
+  ;; Derive a colour component from supplied iteration and threshold values
   (func $8_bit_clamp
     (param $n i32)
-    (param $diff i32)
+    (param $threshold i32)
     (result i32)
     (local $temp i32)
 
-    ;; Add colour-specific offset and mask out all but the junior 10 bits
-    ;; $temp = ($n + $diff) & 1023
-    (local.set $temp (i32.and (i32.add (local.get $n) (local.get $diff)) (i32.const 1023)))
+    ;; Add colour-specific threshold, then mask out all but the junior 10 bits
+    ;; $temp = ($n + $threshold) & 1023
+    (local.set $temp (i32.and (i32.add (local.get $n) (local.get $threshold)) (i32.const 1023)))
 
-    ;; If $temp uses at least 9 bits
+    ;; How many bits does $temp use?
     (if (result i32)
+      ;; At least 9 bits
       (i32.ge_u (local.get $temp) (i32.const 256))
       (then
         ;; If bit 10 is switched off invert value, else return zero
@@ -138,12 +139,11 @@
 
   ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   ;; Plot Mandelbrot set
-  (func $mandel_plot
-        (export "mandel_plot")
+  (func (export "mandel_plot")
         (param $width i32)          ;; Canvas width
         (param $height i32)         ;; Canvas height
-        (param $origin_x f64)       ;; X origin location
-        (param $origin_y f64)       ;; Y origin location
+        (param $origin_x f64)       ;; X origin coordinate
+        (param $origin_y f64)       ;; Y origin coordinate
         (param $ppu i32)            ;; Pixels per unit (zoom level)
         (param $max_iters i32)      ;; Maximum iteration count
     (local $x_pos i32)
@@ -154,9 +154,7 @@
     (local $temp_y_coord f64)
     (local $pixel_offset i32)
     (local $pixel_val i32)
-    (local $pixel_colour i32)
     (local $ppu_f64 f64)
-
     (local $half_width f64)
     (local $half_height f64)
 

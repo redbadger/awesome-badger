@@ -3,22 +3,25 @@
 ### Transform an Iteration Value to an RGBA[^1] Colour Value
 The coding that generates the colour palette does not need to be described in detail, suffice it to say that a single iteration value can be translated into the red, green and blue colour components by multiplying it by 4 (implemented as a shift left instruction), then passing it through an algorithm that derives an 8-bit value for each colour component using fixed thresholds.[^2]
 
+All of the coding that follows lives within the `module` defined in `mandel_plot.wat`
+
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;; Utility function used for colour component generation
+;; Derive a colour component from supplied iteration and threshold values
 (func $8_bit_clamp
       (param $n i32)
-      (param $diff i32)
+      (param $threshold i32)
       (result i32)
 
   (local $temp i32)
 
-  ;; Add colour-specific offset and take only the junior 10 bits
-  ;; $temp = ($n + $diff) & 1023
-  (local.set $temp (i32.and (i32.add (local.get $n) (local.get $diff)) (i32.const 1023)))
+  ;; Add colour-specific threshold, then mask out all but the junior 10 bits
+  ;; $temp = ($n + $threshold) & 1023
+  (local.set $temp (i32.and (i32.add (local.get $n) (local.get $threshold)) (i32.const 1023)))
 
-  ;; If $temp uses at least 9 bits
+  ;; How many bits does $temp use?
   (if (result i32)
+    ;; At least 9 bits
     (i32.ge_u (local.get $temp) (i32.const 256))
     (then
       ;; If bit 10 is switched off invert value, else return zero
@@ -33,7 +36,7 @@ The coding that generates the colour palette does not need to be described in de
 )
 ```
 
-With this 8-bit clamp in place, we create three colour functions:
+With this 8-bit clamp in place, we create three colour functions that use hard-coded colour thresholds:
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,7 +51,7 @@ Finally, we take each of the colour component values, shift them left by the app
 > ***IMPORTANT***
 > Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
 
- ```wat
+```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Transform an iteration value to an ABGR colour
 (func $colour
@@ -74,7 +77,7 @@ Finally, we take each of the colour component values, shift them left by the app
 
 ### Generate the Entire Colour Palette
 
-This particular colour generation algorithm produces colours that do not vary significantly as `max_iters` changes.  However, since we need to generate a lookup table that ranges from 1 to `max_iters`, each time `max_iters` changes, we will need to regenerate the entire colour palette.
+This particular palette generation algorithm produces colours that are distributed evenly across their range; therefore, changes to `max_iters` will not change the overall range of colours.  However, since we need to generate a lookup table that ranges from 0 to `max_iters`, each time `max_iters` changes, we will need to regenerate the entire colour palette.
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
