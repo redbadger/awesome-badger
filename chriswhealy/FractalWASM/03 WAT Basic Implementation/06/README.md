@@ -9,7 +9,7 @@ Now that the WebAssembly side of the coding has been written, we need an HTML pa
 
 In the above image, notice that without any optimisations, our basic implementation is pretty slow...
 
-[WAT Basic Implementation.html](wat-basic-implementation.html)
+[WAT Basic Implementation.html](../wat-basic-implementation.html)
 
 ```html
 <!DOCTYPE html>
@@ -99,12 +99,12 @@ start()
 The JavaScript coding in this Web page does the following things:
 
 1. Defines a helper function and various constant values
-1. Access the HTML `canvas` element called `mandelImage`, defines its dimensions and works out how many WebAssembly memory pages will be needed for an image of that particular size
+1. Accesses the HTML `canvas` element called `mandelImage`, defines its dimensions and works out how many WebAssembly memory pages will be needed for an image of that particular size
 1. Allocates the required amount of WebAssembly memory
-1. Defines a two-layer object that references the various host resources shared with the WebAssembly module
+1. Defines a two-layer object that references the various host resources being shared with the WebAssembly module
 1. Within an asynchronous function called `start`:
-    1. The WebAssembly module is instantiated
-    1. The WebAssembly function to generate the colour palette is called
-    1. Making a note of the start and end times, the WebAssembly function to generate the Mandelbrot set is called and the execution time displayed on the screen
-    1. The rendered image is displayed by transferring relevant slice of shared memory to the HTML `canvas` element
+    1. Instantiate the WebAssembly module
+    1. Call the WebAssembly function to generate the colour palette
+    1. Making a note of the start and end times, call the WebAssembly function to generate the Mandelbrot set and display the execution time
+    1. Display the rendered image by transferring relevant slice of shared memory to the HTML `canvas` element
 1. Calls the asynchronous `start()` function
