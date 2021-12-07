@@ -10,6 +10,14 @@
 
 ## Blogs
 
+### Plotting Fractals with WebAssembly
+
+If you have read the [Introduction to WebAssembly Text](./Introduction%20to%20WebAssembly%20Text/) blogs described below, then I trust you will also be interested in taking your knowledge another step further.
+
+This set of blogs builds a progressively more optimised set of WebAssembly Text programs that plot the Mandelbrot Set and multiple Julia Sets.
+
+[Plotting Fractals with WebAssembly](FractalWASM/README.md)
+
 ### Introduction to WebAssembly Text
 
 WebAssembly is usually thought of as simply a compilation target.  The usual workflow is that you write your application in some other language (such as Rust), then compile it to WebAssembly and have it run pretty much anywhere.
