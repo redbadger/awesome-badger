@@ -9,4 +9,4 @@ The image information created by WebAssembly is made available to JavaScript by 
 1. [Generate the Colour Palette](./03/README.md)
 1. [Escape-Time Algorithm](./04/README.md)
 1. [Calculating the Mandelbrot Set Image](./05/README.md)
-1. [Displaying the Rendered Fractal Image](./README.md)
+1. [Displaying the Rendered Fractal Image](./06/README.md)
