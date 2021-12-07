@@ -1,3 +1,8 @@
+| Previous | | Next
+|---|---|---
+| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
+| [Create the WebAssembly Module](../02/README.md) | [Up](../README.md) | [Escape-Time Algorithm](../04/README.md)
+
 ## 3.3: Generate the Colour Palette
 
 ### Transform an Iteration Value to an RGBA[^1] Colour Value

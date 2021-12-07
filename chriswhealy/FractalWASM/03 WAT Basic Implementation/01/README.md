@@ -1,3 +1,8 @@
+| Previous | | Next
+|---|---|---
+| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
+| | [Up](../README.md) | [Create the WebAssembly Module](../02/README.md)
+
 ## 3.1: Shared Memory
 
 ### How Much Shared Memory Do We Need?

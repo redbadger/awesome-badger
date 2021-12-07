@@ -1,3 +1,8 @@
+| Previous | | Next
+|---|---|---
+| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
+| [Escape-Time Algorithm](../04/README.md) | [Up](../README.md) | [Displaying the Rendered Fractal Image](../06/README.md)
+
 ## 3.5: Calculating the Mandelbrot Set Image
 
 Now that we have a bare-bones function to calculate the value of a single pixel, we can simply call this function for every pixel in the image.

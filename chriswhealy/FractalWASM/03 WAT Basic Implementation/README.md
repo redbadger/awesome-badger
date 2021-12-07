@@ -1,3 +1,7 @@
+| Previous | | Next
+|---|---|---
+| [Initial Implementation](../02%20Initial%20Implementation/README.md) | [Top](../README.md) | 
+
 # 3: Basic WAT Implementation
 
 Starting from a Web page written in HTML and JavaScript, we want to display an image of the Mandelbrot set; however, the CPU-intensive task of calculating the fractal image will not be implemented in JavaScript, but rather delegated to a WebAssembly program that we will now write.

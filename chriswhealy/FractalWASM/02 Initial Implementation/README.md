@@ -1,3 +1,7 @@
+| Previous | | Next
+|---|---|---
+| [Plotting Fractals](../01%20Plotting%20Fractals/README.md) | [Top](../README.md) | [WAT Basic Implementation](../03%20WAT%20Basic%20Implementation/README.md)
+
 # 2: Initial Implementation
 
 In its simplest form, the algorithm to plot either the Mandelbrot or Julia Sets is just a highly repetitive calculation known as an "*escape-time*" algorithm.  That is, it performs a feedback loop that continues until its value either escapes to infinity, or some arbitrary time limit is reached.

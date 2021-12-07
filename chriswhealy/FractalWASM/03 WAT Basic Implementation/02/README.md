@@ -1,3 +1,8 @@
+| Previous | | Next
+|---|---|---
+| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
+| [Shared memory](../01/README.md) | [Up](../README.md) | [Generate the Colour Palette](../03/README.md)
+
 ## 3.2: Create the WebAssembly Module
 
 At the end of [§3.1](../01/README.md) we assumed that our WebAssembly module would be called `mandel_plot.wasm`, so it would probably be a good idea to create this module now.

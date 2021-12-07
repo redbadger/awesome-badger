@@ -1,3 +1,8 @@
+| Previous | | Next
+|---|---|---
+| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
+| [Calculating the Mandelbrot Set Image](../05/README.md) | [Up](../README.md) |
+
 ## Displaying the Rendered Fractal Image
 
 Now that the WebAssembly side of the coding has been written, we need an HTML page to display the rendered image.

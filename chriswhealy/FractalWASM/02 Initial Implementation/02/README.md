@@ -1,3 +1,8 @@
+| Previous | | Next
+|---|---|---
+| [Plotting Fractals](../../01%20Plotting%20Fractals/README.md) | [Top](../../README.md) | [WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/README.md)
+| [Basic Escape-Time Implementation](../01/README.md) | [Up](../README.md) | 
+
 ## 2.2: Optimised Escape-Time Implementation
 
 As previously implemented, the `escapeTime` function uses a brute-force approach because the loop only stops when one of our two hard limits is exceeded.  Fortunately however, there are two simple checks we can perform that allow us to avoid running the expensive escape-time loop if the given point lies within either the main cardioid or the period 2 bulb.

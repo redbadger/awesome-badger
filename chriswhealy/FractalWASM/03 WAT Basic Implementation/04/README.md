@@ -1,3 +1,8 @@
+| Previous | | Next
+|---|---|---
+| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
+| [Generate the Colour Palette](../03/README.md) | [Up](../README.md) | [Calculating the Mandelbrot Set Image](../05/README.md)
+
 ## 3.4: Escape-Time Algorithm
 
 The next function we need to write is the escape-time algorithm that actually calculates the iteration value of a given pixel in the fractal image.  To start with, we will not worry about performance optimisations &mdash; these will be added later.

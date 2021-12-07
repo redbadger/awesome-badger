@@ -1,3 +1,7 @@
+| Previous | | Next
+|---|---|---
+| | [Top](../README.md) | [Initial Implementation](../02%20Initial%20Implementation/README.md)
+
 # 1: Plotting Fractals
 
 To create any sort of fractal image, it is necessary to repeatedly evaluate a function that takes a complex number as input and gives another complex number as output.  This output value is then fed back into the original equation and a new value is generated.
