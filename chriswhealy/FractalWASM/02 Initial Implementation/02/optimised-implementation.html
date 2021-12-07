@@ -17,8 +17,10 @@ const DEFAULT_Y_ORIGIN = 0
 const maxIters = 1000
 const bailout  = 4
 
-const pixel2XCoord = pos => DEFAULT_X_ORIGIN + ((pos - (CANVAS_WIDTH / 2)) / PPU)
-const pixel2YCoord = pos => DEFAULT_Y_ORIGIN + ((pos - (CANVAS_HEIGHT / 2)) / PPU)
+const pixelPos2Coord = (origin, dim) => pos => origin + ((pos - (dim / 2)) / PPU)
+
+const pixel2XCoord = pixelPos2Coord(DEFAULT_X_ORIGIN, CANVAS_WIDTH)
+const pixel2YCoord = pixelPos2Coord(DEFAULT_Y_ORIGIN, CANVAS_HEIGHT)
 
 const microPrecision = val => Math.round(val * 10000) / 10000
 
@@ -52,8 +54,8 @@ let buf8  = new Uint8ClampedArray(buf)
 let buf32 = new Uint32Array(buf)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Performance optimisation that calculates whether the current point lies within the Mandelbrot Set's main cardioid or
-// the period-2 bulb.  If it does, then we can bail out early
+// Performance optimisation to avoid running the escape-time algorithm
+// If the current point lies within the Mandelbrot Set's main cardioid or the period-2 bulb, then bail out early
 const sumOfSquares       = (val1, val2) => (val1 * val1) + (val2 * val2)
 const isInMainCardioid   = (x, y) => (temp => temp * (temp + x - 0.25) <= (y * y) / 4.0)(sumOfSquares(x - 0.25, y))
 const isInPeriod2Bulb    = (x, y) => sumOfSquares(x + 1.0, y) <= 0.0625

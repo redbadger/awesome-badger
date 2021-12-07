@@ -1,4 +1,4 @@
-# Implementation
+# 2: Initial Implementation
 
 In its simplest form, the algorithm to plot either the Mandelbrot or Julia Sets is just a highly repetitive calculation known as an "*escape-time*" algorithm.  That is, it performs a feedback loop that continues until its value either escapes to infinity, or some arbitrary time limit is reached.
 
