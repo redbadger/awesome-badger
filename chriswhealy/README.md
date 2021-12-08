@@ -12,7 +12,7 @@
 
 ### Plotting Fractals with WebAssembly
 
-If you have read the [Introduction to WebAssembly Text](./Introduction%20to%20WebAssembly%20Text/) blogs described below, then I trust you will also be interested in taking your knowledge another step further.
+If you have read the [Introduction to WebAssembly Text](./Introduction%20to%20WebAssembly%20Text/README.md) blogs described below, then I trust you will also be interested in taking your knowledge another step further.
 
 This set of blogs builds a progressively more optimised set of WebAssembly Text programs that plot the Mandelbrot Set and multiple Julia Sets.
 
@@ -26,7 +26,7 @@ This approach is fine&mdash;most of the time.
 
 However, there are circumstances in which you need to perform a highly repetitive, CPU-intensive task.  Under these conditions, you need to ensure that your application is as small and as fast as possible; and this is where you need to start writing in WebAssembly Text.
 
-[Introduction to WebAssembly Text](./Introduction%20to%20WebAssembly%20Text/)
+[Introduction to WebAssembly Text](./Introduction%20to%20WebAssembly%20Text/README.md)
 
 ### `toString || !toString`
 
@@ -42,7 +42,7 @@ However, there are circumstances in which you need to perform a highly repetitiv
 
 (with apologies to the Bard)
 
-[toString or not toString](./toStringOrNotToString/)
+[toString or not toString](./toStringOrNotToString/README.md)
 
 ### Porous Absorber Calculator
 
@@ -54,25 +54,25 @@ Then in 2019, when I started to learn Rust, I needed a real-life project to work
 
 The purpose of this blog is to describe how a Web-based app can be written in Rust, then compiled to WebAssembly and executed in the browser.
 
-[From Rust to the Browser via WebAssembly](./RustWASM/)
+[From Rust to the Browser via WebAssembly](./RustWASM/README.md)
 
 ### Understanding JavaScript
 
 This is a work-in-progress series of blogs on understanding various internal features of JavaScript
 
-1. [Type Coercion](./InsideJavaScript/01%20Type%20Coercion/)
+1. [Type Coercion](./InsideJavaScript/01%20Type%20Coercion/README.md)
 
     5th May 2020
 
     A somewhat light-hearted look at how type coercion works and some of its more unexpected consequences.
 
-1. [Objects and Arrays](./InsideJavaScript/02%20Objects%20and%20Arrays/)
+1. [Objects and Arrays](./InsideJavaScript/02%20Objects%20and%20Arrays/README.md)
 
     7th May 2020
 
     A look at how JavaScript Objects can be accessed as if they were arrays, and the fact that all JavaScript Arrays are in fact Objects.
 
-1. [Variable Hoisting](./InsideJavaScript/03%20Hoisting/)
+1. [Variable Hoisting](./InsideJavaScript/03%20Hoisting/README.md)
 
     8th May 2020
 

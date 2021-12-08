@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
+| [2: Initial Implementation](../02%20Initial%20Implementation/README.md) | [Up](../README.md) | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/README.md)
 
 # 3: Basic WAT Implementation
 
