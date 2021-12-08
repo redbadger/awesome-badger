@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
-| | [Up](../README.md) | [Create the WebAssembly Module](../02/README.md)
+| [2: Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
+| | [3: Basic WAT Implementation](../README.md) | [3.2: Create the WebAssembly Module](../02/README.md)
 
 ## 3.1: Shared Memory
 

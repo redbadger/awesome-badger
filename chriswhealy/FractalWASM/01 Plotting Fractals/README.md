@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| | [Top](../README.md) | [Initial Implementation](../02%20Initial%20Implementation/README.md)
+| | [Up](../README.md) | [2: Initial Implementation](../02%20Initial%20Implementation/README.md)
 
 # 1: Plotting Fractals
 

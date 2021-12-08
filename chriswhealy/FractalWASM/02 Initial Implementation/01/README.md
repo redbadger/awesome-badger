@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [Plotting Fractals](../../01%20Plotting%20Fractals/README.md) | [Top](../../README.md) | [WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/README.md)
-| | [Up](../README.md) | [Optimised Escape-Time Implementation](../02/README.md)
+| [1: Plotting Fractals](../../01%20Plotting%20Fractals/README.md) | [Up](../README.md) | [3: WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/README.md)
+| | [2: Initial Implementation](../README.md) | [2.2: Optimised Escape-Time Implementation](../02/README.md)
 
 ## 2.1: Basic Escape-Time Implementation
 

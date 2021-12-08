@@ -1,8 +1,4 @@
-| Previous | | Next
-|---|---|---
-| [Plotting Fractals](../01%20Plotting%20Fractals/README.md) | [Top](../README.md) | [Initial Implementation](../03%20WAT%20Basic%20Implementation/README.md)
-
-# 3: Plotting Fractals with WebAssembly
+# Plotting Fractals with WebAssembly
 
 ## Introduction
 

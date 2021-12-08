@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Top](../../README.md) | 
-| [Shared memory](../01/README.md) | [Up](../README.md) | [Generate the Colour Palette](../03/README.md)
+| [2: Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
+| [3.1: Shared memory](../01/README.md) | [3: Basic WAT Implementation](../README.md) | [3.3: Generate the Colour Palette](../03/README.md)
 
 ## 3.2: Create the WebAssembly Module
 
