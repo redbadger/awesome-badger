@@ -53,7 +53,7 @@ With this 8-bit clamp in place, we create three colour functions that use hard-c
 
 Finally, we take each of the colour component values, shift them left by the appropriate number of bits, then `OR` them all together to form the 32-bit colour value.
 
-> ***IMPORTANT***
+> ***IMPORTANT***  
 > Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
 
 ```wat

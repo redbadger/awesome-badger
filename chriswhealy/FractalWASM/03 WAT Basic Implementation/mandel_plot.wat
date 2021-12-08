@@ -193,9 +193,14 @@
                   )
                 )
 
-                ;; Check if iteration value equals max_iters
-                (if (i32.eq
-                      ;; Calculate the current pixel's iteration value
+                ;; Store the current pixel's colour using the value returned from the following if expression
+                (i32.store
+                  (local.get $pixel_offset)
+                  (if (result i32)
+                    ;; Does the current pixel hit max_iters?
+                    (i32.eq
+                      (local.get $max_iters)
+                      ;; Calculate the current pixel's iteration value and store in $pixel_val
                       (local.tee $pixel_val
                         (call $escape_time_mj
                           (local.get $x_coord) (local.get $y_coord)
@@ -203,16 +208,12 @@
                           (local.get $max_iters)
                         )
                       )
-                      (local.get $max_iters)
                     )
-                  (then
-                    ;; Any pixel that hits $max_iters is arbitrarily set to black
-                    (i32.store (local.get $pixel_offset) (global.get $BLACK))
-                  )
-                  (else
-                    ;; Lookup the relevant colour from the palette and store it as the current image pixel
-                    (i32.store
-                      (local.get $pixel_offset)
+                    ;; Yup, so return black
+                    (then (global.get $BLACK))
+                    ;; Nope, so return whatever colour corresponds to this iteration value
+                    (else
+                      ;; Push the relevant colour from the palette onto the stack
                       (i32.load
                         (i32.add (global.get $palette_offset) (i32.shl (local.get $pixel_val) (i32.const 2)))
                       )
