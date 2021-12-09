@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/README.md) | [Up](../README.md) | 
+| [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/) | [Up](../) | 
 
 ## 5: Plotting a Julia Set
 
@@ -12,8 +12,8 @@ This is where we will start to see the benefits of writing in WebAssembly Text, 
 
 We need to make two sets of changes:
 
-1. [Web Page Changes](./01/README.md)
-1. [WebAssembly Changes](./02/README.md)
+1. [Web Page Changes](./01/)
+1. [WebAssembly Changes](./02/)
 
 Here's a working version of the [Mandelbrot Set with Dynamic Julia Sets](mb-julia-set.html)
 
@@ -38,4 +38,4 @@ drwxr-xr-x   3 chris  staff     96  9 Dec 14:42 02
 
 Wow! Only 712 bytes!
 
-Compare this with the 74Kb module created by `wasm-pack` from a Rust implementation mentioned in the [introduction](../README.md).
+Compare this with the 74Kb module created by `wasm-pack` from a Rust implementation mentioned in the [introduction](../).

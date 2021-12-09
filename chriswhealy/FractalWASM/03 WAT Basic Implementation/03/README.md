@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
-| [3.2: Create the WebAssembly Module](../02/README.md) | [3: Basic WAT Implementation](../README.md) | [3.4: Escape-Time Algorithm](../04/README.md)
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [3.2: Create the WebAssembly Module](../02/) | [3: Basic WAT Implementation](../) | [3.4: Escape-Time Algorithm](../04/)
 
 ## 3.3: Generate the Colour Palette
 
@@ -112,7 +112,7 @@ There are a couple of things to notice about this function:
 
 1. Since this function will only be invoked from the host environment, the internal name has been omitted and only an exported name has been defined.
 1. This function does not return a specific value, it writes to shared memory; therefore, it has no `result` clause.
-1. In [§3.2](../02/README.md), at the start of the module we defined a global constant called `$palette_offset` whose value is imported from the host environment as property `js.palette_offset`.  This value acts as the starting point for calculating where the next `i32` colour value will be written in memory
+1. In [§3.2](../02/), at the start of the module we defined a global constant called `$palette_offset` whose value is imported from the host environment as property `js.palette_offset`.  This value acts as the starting point for calculating where the next `i32` colour value will be written in memory
 1. The loop labeled `$next` continues until our index counter `$idx` exceeds the supplied value of `max_iters`
 1. The `i32.store` instruction writes a 4 byte value to memory.  The first argument is the memory offset and the second is the value being stored.  
 

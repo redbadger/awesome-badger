@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
-| [3.4: Escape-Time Algorithm](../04/README.md) | [3: Basic WAT Implementation](../README.md) | [3.6: Displaying the Rendered Fractal Image](../06/README.md)
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [3.4: Escape-Time Algorithm](../04/) | [3: Basic WAT Implementation](../) | [3.6: Displaying the Rendered Fractal Image](../06/)
 
 ## 3.5: Calculating the Mandelbrot Set Image
 
