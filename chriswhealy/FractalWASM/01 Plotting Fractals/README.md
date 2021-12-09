@@ -31,7 +31,6 @@ The [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set) is created as
    
    Repeatedly derive <tt>Z<sub>n+1</sub></tt> by passing <tt>Z<sub>n</sub></tt> into the equation (counting the number of iterations) until either `|Z| > bailout` or we hit the iteration limit defined by `max_iters`
 
-
 1. Colour each pixel according to the number of times the equation is iterated.  
    Any pixel whose iteration value hits the `max_iters` limit is arbitrarily coloured black.  
    The other pixels can be coloured according whatever aesthetically pleasing colour scheme you choose
@@ -43,7 +42,3 @@ The [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set) is created as
 For every point on the Mandelbrot Set, there is a corresponding [Julia Set](https://en.wikipedia.org/wiki/Julia_set).  This means that there are an infinite number of possible Julia Sets, and the one shown here corresponds to the location (-0.755, -0.19) on the Mandelbrot Set.
 
 ![Julia Set](Julia%20Set.png)
-
-In the equation used to plot the Mandelbrot Set, if <tt>Z<sub>0</sub></tt> is given an initial starting value of 0, then the resulting image is the Mandelbrot set.  However, if <tt>Z<sub>0</sub></tt> is set to some other complex number, then we get a Julia Set.
-
-Therefore, as you move the mouse pointer over the Mandelbrot Set, we set <tt>Z<sub>0</sub></tt> equal to the mouse pointer location and a completely new Julia Set emerges.

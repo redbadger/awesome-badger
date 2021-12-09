@@ -15,7 +15,7 @@ When looking through the coding below, the following points are important:
     1.  How to transform an image pixel location to a corresponding coordinate in the complex plane.  Hence we must supply values for arguments `$origin_x` and `$origin_y`.  These arguments identify the X and Y coordinates of the central pixel in the image
     1. What zoom level is the image being rendered at.  Hence we must supply a value for argument `$ppu` (or pixels per unit).  By default, each unit on the complex plane is subdivided into 200 pixels; hence `$ppu = 200`
 1. The basic structure here follows that already seen in the JavaScript implementation: a pair of nested loops.
-1. Certain optimisations have been implemented in order to avoid recalculating the same value multiple times.  E.G `$half_width`, `$half_height`, `$temp_x_coord` and `$temp_y_coord`
+1. Certain optimisations have been implemented in order to avoid recalculating the same value multiple times.  E.G `$half_width`, `$half_height`, `$cx_int` and `$cy_int`
 1. It is very important to remember that the `$x_pos` and `$y_pos` loop counters are integers, but the escape-time algorithm requires coordinate values.  This means two things:
     1. Each index value must be transformed from a pixel location on the image, to a coordinate in the complex plane
     1. Coordinates are floating point numbers, not integers.  Therefore, we must employ type-conversion instructions (such as `f64.convert_i32_u`) to convert unsigned 32-bit integers into 64-bit floating points.  
@@ -39,10 +39,10 @@ When looking through the coding below, the following points are important:
 
   (local $x_pos i32)
   (local $y_pos i32)
-  (local $x_coord f64)
-  (local $y_coord f64)
-  (local $temp_x_coord f64)
-  (local $temp_y_coord f64)
+  (local $cx f64)
+  (local $cy f64)
+  (local $cx_int f64)
+  (local $cy_int f64)
   (local $pixel_offset i32)
   (local $pixel_val i32)
   (local $ppu_f64 f64)
@@ -57,17 +57,17 @@ When looking through the coding below, the following points are important:
 
   ;; Intermediate X and Y coords based on static values
   ;; $origin - ($half_dimension / $ppu)
-  (local.set $temp_x_coord (f64.sub (local.get $origin_x) (f64.div (local.get $half_width) (local.get $ppu_f64))))
-  (local.set $temp_y_coord (f64.sub (local.get $origin_y) (f64.div (local.get $half_height) (local.get $ppu_f64))))
+  (local.set $cx_int (f64.sub (local.get $origin_x) (f64.div (local.get $half_width) (local.get $ppu_f64))))
+  (local.set $cy_int (f64.sub (local.get $origin_y) (f64.div (local.get $half_height) (local.get $ppu_f64))))
 
   (loop $rows
     ;; Continue plotting rows?
     (if (i32.gt_u (local.get $height) (local.get $y_pos))
       (then
         ;; Translate y position to y coordinate
-        (local.set $y_coord
+        (local.set $cy
           (f64.add
-            (local.get $temp_y_coord)
+            (local.get $cy_int)
             (f64.div (f64.convert_i32_u (local.get $y_pos)) (local.get $ppu_f64))
           )
         )
@@ -77,9 +77,9 @@ When looking through the coding below, the following points are important:
           (if (i32.gt_u (local.get $width) (local.get $x_pos))
             (then
               ;; Translate x position to x coordinate
-              (local.set $x_coord
+              (local.set $cx
                 (f64.add
-                  (local.get $temp_x_coord)
+                  (local.get $cx_int)
                   (f64.div (f64.convert_i32_u (local.get $x_pos)) (local.get $ppu_f64))
                 )
               )
@@ -94,7 +94,7 @@ When looking through the coding below, the following points are important:
                     ;; Calculate the current pixel's iteration value and store in $pixel_val
                     (local.tee $pixel_val
                       (call $escape_time_mj
-                        (local.get $x_coord) (local.get $y_coord)
+                        (local.get $cx) (local.get $cy)
                         (f64.const 0) (f64.const 0)
                         (local.get $max_iters)
                       )

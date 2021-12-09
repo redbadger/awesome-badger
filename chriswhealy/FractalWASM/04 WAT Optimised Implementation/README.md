@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [3: Basic WAT Implementation](../03%20WAT%20Basic%20Implementation/README.md) | [Up](../README.md) | 
+| [3: Basic WAT Implementation](../03%20WAT%20Basic%20Implementation/README.md) | [Up](../README.md) | [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/README.md)
 
 ## 4: Optimised WAT Implementation
 

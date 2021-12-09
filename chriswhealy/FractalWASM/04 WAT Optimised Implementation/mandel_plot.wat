@@ -85,48 +85,39 @@
 
   ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   ;; Escape time algorithm for calculating either the Mandelbrot or Julia sets
+  ;; Iterates z[n]^2 + c => z[n+1]
   (func $escape_time_mj
-        (param $mandel_x f64)
-        (param $mandel_y f64)
-        (param $x f64)
-        (param $y f64)
+        (param $zx f64)
+        (param $zy f64)
+        (param $cx f64)
+        (param $cy f64)
         (param $max_iters i32)
         (result i32)
 
     (local $iters i32)
-    (local $new_x f64)
-    (local $new_y f64)
-    (local $x_sqr f64)
-    (local $y_sqr f64)
+    (local $zx_sqr f64)
+    (local $zy_sqr f64)
 
     (loop $next_iter
-      ;; Store x^2 and y^2 values
-      (local.set $x_sqr (f64.mul (local.get $x) (local.get $x)))
-      (local.set $y_sqr (f64.mul (local.get $y) (local.get $y)))
+      ;; Remember the squares of the current $zx and $zy values
+      (local.set $zx_sqr (f64.mul (local.get $zx) (local.get $zx)))
+      (local.set $zy_sqr (f64.mul (local.get $zy) (local.get $zy)))
 
-      ;; Should the loop be continued?
+      ;; Only continue the loop if we're still within both the bailout value and the iteration limit
       (if
-        ;; Continue as long as $BAILOUT > ($x^2 + $y^2) and $max_iters > $iters
         (i32.and
-          (f64.gt (global.get $BAILOUT) (f64.add (local.get $x_sqr) (local.get $y_sqr)))
+          ;; $BAILOUT > ($zx_sqr + $zy_sqr)?
+          (f64.gt (global.get $BAILOUT) (f64.add (local.get $zx_sqr) (local.get $zy_sqr)))
+
+          ;; $max_iters > iters?
           (i32.gt_u (local.get $max_iters) (local.get $iters))
         )
         (then
-          ;; $new_x = $mandel_x + ($x^2 - $y^2)
-          (local.set $new_x
-            (f64.add
-              (local.get $mandel_x)
-              (f64.sub (local.get $x_sqr) (local.get $y_sqr))
-            )
-          )
-          ;; $new_y = $mandel_y + ($y * 2 * $x)
-          (local.set $new_y
-            (f64.add (local.get $mandel_y)
-                     (f64.mul (local.get $y) (f64.add (local.get $x) (local.get $x)))
-            )
-          )
-          (local.set $x (local.get $new_x))
-          (local.set $y (local.get $new_y))
+          ;; $zy = $cy + (2 * $zy * $zx)
+          (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
+          ;; $zx = $cx + ($zx_sqr - $zy_sqr)
+          (local.set $zx (f64.add (local.get $cx) (f64.sub (local.get $zx_sqr) (local.get $zy_sqr))))
+
           (local.set $iters (i32.add (local.get $iters) (i32.const 1)))
 
           br $next_iter
@@ -202,10 +193,10 @@
         (param $max_iters i32)      ;; Maximum iteration count
     (local $x_pos i32)
     (local $y_pos i32)
-    (local $x_coord f64)
-    (local $y_coord f64)
-    (local $temp_x_coord f64)
-    (local $temp_y_coord f64)
+    (local $cx f64)
+    (local $cy f64)
+    (local $cx_int f64)
+    (local $cy_int f64)
     (local $pixel_offset i32)
     (local $pixel_val i32)
     (local $ppu_f64 f64)
@@ -220,17 +211,17 @@
 
     ;; Intermediate X and Y coords based on static values
     ;; $origin - ($half_dimension / $ppu)
-    (local.set $temp_x_coord (f64.sub (local.get $origin_x) (f64.div (local.get $half_width) (local.get $ppu_f64))))
-    (local.set $temp_y_coord (f64.sub (local.get $origin_y) (f64.div (local.get $half_height) (local.get $ppu_f64))))
+    (local.set $cx_int (f64.sub (local.get $origin_x) (f64.div (local.get $half_width) (local.get $ppu_f64))))
+    (local.set $cy_int (f64.sub (local.get $origin_y) (f64.div (local.get $half_height) (local.get $ppu_f64))))
 
     (loop $rows
       ;; Continue plotting rows?
       (if (i32.gt_u (local.get $height) (local.get $y_pos))
         (then
           ;; Translate y position to y coordinate
-          (local.set $y_coord
+          (local.set $cy
             (f64.add
-              (local.get $temp_y_coord)
+              (local.get $cy_int)
               (f64.div (f64.convert_i32_u (local.get $y_pos)) (local.get $ppu_f64))
             )
           )
@@ -240,9 +231,9 @@
             (if (i32.gt_u (local.get $width) (local.get $x_pos))
               (then
                 ;; Translate x position to x coordinate
-                (local.set $x_coord
+                (local.set $cx
                   (f64.add
-                    (local.get $temp_x_coord)
+                    (local.get $cx_int)
                     (f64.div (f64.convert_i32_u (local.get $x_pos)) (local.get $ppu_f64))
                   )
                 )
@@ -252,7 +243,7 @@
                   (local.get $pixel_offset)
                   (if (result i32)
                     ;; Can we avoid running the escape-time algorithm?
-                    (call $early_bailout (local.get $x_coord) (local.get $y_coord))
+                    (call $early_bailout (local.get $cx) (local.get $cy))
                     ;; Yup, so we know this pixel will be black
                     (then (global.get $BLACK))
                     ;; Nope, we can't bail out early
@@ -264,8 +255,8 @@
                           ;; Calculate the current pixel's iteration value and store in $pixel_val
                           (local.tee $pixel_val
                             (call $escape_time_mj
-                              (local.get $x_coord) (local.get $y_coord)
                               (f64.const 0) (f64.const 0)
+                              (local.get $cx) (local.get $cy)
                               (local.get $max_iters)
                             )
                           )

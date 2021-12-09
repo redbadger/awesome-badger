@@ -24,59 +24,52 @@ This coding style is used here.
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Escape time algorithm for calculating either the Mandelbrot or Julia sets
+;; Iterates z[n]^2 + c => z[n+1]
 (func $escape_time_mj
-      (param $mandel_x f64)
-      (param $mandel_y f64)
-      (param $x f64)
-      (param $y f64)
+      (param $zx f64)
+      (param $zy f64)
+      (param $cx f64)
+      (param $cy f64)
       (param $max_iters i32)
       (result i32)
 
   (local $iters i32)
-  (local $new_x f64)
-  (local $new_y f64)
-  (local $x_sqr f64)
-  (local $y_sqr f64)
+  (local $zx_sqr f64)
+  (local $zy_sqr f64)
 
   (loop $next_iter
-    ;; Store x^2 and y^2 values
-    (local.set $x_sqr (f64.mul (local.get $x) (local.get $x)))
-    (local.set $y_sqr (f64.mul (local.get $y) (local.get $y)))
-    
+    ;; Remember the squares of the current $zx and $zy values
+    (local.set $zx_sqr (f64.mul (local.get $zx) (local.get $zx)))
+    (local.set $zy_sqr (f64.mul (local.get $zy) (local.get $zy)))
+
     ;; Only continue the loop if we're still within both the bailout value and the iteration limit
     (if
-      ;; Continue as long as $BAILOUT > ($x^2 + $y^2) and $max_iters > $iters
       (i32.and
-        (f64.gt (global.get $BAILOUT) (f64.add (local.get $x_sqr) (local.get $y_sqr)))
+        ;; $BAILOUT > ($zx_sqr + $zy_sqr)?
+        (f64.gt (global.get $BAILOUT) (f64.add (local.get $zx_sqr) (local.get $zy_sqr)))
+        
+        ;; $max_iters > iters?
         (i32.gt_u (local.get $max_iters) (local.get $iters))
-    )
-    (then
-        ;; $new_x = $mandel_x + ($x^2 - $y^2)
-        (local.set $new_x
-          (f64.add
-            (local.get $mandel_x)
-            (f64.sub (local.get $x_sqr) (local.get $y_sqr))
-          )
-        )
-        ;; $new_y = $mandel_y + ($y * 2 * $x)
-        (local.set $new_y
-          (f64.add (local.get $mandel_y)
-                   (f64.mul (local.get $y) (f64.add (local.get $x) (local.get $x)))
-          )
-        )
-        (local.set $x (local.get $new_x))
-        (local.set $y (local.get $new_y))
+      )
+      (then
+        ;; $zy = $cy + (2 * $zy * $zx)
+        (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
+        ;; $zx = $cx + ($zx_sqr - $zy_sqr)
+        (local.set $zx (f64.add (local.get $cx) (f64.sub (local.get $zx_sqr) (local.get $zy_sqr))))
+        
         (local.set $iters (i32.add (local.get $iters) (i32.const 1)))
-
+        
         br $next_iter
       )
     )
   )
-
+  
   (local.get $iters)
 )
 ```
 
-The mechanics of the actual calculation are not particularly important; however, there is an important difference between this function and the others we've written so far; that is, this one works with both `f64` floating point values and `i32` integer values.
+This function takes two complex numbers `z` and `c` and repeatedly squares `z` and adds `c` until one of the continuation conditions become false.  However, since WebAssembly has no complex number datatype, the real and imaginary parts or complex arguments `z` and `c` are supplied as two pairs of `f64`s: `zx` and `zy`, and `cx` and `cy`.
 
-The point to understand here is that we must now be careful how we use each of the local variables, because any particular instruction cannot use arguments of mixed datatype.
+Certain optimisations have been added to avoid the need for either expensive function calls or repetitive calculations.
+
+For instance, testing the magnitude of a complex number requires the use of the Pythagorean formula (`a = sqrt(b^2 + c^2)`).  Not only is the call to `sqrt` expensive, but in our case, it is actually unnecessary since we only need to check that the sum of the squares (`a^2 + b^2`) is less than the square of the bailout value.  Hence the global value `$BAILOUT` is set to `4` not `2`
