@@ -15,3 +15,4 @@ To achieve this, we need to do the following:
 1. [Check for Early Bailout](./01/)
 1. [Modify Render Loop](./02/)
 
+Here's an implementation of the [optimised WAT coding](wat-optimised-implementation.html)

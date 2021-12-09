@@ -21,7 +21,7 @@ Here's a working version of the [Mandelbrot Set with Dynamic Julia Sets](mb-juli
 
 Good question, glad you asked...  😃
 
-We now have a single WebAssembly module that can plot both the Mandelbrot and Julia Sets, it is worth looking at the size of the compile module:
+Now that we have a single WebAssembly module that can plot both the Mandelbrot and Julia Sets, it is worth looking at the size of the compiled module:
 
 ```bash
 $ ll
