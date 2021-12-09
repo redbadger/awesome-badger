@@ -11,10 +11,10 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
 
 | Argument | Description | Notes
 |---|---|---
-| `$mandel_x` | Current pixel X coordinate | Derived from image pixel X location
-| `$mandel_y` | Current pixel Y coordinate | Derived from image pixel Y location
-| `$x` | Pointer X position on Mandelbrot Set | Always zero when plotting the Mandelbrot Set
-| `$y` | Pointer Y position on Mandelbrot Set | Always zero when plotting the Mandelbrot Set
+| `$zx` | Real part of Iterated value | For the Mandelbrot Set, `z` always starts at 0
+| `$zy` | Imaginary part of iterated value | For the Mandelbrot Set, `z` always starts at 0
+| `$cx` | Pixel X coordinate | Caller must transform pixel location to a coordinate
+| `$cy` | Pixel Y coordinate | Caller must transform pixel location to a coordinate
 | `$max_iters` | Iteration limit |
 
 If you have read [§8](Introduction%20to%20WebAssembly%20Text/08/README.md) on Loops from the blog series [Introduction to WebAssembly Text](Introduction%20to%20WebAssembly%20Text/README.md), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.

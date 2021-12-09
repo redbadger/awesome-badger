@@ -9,7 +9,7 @@ Our existing WebAssembly function `mandel_plot` is already very close to what we
 
 #### Rename Function To `mj_plot`
 
-Since the function that calculates a fractal image is now a dual-purpose, this should be reflected in the name.
+Since the function that calculates fractal images is now dual-purpose, this functionality should be reflected in the name.
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -24,8 +24,8 @@ Since the function that calculates a fractal image is now a dual-purpose, this s
 When we were only plotting the Mandelbrot Set, we didn't care about what type of image we were plotting, or where the mouse pointer was located over that image.  However, in order to plot a Julia Set, we now need to know some extra values:
 
 1. The mouse pointer's coordinates are supplied as two `f64` values called `zx` and `zy`
-1. A Boolean argument called `is_mandelbrot` to say whether a Mandelbrot or Julia Set calculation is performed[^1]
-1. An `i32` argument holding the offset in memory where the particular image data starts.[^2]
+1. A Boolean argument is supplied called `is_mandelbrot` that says whether or not the Mandelbrot Set is being calculated[^1]
+1. An `i32` argument is supplied called `image_offset` that holds the offset in memory where this particular image's data starts.[^2]
 
 The function signature has now expanded and looks like this:
 
@@ -95,5 +95,5 @@ Hence the call to `escape_time_mj` contains an `if` expression that reverses the
 
 
 
-[^1]: This is needed because the performance optimisation to check whether a point lies in the main cardioid or the period 2 bulb is only relevant for the Mandelbrot Set
+[^1]: This is needed because the early bailout check is only relevant for the Mandelbrot Set
 [^2]: Now that function `mj_plot` is used to plot both types of fractal, it is simpler to supply the memory offset at which the image data should be written as an argument, rather than trying to decide which of several possible memory offsets should be used that have been supplied from the host environment.

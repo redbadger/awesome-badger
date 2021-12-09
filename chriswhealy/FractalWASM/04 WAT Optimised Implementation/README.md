@@ -6,7 +6,9 @@
 
 Now that we have a working implementation, let's add an optimisation that will greatly improve performance.
 
-As it mentioned in [§2.2](../02%20Initial%20Implementation/02/README.md), there are certain locations on the Mandelbrot Set where we know that the escape-time algorithm will always escape to infinity.  Therefore, to improve performance, we will first test whether the current pixel falls within one of these areas.  If it does, we can save ourselves the cost of running an expensive algorithm because we already know the outcome &mdash; black.
+As it mentioned in [§2.2](../02%20Initial%20Implementation/02/README.md), there are certain locations on the Mandelbrot Set where we know that the escape-time algorithm will never escape to infinity.  Unfortunately, our simplistic escape-time algorithm cannot know this until it has repeated the loop `max_iters` time.  This is a big waste of time, since we already know that this particular pixel will be black.
+
+Therefore, to improve performance, we will first test whether the current pixel falls within one of these areas.  If it does, we can bail out early.
 
 To achieve this, we need to do the following:
 

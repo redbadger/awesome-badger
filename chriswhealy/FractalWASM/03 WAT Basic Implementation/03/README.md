@@ -5,7 +5,7 @@
 
 ## 3.3: Generate the Colour Palette
 
-### Transform an Iteration Value to an RGBA[^1] Colour Value
+### Transform an Iteration Value into an RGBA[^1] Colour Value
 The coding that generates the colour palette does not need to be described in detail, suffice it to say that a single iteration value can be translated into the red, green and blue colour components by multiplying it by 4 (implemented as a shift left instruction), then passing it through an algorithm that derives an 8-bit value for each colour component using fixed thresholds.[^2]
 
 All of the coding that follows lives within the `module` defined in `mandel_plot.wat`

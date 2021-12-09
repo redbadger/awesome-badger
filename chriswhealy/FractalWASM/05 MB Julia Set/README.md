@@ -15,3 +15,5 @@ We need to make two sets of changes:
 1. [Web Page Changes](./01/README.md)
 1. [WebAssembly Changes](./02/README.md)
 
+Here's a working version of the [Mandelbrot Set with Dynamic Julia Sets](mb-julia-set.html)
+
