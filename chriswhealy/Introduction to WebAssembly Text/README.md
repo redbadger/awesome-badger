@@ -16,9 +16,9 @@ This introduction to WebAssembly Text serves as the starting point for subsequen
 ## Table of Contents
 
 - [Prerequisites](00/README.md)
-- [Benefits of WebAssembly](01/README.md)
-- [Creating a WebAssembly Module](02/README.md)
-- [Calling WebAssembly from a Host Environment](03/README.md)
+- [Benefits of WebAssembly](./01/README.md)
+- [Creating a WebAssembly Module](./02/README.md)
+- [Calling WebAssembly from a Host Environment](./03/README.md)
 - [WAT Datatypes](04/README.md)
 - [Local Variables](05/README.md)
 - [Arrangement of WAT Instructions](06/README.md)

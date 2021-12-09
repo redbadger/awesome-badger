@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Basic Implementation of the Mandelbrot Set</title>
+</head>
+<body>
+  <canvas id="mandelImage" style="border: 1px solid black"></canvas>
+  <div>Mandelbrot Set rendered in <span id="runtime"></span>ms</div>
+<script>
+const CANVAS_WIDTH     = 800
+const CANVAS_HEIGHT    = 450
+const PPU              = CANVAS_WIDTH / 4  // Pixels per unit in the complex plane (zoom level)
+const DEFAULT_X_ORIGIN = -0.5
+const DEFAULT_Y_ORIGIN = 0
+
+const maxIters = 1000
+const bailout  = 4
+
+const pixelPos2Coord = (origin, dim) => pos => origin + ((pos - (dim / 2)) / PPU)
+
+const pixel2XCoord = pixelPos2Coord(DEFAULT_X_ORIGIN, CANVAS_WIDTH)
+const pixel2YCoord = pixelPos2Coord(DEFAULT_Y_ORIGIN, CANVAS_HEIGHT)
+
+const microPrecision = val => Math.round(val * 10000) / 10000
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Colour palette functions
+const shift_and_cap = diff => n => {
+  let temp = (n + diff) & 1023
+  return (temp >= 256) ? (temp < 512) ? 510 - temp : 0 : temp
+}
+
+const red   = shift_and_cap(0)
+const green = shift_and_cap(128)
+const blue  = shift_and_cap(356)
+
+const iter2Colour = iter => {
+  let iter4 = iter * 4
+  // Calculate colour components and merge with default opacity
+  return 0xFF000000 | (blue(iter4) << 16) | (green(iter4) << 8) | red(iter4)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Canvas
+const mCanvas  = document.getElementById('mandelImage')
+mCanvas.width  = CANVAS_WIDTH
+mCanvas.height = CANVAS_HEIGHT
+const mContext = mCanvas.getContext('2d')
+const mImage   = mContext.createImageData(mCanvas.width, mCanvas.height)
+
+let buf   = new ArrayBuffer(mImage.data.length)
+let buf8  = new Uint8ClampedArray(buf)
+let buf32 = new Uint32Array(buf)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+const escapeTime = (xPixel, yPixel) => {
+  let x0 = pixel2XCoord(xPixel)
+  let y0 = pixel2YCoord(yPixel)
+  let xTemp = 0
+  let iterCount = 0
+  let x  = 0
+  let y  = 0
+
+  while (x*x + y*y < bailout && iterCount < maxIters) {
+    xTemp = x*x - y*y + x0
+    y = 2*x*y + y0
+    x = xTemp
+    iterCount += 1
+  }
+
+  return iterCount
+}
+
+let start = performance.now()
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Unoptimised loop to plot the Mandelbrot set
+for (let iy = 0; iy < mCanvas.height; ++iy) {
+  for (let ix = 0; ix < mCanvas.width; ++ix) {
+    // Get the iteration value of the current pixel
+    let iter = escapeTime(ix, iy)
+
+    // Translate the iteration value into a colour
+    let colour = iter === maxIters ? 0xFF000000 : iter2Colour(iter)
+
+    // Write the 4-byte colour data to the ArrayBuffer using the 32-bit overlay
+    buf32[iy * mCanvas.width + ix] = colour
+  }
+}
+
+document.getElementById("runtime").innerHTML = microPrecision(performance.now() - start)
+
+// Transfer the ArrayBuffer data into the image, then display it in the canvas
+mImage.data.set(buf8)
+mContext.putImageData(mImage, 0, 0)
+</script>
+</body>
+</html>

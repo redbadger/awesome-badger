@@ -8,6 +8,9 @@ Assorted thinking (mostly) about technology written by [the Badgers](https://red
 
 <!-- insert new posts at the top -->
 
+
+- 2021-12-07 - [Plotting Fractals in WebAssembly](./chriswhealy/FractalWASM) by [Chris W][chrisw]
+
 - 2021-11-24 - [Introduction to WebAssembly Text](./chriswhealy/Introduction%20to%20WebAssembly%20Text) by [Chris W][chrisw]
 
 - 2021-11-12 - [Write better build scripts](./stuartharris/build-scripts) by [Stu][stu]
