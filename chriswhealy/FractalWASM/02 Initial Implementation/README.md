@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [1: Plotting Fractals](../01%20Plotting%20Fractals/README.md) | [Up](../README.md) | [3: Basic WAT Implementation](../03%20WAT%20Basic%20Implementation/README.md)
+| [1: Plotting Fractals](../01%20Plotting%20Fractals/) | [Up](../) | [3: Basic WAT Implementation](../03%20WAT%20Basic%20Implementation/)
 
 # 2: Initial Implementation
 
@@ -19,7 +19,7 @@ However, before diving into the WebAssembly Text coding, let's first look at the
 
 Before diving directly into the WAT coding, it is helpful to see the basic implementation in JavaScript.  Firstly, this will help you become familiar with overall structure of the solution, and secondly, it will act as a point of reference if you get lost when looking at the WebAssembly Text implementation.
 
-* [2.1 Basic Escape-Time Implementation](./01/README.md)
-* [2.2 Optimised Escape-Time Implementation](./02/README.md)
+* [2.1 Basic Escape-Time Implementation](./01/)
+* [2.2 Optimised Escape-Time Implementation](./02/)
 
 

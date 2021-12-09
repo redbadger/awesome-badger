@@ -23,11 +23,11 @@ So as a matter of both curiosity and education, I set about re-implementing this
 The results are encouraging.  I've got the `.wasm` file down to just 940 bytes...
 
 # Table of Contents
-1. [Plotting Fractals](./01%20Plotting%20Fractals/README.md)
-1. [Initial Implementation](./02%20Initial%20Implementation/README.md)
-1. [Basic WAT Implementation](./03%20WAT%20Basic%20Implementation/README.md)
-1. [Optimised WAT Implementation](./04%20WAT%20Optimised%20Implementation/README.md)
-1. [Plotting a Julia Set](./05%20MB%20Julia%20Set/README.md)
+1. [Plotting Fractals](./01%20Plotting%20Fractals/)
+1. [Initial Implementation](./02%20Initial%20Implementation/)
+1. [Basic WAT Implementation](./03%20WAT%20Basic%20Implementation/)
+1. [Optimised WAT Implementation](./04%20WAT%20Optimised%20Implementation/)
+1. [Plotting a Julia Set](./05%20MB%20Julia%20Set/)
 
 
 

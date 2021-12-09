@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/README.md) | [Up](../../README.md) | 
-| [4.1 Check for Early Bailout](../01/README.md) | [4: Optimised WAT Implementation](../README.md) | 
+| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Up](../../) | 
+| [4.1 Check for Early Bailout](../01/) | [4: Optimised WAT Implementation](../) | 
 
 ### 4.2: Modify Render Loop
 

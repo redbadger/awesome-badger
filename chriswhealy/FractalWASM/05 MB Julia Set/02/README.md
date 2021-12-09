@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/README.md) | [Up](../../README.md) | 
-| [5.1 Web Page Changes](../01/README.md) | [5: Plotting a Julia Set](../README.md) | 
+| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Up](../../) | 
+| [5.1 Web Page Changes](../01/) | [5: Plotting a Julia Set](../) | 
 
 ### 5.2: WebAssembly Changes
 

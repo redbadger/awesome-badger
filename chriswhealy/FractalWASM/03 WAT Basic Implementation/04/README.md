@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
-| [3.3: Generate the Colour Palette](../03/README.md) | [3: Basic WAT Implementation](../README.md) | [3.5: Calculating the Mandelbrot Set Image](../05/README.md)
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [3.3: Generate the Colour Palette](../03/) | [3: Basic WAT Implementation](../) | [3.5: Calculating the Mandelbrot Set Image](../05/)
 
 ## 3.4: Escape-Time Algorithm
 
@@ -17,7 +17,7 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
 | `$cy` | Pixel Y coordinate | Caller must transform pixel location to a coordinate
 | `$max_iters` | Iteration limit |
 
-If you have read [§8](Introduction%20to%20WebAssembly%20Text/08/README.md) on Loops from the blog series [Introduction to WebAssembly Text](Introduction%20to%20WebAssembly%20Text/README.md), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.
+If you have read [§8](Introduction%20to%20WebAssembly%20Text/08/) on Loops from the blog series [Introduction to WebAssembly Text](Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.
 
 This coding style is used here.
 

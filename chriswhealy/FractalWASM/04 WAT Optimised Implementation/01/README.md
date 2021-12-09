@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/README.md) | [Up](../../README.md) | 
-| | [4: Optimised WAT Implementation](../README.md) | [4.2 Modify Render Loop](../02/README.md)
+| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Up](../../) | 
+| | [4: Optimised WAT Implementation](../) | [4.2 Modify Render Loop](../02/)
 
 ### 4.1: Check for Early Bailout
 
@@ -23,7 +23,7 @@ If this returns true, then there is no need to run the escape time algorithm.
 
 So, let's now create a WAT function that implements this check.
 
-If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/README.md), you'll remember that in [§7](../../../07/README.md) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.  Hence this function returns an `i32`:
+If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](../../../07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.  Hence this function returns an `i32`:
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

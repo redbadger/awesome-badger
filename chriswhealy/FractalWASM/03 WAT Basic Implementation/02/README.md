@@ -1,11 +1,11 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
-| [3.1: Shared memory](../01/README.md) | [3: Basic WAT Implementation](../README.md) | [3.3: Generate the Colour Palette](../03/README.md)
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [3.1: Shared memory](../01/) | [3: Basic WAT Implementation](../) | [3.3: Generate the Colour Palette](../03/)
 
 ## 3.2: Create the WebAssembly Module
 
-At the end of [§3.1](../01/README.md) we assumed that our WebAssembly module would be called `mandel_plot.wasm`, so it would probably be a good idea to create this module now.
+At the end of [§3.1](../01/) we assumed that our WebAssembly module would be called `mandel_plot.wasm`, so it would probably be a good idea to create this module now.
 
 > The following coding has been performed in MS Visual Studio Code using the [WebAssembly Extension](https://marketplace.visualstudio.com/items?itemName=dtsvet.vscode-wasm) supplied by the WebAssembly Foundation.
 

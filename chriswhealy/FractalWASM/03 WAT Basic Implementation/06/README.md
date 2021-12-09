@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/README.md) | [Up](../README.md) | 
- | [3.5: Calculating the Mandelbrot Set Image](../05/README.md) | [3: Basic WAT Implementation](../README.md) |
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+ | [3.5: Calculating the Mandelbrot Set Image](../05/) | [3: Basic WAT Implementation](../) |
 
 ## 3.6: Displaying the Rendered Fractal Image
 
@@ -14,7 +14,7 @@ Now that the WebAssembly side of the coding has been written, we need an HTML pa
 
 In the above image, notice that without any optimisations, our basic implementation is pretty slow...
 
-[WAT Basic Implementation.html](../wat-basic-implementation.html)
+[Basic WAT Implementation.html](../wat-basic-implementation.html)
 
 ```html
 <!DOCTYPE html>
