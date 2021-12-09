@@ -17,3 +17,25 @@ We need to make two sets of changes:
 
 Here's a working version of the [Mandelbrot Set with Dynamic Julia Sets](mb-julia-set.html)
 
+### How Big is the WASM Module Now?
+
+Good question, glad you asked...  😃
+
+We now have a single WebAssembly module that can plot both the Mandelbrot and Julia Sets, it is worth looking at the size of the compile module:
+
+```bash
+$ ll
+total 56
+drwxr-xr-x   8 chris  staff    256  9 Dec 19:04 .
+drwxr-xr-x  10 chris  staff    320  9 Dec 18:41 ..
+drwxr-xr-x   3 chris  staff     96  9 Dec 14:42 01
+drwxr-xr-x   3 chris  staff     96  9 Dec 14:42 02
+-rw-r--r--   1 chris  staff    894  9 Dec 16:26 README.md
+-rw-r--r--   1 chris  staff   6812  9 Dec 18:25 mb-julia-set.html
+-rw-r--r--   1 chris  staff    712  9 Dec 19:04 mj_plot.wasm
+-rw-r--r--   1 chris  staff  11936  9 Dec 14:08 mj_plot.wat
+```
+
+Wow! Only 712 bytes!
+
+Compare this with the 74Kb module created by `wasm-pack` from a Rust implementation mentioned in the [introduction](../README.md).
