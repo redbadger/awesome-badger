@@ -21,11 +21,11 @@ Since the `mandel_plot` function is now dual-purpose, this functionality should 
 
 #### Supply Function `mj_plot` With Additional Arguments
 
-When we were only plotting the Mandelbrot Set, we didn't care about what type of image we were plotting, or where the mouse pointer was located over that image.  However, in order for this function to also plot a Julia Set, we need some extra information.  We need to know:
+When we were only plotting the Mandelbrot Set, we didn't care about either the type of image we were plotting (there was only one), or where the mouse pointer was located over that image.  However, in order for this function to also plot a Julia Set, we need some extra information.  We need to know:
 
 1. The mouse pointer's coordinates over the Mandelbrot Set.  These are supplied as two `f64` values called `zx` and `zy`
 1. Whether we are plotting the Mandelbrot Set or a Julia Set.  This is supplied as a Boolean flag called `is_mandelbrot`.
-1. The memory offset for the image data. This is supplied as an `i32` argument called `image_offset`.[^1]
+1. The memory offset where the data for the current image starts. This is supplied as an `i32` argument called `image_offset`.[^1]
 
 The function signature has now expanded and looks like this:
 
@@ -47,7 +47,9 @@ The function signature has now expanded and looks like this:
 
 #### Skip Early Bailout Check For Julia Sets
 
-The test for early bailout only applies when plotting the Mandelbrot Set; therefore, we must first know that we are plotting the Mandelbrot Set before checking for early bailout.  All we need to do here is extend the early bailout test by `AND`ing it with the value of the `$is_mandelbrot` flag:
+The test for early bailout only applies when plotting the Mandelbrot Set; therefore, before checking for early bailout, we must first know that we are plotting the Mandelbrot Set .
+
+All we need to do here is extend the early bailout test by `AND`ing it with the value of the `$is_mandelbrot` flag:
 
 ```wat
 ;; Store the current pixel's colour using the value returned from the following if expression

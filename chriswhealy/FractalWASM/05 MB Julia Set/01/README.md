@@ -16,7 +16,7 @@ The following HTML `canvas` and `div` elements have been added
 </div>
 ```
 
-The `div` element contains some `span` elements into which the mouse pointer coordinates and the rendering time will be displayed
+The `div` element contains some `span` elements into which the mouse pointer coordinates and the rendering time will be displayed.
 
 #### Increase Shared Memory
 
@@ -43,7 +43,7 @@ const wasmMemory = new WebAssembly.Memory({
 
 Previously, we supplied the memory offset as a static value in the `host_fns` object.  WebAssembly then picks up this object at the time the module is instantiated.  However, since the same WebAssembly function is now going to plot both the Mandelbrot and Julia Sets, we will need to supply two offsets.
 
-Rather than supplying two memory offset values as static fields in the `host_fns` object, it is easier to pass the relevant memory offset as a runtime argument.  So now the `js` namespace of the `host_fns` object contains only two properties:
+Rather than supplying two memory offset values as static fields in the `host_fns` object, it is easier to pass the relevant memory offset as a runtime argument.  So now the `js` namespace of the `host_fns` object only needs two properties:
 
 ```javascript
 const host_fns = {
@@ -56,7 +56,7 @@ const host_fns = {
 
 #### Write a `mousemove` Event Handler
 
-Since a new Julia Set must be calculated every time the mouse moves over the Mandelbrot Set image, we will need an event handler function attached to the `mousemove`  event of the `juliaImage` HTML `canvas` element.
+Since a new Julia Set must be calculated every time the mouse moves over the Mandelbrot Set image, we need to attach an event handler function to the `mousemove`  event of the `juliaImage` HTML `canvas` element.
 
 This event handler must do the following things:
 1. Transform the mouse pointer's `X` ,`Y` position over the image into the `X`, `Y` coordinates of the complex plane
