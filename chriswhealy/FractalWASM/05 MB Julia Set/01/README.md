@@ -63,7 +63,7 @@ This event handler must do the following things:
 1. Invoke the WebAssembly function to plot a new Julia Set
 1. Update the Julia Set image from the relevant section of shared memory
 
-This event handler function also uses some helper functions to calculate exactly where the mouse is in relation to image embedded within the canvas:
+This event handler function also uses some helper functions to calculate exactly where the mouse is in relation to the image embedded within the canvas:
 
 ```javascript
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -107,7 +107,7 @@ const mouse_track = evt => {
     0.0, 0.0,                                    // Coordinates of centre pixel
     x_coord, y_coord,                            // Pointer coordinates over Mandelbrot Set
     PPU, DEFAULT_MAX_ITERS,                      // Default zoom level and iteration limit
-    false, jImageOffset,                           // isMandelbrot and Julia Set image data offset
+    false, jImageOffset,                         // isMandelbrot and Julia Set image data offset
   )
 
   $id("julia_runtime").innerHTML = microPrecision(performance.now() - start_time)
@@ -126,9 +126,9 @@ mCanvas.addEventListener('mousemove', mouse_track, false)
 
 #### Reference a Single WebAssembly Module Instance
 
-At this stage of our development, the Mandelbrot Set is plotted once, but every time the mouse pointer moves, a new Julia Set must be calculated.  Therefore, we must adjust the coding to ensure that the WebAssembly module is only instantiated once.
+At this stage of our development, the Mandelbrot Set is plotted once, but every time the mouse pointer moves, a new Julia Set must be calculated.  Therefore, we must adjust the coding to ensure that the WebAssembly module is only instantiated once.  Thereafter, we repeatedly call the `mj_plot` function in this persistent module instance.
 
-The declaration of `wasmObj` (that previously was just a local constant within the asynchronous `start` function) is moved outside the scope of the function and exists at the window level
+All we need to do here is simply move the declaration of `wasmObj` (that previously was just a local constant within the asynchronous `start` function) into the global window scope.
 
 ```javascript
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -141,4 +141,7 @@ const start = async () => {
   wasmObj = await WebAssembly.instantiateStreaming(fetch('./mj_plot.wasm'), host_fns)
   
   // snip...
+}
+
+start()
 ```
