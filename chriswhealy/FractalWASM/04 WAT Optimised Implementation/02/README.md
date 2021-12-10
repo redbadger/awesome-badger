@@ -39,4 +39,4 @@ Just by the addition of this simple test, we have shortened the render time by a
 
 ![Optimised WAT Mandelbrot Set](optimised-rendered-mbset.png)
 
-Here's an implementation of the [optimised WAT coding](wat-optimised-implementation.html)
+Here's an implementation of the [optimised WAT coding](../wat-optimised-implementation.html)

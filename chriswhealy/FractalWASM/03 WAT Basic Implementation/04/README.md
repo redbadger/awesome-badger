@@ -68,6 +68,6 @@ This function takes two complex numbers `z` and `c` and repeatedly squares `z` a
 )
 ```
 
-Certain optimisations have been added to avoid the need for either expensive function calls or repetitive calculations.
+Certain optimisations have been added to avoid the need for either expensive function calls or unnecessary calculations.
 
 For instance, testing the magnitude of a complex number requires the use of the Pythagorean formula (`a = sqrt(b^2 + c^2)`).  Not only is the call to `sqrt` expensive, but in our case, it is actually unnecessary since we only need to check that the sum of the squares (`a^2 + b^2`) is less than the square of the bailout value.  Hence the global value `$BAILOUT` is set to `4` not `2`
