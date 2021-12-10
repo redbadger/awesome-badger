@@ -5,14 +5,23 @@
 
 ## 3.3: Generate the Colour Palette
 
+Since we are interested in runtime performance, we will precalculate all the possible 4-byte colour values that could be obtained from the range of numbers between `0` and `max_iters`.  This will then be our colour lookup table
+
+### Note on Coding Style
+
+You are free to lay out the source code of a WebAssembly Text program any way you like, but I have found the following conventions to be helpful:
+
+1. Since WebAssembly Text programs can become deeply nested, set the indentation level to 2 spaces.  Anything more than this and your source code will start to become unnecessarily wide
+1. Function signatures have a variety of optional clauses that, if used, must immediately follow the `func` keyword.  SInce the open parentheses plus the word `func` plus a space occupies 6 characters, it is helpful to indent any function signature clauses by 6 characters to provide a visual cue that they belong to the signature, not the function body.
+
 ### Transform an Iteration Value into an RGBA[^1] Colour Value
 The coding that generates the colour palette does not need to be described in detail, suffice it to say that a single iteration value can be translated into the red, green and blue colour components by multiplying it by 4 (implemented as a shift left instruction), then passing it through an algorithm that derives an 8-bit value for each colour component using fixed thresholds.[^2]
 
-All of the coding that follows lives within the `module` defined in `mandel_plot.wat`
+The `$8_bit_clamp` function shown below lives within the `module` definition in file `mandel_plot.wat`
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;; Derive a colour component from supplied iteration and threshold values
+;; Derive a single colour component from the iteration and colour threshold values
 (func $8_bit_clamp
       (param $n i32)
       (param $threshold i32)
@@ -41,7 +50,9 @@ All of the coding that follows lives within the `module` defined in `mandel_plot
 )
 ```
 
-With this 8-bit clamp in place, we create three colour functions that use hard-coded colour thresholds:
+With the `$8_bit_clamp` function in place, we can now create three colour functions that supply hard-coded colour thresholds.
+
+Since these functions are very small, their definitions can be compressed into a single line:
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -66,7 +77,7 @@ Finally, we take each of the colour component values, shift them left by the app
   (local $iter4 i32)
   (local.set $iter4 (i32.shl (local.get $iter) (i32.const 2)))
 
-  ;; Little-endian processor requires the colour component values in ABGR order, not RGBA
+  ;; Little-endian processors require the colour component values in ABGR order, not RGBA
   (i32.or
     (i32.or
       (i32.const 0xFF000000)   ;; Fully opaque
@@ -82,7 +93,7 @@ Finally, we take each of the colour component values, shift them left by the app
 
 ### Generate the Entire Colour Palette
 
-This particular palette generation algorithm produces colours that are distributed evenly across their range; therefore, changes to `max_iters` will not change the overall range of colours.  However, since we need to generate a lookup table that ranges from 0 to `max_iters`, each time `max_iters` changes, we will need to regenerate the entire colour palette.
+This particular palette generation algorithm produces colours that are distributed evenly across their range; therefore, changes to `max_iters` will not change the way the colours are spread over the range.  However, since we need to generate a static lookup table that ranges from 0 to `max_iters`, should `max_iters` ever change,[^3] then we will need to regenerate the entire colour palette.
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -108,19 +119,19 @@ This particular palette generation algorithm produces colours that are distribut
 )
 ```
 
-There are a couple of things to notice about this function:
+There are several of things to notice about this function:
 
 1. Since this function will only be invoked from the host environment, the internal name has been omitted and only an exported name has been defined.
 1. This function does not return a specific value, it writes to shared memory; therefore, it has no `result` clause.
 1. In [§3.2](../02/), at the start of the module we defined a global constant called `$palette_offset` whose value is imported from the host environment as property `js.palette_offset`.  This value acts as the starting point for calculating where the next `i32` colour value will be written in memory
 1. The loop labeled `$next` continues until our index counter `$idx` exceeds the supplied value of `max_iters`
-1. The `i32.store` instruction writes a 4 byte value to memory.  The first argument is the memory offset and the second is the value being stored.  
-
-   So we call function `$colour`, passing in the value of `$idx`, and store the returned value at the memory location calculated from `$palette_offset + ($idx * 4)`[^3]
+1. The `i32.store` instruction takes the top `i32` value off the stack and writes it to memory.  The first argument is the memory offset and the second is the value being stored.  So we call function `$colour` to transform the value of `$idx` into a colour, then store that value at the memory location calculated from `$palette_offset + ($idx * 4)`[^4]
 3. When this function exits, the block of shared memory starting at the offset defined in `$palette_offset` will contain the colours for all iteration values from 0 to `max_iters`
 
+---
 
 
 [^1]: RGBA stands for the four values needed to fully define a pixel's colour: Red, Green, Blue and Alpha (opacity)
 [^2]: 0 for red, 128 for green, and 356 for blue
-[^3]: The cheapest way to implement multiplication by a power of 2 is to perform an `i32.shl` (shift left) instruction by the relevant number of binary places
+[^3]: This functionality will not be implemented until the very end of this development process
+[^4]: The cheapest way to implement multiplication by a power of 2 is to perform an `i32.shl` (shift left) instruction by the relevant number of binary places

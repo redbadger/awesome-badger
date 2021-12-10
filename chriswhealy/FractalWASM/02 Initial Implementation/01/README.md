@@ -79,8 +79,7 @@ for (let iy = 0; iy < mCanvas.height; ++iy) {
     // Translate the iteration value into a colour
     let colour = iter2Colour(iter)
 
-    // Write the current pixel colour datat to the ArrayBuffer using the
-    // 32-bit overlay
+    // Write the 4 bytes colour data to the ArrayBuffer using the 32-bit overlay
     buf32[iy * mCanvas.width + ix] = colour
   }
 }

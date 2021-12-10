@@ -4,13 +4,13 @@
 
 ## 5: Plotting a Julia Set
 
-Now that we have an efficient means of plotting the Mandelbrot Set, we can now add an additional HTML `canvas` element to the Web page to display a Julia Set.
+Now that we have an efficient means of plotting the Mandelbrot Set, we can now add a second HTML `canvas` element to the Web page to display a Julia Set.
 
-For every point on the Mandelbrot Set, there is a corresponding Julia Set.  So as the mouse pointer moves over the Mandelbrot Set, a completely new Julia Set needs to be rendered.  Consequently, every time a `mousemove` event goes off over the `canvas`, our now dual-purpose escape-time algorithm will be invoked.
+For every point on the Mandelbrot Set, there is a corresponding Julia Set.  So as the mouse pointer moves over the Mandelbrot Set, a completely new Julia Set needs to be rendered.  Consequently, every time a `mousemove` event goes off over the `canvas`, our now dual-purpose plot function will be called.
 
-This is where we will start to see the benefits of writing in WebAssembly Text, because we can focus on low-level efficiency.
+This is where we start to see the benefits of writing in WebAssembly Text.  Since we can focus on low-level efficiency, we can produce a very small, very fast program.
 
-We need to make two sets of changes:
+To plot the additional Julia Sets, we need to make two sets of changes:
 
 1. [Web Page Changes](./01/)
 1. [WebAssembly Changes](./02/)

@@ -12,7 +12,7 @@ Now that the WebAssembly side of the coding has been written, we need an HTML pa
 
 ![Basic WAT Implementation](basic-rendered-mbset.png)
 
-In the above image, notice that without any optimisations, our basic implementation is pretty slow...
+In the above image, notice that without any optimisation, our basic implementation takes several hundred milliseconds to complete &mdash; which is pretty slow...
 
 [Basic WAT Implementation.html](../wat-basic-implementation.html)
 
@@ -110,6 +110,6 @@ The JavaScript coding in this Web page does the following things:
 1. Within an asynchronous function called `start`:
     1. Instantiate the WebAssembly module
     1. Call the WebAssembly function to generate the colour palette
-    1. Making a note of the start and end times, call the WebAssembly function to generate the Mandelbrot set and display the execution time
+    1. Making a note of the start, call the WebAssembly function to generate the Mandelbrot set, then display the execution time
     1. Display the rendered image by transferring the relevant slice of shared memory to the HTML `canvas` element
 1. Calls the asynchronous `start()` function

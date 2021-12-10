@@ -7,25 +7,6 @@
 
 Now that we have a bare-bones function to calculate the value of a single pixel, we can simply call this function for every pixel in the image.
 
-When looking through the coding below, the following points are important:
-
-1. The `mandel_plot` function is not called from anywhere inside the WebAssembly module; therefore, it does not need an internal name, only an exported name
-1. This function writes to shared memory; therefore, it has no need for a `result` clause
-1. Since this function works using two different frames of reference (pixels within the image, and coordinates on the complex plane), it needs to know:
-    1.  How to transform an image pixel location to a corresponding coordinate in the complex plane.  Hence we must supply values for arguments `$origin_x` and `$origin_y`.  These arguments identify the X and Y coordinates of the central pixel in the image
-    1. What zoom level is the image being rendered at.  Hence we must supply a value for argument `$ppu` (or pixels per unit).  By default, each unit on the complex plane is subdivided into 200 pixels; hence `$ppu = 200`
-1. The basic structure here follows that already seen in the JavaScript implementation: a pair of nested loops.
-1. Certain optimisations have been implemented in order to avoid recalculating the same value multiple times.  E.G `$half_width`, `$half_height`, `$cx_int` and `$cy_int`
-1. It is very important to remember that the `$x_pos` and `$y_pos` loop counters are integers, but the escape-time algorithm requires coordinate values.  This means two things:
-    1. Each index value must be transformed from a pixel location on the image, to a coordinate in the complex plane
-    1. Coordinates are floating point numbers, not integers.  Therefore, we must employ type-conversion instructions (such as `f64.convert_i32_u`) to convert unsigned 32-bit integers into 64-bit floating points.  
-
-        This also explains why although the function receives argument `$ppu` as an `i32`, before it can be used, that value must be converted and stored as an `f64` local variable.
-1. Just before the call to `$escape_time_mj`, we use the instruction `i32.tee`.  This instruction is useful here because it does two things at once:
-    1. It stores a value in a local variable (in this case `$pixel_val`), and
-    1. It leaves the stored value on the top of the stack, thus saving us from needing to perform a `local.set ...` followed by a `local.get ...`
-
-
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot set
@@ -132,3 +113,20 @@ When looking through the coding below, the following points are important:
 )
 ```
 
+When looking through the coding, the following points are important:
+
+1. The `mandel_plot` function is not called from anywhere inside the WebAssembly module; therefore, it does not need an internal name, only an exported name
+1. This function writes to shared memory; therefore, it has no need for a `result` clause
+1. Since this function works using two different frames of reference (pixels within the image, and coordinates on the complex plane), it needs to know:
+    1.  How to transform an image pixel location to a corresponding coordinate in the complex plane.  Therefore, to link these two frames of reference, we must supply the arguments `$origin_x` and `$origin_y` that identify the X and Y coordinates of the central pixel in the image
+    1. At what zoom level is the image being rendered?  To answer this question, we must supply the argument `$ppu` (or pixels per unit).  To start with, each unit on the complex plane will subdivided into 200 pixels (`$ppu = 200`) since this is small enough to show the entire Mandelbrot set on a canvas that is 800 by 450 in size.
+1. The basic structure of the WAT function follows the structure used in the JavaScript implementation; that is, a pair of nested loops.
+1. Certain optimisations have been implemented in order to avoid calculating the same value multiple times.  Hence the need for intermediate values such as `$half_width`, `$half_height`, `$cx_int` and `$cy_int`
+1. It is very important to remember that the `$x_pos` and `$y_pos` loop counters are integers, but the escape-time algorithm requires coordinate values.  This means two things:
+    1. Each index value must be transformed from a pixel location on the image, to a coordinate in the complex plane
+    1. Coordinates are floating point numbers, not integers.  Therefore, we must employ type-conversion instructions (such as `f64.convert_i32_u`) to convert unsigned 32-bit integers into 64-bit floating points.  
+
+        This also explains why although the function receives argument `$ppu` as an `i32`, before it can be used, that value must first be converted and stored as an `f64` local variable.
+1. Just before the call to `$escape_time_mj`, we use the instruction `i32.tee`.  This instruction is useful here because it does two things at once:
+    1. It stores a value in a local variable (in this case `$pixel_val`), and
+    1. It leaves the stored value on the top of the stack, thus saving us from needing to perform a `local.set ...` followed by a `local.get ...`

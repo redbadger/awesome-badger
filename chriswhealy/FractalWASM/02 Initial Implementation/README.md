@@ -22,4 +22,4 @@ Before diving directly into the WAT coding, it is helpful to see the basic imple
 * [2.1 Basic Escape-Time Implementation](./01/)
 * [2.2 Optimised Escape-Time Implementation](./02/)
 
-
+Now that you understand the JavaScript implementation, we can move on to rewriting this functionality in WebAssembly Text.

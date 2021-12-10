@@ -13,13 +13,15 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
 |---|---|---
 | `$zx` | Real part of Iterated value | For the Mandelbrot Set, `z` always starts at 0
 | `$zy` | Imaginary part of iterated value | For the Mandelbrot Set, `z` always starts at 0
-| `$cx` | Pixel X coordinate | Caller must transform pixel location to a coordinate
-| `$cy` | Pixel Y coordinate | Caller must transform pixel location to a coordinate
+| `$cx` | Pixel X coordinate (real part) | Caller must transform pixel location to a coordinate
+| `$cy` | Pixel Y coordinate (imaginary part) | Caller must transform pixel location to a coordinate
 | `$max_iters` | Iteration limit |
 
 If you have read [§8](Introduction%20to%20WebAssembly%20Text/08/) on Loops from the blog series [Introduction to WebAssembly Text](Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.
 
 This coding style is used here.
+
+This function takes two complex numbers `z` and `c` and repeatedly squares `z` and adds `c` until one of the continuation conditions become false.  However, since WebAssembly has no complex number datatype, the real and imaginary parts of the complex arguments `z` and `c` are supplied as two pairs of `f64`s: `zx` and `zy`, and `cx` and `cy`.
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -44,17 +46,15 @@ This coding style is used here.
 
     ;; Only continue the loop if we're still within both the bailout value and the iteration limit
     (if
+      ;; ($BAILOUT > ($zx_sqr + $zy_sqr)) AND ($max_iters > iters)?
       (i32.and
-        ;; $BAILOUT > ($zx_sqr + $zy_sqr)?
         (f64.gt (global.get $BAILOUT) (f64.add (local.get $zx_sqr) (local.get $zy_sqr)))
-        
-        ;; $max_iters > iters?
         (i32.gt_u (local.get $max_iters) (local.get $iters))
       )
       (then
         ;; $zy = $cy + (2 * $zy * $zx)
-        (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
         ;; $zx = $cx + ($zx_sqr - $zy_sqr)
+        (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
         (local.set $zx (f64.add (local.get $cx) (f64.sub (local.get $zx_sqr) (local.get $zy_sqr))))
         
         (local.set $iters (i32.add (local.get $iters) (i32.const 1)))
@@ -67,8 +67,6 @@ This coding style is used here.
   (local.get $iters)
 )
 ```
-
-This function takes two complex numbers `z` and `c` and repeatedly squares `z` and adds `c` until one of the continuation conditions become false.  However, since WebAssembly has no complex number datatype, the real and imaginary parts or complex arguments `z` and `c` are supplied as two pairs of `f64`s: `zx` and `zy`, and `cx` and `cy`.
 
 Certain optimisations have been added to avoid the need for either expensive function calls or repetitive calculations.
 

@@ -7,7 +7,7 @@
 
 #### Main Cardioid Check
 
-To check whether the current location on the complex plane falls within the main cardioid, we first create an intermediate value `q`
+To check whether the current location on the complex plane falls within the Mandelbrot Set's main cardioid, we must first derive an intermediate value `q` from the `x` and `y` coordinates of the current pixel:
 
 ```javascript
 q = (x - 0.25)^2 + y^2

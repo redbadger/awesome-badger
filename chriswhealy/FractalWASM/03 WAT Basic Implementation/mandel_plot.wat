@@ -8,7 +8,7 @@
   (global $BLACK   i32 (i32.const 0xFF000000))
 
   ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  ;; Derive a colour component from supplied iteration and threshold values
+  ;; Derive a single colour component from the iteration and colour threshold values
   (func $8_bit_clamp
     (param $n i32)
     (param $threshold i32)
@@ -105,17 +105,15 @@
 
       ;; Only continue the loop if we're still within both the bailout value and the iteration limit
       (if
+        ;; ($BAILOUT > ($zx_sqr + $zy_sqr)) AND ($max_iters > iters)?
         (i32.and
-          ;; $BAILOUT > ($zx_sqr + $zy_sqr)?
           (f64.gt (global.get $BAILOUT) (f64.add (local.get $zx_sqr) (local.get $zy_sqr)))
-
-          ;; $max_iters > iters?
           (i32.gt_u (local.get $max_iters) (local.get $iters))
         )
         (then
           ;; $zy = $cy + (2 * $zy * $zx)
-          (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
           ;; $zx = $cx + ($zx_sqr - $zy_sqr)
+          (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
           (local.set $zx (f64.add (local.get $cx) (f64.sub (local.get $zx_sqr) (local.get $zy_sqr))))
 
           (local.set $iters (i32.add (local.get $iters) (i32.const 1)))
