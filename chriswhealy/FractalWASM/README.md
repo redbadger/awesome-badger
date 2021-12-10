@@ -20,7 +20,7 @@ This is certainly not large, but it was much larger than I expected given the si
 
 So as a matter of both curiosity and education, I set about re-implementing this program in WebAssembly Text (WAT) to see just how small I could get the program.
 
-The results are encouraging.  I've got the `.wasm` file down to just 940 bytes...
+The results are encouraging because the hand-crafted `.wasm` file is now about 100 times smaller - just 712 bytes...
 
 # Table of Contents
 1. [Plotting Fractals](./01%20Plotting%20Fractals/)
