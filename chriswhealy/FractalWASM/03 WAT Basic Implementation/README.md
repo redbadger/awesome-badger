@@ -4,9 +4,9 @@
 
 # 3: Basic WAT Implementation
 
-Starting from a Web page written in HTML and JavaScript, we want to display an image of the Mandelbrot set; however, the CPU-intensive task of calculating the fractal image will not be implemented in JavaScript, but rather delegated to a WebAssembly program that we will now write.
+The Web page used to implement the JavaScript version of the Mandelbrot Set is a good starting point from which to invoke the WebAssembly version of this program.
 
-The image information created by WebAssembly is made available to JavaScript by means of shared memory.
+The only difference now is that the CPU-intensive task of calculating the fractal image will be implemented in a hand-crafted WebAssembly program.  The image data created by the WebAssembly program is then made available to JavaScript by means of shared memory.
 
 1. [Shared Memory](./01/)
 1. [Create the WebAssembly Module](./02/)

@@ -10,6 +10,7 @@
 The following HTML `canvas` and `div` elements have been added
    
 ```html
+<canvas id="juliaImage" style="border: 1px solid black"></canvas>
 <div>Julia Set corresponding to
   (<span id="x_complex_coord"></span>,<span id="y_complex_coord"></span>)
   on the Mandelbrot Set rendered in <span id="julia_runtime"></span>ms
@@ -41,9 +42,9 @@ const wasmMemory = new WebAssembly.Memory({
 })
 ```
 
-Previously, we supplied the memory offset as a static value in the `host_fns` object.  WebAssembly then picks up this object at the time the module is instantiated.  However, since the same WebAssembly function is now going to plot both the Mandelbrot and Julia Sets, we will need to supply two offsets.
+Previously, we supplied the memory offset as a static value in the `host_fns` object.  WebAssembly then picks up this object at the time the module is instantiated.  However, since the same WebAssembly function is now going to plot both the Mandelbrot and Julia Sets, we will need to supply an offset for each image.[^1]
 
-Rather than supplying two memory offset values as static fields in the `host_fns` object, it is easier to pass the relevant memory offset as a runtime argument.  So now the `js` namespace of the `host_fns` object only needs two properties:
+Rather than supplying two memory offsets as static fields in the `host_fns` object, it is easier to pass the relevant offset as a runtime argument.  So now the `js` namespace of the `host_fns` object only needs two properties:
 
 ```javascript
 const host_fns = {
@@ -145,3 +146,7 @@ const start = async () => {
 
 start()
 ```
+
+---
+
+[^1]: Pay attention here!  This a good example of where, within its own memory space, a WebAssembly program only has the memory safety you give it.  If you're not careful, you can end up writing code that tramples over top of other data structures in your own memory.

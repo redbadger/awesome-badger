@@ -25,4 +25,10 @@ Having created a file called `mandel_plot.wat`, start by defining the module and
 
 Notice how the two-layer namespace is used to identify each property in the JavaScript object we created called `host_fns`.
 
-> We have kept the WebAssembly global names the same as the JavaScript property names, so `$image_offset` has the same name as the `host_fns` property `js.image_offset` from which its value has been obtained; however, this has only been done for the sake of simplicity.  It is not a requirement.
+> ***IMPORTANT***
+>
+> Currently, there is a limitation that the number of memory pages referenced in the `(memory ...)` clause must be hard-coded to match number of memory pages allocated in the host environment.  This value cannot be picked from a variable reference.
+
+For the sake of simplicity, we have kept the WebAssembly global names the same as the JavaScript property names.  So the WebAssembly global value `$image_offset` has the same name as the `host_fns` property `js.image_offset` from which its value has been obtained.
+
+Should you wish to, the global names used within the WebAssembly module can be different from the property names supplied by the host environment.  However, consider whether having different internal and external names will help or hinder the clarity of your code...

@@ -21,7 +21,7 @@ This greatly improves runtime efficiency, and will also be demonstrated here.
 The [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set) is created as follows:
 
 1. First, decide on two arbitrary limits:
-   * What is the maximum number of times we will iterate the calculation before giving up? This value is referred to as `max_iters` and a reasonable starting value is `150`
+   * What is the maximum number of times we will iterate the calculation before giving up? This value is referred to as `max_iters` and a reasonable starting value is `1000`
    * Each time we iterate the calculation, we get out a number that might well start to grow.  How big should we allow this number to become before stopping (since it's only going to continue growing).  This limit is called `bailout` and is typically set to `4`
 1. Using this equation:
 

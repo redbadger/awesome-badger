@@ -37,4 +37,6 @@ The innermost `if` expression in function `mandel_plot` has now been extended to
 
 Just by the addition of this simple test, we have shortened the render time by a factor of about 6!
 
-![Optimised Rendered Mandelbrot Set](optimised-rendered-mbset.png)
+![Optimised WAT Mandelbrot Set](optimised-rendered-mbset.png)
+
+Here's an implementation of the [optimised WAT coding](wat-optimised-implementation.html)

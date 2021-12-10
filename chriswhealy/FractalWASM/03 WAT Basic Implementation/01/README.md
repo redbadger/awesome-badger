@@ -9,21 +9,23 @@
 
 As we have seen from the JavaScript implementation, the image displayed on the HTML `canvas` is stored in an `ArrayBuffer`.  This fact remains true irrespective of whether the fractal image has been calculated by a JavaScript program or a WebAssembly program.
 
-We know that our `canvas` image is 800 by 450 pixels in size and that each pixel requires 4 bytes (one for each of the Red, Green and Blue values and one byte for the opacity, or alpha channel); so we will require about one and a half megabytes to store the image:
+We know that our `canvas` image is 800 by 450 pixels in size and that each pixel requires 4 bytes (one for each of the Red, Green and Blue values and one byte for the opacity, or alpha channel):
 
 ```javascript
 800 * 450 * 4 bytes per pixel = 1,440,000 bytes
 ```
 
-However, we also know that WebAssembly memory can only be allocated in 64Kb pages
+So we will require about one and a half megabytes to store the image.  However, we also know that WebAssembly memory can only be allocated in 64Kb pages.  Therefore, we need to calculate how many whole memory pages to allocate:
 
 ```javascript
 Math.ceil(1440000 / 65536) = 22 pages
 ```
 
-Therefore, we will need 22, 64Kb memory pages
+So, 22 memory pages of 64Kb each will be needed to store the image.
 
-In addition to memory needed for the image, we need to allocate some memory for the colour palette information.[^1]  This is simply a precalculated lookup table to translate an iteration value into a colour.  Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
+In addition to memory needed for the image, we also need to allocate some memory for the colour palette information.[^1]
+
+The colour palette is simply a precalculated lookup table that allows us to translate an iteration value into a colour.  Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
 
 ```javascript
 (32768 * 4) / 65536 = 2 pages
@@ -60,7 +62,7 @@ In this case, we do not need to allocate a specific `ArrayBuffer` object, becaus
 
 ### Decide How Shared Memory Should be Used
 
-Now that we have a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what lives where, and be careful to ensure we don't start trampling on our own data!
+Now that we have a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what data structures live where and be very careful not to trample on our own data!
 
 In our case, the simplest way to do this is to say that the image data will start at offset 0 and the colour palette data will start at the full page boundary after the image data.  This does means that there will be a few bytes of wasted space, but this is not a particularly critical issue.
 
@@ -95,15 +97,17 @@ const host_fns = {
 }
 ```
 
-Now, assuming that our WebAssembly module lives in the same directory as the HTML file running this JavaScript code, and that it is called `mandel_plot.wasm`, then the code to instantiate this module would look like this:
+Now, assuming that our (as yet, unwritten) WebAssembly module lives in the same directory as the HTML file running this JavaScript code, and that it is called `mandel_plot.wasm`, then the code to instantiate this module would look like this:
 
 ```javascript
 const wasmObj = await WebAssembly.instantiateStreaming(
-  fetch('./mandel_plot.wasm'),
-  host_fns
+  fetch('./mandel_plot.wasm'), // Asynchronously fetch the .wasm file
+  host_fns                     // Host environment resources being shared with this module instance
 )
 ```
 
 Notice that instantiating a WebAssembly module requires the use of `await`; therefore, this call must be located within an asynchronous function.
+
+---
 
 [^1]: It is possible to avoid the need for storing colour palette information by dynamically calculating the colour value each time a pixel iteration value is calculated; however, this is not a very efficient approach because each iteration value translates to a static colour value.  Therefore, it is much more efficient to precalculate all the colour values from 1 to `max_iters` and store them in a lookup table.
