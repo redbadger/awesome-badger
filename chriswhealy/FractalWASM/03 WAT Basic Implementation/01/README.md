@@ -7,7 +7,7 @@
 
 ### How Much Shared Memory Do We Need?
 
-As we have seen from the JavaScript implementation, the image displayed on the HTML `canvas` is stored in an `ArrayBuffer`.  This fact remains true irrespective of whether the fractal image has been calculated by a JavaScript program or a WebAssembly program.
+Irrespective of whether the fractal image is calculated by a JavaScript program or a WebAssembly program, the image displayed on the HTML `canvas` is stored in an `ArrayBuffer`.  We must therefore decide how large this `ArrayBuffer` needs to be.
 
 We know that our `canvas` image is 800 by 450 pixels in size and that each pixel requires 4 bytes (one for each of the Red, Green and Blue values and one byte for the opacity, or alpha channel):
 
@@ -21,9 +21,7 @@ So we will require about one and a half megabytes to store the image.  However, 
 Math.ceil(1440000 / 65536) = 22 pages
 ```
 
-So, 22 memory pages of 64Kb each will be needed to store the image.
-
-In addition to memory needed for the image, we also need to allocate some memory for the colour palette information.[^1]
+In addition to the memory needed for the image, we also need to allocate some memory for the colour.[^1]
 
 The colour palette is simply a precalculated lookup table that allows us to translate an iteration value into a colour.  Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
 
@@ -58,11 +56,13 @@ const wasmMemory = new WebAssembly.Memory({
 const wasmMem8 = new Uint8ClampedArray(wasmMemory.buffer)
 ```
 
-In this case, we do not need to allocate a specific `ArrayBuffer` object, because one is created for us when we call `new WebAssembly.Memory()`.  We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer`.
+In the case of WebAssembly memory however, we do not need to allocate a specific `ArrayBuffer` object because one is created for us when we call `new WebAssembly.Memory()`.
+
+We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer` in order to transfer the image data from WebAssembly shared memory to the `canvas`.
 
 ### Decide How Shared Memory Should be Used
 
-Now that we have a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what data structures live where and be very careful not to trample on our own data!
+Now that we have a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what data structures live where and be very careful not to trample on our own data![^2]
 
 In our case, the simplest way to do this is to say that the image data will start at offset 0 and the colour palette data will start at the full page boundary after the image data.  This does means that there will be a few bytes of wasted space, but this is not a particularly critical issue.
 
@@ -111,3 +111,4 @@ Notice that instantiating a WebAssembly module requires the use of `await`; ther
 ---
 
 [^1]: It is possible to avoid the need for storing colour palette information by dynamically calculating the colour value each time a pixel iteration value is calculated; however, this is not a very efficient approach because each iteration value translates to a static colour value.  Therefore, it is much more efficient to precalculate all the colour values from 1 to `max_iters` and store them in a lookup table.
+[^2]: Pay attention here!  This a good example of where, within its own memory space, a WebAssembly program only has the memory safety you give it.  If you're not careful, you can end up writing code that tramples over top of other data structures in your own memory.

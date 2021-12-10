@@ -5,14 +5,14 @@
 
 ## 3.3: Generate the Colour Palette
 
-Since we are interested in runtime performance, we will precalculate all the possible 4-byte colour values that could be obtained from the range of numbers between `0` and `max_iters`.  This will then be our colour lookup table
+Since we are interested in runtime performance, we will precalculate all the possible 4-byte colour values that could be obtained from the range of iteration values between `0` and `max_iters`.  This will then become our colour lookup table.
 
 ### Note on Coding Style
 
 You are free to lay out the source code of a WebAssembly Text program any way you like, but I have found the following conventions to be helpful:
 
 1. Since WebAssembly Text programs can become deeply nested, set the indentation level to 2 spaces.  Anything more than this and your source code will start to become unnecessarily wide
-1. Function signatures have a variety of optional clauses that, if used, must immediately follow the `func` keyword.  SInce the open parentheses plus the word `func` plus a space occupies 6 characters, it is helpful to indent any function signature clauses by 6 characters to provide a visual cue that they belong to the signature, not the function body.
+1. Function signatures have a variety of optional clauses that, if used, must immediately follow the `func` keyword.  SInce the open parentheses plus the word `func` plus a space occupies 6 characters, it is helpful to indent clauses related to the function signature by 6 characters to provide a visual cue that they are not part of the function body.
 
 ### Transform an Iteration Value into an RGBA[^1] Colour Value
 The coding that generates the colour palette does not need to be described in detail, suffice it to say that a single iteration value can be translated into the red, green and blue colour components by multiplying it by 4 (implemented as a shift left instruction), then passing it through an algorithm that derives an 8-bit value for each colour component using fixed thresholds.[^2]
@@ -50,9 +50,10 @@ The `$8_bit_clamp` function shown below lives within the `module` definition in 
 )
 ```
 
-With the `$8_bit_clamp` function in place, we can now create three colour functions that supply hard-coded colour thresholds.
+With the `$8_bit_clamp` function in place, we can now create three colour functions in which the hard-coded colour thresholds are defined.
 
-Since these functions are very small, their definitions can be compressed into a single line:
+> ***Stylistic Note***  
+> Since these functions are very small, their definitions can be compressed into a single line:
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -93,7 +94,7 @@ Finally, we take each of the colour component values, shift them left by the app
 
 ### Generate the Entire Colour Palette
 
-This particular palette generation algorithm produces colours that are distributed evenly across their range; therefore, changes to `max_iters` will not change the way the colours are spread over the range.  However, since we need to generate a static lookup table that ranges from 0 to `max_iters`, should `max_iters` ever change,[^3] then we will need to regenerate the entire colour palette.
+This particular palette generation algorithm produces colours that are distributed evenly across their range between `0` and `max_iters`.  However, since we need to generate a static lookup table, should `max_iters` ever change,[^3] then this table will need to be regenerated.
 
 ```wat
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

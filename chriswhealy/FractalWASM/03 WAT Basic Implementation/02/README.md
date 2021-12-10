@@ -27,7 +27,7 @@ Notice how the two-layer namespace is used to identify each property in the Java
 
 > ***IMPORTANT***
 >
-> Currently, there is a limitation that the number of memory pages referenced in the `(memory ...)` clause must be hard-coded to match number of memory pages allocated in the host environment.  This value cannot be picked from a variable reference.
+> Currently, there is a limitation that the number of memory pages referenced in the `(memory ...)` clause must be hard-coded to match number of memory pages supplied by the host environment.  This value cannot be picked up from a variable reference.
 
 For the sake of simplicity, we have kept the WebAssembly global names the same as the JavaScript property names.  So the WebAssembly global value `$image_offset` has the same name as the `host_fns` property `js.image_offset` from which its value has been obtained.
 
