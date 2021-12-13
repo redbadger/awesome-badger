@@ -6,10 +6,16 @@
 <link rel="stylesheet" href="style.css"charset="utf8">
 </head>
 <body>
-  <div>Left-click to zoom in, right-click to zoom out</div>
-  <div>Zoom level = <span id="zoom">200</span></div>
-  <div>Max Iterations <input class="horizontal" id="max_iters" type="range"> <span id="max_iters_txt"></span></div>
-  <br>
+  <div>
+    <table>
+      <tr><th colspan="3">Left-click to zoom in, right-click to zoom out</th></tr>
+      <tr><td>Max Iterations</td>
+          <td><input class="horizontal" id="max_iters" type="range"></td>
+          <td id="max_iters_txt"></td></tr>
+      <tr><td>Zoom level</td>
+          <td id="ppu_txt"></td></tr>
+    </table>
+  </div>
   <canvas id="mandelImage" style="border: 1px solid black"></canvas>
   <div>Mandelbrot Set rendered in <span id="mb_runtime"></span>ms</div>
   <br>
@@ -41,9 +47,9 @@ const RANGE_MAX_ITERS = { MIN : 100, MAX : 32768, STEP : 100, DEFAULT : 1000 }
 let   MAX_ITERS       = RANGE_MAX_ITERS.DEFAULT
 
 // Define max/min zoom level limits (PPU = pixels per unit in the complex plane)
-const MAX_PPU     = 409600
-const DEFAULT_PPU = CANVAS_WIDTH / 4
-let   PPU         = DEFAULT_PPU
+const MAX_PPU = 409600             // Allow for 12 zoom steps
+const MIN_PPU = CANVAS_WIDTH / 4   // Start by showing entire Mandelbrot Set
+let   PPU     = MIN_PPU
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Partial function to translate the mouse X/Y canvas position to the corresponding X/Y coordinate in the complex
@@ -81,22 +87,17 @@ const draw_fractal = (x_coord, y_coord, is_mandelbrot) => {
       "ctx"      : jContext,
       "x_origin" : 0.0,
       "y_origin" : 0.0,
-      "ppu"      : DEFAULT_PPU,
+      "ppu"      : MIN_PPU,
       "rt_el"    : "julia_runtime"
     }
 
   let start_time = performance.now()
   wasmObj.instance.exports.mj_plot(
-    CANVAS_WIDTH,
-    CANVAS_HEIGHT,
-    x_origin,
-    y_origin,
-    x_coord,
-    y_coord,
-    ppu,
-    MAX_ITERS,
-    is_mandelbrot,
-    offset,
+    CANVAS_WIDTH, CANVAS_HEIGHT,
+    x_origin, y_origin,
+    x_coord, y_coord,
+    ppu, MAX_ITERS,
+    is_mandelbrot, offset,
   )
   $id(rt_el).innerHTML = microPrecision(performance.now() - start_time)
 
@@ -117,12 +118,12 @@ const zoom = zoom_in => evt => {
 
   // Change zoom level
   PPU = zoom_in
-        ? (new_ppu => new_ppu > MAX_PPU     ? MAX_PPU     : new_ppu)(PPU * 2)
-        : (new_ppu => new_ppu < DEFAULT_PPU ? DEFAULT_PPU : new_ppu)(PPU / 2)
-  $id("zoom").innerHTML = PPU
+        ? (new_ppu => new_ppu > MAX_PPU ? MAX_PPU : new_ppu)(PPU * 2)
+        : (new_ppu => new_ppu < MIN_PPU ? MIN_PPU : new_ppu)(PPU / 2)
+  $id("ppu_txt").innerHTML = PPU
 
   // If we're back out to the default zoom level, then reset the Mandelbrot Set image origin
-  if (PPU === DEFAULT_PPU) {
+  if (PPU === MIN_PPU) {
     X_ORIGIN = DEFAULT_X_ORIGIN
     Y_ORIGIN = DEFAULT_Y_ORIGIN
   }
@@ -179,7 +180,7 @@ mCanvas.width  = CANVAS_WIDTH
 mCanvas.height = CANVAS_HEIGHT
 
 mCanvas.addEventListener('mousemove',   mouse_track, false)
-mCanvas.addEventListener('click',       zoom(true), false)
+mCanvas.addEventListener('click',       zoom(true),  false)
 mCanvas.addEventListener('contextmenu', zoom(false), false)
 
 const mContext     = mCanvas.getContext('2d')
@@ -227,9 +228,11 @@ const start = async () => {
   max_iters_slider.min   = RANGE_MAX_ITERS.MIN
   max_iters_slider.step  = RANGE_MAX_ITERS.STEP
   max_iters_slider.value = RANGE_MAX_ITERS.DEFAULT
+
   max_iters_slider.addEventListener("input", update_max_iters, false)
 
   $id("max_iters_txt").innerHTML = RANGE_MAX_ITERS.DEFAULT
+  $id("ppu_txt").innerHTML = PPU
 
   wasmObj = await WebAssembly.instantiateStreaming(fetch('./mj_plot.wasm'), host_fns)
 

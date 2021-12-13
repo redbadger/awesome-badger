@@ -1,0 +1,76 @@
+| Previous | | Next
+|---|---|---
+| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Up](../) | 
+| | [6: Zooming In](../) | [6.2 Add Slider for Changing `max_iters`](../02/)
+
+### 6.1: Add Zoom In/Out Functionality
+
+Now we will add the functionality that allows you to zoom in and out of the Mandelbrot Set.  This will be implemented simply by left and right mouse clicks.
+
+Any given zoom level is determined simply by deciding how many pixels one unit on the complex plane will occupy.  The default (and also minimum) zoom level of `200` and this value is derived by dividing the canvas width by 4.  This gives a zoom level suitable for seeing the entire Mandelbrot Set.
+
+The minimum and maximum zoom levels are defined as:
+
+```Javascript
+const MAX_PPU = 409600             // Allow for 12 zoom steps
+const MIN_PPU = CANVAS_WIDTH / 4   // Start by showing entire Mandelbrot Set
+let   PPU     = MIN_PPU
+```
+
+When you zoom in, the zoom level is doubled until `MAX_PPU` is reached.  Similarly, when you zoom out, the zoom level is halved until `MIN_PPU` is reached.  When `MIN_PPU` is reached, the image of the Mandelbrot Set is automatically recentred.  In both case, the location on which you click becomes the centre pixel of the new image.
+
+Since the both zoom level and the coordinates of the image's centre pixel are now variable, every time the zoom level changes, we need to redefine the helper functions that transform a pixel location to to coordinates.
+
+This firstly means that functions `mandel_x_pos_to_ccord` and `mandel_y_pos_to_ccord` can no longer be constants:
+
+```javascript
+let mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH, PPU, X_ORIGIN)
+let mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
+```
+
+#### Zoom Event Handler
+
+The functionality need when zooming into the Mandelbrot Set is almost identical to that needed when zooming out.  The only difference is that when we zoom in, `PPU` is multiplied by two until it reaches `MAX_PPU`, and when zooming out `PPU` is divided by two until it reaches `MIN_PPU`.
+
+This means we can create a single partial function that when passed the zoom direction, returns an event handler function that changes `PPU` in the appropriate direction.
+
+```javascript
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Partial function for handling image zoom in/out events
+const zoom = zoom_in => evt => {
+  // Suppress default context menu when zooming out
+  if (!zoom_in) evt.preventDefault()
+
+  // Transform the mouse pointer pixel location to coordinates in the complex plane
+  X_ORIGIN = mandel_x_pos_to_coord(offset_to_clamped_pos(evt.offsetX, evt.target.width, evt.target.offsetWidth))
+  Y_ORIGIN = mandel_y_pos_to_coord(offset_to_clamped_pos(evt.offsetY, evt.target.height, evt.target.offsetHeight))
+
+  // Change zoom level
+  PPU = zoom_in
+        ? (new_ppu => new_ppu > MAX_PPU ? MAX_PPU : new_ppu)(PPU * 2)
+        : (new_ppu => new_ppu < MIN_PPU ? MIN_PPU : new_ppu)(PPU / 2)
+  $id("ppu_txt").innerHTML = PPU
+
+  // If we're back out to the default zoom level, then reset the Mandelbrot Set image origin
+  if (PPU === MIN_PPU) {
+    X_ORIGIN = DEFAULT_X_ORIGIN
+    Y_ORIGIN = DEFAULT_Y_ORIGIN
+  }
+
+  // Update the mouse position helper functions using the new X/Y origin and zoom level
+  mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH, PPU, X_ORIGIN)
+  mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
+
+  // Redraw the Mandelbrot Set
+  draw_fractal(0.0, 0.0, true)
+}
+```
+
+Notice also that instead of directly calling the WebAssembly function `mj_plot`, the functionality to call this function, record its execution time and plot the image has been moved into a function called `draw_fractal`.
+
+Now, the zoom event handler is added to the `canvas` HTML element:
+
+```javascript
+mCanvas.addEventListener('click',       zoom(true),  false)
+mCanvas.addEventListener('contextmenu', zoom(false), false)
+```
