@@ -33,16 +33,16 @@ const DEFAULT_MAX_ITERS = 1000
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Canvas
-const DEFAULT_X_ORIGIN      = -0.5
-const DEFAULT_Y_ORIGIN      = 0
-const DEFAULT_CANVAS_WIDTH  = 800
-const DEFAULT_CANVAS_HEIGHT = 450
+const DEFAULT_X_ORIGIN = -0.5
+const DEFAULT_Y_ORIGIN = 0
+const CANVAS_WIDTH     = 800
+const CANVAS_HEIGHT    = 450
 
-const PPU = DEFAULT_CANVAS_WIDTH / 4 // Pixels per unit in the complex plane
+const PPU = CANVAS_WIDTH / 4 // Pixels per unit in the complex plane
 
 const mCanvas  = document.getElementById('mandelImage')
-mCanvas.width  = DEFAULT_CANVAS_WIDTH
-mCanvas.height = DEFAULT_CANVAS_HEIGHT
+mCanvas.width  = CANVAS_WIDTH
+mCanvas.height = CANVAS_HEIGHT
 
 const mContext    = mCanvas.getContext('2d')
 const mImage      = mContext.createImageData(mCanvas.width, mCanvas.height)
@@ -80,12 +80,9 @@ const start = async () => {
   // Record the start time and render the Mandelbrot Set
   const start_time = performance.now()
   wasmObj.instance.exports.mandel_plot(
-    DEFAULT_CANVAS_WIDTH,
-    DEFAULT_CANVAS_HEIGHT,
-    DEFAULT_X_ORIGIN,
-    DEFAULT_Y_ORIGIN,
-    PPU,
-    DEFAULT_MAX_ITERS,
+    CANVAS_WIDTH, CANVAS_HEIGHT,
+    DEFAULT_X_ORIGIN, DEFAULT_Y_ORIGIN,
+    PPU, DEFAULT_MAX_ITERS,
   )
 
   document.getElementById("runtime").innerHTML = microPrecision(performance.now() - start_time)

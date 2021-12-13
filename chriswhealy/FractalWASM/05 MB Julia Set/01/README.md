@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Up](../../) | 
+| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Up](../../) | [6: Zooming In](../06%20Zoom%20Image/) 
 | | [5: Plotting a Julia Set](../) | [5.2 WebAssembly Changes](../02/)
 
 ### 5.1: Web Page Changes
@@ -25,8 +25,8 @@ The memory requirements for the new Julia Set image are calculated in exactly th
 
 ```javascript
 const jCanvas  = $id('juliaImage')
-jCanvas.width  = DEFAULT_CANVAS_WIDTH
-jCanvas.height = DEFAULT_CANVAS_HEIGHT
+jCanvas.width  = CANVAS_WIDTH
+jCanvas.height = CANVAS_HEIGHT
    
 const jContext     = jCanvas.getContext('2d')
 const jImage       = jContext.createImageData(jCanvas.width, jCanvas.height)
@@ -71,8 +71,8 @@ This event handler function also uses some helper functions to calculate exactly
 // Partial function to translate the mouse X or Y canvas position to the corresponding X or Y coordinate in the complex
 // plane.
 const canvas_pxl_to_coord = (cnvsDim, ppu, origin) => mousePos => origin + ((mousePos - (cnvsDim / 2)) / ppu)
-const mandel_x_pos_to_coord = canvas_pxl_to_coord(DEFAULT_CANVAS_WIDTH, PPU, DEFAULT_X_ORIGIN)
-const mandel_y_pos_to_coord = canvas_pxl_to_coord(DEFAULT_CANVAS_HEIGHT, PPU, DEFAULT_Y_ORIGIN)
+const mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH, PPU, DEFAULT_X_ORIGIN)
+const mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, DEFAULT_Y_ORIGIN)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Return a value clamped to the magnitude of the canvas image dimension accounting also for the canvas border width
@@ -92,7 +92,7 @@ const mouse_track = evt => {
   let x_coord = mandel_x_pos_to_coord(
     offset_to_clamped_pos(evt.offsetX, evt.target.width, evt.target.offsetWidth)
   )
-  // On a canvas, positive Y direction is down, but this needs to be flipped when converting to coordinates
+  // Flip sign because on a canvas, positive Y direction is down
   let y_coord = mandel_y_pos_to_coord(
     offset_to_clamped_pos(evt.offsetY, evt.target.height, evt.target.offsetHeight)
   ) * -1
@@ -104,11 +104,11 @@ const mouse_track = evt => {
   // Record the start time and render the Julia Set
   const start_time = performance.now()
   wasmObj.instance.exports.mj_plot(
-    DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT, // Julia Set canvas dimensions
-    0.0, 0.0,                                    // Coordinates of centre pixel
-    x_coord, y_coord,                            // Pointer coordinates over Mandelbrot Set
-    PPU, DEFAULT_MAX_ITERS,                      // Default zoom level and iteration limit
-    false, jImageOffset,                         // isMandelbrot and Julia Set image data offset
+    CANVAS_WIDTH, CANVAS_HEIGHT,  // Julia Set canvas dimensions
+    0.0, 0.0,                     // Coordinates of centre pixel
+    x_coord, y_coord,             // Pointer coordinates over Mandelbrot Set
+    PPU, DEFAULT_MAX_ITERS,       // Default zoom level and iteration limit
+    false, jImageOffset,          // isMandelbrot and Julia Set image data offset
   )
 
   $id("julia_runtime").innerHTML = microPrecision(performance.now() - start_time)

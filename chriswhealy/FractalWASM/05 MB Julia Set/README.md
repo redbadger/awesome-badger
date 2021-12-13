@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/) | [Up](../) | 
+| [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/) | [Up](../) | [6: Zooming In](../06%20Zoom%20Image/) 
 
 ## 5: Plotting a Julia Set
 
