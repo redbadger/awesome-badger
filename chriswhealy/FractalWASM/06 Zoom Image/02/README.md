@@ -40,7 +40,7 @@ let   MAX_ITERS       = RANGE_MAX_ITERS.DEFAULT
 
 #### Define Slider Event Handler
 
-Since the slider event handler needs to draw both the Mandelbrot and Julia Sets, the X and Y coordinates of the last Julia set need to be available to this event handler, hence the addition of two variables `last_julia_x_coord` and `last_julia_y_coord`;
+Since the slider event handler needs to draw both the Mandelbrot and Julia Sets, the X and Y coordinates of the last Julia set need to be available to this event handler, hence the addition of two, document-wide variables called `last_julia_x_coord` and `last_julia_y_coord`:
 
 ```javascript
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
