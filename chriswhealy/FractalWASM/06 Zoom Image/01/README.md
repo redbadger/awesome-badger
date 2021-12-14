@@ -7,17 +7,17 @@
 
 Now we will add the functionality that allows you to zoom in and out of the Mandelbrot Set.  This will be implemented simply by left and right mouse clicks.
 
-Any given zoom level is determined simply by deciding how many pixels one unit on the complex plane will occupy.  The default (and also minimum) zoom level is `200` and is derived by dividing the canvas width by 4.  This gives a zoom level suitable for seeing the entire Mandelbrot Set.
+Any given zoom level is determined simply by deciding how many pixels are needed to plot one unit on the complex plane.  The higher the number of pixels, the greater your level of magnification.  The default (and also minimum) zoom level is `200`.  This value has been derived by dividing the entire canvas width by 4, thus allowing you to see the entire Mandelbrot Set.
 
-The minimum and maximum zoom levels are defined as:
+We'll start by defining the maximum, minimum and current zoom levels:
 
 ```Javascript
-const MAX_PPU = 409600             // Allow for 12 zoom steps
+const MAX_PPU = 6553600            // Allow for 16 zoom steps (100 * 2^16)
 const MIN_PPU = CANVAS_WIDTH / 4   // Start by showing entire Mandelbrot Set
 let   PPU     = MIN_PPU
 ```
 
-When you zoom in, the zoom level is doubled until `MAX_PPU` is reached.  Similarly, when you zoom out, the zoom level is halved until `MIN_PPU` is reached.  When `MIN_PPU` is reached, the image of the Mandelbrot Set is automatically recentred.  In both case, the location on which you click becomes the centre pixel of the new image.
+When you zoom in, the zoom level is doubled until `MAX_PPU` is reached.  Similarly, when you zoom out, the zoom level is halved until `MIN_PPU` is reached.  When `MIN_PPU` is reached, the image of the Mandelbrot Set is automatically recentred.  In both cases, the location on which you click becomes the centre pixel of the new image.
 
 Since both the zoom level and the coordinates of the image's centre pixel are now variable, every time the zoom level changes, we need to redefine the helper functions that transform a pixel location to complex plane coordinates.
 
@@ -32,7 +32,7 @@ let mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
 
 The functionality needed when zooming into the Mandelbrot Set is almost identical to that needed when zooming out.  The only difference is that when we zoom in, `PPU` is multiplied by two until it reaches `MAX_PPU`, and when zooming out `PPU` is divided by two until it reaches `MIN_PPU`.
 
-This means we can create a single partial function that when passed the zoom direction, returns an event handler function that makes the appropriate change to `PPU`.
+This means we can create a single partial function that when passed the zoom direction, returns an event handler function that changes `PPU` appropriately.
 
 ```javascript
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

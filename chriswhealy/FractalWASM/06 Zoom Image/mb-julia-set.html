@@ -8,11 +8,11 @@
 <body>
   <div>
     <table>
-      <tr><th colspan="3">Left-click to zoom in, right-click to zoom out</th></tr>
-      <tr><td>Max Iterations</td>
+      <tr><td colspan="3"><h1>Left-click to zoom in, right-click to zoom out</h1></td></tr>
+      <tr><td>Maximum Iterations</td>
           <td><input class="horizontal" id="max_iters" type="range"></td>
           <td id="max_iters_txt"></td></tr>
-      <tr><td>Zoom level</td>
+      <tr><td>Zoom Level</td>
           <td id="ppu_txt"></td></tr>
     </table>
   </div>
@@ -47,7 +47,7 @@ const RANGE_MAX_ITERS = { MIN : 100, MAX : 32768, STEP : 100, DEFAULT : 1000 }
 let   MAX_ITERS       = RANGE_MAX_ITERS.DEFAULT
 
 // Define max/min zoom level limits (PPU = pixels per unit in the complex plane)
-const MAX_PPU = 409600             // Allow for 12 zoom steps
+const MAX_PPU = 6553600            // Allow for 16 zoom steps (100 * 2^16)
 const MIN_PPU = CANVAS_WIDTH / 4   // Start by showing entire Mandelbrot Set
 let   PPU     = MIN_PPU
 
@@ -58,8 +58,10 @@ const canvas_pxl_to_coord = (cnvsDim, ppu, origin) => mousePos => origin + ((mou
 let mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH,  PPU, X_ORIGIN)
 let mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
 
-let last_julia_x_coord = null
-let last_julia_y_coord = null
+let last_julia = {
+  x_coord : null,
+  y_coord : null
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Return a value clamped to the magnitude of the canvas image dimension accounting also for the canvas border width
@@ -140,20 +142,20 @@ const zoom = zoom_in => evt => {
 // Mouse move event handler
 const mouse_track = evt => {
   // Transform the mouse pointer pixel location to coordinates in the complex plane
-  last_julia_x_coord = mandel_x_pos_to_coord(
+  last_julia.x_coord = mandel_x_pos_to_coord(
     offset_to_clamped_pos(evt.offsetX, evt.target.width,  evt.target.offsetWidth)
   )
   // Flip sign because on a canvas, positive Y direction is down
-  last_julia_y_coord = mandel_y_pos_to_coord(
+  last_julia.y_coord = mandel_y_pos_to_coord(
     offset_to_clamped_pos(evt.offsetY, evt.target.height, evt.target.offsetHeight)
   ) * -1
 
   // Display the mouse pointer's current position as coordinates in the complex plane
-  $id('x_complex_coord').innerHTML = last_julia_x_coord
-  $id('y_complex_coord').innerHTML = last_julia_y_coord
+  $id('x_complex_coord').innerHTML = last_julia.x_coord
+  $id('y_complex_coord').innerHTML = last_julia.y_coord
 
   // Draw the new Julia Set
-  draw_fractal(last_julia_x_coord, last_julia_y_coord, false)
+  draw_fractal(last_julia.x_coord, last_julia.y_coord, false)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -169,8 +171,8 @@ const update_max_iters = evt => {
   draw_fractal(0.0, 0.0, true)
 
   // Redraw last Julia Set
-  if (last_julia_x_coord !== null && last_julia_y_coord !== null)
-    draw_fractal(last_julia_x_coord, last_julia_y_coord, false)
+  if (last_julia.x_coord !== null && last_julia.y_coord !== null)
+    draw_fractal(last_julia.x_coord, last_julia.y_coord, false)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

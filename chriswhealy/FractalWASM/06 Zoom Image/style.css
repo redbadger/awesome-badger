@@ -5,26 +5,11 @@ body {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.25rem;
   margin: 0.67em 0;
   text-align: center;
-}
-
-.rb_logo {
-  width: 176px;
-  height: 44px;
 }
 
 [type="range"].horizontal {
   width: 400px
 }
-
-table.perf {
-  width: 12em;
-  table-layout: fixed;
-}
-
-td.hidden  { visibility: hidden; }
-td.visible { visibility: visible; }
-
-td.narrow { width: 20%; text-align: right; }
