@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WAT Implementation of the Mandelbrot Set and Julia Sets</title>
+<link rel="stylesheet" href="style.css"charset="utf8">
+</head>
+<body>
+  <div>
+    <table>
+      <tr><td colspan="3"><h1>Left-click to zoom in, right-click to zoom out</h1></td></tr>
+      <tr><td>Maximum Iterations</td>
+          <td><input class="horizontal" id="max_iters" type="range"></td>
+          <td id="max_iters_txt"></td></tr>
+      <tr><td>Zoom Level</td>
+          <td id="ppu_txt"></td></tr>
+    </table>
+  </div>
+  <canvas id="mandelImage" style="border: 1px solid black"></canvas>
+  <div>Mandelbrot Set rendered in <span id="mb_runtime"></span>ms</div>
+  <br>
+  <canvas id="juliaImage" style="border: 1px solid black"></canvas>
+  <div>Julia Set corresponding to
+    (<span id="x_complex_coord"></span>, <span id="y_complex_coord"></span>)
+    on the Mandelbrot Set rendered in <span id="julia_runtime"></span>ms
+  </div>
+  <script>
+function $id(el) { return document.getElementById(el) }
+const microPrecision = val => Math.round(val * 10000) / 10000
+
+const WASM_PAGE_SIZE = 1024 * 64
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Canvas properties
+const CANVAS_WIDTH  = 800
+const CANVAS_HEIGHT = 450
+
+const DEFAULT_X_ORIGIN = -0.5
+const DEFAULT_Y_ORIGIN = 0
+
+let X_ORIGIN = DEFAULT_X_ORIGIN
+let Y_ORIGIN = DEFAULT_Y_ORIGIN
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Max iters slider parameters
+const RANGE_MAX_ITERS = { MIN : 100, MAX : 32768, STEP : 100, DEFAULT : 1000 }
+let   MAX_ITERS       = RANGE_MAX_ITERS.DEFAULT
+
+// Define max/min zoom level limits (PPU = pixels per unit in the complex plane)
+const MAX_PPU = 6553600            // Allow for 16 zoom steps (100 * 2^16)
+const MIN_PPU = CANVAS_WIDTH / 4   // Start by showing entire Mandelbrot Set
+let   PPU     = MIN_PPU
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Partial function to translate the mouse X/Y canvas position to the corresponding X/Y coordinate in the complex
+// plane.
+const canvas_pxl_to_coord = (cnvsDim, ppu, origin) => mousePos => origin + ((mousePos - (cnvsDim / 2)) / ppu)
+let mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH,  PPU, X_ORIGIN)
+let mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
+
+let last_julia = {
+  x_coord : null,
+  y_coord : null
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Return a value clamped to the magnitude of the canvas image dimension accounting also for the canvas border width
+const offset_to_clamped_pos = (offset, dim, offsetDim) => {
+  let pos = offset - ((offsetDim - dim) / 2)
+  return pos < 0 ? 0 : pos > dim ? dim : pos
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Draw a fractal image
+const draw_fractal = (x_coord, y_coord, is_mandelbrot) => {
+  let { img, offset, ctx, x_origin, y_origin, ppu, rt_el } = is_mandelbrot
+    ? {
+      "img"      : mImage,
+      "offset"   : mImageOffset,
+      "ctx"      : mContext,
+      "x_origin" : X_ORIGIN,
+      "y_origin" : Y_ORIGIN,
+      "ppu"      : PPU,
+      "rt_el"    : "mb_runtime"
+    }
+    : {
+      "img"      : jImage,
+      "offset"   : jImageOffset,
+      "ctx"      : jContext,
+      "x_origin" : 0.0,
+      "y_origin" : 0.0,
+      "ppu"      : MIN_PPU,
+      "rt_el"    : "julia_runtime"
+    }
+
+  let start_time = performance.now()
+  wasmObj.instance.exports.mj_plot(
+    CANVAS_WIDTH, CANVAS_HEIGHT,
+    x_origin, y_origin,
+    x_coord, y_coord,
+    ppu, MAX_ITERS,
+    is_mandelbrot, offset,
+  )
+  $id(rt_el).innerHTML = microPrecision(performance.now() - start_time)
+
+  // Transfer the relevant slice of shared memory to the canvas image, then display it
+  img.data.set(wasmMem8.slice(offset, offset + img.data.length))
+  ctx.putImageData(img, 0, 0)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Partial function for handling image zoom in/out events
+const zoom = zoom_in => evt => {
+  // Suppress default context menu when zooming out
+  if (!zoom_in) evt.preventDefault()
+
+  // Transform the mouse pointer pixel location to coordinates in the complex plane
+  X_ORIGIN = mandel_x_pos_to_coord(offset_to_clamped_pos(evt.offsetX, evt.target.width,  evt.target.offsetWidth))
+  Y_ORIGIN = mandel_y_pos_to_coord(offset_to_clamped_pos(evt.offsetY, evt.target.height, evt.target.offsetHeight))
+
+  // Change zoom level
+  PPU = zoom_in
+        ? (new_ppu => new_ppu > MAX_PPU ? MAX_PPU : new_ppu)(PPU * 2)
+        : (new_ppu => new_ppu < MIN_PPU ? MIN_PPU : new_ppu)(PPU / 2)
+  $id("ppu_txt").innerHTML = PPU
+
+  // If we're back out to the default zoom level, then reset the Mandelbrot Set image origin
+  if (PPU === MIN_PPU) {
+    X_ORIGIN = DEFAULT_X_ORIGIN
+    Y_ORIGIN = DEFAULT_Y_ORIGIN
+  }
+
+  // Update the mouse position helper functions using the new X/Y origin and zoom level
+  mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH,  PPU, X_ORIGIN)
+  mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
+
+  // Redraw the Mandelbrot Set
+  draw_fractal(0.0, 0.0, true)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Mouse move event handler
+const mouse_track = evt => {
+  // Transform the mouse pointer pixel location to coordinates in the complex plane
+  last_julia.x_coord = mandel_x_pos_to_coord(
+    offset_to_clamped_pos(evt.offsetX, evt.target.width,  evt.target.offsetWidth)
+  )
+  // Flip sign because on a canvas, positive Y direction is down
+  last_julia.y_coord = mandel_y_pos_to_coord(
+    offset_to_clamped_pos(evt.offsetY, evt.target.height, evt.target.offsetHeight)
+  ) * -1
+
+  // Display the mouse pointer's current position as coordinates in the complex plane
+  $id('x_complex_coord').innerHTML = last_julia.x_coord
+  $id('y_complex_coord').innerHTML = last_julia.y_coord
+
+  // Draw the new Julia Set
+  draw_fractal(last_julia.x_coord, last_julia.y_coord, false)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Max iters slider event handler
+const update_max_iters = evt => {
+  MAX_ITERS = evt.target.value
+  $id("max_iters_txt").innerHTML = MAX_ITERS
+
+  // Regenerate the colour palette
+  wasmObj.instance.exports.gen_palette(MAX_ITERS)
+
+  // Redraw Mandelbrot Set
+  draw_fractal(0.0, 0.0, true)
+
+  // Redraw last Julia Set
+  if (last_julia.x_coord !== null && last_julia.y_coord !== null)
+    draw_fractal(last_julia.x_coord, last_julia.y_coord, false)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Mandelbrot Set canvas
+const mCanvas  = $id('mandelImage')
+mCanvas.width  = CANVAS_WIDTH
+mCanvas.height = CANVAS_HEIGHT
+
+mCanvas.addEventListener('mousemove',   mouse_track, false)
+mCanvas.addEventListener('click',       zoom(true),  false)
+mCanvas.addEventListener('contextmenu', zoom(false), false)
+
+const mContext     = mCanvas.getContext('2d')
+const mImage       = mContext.createImageData(mCanvas.width, mCanvas.height)
+const mImagePages  = Math.ceil(mImage.data.length / WASM_PAGE_SIZE)
+const mImageOffset = 0
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Julia Set canvas
+const jCanvas  = $id('juliaImage')
+jCanvas.width  = CANVAS_WIDTH
+jCanvas.height = CANVAS_HEIGHT
+
+const jContext     = jCanvas.getContext('2d')
+const jImage       = jContext.createImageData(jCanvas.width, jCanvas.height)
+const jImagePages  = Math.ceil(jImage.data.length / WASM_PAGE_SIZE)
+const jImageOffset = WASM_PAGE_SIZE * mImagePages
+
+const palettePages = 2
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Create WASM shared memory and object for sharing resources from the host environment
+const wasmMemory = new WebAssembly.Memory({
+  initial : mImagePages + jImagePages + palettePages
+})
+
+const wasmMem8 = new Uint8ClampedArray(wasmMemory.buffer)
+
+const host_fns = {
+  js : {
+    shared_mem : wasmMemory,
+    palette_offset : WASM_PAGE_SIZE * (mImagePages + jImagePages),
+  }
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// WASM module instance needs to exist at the window level
+let wasmObj
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Async function to create WASM module instance, generate colour palette and plot Mandelbrot Set
+const start = async () => {
+  let max_iters_slider   = $id("max_iters")
+  max_iters_slider.max   = RANGE_MAX_ITERS.MAX
+  max_iters_slider.min   = RANGE_MAX_ITERS.MIN
+  max_iters_slider.step  = RANGE_MAX_ITERS.STEP
+  max_iters_slider.value = RANGE_MAX_ITERS.DEFAULT
+
+  max_iters_slider.addEventListener("input", update_max_iters, false)
+
+  $id("max_iters_txt").innerHTML = RANGE_MAX_ITERS.DEFAULT
+  $id("ppu_txt").innerHTML = PPU
+
+  wasmObj = await WebAssembly.instantiateStreaming(fetch('./mj_plot.wasm'), host_fns)
+
+  // Create the colour palette
+  wasmObj.instance.exports.gen_palette(MAX_ITERS)
+
+  // Draw initial Mandelbrot Set
+  draw_fractal(0.0, 0.0, true)
+}
+
+start()
+</script>
+</body>
+</html>
