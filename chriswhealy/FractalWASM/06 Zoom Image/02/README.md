@@ -7,11 +7,11 @@
 
 Next we will add a slider for changing the value of `max_iters`.
 
-Every time `max_iters` changes, we will need to redraw both the Mandelbrot and current Julia Sets to account for the new level of detail.  In addition to this, we must also remember that the value of `max_iters` defines the number of colours in the colour palette.
+Every time `max_iters` changes, we will need to redraw both the Mandelbrot and current Julia Sets to account for the new level of detail.  In addition to this, we must also remember that the value of `max_iters` defines the number of colours in the palette; therefore, the colour palette will also need to be rebuilt.
 
 #### Change the HTML
 
-Firstly, we need to change the HTML to add the slider `input` element and also display the current zoom level.
+Inside a `table`, add a slider `input` element and a text field to display the current zoom level.
 
 ```html
 <div>
@@ -26,11 +26,11 @@ Firstly, we need to change the HTML to add the slider `input` element and also d
 </div>
 ```
 
-Here, we are referencing a CSS file to defines things such as the default typeface for the entire Web page (Raleway) and the width of the slider.
+A separate CSS file is referenced here that defines things such as the default typeface for the entire Web page (Raleway) and the width of the slider.
 
 #### Define Slider Parameters
 
-First the slider parameters are defined in a configuration object:
+First, the slider parameters are defined in a configuration object:
 
 ```javascript
 // Max iters slider parameters
@@ -40,9 +40,14 @@ let   MAX_ITERS       = RANGE_MAX_ITERS.DEFAULT
 
 #### Define Slider Event Handler
 
-Since the slider event handler needs to draw both the Mandelbrot and Julia Sets, the X and Y coordinates of the last Julia set need to be available to this event handler, hence the addition of two, document-wide variables called `last_julia_x_coord` and `last_julia_y_coord`:
+Since the slider event handler needs to draw both the Mandelbrot and Julia Sets, the X and Y coordinates of the last Julia set need to be available to this event handler; hence the addition of a document-wide object called `last_julia`:
 
 ```javascript
+let last_julia = {
+  x_coord : null,
+  y_coord : null
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Max iters slider event handler
 const update_max_iters = evt => {
@@ -56,8 +61,8 @@ const update_max_iters = evt => {
   draw_fractal(0.0, 0.0, true)
   
   // Redraw last Julia Set
-  if (last_julia_x_coord !== null && last_julia_y_coord !== null)
-    draw_fractal(last_julia_x_coord, last_julia_y_coord, false)
+  if (last_julia.x_coord !== null && last_julia.y_coord !== null)
+    draw_fractal(last_julia.x_coord, last_julia.y_coord, false)
 }
 ```
 

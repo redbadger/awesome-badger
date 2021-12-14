@@ -15,15 +15,15 @@ Oh dear...
 
 ![Slow Runtime](Slow%20Runtime.png)
 
-There are several techniques for improving the performance here.  Some are based on watching the trajectory of the iterated coordinates each time around the the escape-time loop.  If a repeating series is detected, then we know that the orbit is stable and therefore we can bail out early.
+There are several techniques for improving the performance here.  Some are based on watching the trajectory of the iterated coordinates each time around the escape-time loop.  If a repeating series is detected, then we know that the orbit is stable and therefore we can bail out early.
 
-However, we're going to take a different approach.  Instead of modifying the basic escape-time algorithm, we will take advantage of the fact that plotting these fractal images is *"embarrassingly parallel"*.  This means we can use Web Workers to parallelize the solution.
+However, we're going to take a different approach.  Instead of modifying the basic escape-time algorithm, we will take advantage of the fact that plotting these fractal images is *"embarrassingly parallel"*.  This means we can parallelize the solution.
 
-However, several basic changes will first need to be made:
+However, this will require several basic changes to be made:
 
-1. Adapt the WebAssembly function `mj_plot` to use the `atomic.rmw` (read-modify-write) statement.  This allows multiple instances of the same WebAssembly module to act upon the same block of linear memory without interfering with each other, and without the need to manage locks or mutexes.
-1. Create multiple instances of our WebAssembly module
-1. Adapt the JavaScript coding to call multiple copies of the `mj_plot` function from Web Workers
+1. The combined efforts of multiple instances of function `mj_plot` will now be used to calculate a single fractal image.  Therefore, this function must be adapted so that while each performs its own loop, no two instances ever attempt to calculate the same pixel value.
+1. The JavaScript coding that creates an instance of the WebAssembly module must be moved into a Web Worker
+1. The main Web page must be adapted to create multiple Web Worker instances and then send them appropriate messages any time a user changes a value such as the zoom level or the maximum iterations.
 
 In the next section we will look how to implement these changes.
 
