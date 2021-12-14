@@ -53,7 +53,7 @@ Once all the instances of `mj_plot` have finished, the main thread then transfer
 
 
 
----
+
 [^1]: All without the need for lock objects or mutexes!
 
 
