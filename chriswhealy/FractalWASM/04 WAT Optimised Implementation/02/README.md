@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Up](../../) | 
-| [4.1 Check for Early Bailout](../01/) | [4: Optimised WAT Implementation](../) | 
+| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Up](../../) |
+| [4.1 Check for Early Bailout](../01/) | [4: Optimised WAT Implementation](../) |
 
 ### 4.2: Modify Render Loop
 
@@ -14,7 +14,7 @@ Now, before calling function `escape_time_mj`, we must first check where the cur
 
 The innermost `if` expression in function `mandel_plot` has now been extended to perform this additional test:
 
-```wat
+```wast
 ;; Store the current pixel's colour using the value returned from the following if expression
 (i32.store
   (local.get $pixel_offset)

@@ -13,3 +13,13 @@ h1 {
 [type="range"].horizontal {
   width: 400px
 }
+
+table.perf {
+  width: 12em;
+  table-layout: fixed;
+}
+
+td.hidden  { visibility: hidden; }
+td.visible { visibility: visible; }
+
+td.narrow { width: 20%; text-align: right; }

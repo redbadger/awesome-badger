@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) |
 | [3.3: Generate the Colour Palette](../03/) | [3: Basic WAT Implementation](../) | [3.5: Calculating the Mandelbrot Set Image](../05/)
 
 ## 3.4: Escape-Time Algorithm
@@ -23,7 +23,7 @@ This coding style is used here.
 
 This function takes two complex numbers `z` and `c` and repeatedly squares `z` and adds `c` until one of the continuation conditions become false.  However, since WebAssembly has no complex number datatype, the real and imaginary parts of the complex arguments `z` and `c` are supplied as two pairs of `f64`s: `zx` and `zy`, and `cx` and `cy`.
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Escape time algorithm for calculating either the Mandelbrot or Julia sets
 ;; Iterates z[n]^2 + c => z[n+1]
@@ -56,14 +56,14 @@ This function takes two complex numbers `z` and `c` and repeatedly squares `z` a
         ;; $zx = $cx + ($zx_sqr - $zy_sqr)
         (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
         (local.set $zx (f64.add (local.get $cx) (f64.sub (local.get $zx_sqr) (local.get $zy_sqr))))
-        
+
         (local.set $iters (i32.add (local.get $iters) (i32.const 1)))
-        
+
         br $next_iter
       )
     )
   )
-  
+
   (local.get $iters)
 )
 ```

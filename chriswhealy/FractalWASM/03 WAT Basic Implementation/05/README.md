@@ -1,13 +1,13 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) |
 | [3.4: Escape-Time Algorithm](../04/) | [3: Basic WAT Implementation](../) | [3.6: Displaying the Rendered Fractal Image](../06/)
 
 ## 3.5: Calculating the Mandelbrot Set Image
 
 Now that we have a bare-bones function to calculate the value of a single pixel, we can simply call this function for every pixel in the image.
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot set
 (func (export "mandel_plot")
@@ -64,7 +64,7 @@ Now that we have a bare-bones function to calculate the value of a single pixel,
                   (f64.div (f64.convert_i32_u (local.get $x_pos)) (local.get $ppu_f64))
                 )
               )
-              
+
               ;; Store the current pixel's colour using the value returned from the following if expression
               (i32.store
                 (local.get $pixel_offset)
@@ -96,7 +96,7 @@ Now that we have a bare-bones function to calculate the value of a single pixel,
               ;; Increment column and memory offset counters
               (local.set $x_pos (i32.add (local.get $x_pos) (i32.const 1)))
               (local.set $pixel_offset (i32.add (local.get $pixel_offset) (i32.const 4)))
-               
+
               br $cols
             )
           )
@@ -105,7 +105,7 @@ Now that we have a bare-bones function to calculate the value of a single pixel,
         ;; Reset column counter and increment row counter
         (local.set $x_pos (i32.const 0))
         (local.set $y_pos (i32.add (local.get $y_pos) (i32.const 1)))
-         
+
         br $rows
       )
     )
@@ -124,7 +124,7 @@ When looking through the coding, the following points are important:
 1. Certain optimisations have been implemented in order to avoid calculating the same value multiple times.  Hence the need for intermediate values such as `$half_width`, `$half_height`, `$cx_int` and `$cy_int`
 1. It is very important to remember that the `$x_pos` and `$y_pos` loop counters are integers, but the escape-time algorithm requires coordinate values.  This means two things:
     1. Each index value must be transformed from a pixel location on the image, to a coordinate in the complex plane
-    1. Coordinates are floating point numbers, not integers.  Therefore, we must employ type-conversion instructions (such as `f64.convert_i32_u`) to convert unsigned 32-bit integers into 64-bit floating points.  
+    1. Coordinates are floating point numbers, not integers.  Therefore, we must employ type-conversion instructions (such as `f64.convert_i32_u`) to convert unsigned 32-bit integers into 64-bit floating points.
 
         This also explains why although the function receives argument `$ppu` as an `i32`, before it can be used, that value must first be converted and stored as an `f64` local variable.
 1. Just before the call to `$escape_time_mj`, we use the instruction `i32.tee`.  This instruction is useful here because it does two things at once:

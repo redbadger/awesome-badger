@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Up](../../) | 
+| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Up](../../) |
 | | [4: Optimised WAT Implementation](../) | [4.2 Modify Render Loop](../02/)
 
 ### 4.1: Check for Early Bailout
@@ -25,7 +25,7 @@ So, let's now create a WAT function that implements this check.
 
 If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](../../../07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.  Hence this function returns an `i32`:
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Main cardioid check
 (func $is_in_main_cardioid
@@ -63,7 +63,7 @@ If this returns true, then there is no need to run the escape time algorithm.
 
 Here's the WebAssembly function that implements this check
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Period 2 bulb check: ($x + 1)^2 + $y^2 <= 0.0625
 (func $is_in_period_two_bulb
@@ -87,7 +87,7 @@ Here's the WebAssembly function that implements this check
 
 Finally, we can combine these two functions into a simple check for early bailout
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Check for early bailout
 (func $early_bailout
