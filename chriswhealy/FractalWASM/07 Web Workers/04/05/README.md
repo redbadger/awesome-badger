@@ -99,7 +99,7 @@ Previously, we used the internal `$x_pos` and `$y_pos` counters to control a nes
 ) ;; end of $rows loop
 ```
 
-Now, we simply have a single loop that performs an atomic read-modify-write on the next pixel value in shared memory, then converts that pixel number to the correct row and column values:
+Now, we simply have a single loop that performs an atomic read-modify-write on the next pixel value in shared memory, then converts that pixel number to the correct row and column coordinates:
 
 ```wast
 (loop $pixels

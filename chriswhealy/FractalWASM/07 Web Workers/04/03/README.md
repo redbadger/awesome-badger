@@ -44,6 +44,8 @@ const rebuild_workers = evt => {
 
     // Create new set of workers
     for (let i=0; i<WORKERS; i++) {
+      // snip UI stuff...
+      
       let w = new Worker('worker.js')
 
       // Respond to messages received from the worker
@@ -54,6 +56,8 @@ const rebuild_workers = evt => {
 
       worker_list.push(w)
     }
+    
+    // snip more UI stuff...
   }
 }
 ```
