@@ -12,7 +12,7 @@ Remember that a WebAssembly program can only be invoked from a host environment.
 Here's a syntactically correct, but completely useless WebAssembly module.
 
 [`02-useless.wat`](02-useless.wat)
-```wat
+```wast
 (module)
 ```
 
@@ -36,14 +36,14 @@ Well, that's hardly surprising since the module doesn't contain any functions at
 Let's now make the above module slightly less useless by adding a function that does nothing more than return the number `42`
 
 [`02-slightly-less-useless.wat`](02-slightly-less-useless.wat)
-```wat
+```wast
 (module
   (func               ;; Declare a function that can be called from
     (export "answer") ;; outside the WASM module using the name "answer"
     (result i32)      ;; that returns a 32-bit integer
     (i32.const 42)    ;; Push 42 onto the stack
   )                   ;; Exit the function. Any value left on the stack becomes the function's return value
-)                     
+)
 ```
 
 Let's now compile and run this program:

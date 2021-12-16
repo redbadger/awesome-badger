@@ -14,7 +14,7 @@ So far, we have only looked at a very simple WebAssembly function &mdash; one th
 
 A function is declared using the keyword `func`.
 
-> ***IMPORTANT***  
+> ***IMPORTANT***
 >WebAssembly functions can be given two, possibly different, human-readable names:[^1]
 >
 > 1. A name used when calling the function from **inside** the WebAssembly module
@@ -22,7 +22,7 @@ A function is declared using the keyword `func`.
 
 If we wish to call a WebAssembly function from inside the module, then the internal name is declared as follows:
 
-```wat
+```wast
 (func $my_func       ;; The function's internal name
 
   ;; Function body goes here
@@ -31,7 +31,7 @@ If we wish to call a WebAssembly function from inside the module, then the inter
 
 If a WebAssembly function only needs to be called from outside the module, then the internal name can be omitted.  The external name is defined using the `export` keyword followed by some string that becomes the function's external (or exported) name:
 
-```wat
+```wast
 (func
   (export "wasm_fn") ;; The function's external name
 
@@ -41,7 +41,7 @@ If a WebAssembly function only needs to be called from outside the module, then 
 
 It also might be the case that we need to call this function from both inside and outside the module.  In this case, specify both names:
 
-```wat
+```wast
 (func $my_func       ;; The function's internal name
   (export "wasm_fn") ;; The function's external name
 
@@ -57,7 +57,7 @@ Here's a real-life example.  Let's say we have a function that finds the magnitu
 
 This function takes a complex number as an argument in the form of two, 64-bit floating point numbers (`$real` and `$imag`) and returns a single 64-bit floating point number:
 
-```wat
+```wast
 (func $mag           ;; Internal name
   (export "mag")     ;; External name
   (param $real f64)  ;; 1st argument is an f64 known as $real
@@ -71,7 +71,7 @@ This function takes a complex number as an argument in the form of two, 64-bit f
 The implementation of this function simply uses Pythagoras' formula to work out the hypotenuse length of the right triangle having sides `$real` and `$imag`
 
 [09-single-return-value.wat](09-single-return-value.wat)
-```wat
+```wast
 (func $mag           ;; Internal name
   (export "mag")     ;; External name
   (param $real f64)  ;; 1st argument is an f64 known as $real
@@ -91,7 +91,7 @@ The implementation of this function simply uses Pythagoras' formula to work out 
       (f64.mul (local.get $imag) (local.get $imag))
     )
   )
-  
+
   ;; The square root operation leaves a single f64 value on the stack
   ;; We now exit and this becomes the function's return value
 )
@@ -113,7 +113,7 @@ WebAssembly functions can also return multiple values.  Here's a simple example 
 The WebAssembly function is passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
 
 [`09-multiple-return-values.wat`](09-multiple-return-values.wat)
-```wat
+```wast
 ;; Conjugate of a complex number
 ;; conj(a+bi) => (a-bi)
 (func $conj                     ;; Internal name
