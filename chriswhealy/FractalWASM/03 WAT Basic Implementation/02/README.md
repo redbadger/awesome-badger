@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) |
 | [3.1: Shared memory](../01/) | [3: Basic WAT Implementation](../) | [3.3: Generate the Colour Palette](../03/)
 
 ## 3.2: Create the WebAssembly Module
@@ -11,7 +11,7 @@ At the end of [§3.1](../01/) we assumed that our WebAssembly module would be ca
 
 Having created a file called `mandel_plot.wat`, start by defining the module and the resources that need to be imported from the host environment:
 
-```wat
+```wast
 (module
   (import "js" "shared_mem" (memory 24))
 

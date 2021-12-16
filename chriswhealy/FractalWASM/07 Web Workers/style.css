@@ -1,0 +1,25 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+
+body {
+  font-family: Raleway;
+}
+
+h1 {
+  font-size: 1.25rem;
+  margin: 0.67em 0;
+  text-align: center;
+}
+
+[type="range"].horizontal {
+  width: 400px
+}
+
+table.perf {
+  width: 12em;
+  table-layout: fixed;
+}
+
+td.hidden  { visibility: hidden; }
+td.visible { visibility: visible; }
+
+td.narrow { width: 20%; text-align: right; }

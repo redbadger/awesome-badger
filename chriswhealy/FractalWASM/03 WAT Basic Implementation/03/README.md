@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) |
 | [3.2: Create the WebAssembly Module](../02/) | [3: Basic WAT Implementation](../) | [3.4: Escape-Time Algorithm](../04/)
 
 ## 3.3: Generate the Colour Palette
@@ -19,7 +19,7 @@ The coding that generates the colour palette does not need to be described in de
 
 The `$8_bit_clamp` function shown below lives within the `module` definition in file `mandel_plot.wat`
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Derive a single colour component from the iteration and colour threshold values
 (func $8_bit_clamp
@@ -52,10 +52,10 @@ The `$8_bit_clamp` function shown below lives within the `module` definition in 
 
 With the `$8_bit_clamp` function in place, we can now create three colour functions in which the hard-coded colour thresholds are defined.
 
-> ***Stylistic Note***  
+> ***Stylistic Note***
 > Since these functions are very small, their definitions can be compressed into a single line:
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Generate colour components
 (func $red   (param $iter i32) (result i32) (call $8_bit_clamp (local.get $iter) (i32.const 0)))
@@ -65,10 +65,10 @@ With the `$8_bit_clamp` function in place, we can now create three colour functi
 
 Finally, we take each of the colour component values, shift them left by the appropriate number of bits, then `OR` them all together to form the 32-bit colour value.
 
-> ***IMPORTANT***  
+> ***IMPORTANT***
 > Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Transform an iteration value to an ABGR colour
 (func $colour
@@ -96,7 +96,7 @@ Finally, we take each of the colour component values, shift them left by the app
 
 This particular palette generation algorithm produces colours that are distributed evenly across their range between `0` and `max_iters`.  However, since we need to generate a static lookup table, should `max_iters` ever change,[^3] then this table will need to be regenerated.
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Generate entire colour palette
 (func (export "gen_palette")

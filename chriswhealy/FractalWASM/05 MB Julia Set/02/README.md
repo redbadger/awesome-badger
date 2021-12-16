@@ -1,7 +1,7 @@
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Up](../../) | [6: Zooming In](../06%20Zoom%20Image/) 
-| [5.1 Web Page Changes](../01/) | [5: Plotting a Julia Set](../) | 
+| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Up](../../) | [6: Zooming In](../06%20Zoom%20Image/)
+| [5.1 Web Page Changes](../01/) | [5: Plotting a Julia Set](../) |
 
 ### 5.2: WebAssembly Changes
 
@@ -11,7 +11,7 @@ Our existing WebAssembly function `mandel_plot` is already very close to what we
 
 Since the `mandel_plot` function is now dual-purpose, this functionality should be reflected in the name.
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot or Julia set
 (func (export "mj_plot")
@@ -29,7 +29,7 @@ When we were only plotting the Mandelbrot Set, we didn't care about either the t
 
 The function signature has now expanded and looks like this:
 
-```wat
+```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot or Julia set
 (func (export "mj_plot")
@@ -51,7 +51,7 @@ The test for early bailout only applies when plotting the Mandelbrot Set; theref
 
 All we need to do here is extend the early bailout test by `AND`ing it with the value of the `$is_mandelbrot` flag:
 
-```wat
+```wast
 ;; Store the current pixel's colour using the value returned from the following if expression
 (i32.store
   (local.get $pixel_offset)
@@ -69,7 +69,7 @@ Maybe there's a glitch in my implementation, but when plotting the Julia Set, I 
 
 Hence the call to `escape_time_mj` contains an `if` expression that reverses the order in which the `zx`, `zy` and `cx`, `cy` argument pairs are pushed onto the stack.
 
-```wat
+```wast
 (local.tee $pixel_val
   ;; Reverse argument order for function $escape_time_mj when plotting Julia Set
   (call $escape_time_mj

@@ -29,6 +29,6 @@ The results are encouraging because the hand-crafted `.wasm` file is now about 1
 1. [Optimised WAT Implementation](./04%20WAT%20Optimised%20Implementation/)
 1. [Plotting a Julia Set](./05%20MB%20Julia%20Set/)
 1. [Zooming In](./06%20Zoom%20Image/) 
-
+1. [WebAssembly and Web Workers](./07%20Web%20Workers/)
 
 [^1]: Please note: there is no space between the words "Web" and "Assembly"
