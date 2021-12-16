@@ -8,34 +8,34 @@
 
 As with any other programming language, you can declare variables.  These variable will be local to the scope of a single WebAssembly function:[^1]
 
-```wat
+```wast
 (local $my_value i32)
 ```
 
 Here, we have declared a local variable called `$my_value` to be of type `i32`.
 
-> **IMPORTANT**  
+> **IMPORTANT**
 > Local variables are automatically initialised to zero
 
 Now that we have a local variable, we can store a value in it:
 
-```wat
+```wast
 (local.set $my_value (i32.const 5))
 ```
 
-> **IMPORTANT**  
+> **IMPORTANT**
 > `local.set` consumes the top value from the stack and stores it in the named variable
-> 
+>
 > This behaviour might become clearer if we use the sequential notation for the same assignment:
 >
-> ```wat
+> ```wast
 >i32.const 5              ;; Stack = [5], $my_value = 0
 >local.set $my_value      ;; Stack = [],  $my_value = 5
 >```
 
 Assuming that we have just stored `5` in `$my_value`, then when we use `local.get` to fetch it, a copy of the value is placed onto the top of the stack:
 
-```wat
+```wast
 local.get $my_value      ;; Stack = [5]
 ```
 
@@ -45,7 +45,7 @@ Strangely enough, you do not need to supply a name when declaring a local variab
 
 This might sound pretty weird, but the point is that only humans benefit from human-readable names.  In a WAT program, it's perfectly possible to declare variables like this:
 
-```wat
+```wast
 (local i32 i32 f64)  ;; Declare three unnamed variables, two i32s and an f64
 ```
 
@@ -57,7 +57,7 @@ The point here is that even if you do not assign a human-readable name to a loca
 
 So if you want to store 5 in the second of your local variables (variable `1`), it is quite acceptable to write:
 
-```wat
+```wast
 (local.set 1 (i32.const 5))    ;; Store 5 in local variable 1
 ```
 

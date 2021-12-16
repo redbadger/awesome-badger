@@ -12,7 +12,7 @@ WebAssembly includes the high-level flow control statements `if/then/else/end` f
 
 Using sequential notation, we can test if the local variable `$my_value` equals zero like this.   Place the `i32` value in question on top of the stack, then simply invoke the `if` statement:
 
-```wat
+```wast
 local.get $my_value      ;; Stack = [5]
 
 if
@@ -28,7 +28,7 @@ It's as simple as that.
 
 We could also write the same condition as an S-expression.  But notice some important syntactical differences:
 
-```wat
+```wast
 (if (local.get $my_value)
   (then
     ;; True if the top of the stack contains a non-zero i32
@@ -52,7 +52,7 @@ Simply testing whether a local `i32` variable contains a non-zero value is not a
 
 The following code[^1] sample is part of a larger loop construct, but at the moment, the condition is the part that interests us:
 
-```wat
+```wast
 (local %counter i32)
 
 ;; As long as the limit is greater than the counter
@@ -92,12 +92,12 @@ let iters = isInMainCardioid(x, y) || isInPeriod2Bulb(x,y)
 
 The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `x` `y` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does, then we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
 
-**Q**: That's nice, but how do we replicate this construct in WebAssembly?  
+**Q**: That's nice, but how do we replicate this construct in WebAssembly?
 **A:** We can transform `if` from a *statement* into an *expression* by assigning it a return type
 
 The implementation of functions `$is_in_main_cardioid` and `$is_in_period_2_bulb` is not important here, suffice it to say that these functions both return `i32` values that can be treated as Booleans.
 
-```wat
+```wast
 ;; Set $iters to whatever i32 value is returned from the if expression
 (local.set $iters
   ;; The "(result i32)" clause declares that the if statement will leave an i32

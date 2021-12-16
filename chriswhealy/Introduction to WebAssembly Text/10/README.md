@@ -68,8 +68,8 @@ The object passed to the `WebAssembly.Memory()` function has two further propert
 }
 ```
 
-> ***IMPORTANT***  
-> If the `shared` flag is set to `true`, then the `maximum` value must be explicitly specified, even if it is the same as the `initial` value.  
+> ***IMPORTANT***
+> If the `shared` flag is set to `true`, then the `maximum` value must be explicitly specified, even if it is the same as the `initial` value.
 > Also, the WebAssembly module must be compiled with option `--enable-threads`
 
 ### Sharing the Host Environment with WebAssembly
@@ -78,9 +78,9 @@ Any resources in the host environment that need to be shared with WebAssembly mu
 
 In addition to sharing memory, another common requirement is for the host environment to share "OS level" functionality or language libraries with WebAssembly.
 
-> ***IMPORTANT***  
+> ***IMPORTANT***
 > The term "OS level" has been deliberately placed in quotation marks to indicate the fact that such functionality might not be derived from the machine's actual operating system.
-> 
+>
 > As far as WebAssembly is concerned, it needs access to functionality that lies outside the borders of its own little world.  Therefore such functionality must be supplied by the host environment in response to WebAssembly `import` statements.  Beyond this, it's of little importance to WebAssembly whether that functionality came from the language runtime or from the actual operating system.
 
 In this example, we will write some JavaScript code that makes three resources available to a WebAssembly module called `some_module.wasm`:
@@ -172,7 +172,7 @@ Instantiating our fictitious WebAssembly module and supplying it with a host env
 
 Immediately after the `module` definition, we need to add the following declarations:
 
-```wat
+```wast
 (module
   (import "math" "sin" (func $sin (param f64) (result f64)))
   (import "math" "cos" (func $cos (param f64) (result f64)))
@@ -203,7 +203,7 @@ In our case, the actual implementation of our fictional `expensive_calc` functio
 
 So to start with, we refer to the imported value `js.data_offset` in order to know where in memory we should start to write data.  This value has been imported into our WebAssembly module and stored as a module-wide global with the name `$data_offset`
 
-```wat
+```wast
 (global $data_offset (import "js" "data_offset") i32)
 ```
 
@@ -212,32 +212,32 @@ Here's a minimal and unoptimized loop that performs some expensive but undescrib
 * Call another WebAssembly function called `$some_func` that performs an expensive calculation with arguments `$x` and `$y`
 * The result of calling `$some_func` is stored in the local variable `$next_val`
 * The memory offset at which we store `$next_val` is calculated by multiplying `$idx` by 4 (because each `i32` value is 4 bytes long) then adding this to the base address stored in `$data_offset`
-* The multiply by 4 could have been written as:  
+* The multiply by 4 could have been written as:
 
-   `(i32.mul (local.get $idx) (i32.const 4))`  
+   `(i32.mul (local.get $idx) (i32.const 4))`
 
-    But because `$idx` is an unsigned integer, multiplying by 4 can be implemented by using the much faster bit-shift left instruction, and shifting by 2 places:  
+    But because `$idx` is an unsigned integer, multiplying by 4 can be implemented by using the much faster bit-shift left instruction, and shifting by 2 places:
 
    `(i32.shl (local.get $idx) (i32.const 2))`
 
-```wat
+```wast
 (global $data_offset (import "js" "data_offset") i32)
-  
+
 (func (export "expensive_calc")
       (param $x i32)
       (param $y i32)
       (result i32)
-    
+
   (local $next_val i32)  ;; The value being written to memory
   (local $idx      i32)  ;; Loop counter
-    
+
   (loop $do_it_again
     (local.set $next_val
       ;; Call some function that performs an expensive calculation on arguments
       ;; $x and $y, then store the result in $next_val
       (call $some_func (local.get $x) (local.get $y))
     )
-      
+
     ;; Write contents of $next_val to memory
     (i32.store
       ;; Offset = $data_offset + ($idx * 4)
@@ -248,7 +248,7 @@ Here's a minimal and unoptimized loop that performs some expensive but undescrib
       ;; Value = the contents of $next_val
       (local.get $next_val)
     )
-      
+
     ;; $idx++
     (local.set $idx (i32.add (local.get $idx) (i32.const 1)))
 
@@ -259,7 +259,7 @@ Here's a minimal and unoptimized loop that performs some expensive but undescrib
       )
     )
   )
-    
+
   ;; We need to return the number of bytes written to memory, so leave this value
   ;; on the stack then exit the function
   (i32.shl (local.get $idx) (i32.const 2))

@@ -17,7 +17,7 @@ If you decompile a `.wasm` program using a tool such as `wasm2wat`, you will see
 
 For instance, if we wish add up two numbers, we must first push both values onto the stack *then* call the `add` operation.  The `add` operation then pops the top two values off the stack, adds them up and pushes the new value back onto the stack.
 
-```wat
+```wast
 i32.const 3    ;; Push 3.  Stack = [3]
 i32.const 5    ;; Push 5.  Stack = [5,3]
 
@@ -32,7 +32,7 @@ Similar prefixes exist for 64-bit integers (`i64`), and 32- and 64-bit floating 
 
 It is also possible to fold WAT instructions into what is known as an [S-Expression](https://en.wikipedia.org/wiki/S-expression).  If you have used any of the LISP family of languages such as [Clojure](https://clojure.org/), then you will have already come across this syntactical style.  The same add instructions shown above could also be written as an S-Expression like this:
 
-```wat
+```wast
 (i32.add (i32.const 3) (i32.const 5))
 ```
 
