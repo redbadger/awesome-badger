@@ -41,8 +41,7 @@ In the same way that we needed to change the `memory` declaration in the `colur_
 )
 ```
 
-> ***GOTCHA***
->
+> ***GOTCHA***  
 > If you forget to make this change, then you will not see any errors at compile time.
 > 
 > At runtime however, you will see this slightly-less-then-helpful error message in the browser console:
@@ -58,12 +57,14 @@ The first thing we need to establish is where in shared memory the pixel counter
 
 For simplicity, both pixel counters will be `i32` values and live at offsets `0` and `4` for the Mandelbrot and Julia Sets respectively.  This in turn means that the previous memory location of the Mandelbrot image data (offset zero) must be shifted down by 8 bytes.
 
-> ***IMPORTANT***
+> ***IMPORTANT***  
 > Here's a perfect example of where, within its own memory space, a WebAssembly program is only as memory-safe as you make it!
 > 
 > If you accidentally write data to the wrong offset, too bad!
 > 
-> Other than attempting to write outside the bounds of your entire memory space, there are no boundary checks to prevent you from doing this... 😱
+> Other than attempting to write outside the bounds of your entire memory space, WebAssembly does not perform any internal boundary checks to prevent you from doing this...
+> 
+> 😱
 
 So first we create some local variables to keep track of how many pixels need to be calculated, what the current pixel is, and where in memory can I find the next pixel value.
 
