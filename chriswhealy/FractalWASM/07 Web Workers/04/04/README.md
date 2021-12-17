@@ -2,7 +2,7 @@
 |---|---|---
 | [6: Zooming In](../../../06%20Zoom%20Image/) | [Up](../../../) |
 | [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) |
-| [7.4.3 Create Web Workers](../03/)  | [7.4: Adapt the Main Thread Coding](../) | [7.4.5 Handle Web Worker Messages](../05/)
+| [7.4.3 Create Web Workers](../03/)  | [7.4: Adapt the Main Thread Coding](../) | [7.4.5 Adapt WebAssembly Function `mj_plot`](../05/)
 
 ### 7.4.4: Send/Receive Web Worker Messages
 
@@ -10,14 +10,14 @@
 
 After each worker instance is created, we attach the function `worker_msg_handler` to handle any completion messages received from the workers.  This function does the following:
 
-1. Like all Web Worker message handlers, it receives an object argument having a property called `data`.  The property is destructured to obtain the `action` and the `payload`, then the `payload` is further destructured obtain the details of the worker thread that sent this message.
+1. Like all Web Worker message handlers, it receives an object argument having a property called `data`.  This property is destructured to obtain the `action` and  `payload` properties, then `payload` is further destructured obtain the details of the worker thread that sent the message.
 1. If the `action` is `exec_complete`, then the `plot_time.wCount` counter is incremented
 1. Unless the `plot_time.wCount` counter indicates that all the worker threads have finished, then nothing further happens
 1. If all the worker threads have finished, then the end time is recorded, the image data is transferred from WebAssembly shared memory to the `canvas`, the counters and activity flag are reset and most importantly, the `i32` pixel counters in shared memory are reset to 0.
 
    We are now ready to plot another fractal image.
 
-As stated above, only the essential parts of the code are shown here:
+As previously stated, only the essential parts of the code are shown here:
 
 ```javascript
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -107,4 +107,4 @@ const draw_fractal = (p_name, p_zx, p_zy) => {
 
 Notice that we record the start time just before sending the `exec` message to each worker thread; however, when this loop finishes, we do ***not*** record the end time.  This is because we are asking another thread to perform an asynchronous task, and just because we have sent all the messages, does not mean that the worker threads have finished.
 
-We will only know that a worker thread has finished when we receive its `exec_complete` message.  Only after all the worker threads have finished, do we record the end time.  This functionality in the `worker_msg_handler` function shown above.
+We will only know that a worker thread has finished when we receive its `exec_complete` message.  Only after all the worker threads have finished, do we record the end time.  This functionality is found in the `worker_msg_handler` function shown above.
