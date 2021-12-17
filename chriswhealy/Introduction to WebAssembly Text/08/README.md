@@ -33,12 +33,12 @@ Generally speaking therefore, WAT loops are structured like this:
 
 ```wast
 (loop $loop_label
-  ;; Do repetitive stuff here
-
   ;; Test for continuation, not termination
   ;; As long as the loop limit is greater than the loop conter, then continue
   (if (i32.gt_u (local.get $loop_limit) (local.get $loop_counter))
     (then
+      ;; Do repetitive stuff here
+      
       ;; Increment $loop_counter
       (local.set (i32.add (local.get $loop_counter) (i32.const 1)))
 
@@ -51,10 +51,10 @@ Generally speaking therefore, WAT loops are structured like this:
 
 The point to get used to here is the way in which loop execution is controlled
 
-***Check for Termination***
+***Check for Termination***  
 Most languages assume that the loop should continue, then repeatedly ask "*Should I stop now?*".
 
 That's fine and you could certainly structure a loop this way in WAT...
 
-***Check for Continuation***
+***Check for Continuation***  
 In WAT however, it is more idiomatic to assume that the loop should stop, then repeatedly ask "*Should I continue?*".
