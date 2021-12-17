@@ -14,7 +14,7 @@ So far, we have only looked at a very simple WebAssembly function &mdash; one th
 
 A function is declared using the keyword `func`.
 
-> ***IMPORTANT***
+> ***IMPORTANT***  
 >WebAssembly functions can be given two, possibly different, human-readable names:[^1]
 >
 > 1. A name used when calling the function from **inside** the WebAssembly module
@@ -48,6 +48,9 @@ It also might be the case that we need to call this function from both inside an
   ;; Function body goes here
 )
 ```
+
+> ***IMPORTANT***  
+> It is entirely possible for the internal and external names of a function to be different!
 
 ### Function Arguments and Return Values
 
@@ -92,8 +95,8 @@ The implementation of this function simply uses Pythagoras' formula to work out 
     )
   )
 
-  ;; The square root operation leaves a single f64 value on the stack
-  ;; We now exit and this becomes the function's return value
+  ;; The f64.sqrt operation leaves a single f64 value on the stack; therefore, this
+  ;; becomes the function's return value
 )
 ```
 
@@ -108,7 +111,7 @@ wasmer 09-single-return-value.wat -i mag 3 4
 
 ### Functions with Multiple Return Values
 
-WebAssembly functions can also return multiple values.  Here's a simple example in which we calculate the conjugate of complex number.  This is a very simple operation that transforms a complex number `a + bi` into `a - bi`.
+WebAssembly functions can also return multiple values.  Here's a simple example in which we calculate the conjugate of complex number.  This is a very simple operation that transforms the complex number `a + bi` into `a - bi`.
 
 The WebAssembly function is passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
 
