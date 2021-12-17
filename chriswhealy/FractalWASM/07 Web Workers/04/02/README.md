@@ -14,16 +14,16 @@ After collapsing the function bodies, the source code of our new `colour_palette
 
 ![Colour Palette Coding](Colour%20Coding.png)
 
-***IMPORTANT***
+***IMPORTANT***  
+Notice the highlighted `memory` statement on line 2!
 
-Notice the highlighted `memory` statement on line 2!  Previously, this line read simply:
+Previously, the `memory` declaration specified only the initial number of memory pages:
 
 ```wast
 (import "js" "shared_mem" (memory 46))
 ```
 
-This is fine in situations where you share memory only between WebAssembly and the host environment.  However, we additionally need to share memory between multiple WebAssembly module instances.  This means that our `memory` declaration must be extended to include not only the initial number of memory pages, but also the total number of pages and the fact that this memory is now shared:
-
+This is fine in situations where you share memory only between WebAssembly and the host environment.  However, we additionally need to share memory between multiple WebAssembly module instances.  This means that our `memory` declaration also include the total number of pages and the fact that this memory is now shared:
 
 ```wast
 (import "js" "shared_mem" (memory 46 46 shared))
@@ -56,7 +56,7 @@ Now that we have separated the colour palette functionality into its own WebAsse
 So our `start` function now:
 
 1. Initialises the UI using the helper function `init_slider`
-1. Create an instance of the WebAssembly module `colour_palette.wasm`
+1. Creates an instance of the WebAssembly module `colour_palette.wasm`
 1. Calls the `gen_palette()` WebAssembly function
 1. Calls function `rebuild_workers()` to create the initial number of Web Workers.  (This function is described in the next section).
 
