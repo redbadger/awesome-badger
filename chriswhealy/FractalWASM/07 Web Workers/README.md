@@ -15,4 +15,4 @@ We now need to make quite a few small, but significant changes to our coding.  A
 1. [Create the Web Worker](./03/)
 1. [Adapt the Main Thread Coding](./04/)
 
-Here's the working [Web page with Web Workers](./mb-julia-set.html)
+Here's the working [Web page with Web Workers](https://raw-wasm.pages.dev/)

@@ -2,20 +2,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>WAT Implementation of the Mandelbrot Set and Julia Sets</title>
-<link rel="stylesheet" href="style.css"charset="utf8">
+<title>Plotting Fractals Using WebAssembly Threads and Web Workers</title>
+<link rel="stylesheet" href="./assets/style.css"charset="utf8">
 </head>
 <body>
   <table>
+  <tr><td><a href="https://red-badger.com" target="_new"><img class="rb_logo" src="./assets/red-badger.svg"/></a></td>
+      <td style="text-align: right;">
+          <a href="https://github.com/redbadger/raw_wasm" target="_new">Git Repository</a></td></tr>
+  <tr><td colspan="3">
+      <h1 class="heading">Plotting Fractals Using WebAssembly Threads and Web Workers</h1></td></tr>
   <tr><td colspan="3">
         <table>
-          <tr><td colspan="3"><h1>Left-click to zoom in, right-click to zoom out</h1></td></tr>
           <tr><td>Web Workers</td>
             <td><input class="horizontal" id="workers" type="range"></td>
             <td><span id="workers_txt"></span></td></tr>
-        <tr><td>Maximum iterations</td>
-            <td><input class="horizontal" id="max_iters" type="range"></td>
-            <td><span id="max_iters_txt"></span></td></tr>
+            <tr><td>Maximum iterations</td>
+              <td><input class="horizontal" id="max_iters" type="range"></td>
+              <td><span id="max_iters_txt"></span></td></tr>
+        <tr><td colspan="3"><h3>Left-click to zoom in, right-click to zoom out</h3></td></tr>
         <tr><td>Zoom level</td>
             <td><span id="ppu_txt"></span></td></tr>
         </table></td></tr>
@@ -372,7 +377,7 @@ const rebuild_workers = evt => {
         $id(`w${i}_cell2`).classList.add("visible")
       }
 
-      let w = new Worker('worker.js')
+      let w = new Worker('./js/worker.js')
 
       // Respond to messages received from the worker
       w.onmessage = worker_msg_handler
@@ -407,7 +412,7 @@ const start = async () => {
   $id("ppu_txt").innerHTML = PPU
 
   // Palette generation does not need to be delegated to a worker thread
-  wasm_colour = await WebAssembly.instantiateStreaming(fetch("./colour_palette.wasm"), host_fns)
+  wasm_colour = await WebAssembly.instantiateStreaming(fetch("./wat/colour_palette.wasm"), host_fns)
   wasm_colour.instance.exports.gen_palette(MAX_ITERS)
 
   rebuild_workers()

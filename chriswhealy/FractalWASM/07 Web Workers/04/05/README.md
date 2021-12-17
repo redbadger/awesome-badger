@@ -155,5 +155,5 @@ Now that we have derived the correct X and Y coordinates, we simply continue as 
 
 
 
-
+---
 [^1]: Here's a perfect example of where, within its own memory space, a WebAssembly program is only as memory-safe as you make it.  If you accidentally write data to the wrong offset, too bad!  Other than attempting to write outside the bounds of your entire memory space, there are no boundary checks to prevent you from doing this... 😱
