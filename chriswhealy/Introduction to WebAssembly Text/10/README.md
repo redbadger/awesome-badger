@@ -16,9 +16,12 @@ WebAssembly is often touted as a language that offers complete memory-safety.  U
 
 It is true that a WebAssembly program has no access to the memory space outside its own sand-boxed environment; however, to conclude that this then makes a WebAssembly program truly memory-safe is to misunderstand the nature of memory safety.  True memory safety must provide the following three guarantees:
 
-* **Spatial Safety:** Out-of-bounds read/write access is prevented.  This applies both to the entire memory space in general, and to not writing beyond the bounds of a particular data structure.
-* **Temporal Safety:** Once designated as "free", memory cannot be surreptitiously used for exploitative purposes
-* **Pointer Integrity:** A memory address cannot be fabricated from a non-address value
+* **Spatial Safety:**
+   Out-of-bounds read/write access is prevented.  This applies both to the entire memory space in general, and to not writing beyond the bounds of a particular data structure.
+* **Temporal Safety:**
+   Once designated as "free", memory cannot be surreptitiously used for exploitative purposes
+* **Pointer Integrity:**
+   A memory address cannot be fabricated from a non-address value
 
 These guarantees are all met when looking at WebAssembly from the outside, but from within its own memory space however, a WebAssembly program is still vulnerable to the same types of memory issues as other programs.  Simple corruption or even explicitly malicious behaviour is still possible because a WebAssembly program can still:
 
@@ -30,7 +33,7 @@ This means that sensitive data stored within WebAssembly linear memory could sti
 
 ### Basic Principles of Memory Allocation
 
-Given that the WebAssembly specification is currently in a state of development and expansion, the following restrictions are expected to change.  However, at the time of writing (Nov 2021), the following principles and constraints apply:
+Given that the WebAssembly specification is currently in a state of development and expansion, the following restrictions are expected to change.  However, at the time of writing (Dec 2021), the following principles and constraints apply:
 
 1. WebAssembly memory is a linear block of undifferentiated bytes[^2]
 1. WebAssembly memory can only be allocated in units known as "pages"
@@ -68,7 +71,7 @@ The object passed to the `WebAssembly.Memory()` function has two further propert
 }
 ```
 
-> ***IMPORTANT***
+> ***IMPORTANT***  
 > If the `shared` flag is set to `true`, then the `maximum` value must be explicitly specified, even if it is the same as the `initial` value.
 > Also, the WebAssembly module must be compiled with option `--enable-threads`
 
@@ -78,7 +81,7 @@ Any resources in the host environment that need to be shared with WebAssembly mu
 
 In addition to sharing memory, another common requirement is for the host environment to share "OS level" functionality or language libraries with WebAssembly.
 
-> ***IMPORTANT***
+> ***IMPORTANT***  
 > The term "OS level" has been deliberately placed in quotation marks to indicate the fact that such functionality might not be derived from the machine's actual operating system.
 >
 > As far as WebAssembly is concerned, it needs access to functionality that lies outside the borders of its own little world.  Therefore such functionality must be supplied by the host environment in response to WebAssembly `import` statements.  Beyond this, it's of little importance to WebAssembly whether that functionality came from the language runtime or from the actual operating system.
@@ -121,6 +124,7 @@ Now all we need to do is pass this object to WebAssembly at the time we instanti
 At this point, it is worth providing two versions of the code because there is a slight difference between running this code in NodeJS and running it in a browser.
 
 #### Running in NodeJS
+
 NodeJS reads the `.wasm` file synchronously from the filesystem using the imported function `readFileSync`
 
 ```javascript
