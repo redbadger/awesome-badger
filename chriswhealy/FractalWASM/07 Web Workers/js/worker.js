@@ -42,7 +42,7 @@ onmessage = async ({ data }) => {
       my_worker_id = worker_id
 
       times.init.start = performance.now()
-      wasmObj = await WebAssembly.instantiateStreaming(fetch('./mj_plot.wasm'), host_fns)
+      wasmObj = await WebAssembly.instantiateStreaming(fetch('../wat/mj_plot.wasm'), host_fns)
       times.init.end = performance.now()
 
       // Draw initial Mandelbrot Set

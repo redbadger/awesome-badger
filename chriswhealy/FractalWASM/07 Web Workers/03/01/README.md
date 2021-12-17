@@ -86,6 +86,5 @@ Since the call to the WebAssembly function `mj_plot` has been moved from the mai
 
 
 
-
-
+---
 [^1]: Relax!  We're not writing production code here, so our message protocol does not need to include any form of error reporting.

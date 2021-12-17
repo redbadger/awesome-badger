@@ -5,15 +5,19 @@
 
 ### 7.3 Create the Web Worker
 
-The coding for a Web Worker needs to be in a separate file from the main thread coding.  so we will create a file called `worker.js`.
+The coding for a Web Worker needs to be in a separate file from the main thread, so we will create a file called `worker.js`.
 
-In order for a worker to interact with a main thread, you must follow these minimal requirements:
+In order for a worker to react to messages from the main thread, you must follow these minimal requirements:
 
 1. Create an asynchronous event handler method called `onmessage`
-1. `onmessage` will be passed an object containing a property called `data`
+1. In order to process a message, extract the `data` property of the message passed to the `onmessage` event handler, then take whatever action is appropriate for that given message
+1. Typically, the worker will send some sort of completion message back to the main thread.  The worker does this by calling its `postMessage` method and sending whatever data is needed as a response.
 
 ```javascript
 onmessage = async ({ data }) => {
+  // Do something with the contents of data
+  
+  postMessage(/* some sort of message data */)
 }
 ```
 
