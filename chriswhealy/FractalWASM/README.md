@@ -22,6 +22,10 @@ So as a matter of both curiosity and education, I set about re-implementing this
 
 The results are encouraging because the hand-crafted `.wasm` file is now about 150 times smaller - just 493 bytes...
 
+## Live Demo
+
+[Plotting Fractals Using WebAssembly Threads and Web Workers](https://raw-wasm.pages.dev/)
+
 # Table of Contents
 1. [Plotting Fractals](./01%20Plotting%20Fractals/)
 1. [Initial Implementation](./02%20Initial%20Implementation/)
