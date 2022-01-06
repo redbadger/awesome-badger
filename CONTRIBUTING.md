@@ -60,7 +60,7 @@ Jekyll expects the following fields to be present:
 | `title` | The title used by Jekyll when generating the overview page
 | `date` | The blog creation datestamp in the format `YYYY-MM-DD HH:MM:SS <timezone offset in minutes>`.<br>Jekyll uses this datestamp to list your blogs in chronological order.  This means that the exact value of the time is only important if you have blogged more than once on the same day, but the date part ***must*** be the same as the date in the blog filename
 | `user` | Your Github userid (also used to create your personal folder).
-| `author` | Your name
+| `author` | Your name.  This must be the same name you entered for the `author` field in `_config.yml`
 | `excerpt` | A brief description of the blog that appears on the overview page
 
 If you understand how to use the Liquid scripting language, then you can add your own fields into the front matter and reference them in the blog body using the syntax `{{ page.<field_name> }}`.  For instance, if you want to display your own name, you would enter the script tag `{{ page.author }}`
