@@ -17,7 +17,7 @@ When you clone this repo, you will notice that there are various directories suc
 If this is the first time you are contributing to the Awesome Badger blog site, please follow these initials steps:
 
 1. Edit the file [`_config.yml`](_config.yml) and add your details to the `contributors` object.  There are several things to be aware of here:
-   * The value of `user` must be your GitHub userid, and the value of `user_name` is your display name.
+   * The value of `user` must be your GitHub userid, and the value of `author` is your display name.
    * Jekyll does not sort this list, so please insert your details so that your name appears sorted alphabetically by surname.
    * Jekyll uses these values to identify you as the author of a blog post, and the same value will appear in the front matter of all your blog posts.
 1. Using the same value you gave for `user` (your Github userid), create a top level directory

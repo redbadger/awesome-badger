@@ -23,21 +23,21 @@ logo: /assets/sally.svg
 
 # All contributors must be listed here.  Default sort order is alphabetically by surname
 # "user" is the GitHub user id
-# "user_name" is the contributor's display name
+# "author" is the contributor's display name
 contributors:
   - user: charypar
-    user_name: Victor Charypar
+    author: Victor Charypar
   - user: stuartharris
-    user_name: Stuart Harris
+    author: Stuart Harris
   - user: davidlaban
-    user_name: David Laban
+    author: David Laban
   - user: timlee
-    user_name: Tim Lee
+    author: Tim Lee
   - user: pataruco
-    user_name: Pedro Martin
+    author: Pedro Martin
   - user: ruiramos
-    user_name: Rui Ramos
+    author: Rui Ramos
   - user: matt-thomson
-    user_name: Matt Thomson
+    author: Matt Thomson
   - user: chriswhealy
-    user_name: Chris Whealy
+    author: Chris Whealy
