@@ -23,15 +23,15 @@ If this is the first time you are contributing to the Awesome Badger blog site, 
 1. Using the same value you gave for `user` (your Github userid), create a top level directory
 1. Within your user folder, create a `README.md` file and write a description of yourself that includes things like your role at Red Badger, links to yourself on social media sites, what you do outside of work, etc etc.  Take a look at [Stu's profile][stu] as an example.
 
-### 3: Create a Blog File
+## 3: Create a Blog File
 
 Since this website is generated using Jekyll, all blog posts need to follow these conventions:
 
 1. All blog posts must be created in the `_posts` folder
 1. All blog post files must be named according to the following convention:
-  * The file name must start with the date in `YYYY-MM-DD` format
-  * Within the filename, do not use the space character as a separator, use hyphens `-` instead
-  * The filename must end in `.md`
+   * The file name must start with the date in `YYYY-MM-DD` format
+   * Within the filename, do not use the space character as a separator, use hyphens `-` instead
+   * The filename must end in `.md`
 
   For example, let's says its Jan 4th, 2022 and you want to create a blog about the aerodynamic properties of rubber chickens (please try to contain your excitement).  Your blog file will therefore need to be called `2022-01-04-aerodynamics-of-rubber-chickens.md`
 
@@ -58,8 +58,8 @@ Jekyll expects the following fields to be present:
 |---|---
 | `layout` | Must be set to `post`
 | `title` | The title used by Jekyll when generating the overview page
-| `date` | The blog creation datestamp in the format `YYYY-MM-DD HH:MM:SS <Timezone offset in minutes>`.<br>Jekyll uses this datestamp to list your blogs in chronological order.  This means that the exact value of the time is only important if you have blogged more than once on the same day, but the date part ***must*** be the same as the date in the blog filename
-| `user` | Your Github userid. This must match the name used to create your personal folder
+| `date` | The blog creation datestamp in the format `YYYY-MM-DD HH:MM:SS <timezone offset in minutes>`.<br>Jekyll uses this datestamp to list your blogs in chronological order.  This means that the exact value of the time is only important if you have blogged more than once on the same day, but the date part ***must*** be the same as the date in the blog filename
+| `user` | Your Github userid (also used to create your personal folder).
 | `author` | Your name
 | `excerpt` | A brief description of the blog that appears on the overview page
 
@@ -71,13 +71,15 @@ After the front matter section, write your blog content and format it using Git 
 
 ### 4.3: Non-Markdown Content (Images etc)
 
-All non-markdown content should be placed within your own directory within the top-level `assets` directory.
+If your blog requires the use of images (or any other non-markdown file type) and don't already have one, using your Github userid as the name, please create your own directory under `/assets`.
 
 For instance, many of [Chris'][chris] blogs contain references to file types such as images, JavaScript and WebAssembly Text. All of these are located in `/assets/chriswhealy`.  Any time a reference is then needed from one of your blogs, you can simply link to `/assets/{{ page.user }}/<filename>`
 
 ## 5. Get a Review
 
-You can push straight to master if you want to, but it's probably a good idea to get someone to review your post. Just open a pull request like you would in a software project and get someone to have a look.
+You can push straight to master if you want to, but it's probably a good idea to get someone to review your post.
+
+Just open a pull request like you would in a software project and get someone to have a look.
 
 ## 6. Have fun
 
