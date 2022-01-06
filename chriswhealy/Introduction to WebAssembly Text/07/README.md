@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Arrangement of WAT Instructions](../06/README.md) | [Top](../README.md) | [Loops](../08/README.md)
+| [Arrangement of WAT Instructions](../06/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Loops](../08/)
 
 ## 7: Conditions
 
@@ -92,7 +92,7 @@ let iters = isInMainCardioid(x, y) || isInPeriod2Bulb(x,y)
 
 The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `x` `y` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does, then we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
 
-**Q**: That's nice, but how do we replicate this construct in WebAssembly?  
+**Q**: That's nice, but how do we replicate this construct in WebAssembly?<br>
 **A:** We can transform `if` from a *statement* into an *expression* by assigning it a return type
 
 The implementation of functions `$is_in_main_cardioid` and `$is_in_period_2_bulb` is not important here, suffice it to say that these functions both return `i32` values that can be treated as Booleans.

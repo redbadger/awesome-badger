@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Loops](../08/README.md) | [Top](../README.md) | [WASM and Shared Memory](../10/README.md)
+| [Loops](../08/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [WASM and Shared Memory](../10/)
 
 ## 9: More About Functions
 
@@ -14,8 +14,8 @@ So far, we have only looked at a very simple WebAssembly function &mdash; one th
 
 A function is declared using the keyword `func`.
 
-> ***IMPORTANT***  
->WebAssembly functions can be given two, possibly different, human-readable names:[^1]
+> ***IMPORTANT***<br>
+> WebAssembly functions can be given two, possibly different, human-readable names:[^1]
 >
 > 1. A name used when calling the function from **inside** the WebAssembly module
 > 1. A name used when calling the function from **outside** the WebAssembly module
@@ -49,7 +49,7 @@ It also might be the case that we need to call this function from both inside an
 )
 ```
 
-> ***IMPORTANT***  
+> ***IMPORTANT***<br>
 > It is entirely possible for the internal and external names of a function to be different!
 
 ### Function Arguments and Return Values
@@ -73,7 +73,7 @@ This function takes a complex number as an argument in the form of two, 64-bit f
 
 The implementation of this function simply uses Pythagoras' formula to work out the hypotenuse length of the right triangle having sides `$real` and `$imag`
 
-[09-single-return-value.wat](09-single-return-value.wat)
+[09-single-return-value.wat](/assets/chriswhealy/09-single-return-value.wat)
 ```wast
 (func $mag           ;; Internal name
   (export "mag")     ;; External name
@@ -115,7 +115,7 @@ WebAssembly functions can also return multiple values.  Here's a simple example 
 
 The WebAssembly function is passed a complex number in the form of two, 64-bit floating point numbers, and it returns another complex number, also in the form of two, 64-bit floating point numbers.
 
-[`09-multiple-return-values.wat`](09-multiple-return-values.wat)
+[`09-multiple-return-values.wat`](/assets/chriswhealy/09-multiple-return-values.wat)
 ```wast
 ;; Conjugate of a complex number
 ;; conj(a+bi) => (a-bi)
@@ -132,21 +132,21 @@ The WebAssembly function is passed a complex number in the form of two, 64-bit f
 
 After calling this function, the host environment pops these two values off the stack to obtain the result of the function call
 
-You can test this by running using `wasmer` to run [`09-multiple-return-values.wat`](09-multiple-return-values.wat)
+You can test this by running using `wasmer` to run [`09-multiple-return-values.wat`](/assets/chriswhealy/09-multiple-return-values.wat)
 
 ```bash
 wasmer 09-multiple-return-values.wat -i conj -- -5 3
 -5 -3
 ```
 
-> Notice the double hyphens `--` between `-i conj` and the function arguments.
+> Notice the double hyphens `--` between `-i conj` and the function arguments.<br>
 > This is necessary to prevent the shell from interpreting the minus sign in front of `-5` as a shell option
 
 ### NodeJS Limitation
 
 Versions of NodeJS lower than 16 cannot invoke WebAssembly functions that return multiple values.  Earlier NodeJS versions will throw a runtime error if you attempt to instantiate a WebAssembly module that exports a function with multiple return values.
 
-If you have Node 14 installed, try running [`09-multiple-return-values.js`](09-multiple-return-values.js) from NodeJs.
+If you have Node 14 installed, try running [`09-multiple-return-values.js`](/assets/chriswhealy/09-multiple-return-values.js) from NodeJs.
 
 ```bash
 node 09-multiple-return-values.js

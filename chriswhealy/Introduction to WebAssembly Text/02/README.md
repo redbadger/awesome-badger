@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Benefits of WebAssembly](../01/README.md) | [Top](../README.md) | [Calling WebAssembly From a Host Environment](../03/README.md)
+| [Benefits of WebAssembly](../01/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Calling WebAssembly From a Host Environment](../03/)
 
 
 ## 2: Creating a WebAssembly Module
@@ -11,7 +11,7 @@ Remember that a WebAssembly program can only be invoked from a host environment.
 
 Here's a syntactically correct, but completely useless WebAssembly module.
 
-[`02-useless.wat`](02-useless.wat)
+[`02-useless.wat`](/assets/chriswhealy/02-useless.wat)
 ```wast
 (module)
 ```
@@ -35,7 +35,7 @@ Well, that's hardly surprising since the module doesn't contain any functions at
 
 Let's now make the above module slightly less useless by adding a function that does nothing more than return the number `42`
 
-[`02-slightly-less-useless.wat`](02-slightly-less-useless.wat)
+[`02-slightly-less-useless.wat`](/assets/chriswhealy/02-slightly-less-useless.wat)
 ```wast
 (module
   (func               ;; Declare a function that can be called from

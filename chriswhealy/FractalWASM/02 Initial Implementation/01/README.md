@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [1: Plotting Fractals](../../01%20Plotting%20Fractals/) | [Up](../) | [3: WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/)
+| [1: Plotting Fractals](../../01%20Plotting%20Fractals/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [3: WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/)
 | | [2: Initial Implementation](../) | [2.2: Optimised Escape-Time Implementation](../02/)
 
 ## 2.1: Basic Escape-Time Implementation
@@ -17,9 +19,9 @@ const bailout  = 4
 ### Helper Functions
 
 We need a few helper functions:
-* `pixel2XCoord` and `pixel2YCoord`  
+* `pixel2XCoord` and `pixel2YCoord`
    These functions translate pixel X and Y locations to complex plane X and Y coordinates
-* `iter2Colour`  
+* `iter2Colour`
    Transforms an iteration number into a colour
 
 At the moment, we don't care how these helper functions have been implemented
@@ -75,7 +77,7 @@ for (let iy = 0; iy < mCanvas.height; ++iy) {
   for (let ix = 0; ix < mCanvas.width; ++ix) {
     // Get the iteration value of the current pixel
     let iter = escapeTime(ix, iy)
-    
+
     // Translate the iteration value into a colour
     let colour = iter2Colour(iter)
 
@@ -89,7 +91,7 @@ mImage.data.set(buf8)
 mCanvas.putImageData(mIMage, 0, 0)
 ```
 
-Ignoring questions of efficiency for the time being, we now have a working loop structure. 
+Ignoring questions of efficiency for the time being, we now have a working loop structure.
 
 ### Escape Time Algorithm
 

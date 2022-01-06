@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/)
 | | [3: Basic WAT Implementation](../) | [3.2: Create the WebAssembly Module](../02/)
 
 ## 3.1: Shared Memory
@@ -77,7 +79,7 @@ palette_offset = WASM_PAGE_SIZE * mImagePages
 
 giving a memory layout that looks like this:
 
-![Memory Layout](Memory%20Layout.png)
+![Memory Layout](/assets/chriswhealy/Memory%20Layout.png)
 
 ### Sharing JavaScript Memory with Web Assembly
 

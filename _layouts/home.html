@@ -1,0 +1,45 @@
+---
+layout: default
+---
+
+<div class="home">
+  {%- if page.title -%}
+    <h1 class="page-heading">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {{ content }}
+
+  {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
+
+  {% if site.contributors.size > 0 %}
+    <h2 class="post-list-heading">{{ page.list_title | default: "Blogs and Tutorials" }}</h2>
+    <ul class="post-list">
+      {% for contributor in site.contributors %}
+        <li>
+          <div class="post-contributor-div">
+            <a href="{{ contributor.user }}" class="post-contributor">{{ contributor.user_name }}</a>
+            <!--
+              This inner loop is a very inefficient way of doing things, but Liquid scripts have no access
+              to the filesystem without the use of a plugin...
+            -->
+            {% if site.posts.size > 0 %}
+            <table>
+              {% for post in site.posts %}
+                {% if post.user contains contributor.user %}
+                <tr><td class="post-meta">{{ post.date | date: date_format }}</td>
+                    <td><h3><a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
+                      {%- if site.show_excerpts -%}
+                      {{ post.excerpt }}
+                      {%- endif -%}
+                      </td></tr>
+                {% endif %}
+              {% endfor %}
+            </table>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+</div>

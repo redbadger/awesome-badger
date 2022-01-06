@@ -1,7 +1,9 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Up](../../) | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
-| [6.2 Add Zoom In/Out Functionality `max_iters`](../01/) | [6: Zooming In](../) | [6.3 Looking at the Problem We've Just Created `max_iters`](../03/)
+| [5: Plotting a Julia Set](../../05%20MB%20Julia%20Set/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [7: WebAssembly and Web Workers](../../07%20Web%20Workers/)
+| [6.2 Add Zoom In/Out Functionality `max_iters`](../01/) | [6: Zooming In](../) | [6.3 Looking at the Problem We've Just Created](../03/)
 
 ### 6.2: Add Slider for Changing `max_iters`
 
@@ -59,7 +61,7 @@ const update_max_iters = evt => {
 
   // Redraw Mandelbrot Set
   draw_fractal(0.0, 0.0, true)
-  
+
   // Redraw last Julia Set
   if (last_julia.x_coord !== null && last_julia.y_coord !== null)
     draw_fractal(last_julia.x_coord, last_julia.y_coord, false)
@@ -77,7 +79,7 @@ const start = async () => {
   max_iters_slider.min   = RANGE_MAX_ITERS.MIN
   max_iters_slider.step  = RANGE_MAX_ITERS.STEP
   max_iters_slider.value = RANGE_MAX_ITERS.DEFAULT
-  
+
   max_iters_slider.addEventListener("input", update_max_iters, false)
 
   $id("max_iters_txt").innerHTML = RANGE_MAX_ITERS.DEFAULT
@@ -88,4 +90,3 @@ const start = async () => {
 
 start()
 ```
-

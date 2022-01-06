@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [3: Basic WAT Implementation](../03%20WAT%20Basic%20Implementation/) | [Up](../) | [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/)
+| [3: Basic WAT Implementation](../03%20WAT%20Basic%20Implementation/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/)
 
 ## 4: Optimised WAT Implementation
 

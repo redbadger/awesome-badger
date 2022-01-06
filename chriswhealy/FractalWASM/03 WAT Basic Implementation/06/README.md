@@ -1,16 +1,16 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) | 
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/)
  | [3.5: Calculating the Mandelbrot Set Image](../05/) | [3: Basic WAT Implementation](../) |
 
 ## 3.6: Displaying the Rendered Fractal Image
 
 Now that the WebAssembly side of the coding has been written, we need an HTML page to display the rendered image.
 
-> ***IMPORTANT***  
+> ***IMPORTANT***
 > In order for the Web page shown below to function correctly, it must be served to your browser from a Web server.  WebAssembly `.wasm` files cannot be opened by a browser using the `file://` protocol.
 
-![Basic WAT Implementation](basic-rendered-mbset.png)
+![Basic WAT Implementation](/assets/chriswhealy/basic-rendered-mbset.png)
 
 In the above image, notice that without any optimisation, our basic implementation takes several hundred milliseconds to complete &mdash; which is pretty slow...
 

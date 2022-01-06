@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [6: Zooming In](../../../06%20Zoom%20Image/) | [Up](../../../) |
+| [6: Zooming In](../../../06%20Zoom%20Image/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) |
 | [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) |
 | [7.4.3 Create Web Workers](../03/)  | [7.4: Adapt the Main Thread Coding](../) | [7.4.5 Adapt WebAssembly Function `mj_plot`](../05/)
 
@@ -56,15 +58,15 @@ const worker_msg_handler = ({ data }) => {
           case "mb":
             mImage.data.set(wasmMem8.slice(mImageStart, mImageEnd))
             mContext.putImageData(mImage,0,0)
-            
+
             break
-          
+
           case "julia":
             jImage.data.set(wasmMem8.slice(jImageStart, jImageEnd))
             jContext.putImageData(jImage,0,0)
-            
+
             break
-          
+
           default:
         }
 

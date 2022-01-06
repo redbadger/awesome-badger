@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [6: Zooming In](../../../06%20Zoom%20Image/) | [Up](../../../) |
+| [6: Zooming In](../../../06%20Zoom%20Image/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) |
 | [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) |
 | [7.4.1 Extend the HTML](../01/)  | [7.4: Adapt the Main Thread Coding](../) | [7.4.3 Create Web Workers](../03/)
 
@@ -12,9 +14,9 @@ Given that generating a colour palette is a very lightweight task, there is no r
 
 After collapsing the function bodies, the source code of our new `colour_palette.wat` module looks like this:
 
-![Colour Palette Coding](Colour%20Coding.png)
+![Colour Palette Coding](/assets/chriswhealy/Colour%20Coding.png)
 
-***IMPORTANT***  
+***IMPORTANT***<br>
 Notice the highlighted `memory` statement on line 2!
 
 Previously, the `memory` declaration specified only the initial number of memory pages:
@@ -80,11 +82,3 @@ const start = async () => {
   rebuild_workers()
 }
 ```
-
-
-
-
-
-
-
-

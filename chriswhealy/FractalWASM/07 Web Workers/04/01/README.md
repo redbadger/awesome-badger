@@ -1,8 +1,10 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [6: Zooming In](../../../06%20Zoom%20Image/) | [Up](../../../) | 
-| [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) | 
-| | [7.4: Adapt the Main Thread Coding](../) | [7.4.2 Split WebAssembly Coding](../02/) 
+| [6: Zooming In](../../../06%20Zoom%20Image/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) |
+| [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) |
+| | [7.4: Adapt the Main Thread Coding](../) | [7.4.2 Split WebAssembly Coding](../02/)
 
 ### 7.4.1 Extend the HTML
 
@@ -10,6 +12,4 @@ Since we are demonstrating the performance improvements that can be made with We
 
 Therefore, the `canvas` elements will be placed inside a `table`, and down the right side of the Mandelbrot Set `canvas`, we will have another table showing the last execution time of each worker thread.
 
-![Execution times](Exec%20Times.png)
-
-
+![Execution times](/assets/chriswhealy/Exec%20Times.png)

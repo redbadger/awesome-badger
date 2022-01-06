@@ -1,3 +1,0 @@
-# Jon Yardley
-
-## Tech Director

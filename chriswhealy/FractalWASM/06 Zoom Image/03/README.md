@@ -1,7 +1,9 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Up](../../) | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
-| [6.2 Add Slider for Changing `max_iters`](../02/) | [6: Zooming In](../) | 
+| [5: Plotting a Julia Set](../../05%20MB%20Julia%20Set/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [7: WebAssembly and Web Workers](../../07%20Web%20Workers/)
+| [6.2 Add Slider for Changing `max_iters`](../02/) | [6: Zooming In](../) |
 
 ### 6.3: Looking at the Problem We've Just Created
 
@@ -13,7 +15,7 @@ This problem only becomes worse if we look at regions near or within the Mandelb
 
 Oh dear...
 
-![Slow Runtime](Slow%20Runtime.png)
+![Slow Runtime](/assets/chriswhealy/Slow%20Runtime.png)
 
 There are several techniques for improving the performance here.  Some are based on watching the trajectory of the iterated coordinates each time around the escape-time loop.  If a repeating series is detected, then we know that the orbit is stable and therefore we can bail out early.
 
@@ -26,4 +28,3 @@ However, this will require several basic changes to be made:
 1. The main Web page must be adapted to create multiple Web Worker instances and then send them appropriate messages any time a user changes a value such as the zoom level or the maximum iterations.
 
 In the next section we will look how to implement these changes.
-

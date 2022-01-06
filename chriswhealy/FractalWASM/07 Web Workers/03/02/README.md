@@ -1,8 +1,10 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [6: Zooming In](../../../06%20Zoom%20Image/) | [Up](../../../) | 
-| [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) | 
-| [7.3.1 Define the Message Structure](../01/) | [7.3: Create Web Workers](../) | 
+| [6: Zooming In](../../../06%20Zoom%20Image/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) |
+| [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../) | [7.4 Adapt the Main Thread Coding](../../04/)
+| [7.3.1 Define the Message Structure](../01/) | [7.3: Create Web Workers](../) |
 
 ### 7.3.2 Implement the `onmessage` Event Handler
 
@@ -15,7 +17,7 @@ The first thing to do is extract the `action` and `payload` properties from the 
 // Inbound message handler
 onmessage = async ({ data }) => {
   const { action, payload } = data
-  
+
   switch(action) {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Create WebAssembly module instance and draw initial Mandelbrot Set
@@ -124,5 +126,3 @@ When a worker thread receives an `exec` message, it simply calls `mj_plot` to dr
     times.exec = draw_fractal(fractal, max_iters)
     postMessage(gen_msg_exec_complete(my_worker_id, fractal.name, times))
 ```
-
-

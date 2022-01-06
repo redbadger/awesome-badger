@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Local Variables](../05/README.md) | [Top](../README.md) | [Conditions](../07/README.md)
+| [Local Variables](../05/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Conditions](../07/)
 
 ## 6: Arrangement of WAT Instructions
 WebAssembly is a stack-based language.  This means that most instruction behave in the following way:

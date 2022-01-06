@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Up](../../) |
+| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [5: Plotting a Julia Set](../../05%20MB%20Julia%20Set/)
 | [4.1 Check for Early Bailout](../01/) | [4: Optimised WAT Implementation](../) |
 
 ### 4.2: Modify Render Loop
@@ -37,6 +39,6 @@ The innermost `if` expression in function `mandel_plot` has now been extended to
 
 Just by the addition of this simple test, we have shortened the render time by a factor of about 6!
 
-![Optimised WAT Mandelbrot Set](optimised-rendered-mbset.png)
+![Optimised WAT Mandelbrot Set](/asssets/chriswhealy/optimised-rendered-mbset.png)
 
 Here's an implementation of the [optimised WAT coding](../wat-optimised-implementation.html)

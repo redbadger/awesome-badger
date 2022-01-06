@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../02%20Initial%20Implementation/) | [Up](../) | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/)
+| [2: Initial Implementation](../02%20Initial%20Implementation/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/)
 
 # 3: Basic WAT Implementation
 

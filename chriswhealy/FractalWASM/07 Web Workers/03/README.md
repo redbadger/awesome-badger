@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [6: Zooming In](../../06%20Zoom%20Image/) | [Up](../../) | 
+| [6: Zooming In](../../06%20Zoom%20Image/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) |
 | [7.2 Schematic Overview](../02/) | [7: WebAssembly and Web Workers](../) | [7.4 Adapt the Main Thread Coding](../04/)
 
 ### 7.3 Create the Web Worker
@@ -16,7 +18,7 @@ In order for a worker to react to messages from the main thread, you must follow
 ```javascript
 onmessage = async ({ data }) => {
   // Do something with the contents of data
-  
+
   postMessage(/* some sort of message data */)
 }
 ```
