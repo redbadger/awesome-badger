@@ -26,7 +26,7 @@ When I wrote the above solution in Rust, I enjoyed all the advantages of using a
 
 This is certainly not large, but it was much larger than I expected given the simplicity of the task being performed.
 
-So as a matter of both curiosity and education, I set about re-implementing this program in WebAssembly Text (WAT) to see just how small I could get the program.
+So as a matter of both curiosity and education, I set about re-implementing this program in WebAssembly Text (WAT) to see just how small I could get it.
 
 The results are encouraging because the hand-crafted `.wasm` file is now about 150 times smaller - just 493 bytes...
 
