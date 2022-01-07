@@ -3,7 +3,7 @@ layout: post
 title:  "Full-stack Rust"
 date:   2020-06-23 12:00:00 +0000
 redirect_from: /stuartharris/full-stack-rust-1/
-categories: stuartharris
+category: stuartharris
 author: Stuart Harris
 excerpt: For a while now, I've been wondering how practical it is (as of right now) to use <a href="https://www.rust-lang.org">Rust</a> for web applications and services on the server <i>and</i> for web UI in the browser. So I've been spending quite a lot of time exploring the developer experience, whilst trying to understand whether Rust in the browser is actually a good idea!
 ---

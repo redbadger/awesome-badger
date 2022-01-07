@@ -3,7 +3,7 @@ layout: post
 title:  "a11y is your ally"
 date:   2021-01-14 13:00:00 +0000
 redirect_from: /pataruco/a11y-is-your-ally/
-categories: pataruco
+category: pataruco
 author: Pedro Martin
 excerpt: Accessibility for the Web practices by offering a software engineer perspective
 ---

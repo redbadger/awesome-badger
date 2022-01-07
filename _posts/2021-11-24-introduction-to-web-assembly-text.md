@@ -3,7 +3,7 @@ layout: post
 title:  "Introduction to WebAssembly Text"
 date:   2021-11-24 12:00:00 +0000
 redirect_from: /chriswhealy/Introduction%20to%20WebAssembly%20Text/
-categories: chriswhealy
+category: chriswhealy
 author: Chris Whealy
 excerpt: An introduction to programming directly in WebAssembly Text
 ---

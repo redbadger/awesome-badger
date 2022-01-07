@@ -3,7 +3,7 @@ layout: post
 title:  "Next.js Deployment on Netify with Github Actions"
 date:   2021-09-08 12:00:00 +0000
 redirect_from: /ruiramos/nextjs-github-netlify/
-categories: ruiramos
+category: ruiramos
 author: Rui Ramos
 excerpt: A practical, hands-on guide on how to deploy your Next.js app on Netlify using Github Actions as a CI/CD pipeline
 ---

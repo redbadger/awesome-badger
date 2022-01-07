@@ -3,7 +3,7 @@ layout: post
 title: "Guiding Principles for Agile Technology Choices"
 date: 2020-07-20 12:00:00 +0000
 redirect_from: /charypar/tech-principles/
-categories: charypar
+category: charypar
 author: Victor Charypar
 excerpt: An attempt to capture some guiding principles for making technology choices - picking tools, tech stacks and making architecture decisions.
 ---
