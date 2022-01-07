@@ -2,9 +2,9 @@
 layout: post
 title:  "NATS Impressions"
 date:   2021-07-06 13:00:00 +0000
-permalink: /:slug
+permalink: /:categories/:slug
 redirect_from: /davidlaban/nats-impressions/
-user: davidlaban
+categories: davidlaban
 author: David Laban
 excerpt: Early impressions of NATS, its tooling, and how it fits into the universe
 ---

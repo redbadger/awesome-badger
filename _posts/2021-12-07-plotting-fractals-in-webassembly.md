@@ -2,9 +2,9 @@
 layout: post
 title:  "Plotting Fractals in WebAssembly"
 date:   2021-12-07 12:00:00 +0000
-permalink: /:slug
+permalink: /:categories/:slug
 redirect_from: /chriswhealy/FractalWASM/
-user: chriswhealy
+categories: chriswhealy
 author: Chris Whealy
 excerpt: This set of blogs builds a progressively more optimised set of WebAssembly Text programs that plot the Mandelbrot and Julia Sets.
 ---

@@ -25,7 +25,7 @@ layout: default
             {% if site.posts.size > 0 %}
             <table>
               {% for post in site.posts %}
-                {% if post.user contains contributor.user %}
+                {% if post.categories contains contributor.user %}
                 <tr><td class="post-meta">{{ post.date | date: date_format }}</td>
                     <td><h3><a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
                       {%- if site.show_excerpts -%}

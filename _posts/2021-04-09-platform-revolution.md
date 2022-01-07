@@ -2,9 +2,9 @@
 layout: post
 title:  "Platform (R)evolution"
 date:   2021-04-09 12:00:00 +0000
-permalink: /:slug
+permalink: /:categories/:slug
 redirect_from: /stuartharris/platform-revolution/
-user: stuartharris
+categories: stuartharris
 author: Stuart Harris
 excerpt: A look at how platforms for distributed systems are evolving — how they are rising up to meet ever lighter workloads — and charting a journey from Kubernetes, through Istio and Dapr, to wasmcloud and beyond.
 ---

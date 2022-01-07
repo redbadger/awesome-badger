@@ -2,9 +2,9 @@
 layout: post
 title:  "Infrastructure Musings"
 date:   2021-06-09 12:00:00 +0000
-permalink: /:slug
+permalink: /:categories/:slug
 redirect_from: /davidlaban/infrastructure-musings/
-user: davidlaban
+categories: davidlaban
 author: David Laban
 excerpt: Semi-structured musings about what my vision of infrastructure nirvana is, and what's available at the moment to help us on our way there
 ---

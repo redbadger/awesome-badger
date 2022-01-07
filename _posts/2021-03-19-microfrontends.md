@@ -2,9 +2,9 @@
 layout: post
 title:  "Microfrontends"
 date:   2021-03-19 12:00:00 +0000
-permalink: /:slug
+permalink: /:categories/:slug
 redirect_from: /matt-thomson/microfrontends/
-user: matt-thomson
+categories: matt-thomson
 author: Matt Thomson
 excerpt: As we build larger and larger single page apps, it becomes increasingly difficult to maintain the codebase, particularly if multiple teams are working on it
 ---

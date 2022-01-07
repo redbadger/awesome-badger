@@ -2,9 +2,9 @@
 layout: post
 title:  "Dapr Impressions"
 date:   2021-06-28 12:00:00 +0000
-permalink: /:slug
+permalink: /:categories/:slug
 redirect_from: /davidlaban/dapr-impressions/
-user: davidlaban
+categories: davidlaban
 author: David Laban
 excerpt: Early impressions of dapr, its tooling, and how it fits into the universe
 ---
