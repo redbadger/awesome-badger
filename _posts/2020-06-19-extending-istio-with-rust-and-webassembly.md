@@ -4,7 +4,7 @@ title:  "Extending Istio with Rust and WebAssembly"
 date:   2020-06-19 12:00:00 +0000
 redirect_from: /charypar/proxy-wasm-1/
 category: charypar
-author: Victor Charypar
+author: Viktor Charypar
 excerpt: Istio recently released verion 1.5 and one of the major changes in it is the deprecation of Mixer in favour of WebAssembly Envoy filters. Let’s build one to see what it takes.
 ---
 

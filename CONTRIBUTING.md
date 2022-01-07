@@ -48,8 +48,8 @@ layout: post
 title: "Guiding Principles for Agile Technology Choices"
 date: 2020-07-20 12:00:00 +0000
 redirect_from: /charypar/tech-principles/
-categories: charypar
-author: Victor Charypar
+category: charypar
+author: Viktor Charypar
 excerpt: An attempt to capture some guiding principles for making technology choices - picking tools, tech stacks and making architecture decisions.
 ---
 ```
@@ -62,7 +62,7 @@ The following fields are used:
 | `title` | | The title used by Jekyll when generating the overview page
 | `date` | `YYYY-MM-DD HH:MM:SS <timezone offset in minutes>` | The blog creation datestamp used by Jekyll to list your blogs in chronological order.<br>The exact value of the time part is only important if you have blogged more than once on the same day, but the date part ***must*** be the same as the date in the blog filename
 | `redirect_from` | Old blog URL | Do ***not*** add this field if you are writing a new blog.<br>It is only needed to ensure that the old URLs of blogs posted before the site was rebranded continue to work
-| `categories` | Github userid | This must be the same name you entered for the `contributors.user` field in `_config.yml`.<br>Normally Jekyll uses this value to categorise blog posts, but here we have hijacked it to hold the user name.  This value is then referenced by the `permalink` definition in `_config.yml`
+| `category` | Github userid | This must be the same name you entered for the `contributors.user` field in `_config.yml`.<br>Normally Jekyll uses this value to categorise blog posts, but here we have hijacked it to hold the user name.  This value is then referenced by the `permalink` definition in `_config.yml`
 | `author` | Your display name | This must be the same name you entered for the `contributors.author` field in `_config.yml`
 | `excerpt` | | A brief description of the blog used on the overview page
 
