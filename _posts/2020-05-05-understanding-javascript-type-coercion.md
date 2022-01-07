@@ -2,6 +2,7 @@
 layout: post
 title:  "Understanding JavaScript: Type Coercion"
 permalink: /:slug
+redirect_from: /chriswhealy/InsideJavaScript/01%20Type%20Coercion/
 date:   2020-05-05 12:00:00 +0000
 user: chriswhealy
 author: Chris Whealy

@@ -3,6 +3,7 @@ layout: post
 title:  "Safe From the Wolves - Building Security In"
 date:   2021-04-27 12:00:00 +0000
 permalink: /:slug
+redirect_from: /timlee/safe-from-the-wolves/
 user: timlee
 author: Tim Lee
 excerpt: Last week I virtually attended the reasonably interesting <a href="https://devopscon.io/london">DevOpsCon London</a> event. My main takeaway is that <i>Shift Left on Security</i> is the current buzz-phrase in the DevOps community, with some suggesting an expansion of the existing merger to create <i>DevSecOps</i>.

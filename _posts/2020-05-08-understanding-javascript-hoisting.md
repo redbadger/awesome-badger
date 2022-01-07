@@ -3,6 +3,7 @@ layout: post
 title:  "Understanding JavaScript: Hoisting"
 date:   2020-05-08 12:00:00 +0000
 permalink: /:slug
+redirect_from: /chriswhealy/InsideJavaScript/03%20Hoisting/
 user: chriswhealy
 author: Chris Whealy
 excerpt: The JavaScript compiler uses a strategy called "hoisting" in which certain variable declarations are moved to the top of a function. Here, we take a look not only at this feature and its consequences, but also at some situations in which this behaviour does not happen.

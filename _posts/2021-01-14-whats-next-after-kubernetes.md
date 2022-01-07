@@ -3,6 +3,7 @@ layout: post
 title:  "What's Next, After Kubernetes?"
 date:   2021-01-14 12:00:00 +0000
 permalink: /:slug
+redirect_from: /stuartharris/wasmcloud/
 user: stuartharris
 author: Stuart Harris
 excerpt: <p>Kubernetes is really good. But it does nothing to address what I think is one of the biggest problems we have with microservices — the ratio of functional code (e.g. our core business logic) to non-functional code (e.g. talking to a database) is way too low.</p><p>In this post, I first explore the Onion architecture, how it applies to microservices and how we might peel off the outer, non-functional layers of the onion, so that we can focus on the functional core.</p><p>Then we look at how Kubernetes can be augmented to support this idea (with a service mesh, and a distributed application runtime).</p><p>Finally, and most importantly we ask what comes after Kubernetes (spoiler, a WebAssembly actor runtime) that can support core business logic more natively, allowing us to write that logic in any language, run it literally anywhere, and securely connect it to capability providers that we don't have to write ourselves (but could if we needed to).</p>

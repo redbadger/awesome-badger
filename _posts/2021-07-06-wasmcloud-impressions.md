@@ -3,6 +3,7 @@ layout: post
 title:  "wasmCloud Impressions"
 date:   2021-07-06 12:00:00 +0000
 permalink: /:slug
+redirect_from: /davidlaban/wasmcloud-impressions/
 user: davidlaban
 author: David Laban
 excerpt: Early impressions of WasmCloud
