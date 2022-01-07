@@ -2,7 +2,7 @@
 
 | Previous | | Next |
 |---|---|---|
-| [Type Coercion: The Mostly Sensible Bits](../3/) | [Up](/2020/05/05/understanding-javascript-type-coercion.html) | [Type Coercion: The Very Silly Bits](../5/)
+| [Type Coercion: The Mostly Sensible Bits](../3/) | [Up](/chriswhealy/understanding-javascript-type-coercion) | [Type Coercion: The Very Silly Bits](../5/)
 
 # Unusual Tricks With Logical Operators
 

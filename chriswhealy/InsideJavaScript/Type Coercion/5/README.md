@@ -2,7 +2,7 @@
 
 | Previous | | Next |
 |---|---|---|
-| [Type Coercion: The Unusual Bits](../4/) | [Up](/2020/05/05/understanding-javascript-type-coercion.html) |
+| [Type Coercion: The Unusual Bits](../4/) | [Up](/chriswhealy/understanding-javascript-type-coercion) |
 
 # Type Coercion: The Very Silly Bits...
 

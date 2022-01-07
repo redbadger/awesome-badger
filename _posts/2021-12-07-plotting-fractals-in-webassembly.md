@@ -11,7 +11,7 @@ excerpt: This set of blogs builds a progressively more optimised set of WebAssem
 
 ## Introduction
 
-This tutorial is a continuation of the earlier [Introduction to WebAssembly Text](/2021/11/24/introduction-to-web-assembly-text.html)
+This tutorial is a continuation of the earlier [Introduction to WebAssembly Text](/chriswhealy/introduction-to-web-assembly-text)
 
 If you are not familiar with WebAssembly Text (WAT), then please read the above introductory tutorial first because from this point on, I will assume that you are at least able to read and understand a WebAssembly Text program.
 

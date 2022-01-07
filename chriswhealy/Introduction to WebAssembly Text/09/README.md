@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Loops](../08/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [WASM and Shared Memory](../10/)
+| [Loops](../08/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [WASM and Shared Memory](../10/)
 
 ## 9: More About Functions
 

@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [2: Initial Implementation](../02%20Initial%20Implementation/)
+| | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [2: Initial Implementation](../02%20Initial%20Implementation/)
 
 # 1: Plotting Fractals
 

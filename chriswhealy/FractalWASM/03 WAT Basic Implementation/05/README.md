@@ -1,6 +1,6 @@
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/)
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/)
 | [3.4: Escape-Time Algorithm](../04/) | [3: Basic WAT Implementation](../) | [3.6: Displaying the Rendered Fractal Image](../06/)
 
 ## 3.5: Calculating the Mandelbrot Set Image

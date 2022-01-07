@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Creating a WebAssembly Module](../02/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [WAT Datatypes](../04/)
+| [Creating a WebAssembly Module](../02/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [WAT Datatypes](../04/)
 
 ## 3: Calling WebAssembly from a Host Environment
 

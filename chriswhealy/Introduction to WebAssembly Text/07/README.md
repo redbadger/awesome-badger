@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Arrangement of WAT Instructions](../06/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Loops](../08/)
+| [Arrangement of WAT Instructions](../06/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Loops](../08/)
 
 ## 7: Conditions
 

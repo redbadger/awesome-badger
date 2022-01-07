@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Benefits of WebAssembly](../01/)
+| | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Benefits of WebAssembly](../01/)
 
 ## 0: Prerequisites
 ### WebAssembly Tools

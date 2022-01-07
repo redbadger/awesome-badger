@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [WAT Datatypes](../04/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Arrangement of WAT Instructions](../06/)
+| [WAT Datatypes](../04/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Arrangement of WAT Instructions](../06/)
 
 ## 5: Local Variables
 

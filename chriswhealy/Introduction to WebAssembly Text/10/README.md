@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [More About Functions](../09/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) |
+| [More About Functions](../09/) | [Up](/chriswhealy/introduction-to-web-assembly-text) |
 
 ## 10: WASM and Shared Memory
 

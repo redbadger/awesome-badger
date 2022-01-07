@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Calling WebAssembly from a Host Environment](../03/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Local Variables](../05/)
+| [Calling WebAssembly from a Host Environment](../03/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Local Variables](../05/)
 
 ## 4: WAT Datatypes
 

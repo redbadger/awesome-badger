@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Benefits of WebAssembly](../01/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [Calling WebAssembly From a Host Environment](../03/)
+| [Benefits of WebAssembly](../01/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Calling WebAssembly From a Host Environment](../03/)
 
 
 ## 2: Creating a WebAssembly Module

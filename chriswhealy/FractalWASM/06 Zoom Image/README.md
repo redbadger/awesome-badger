@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Top](/2021/12/07/plotting-fractals-in-webassembly.html) | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
+| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
 
 ## 6: Zooming In
 

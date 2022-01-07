@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Conditions](../07/) | [Up](/2021/11/24/introduction-to-web-assembly-text.html) | [More About Functions](../09/)
+| [Conditions](../07/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [More About Functions](../09/)
 
 ## 8: Loops
 

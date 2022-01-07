@@ -2,7 +2,7 @@
 
 | Previous | | Next |
 |---|---|---|
-| [So, How Hard Do You Hit the Keyboard?](../1/) | [Up](/2020/05/05/understanding-javascript-type-coercion.html) | [Type Coercion: The Mostly Sensible Bits](../3/)
+| [So, How Hard Do You Hit the Keyboard?](../1/) | [Up](/chriswhealy/understanding-javascript-type-coercion) | [Type Coercion: The Mostly Sensible Bits](../3/)
 
 # Type Coercion: The Sensible Bits
 
