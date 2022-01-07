@@ -2,6 +2,7 @@
 layout: post
 title:  "Bazel Impressions"
 date:   2021-07-12 12:00:00 +0000
+permalink: /:slug
 user: davidlaban
 author: David Laban
 excerpt: Early impressions of bazel

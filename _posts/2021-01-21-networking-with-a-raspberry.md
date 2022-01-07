@@ -2,6 +2,7 @@
 layout: post
 title:  "Networking with a Raspberry"
 date:   2021-01-21 12:00:00 +0000
+permalink: /:slug
 user: timlee
 author: Tim Lee
 excerpt: Want to learn about networking, proxies and web servers? Read on.

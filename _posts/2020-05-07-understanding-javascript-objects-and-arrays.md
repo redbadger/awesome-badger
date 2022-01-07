@@ -1,8 +1,9 @@
 ---
 layout: post
 title:  "Understanding JavaScript: Objects and Arrays"
+permalink: /:slug
 date:   2020-05-07 12:00:00 +0000
-user: ChrisWhealy
+user: chriswhealy
 author: Chris Whealy
 excerpt: In this blog, we take a look at the fact that JavaScript Objects can be accessed as if they were arrays, and the fact that all JavaScript Arrays are in fact Objects.
 ---

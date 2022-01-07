@@ -21,6 +21,9 @@ show_excerpts: true
 copyright: "Red Badger Consulting Ltd"
 logo: /assets/sally.svg
 
+plugins:
+  - jekyll-redirect-from
+
 # All contributors must be listed here.  Default sort order is alphabetically by surname
 # "user" is the GitHub user id
 # "author" is the contributor's display name
@@ -39,5 +42,5 @@ contributors:
     author: Rui Ramos
   - user: matt-thomson
     author: Matt Thomson
-  - user: ChrisWhealy
+  - user: chriswhealy
     author: Chris Whealy

@@ -2,7 +2,8 @@
 layout: post
 title:  "toString || !toString"
 date:   2021-09-24 12:00:00 +0000
-user: ChrisWhealy
+permalink: /:slug
+user: chriswhealy
 author: Chris Whealy
 excerpt: toString, or not toString?<br>That is the question&mdash;<br>Whether 'tis nobler in the mind to suffer the slings and arrows of ourageous type coercion...
 ---
@@ -85,7 +86,7 @@ let someObj = { toString: () => "Blah", valueOf: () => "Surprise!" }
 someObj + ""   // 'Surprise!'    Huh?! Why wasn't toString() called?
 ```
 
-![Think](/assets/ChrisWhealy/Think.png)
+![Think](/assets/chriswhealy/Think.png)
 
 ## Strange, but Consistent
 
@@ -137,4 +138,4 @@ And converting the `date` object to a string by overloading the `+` operator wil
 date + ""           // 'Fri Sep 24 2021 12:08:36 GMT+0100 (British Summer Time)'
 ```
 
-![WAT](/assets/ChrisWhealy/wat.jpeg)
+![WAT](/assets/chriswhealy/wat.jpeg)

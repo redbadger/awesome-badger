@@ -2,7 +2,8 @@
 layout: post
 title:  "Plotting Fractals in WebAssembly"
 date:   2021-12-07 12:00:00 +0000
-user: ChrisWhealy
+permalink: /:slug
+user: chriswhealy
 author: Chris Whealy
 excerpt: This set of blogs builds a progressively more optimised set of WebAssembly Text programs that plot the Mandelbrot and Julia Sets.
 ---
@@ -17,7 +18,7 @@ In the tutorials that follow, we will take a detailed look at how to implement a
 
 ## But Why Not Just Write the Solution in Rust?
 
-I did [here](https://github.com/ChrisWhealy/fractal_explorer)!
+I did [here](https://github.com/chriswhealy/fractal_explorer)!
 
 But here's the thing...
 
@@ -34,12 +35,12 @@ The results are encouraging because the hand-crafted `.wasm` file is now about 1
 [Plotting Fractals Using WebAssembly Threads and Web Workers](https://raw-wasm.pages.dev/)
 
 # Table of Contents
-1. [Plotting Fractals](/ChrisWhealy/FractalWASM/01%20Plotting%20Fractals/)
-1. [Initial Implementation](/ChrisWhealy/FractalWASM//02%20Initial%20Implementation/)
-1. [Basic WAT Implementation](/ChrisWhealy/FractalWASM//03%20WAT%20Basic%20Implementation/)
-1. [Optimised WAT Implementation](/ChrisWhealy/FractalWASM//04%20WAT%20Optimised%20Implementation/)
-1. [Plotting a Julia Set](/ChrisWhealy/FractalWASM//05%20MB%20Julia%20Set/)
-1. [Zooming In](/ChrisWhealy/FractalWASM//06%20Zoom%20Image/)
-1. [WebAssembly and Web Workers](/ChrisWhealy/FractalWASM//07%20Web%20Workers/)
+1. [Plotting Fractals](/chriswhealy/FractalWASM/01%20Plotting%20Fractals/)
+1. [Initial Implementation](/chriswhealy/FractalWASM//02%20Initial%20Implementation/)
+1. [Basic WAT Implementation](/chriswhealy/FractalWASM//03%20WAT%20Basic%20Implementation/)
+1. [Optimised WAT Implementation](/chriswhealy/FractalWASM//04%20WAT%20Optimised%20Implementation/)
+1. [Plotting a Julia Set](/chriswhealy/FractalWASM//05%20MB%20Julia%20Set/)
+1. [Zooming In](/chriswhealy/FractalWASM//06%20Zoom%20Image/)
+1. [WebAssembly and Web Workers](/chriswhealy/FractalWASM//07%20Web%20Workers/)
 
 [^1]: Please note: there is no space between the words "Web" and "Assembly"

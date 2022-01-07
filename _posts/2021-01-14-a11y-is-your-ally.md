@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "a11y is your ally"
+permalink: /:slug
 date:   2021-01-14 13:00:00 +0000
 user: pataruco
 author: Pedro Martin

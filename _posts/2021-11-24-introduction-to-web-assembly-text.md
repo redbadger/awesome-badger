@@ -2,7 +2,8 @@
 layout: post
 title:  "Introduction to WebAssembly Text"
 date:   2021-11-24 12:00:00 +0000
-user: ChrisWhealy
+permalink: /:slug
+user: chriswhealy
 author: Chris Whealy
 excerpt: An introduction to programming directly in WebAssembly Text
 ---
@@ -23,17 +24,17 @@ This introduction to WebAssembly Text serves as the starting point for subsequen
 
 ## Table of Contents
 
-- [Prerequisites](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/00/)
-- [Benefits of WebAssembly](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/01/)
-- [Creating a WebAssembly Module](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/02/)
-- [Calling WebAssembly from a Host Environment](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/03/)
-- [WAT Datatypes](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text04/)
-- [Local Variables](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/05/)
-- [Arrangement of WAT Instructions](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/06/)
-- [Conditions](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/07/)
-- [Loops](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/08/)
-- [More About Functions](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/09/)
-- [WASM and Shared Memory](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/10/)
+- [Prerequisites](/chriswhealy/Introduction%20to%20WebAssembly%20Text/00/)
+- [Benefits of WebAssembly](/chriswhealy/Introduction%20to%20WebAssembly%20Text/01/)
+- [Creating a WebAssembly Module](/chriswhealy/Introduction%20to%20WebAssembly%20Text/02/)
+- [Calling WebAssembly from a Host Environment](/chriswhealy/Introduction%20to%20WebAssembly%20Text/03/)
+- [WAT Datatypes](/chriswhealy/Introduction%20to%20WebAssembly%20Text04/)
+- [Local Variables](/chriswhealy/Introduction%20to%20WebAssembly%20Text/05/)
+- [Arrangement of WAT Instructions](/chriswhealy/Introduction%20to%20WebAssembly%20Text/06/)
+- [Conditions](/chriswhealy/Introduction%20to%20WebAssembly%20Text/07/)
+- [Loops](/chriswhealy/Introduction%20to%20WebAssembly%20Text/08/)
+- [More About Functions](/chriswhealy/Introduction%20to%20WebAssembly%20Text/09/)
+- [WASM and Shared Memory](/chriswhealy/Introduction%20to%20WebAssembly%20Text/10/)
 
 
 

@@ -2,10 +2,11 @@
 layout: post
 title:  "Writing a Browser-based WebAssembly Application in Rust"
 date:   2020-10-12 12:00:00 +0000
-user: ChrisWhealy
+permalink: /:slug
+user: chriswhealy
 author: Chris Whealy
 excerpt: Based on a personal project that started back in 2004 as an Excel spreadsheet, this blog describes how to create a Rust application, compile it to WebAssembly and then run in the browser.
-img_path: /assets/ChrisWhealy/
+img_path: /assets/chriswhealy/
 ---
 
 # Porous Absorber Calculator
@@ -16,7 +17,7 @@ The purpose of this blog is not to explain any of the principles of acoustics or
 
 If you wish to see an explanation of the basic acoustic principles behind the Porous Absorber Calculator spreadsheet, please watch this [video](https://genomics.zoom.us/rec/share/QAOteL-hsuIyW4BgccBDIILheEHAiJigpxOoIkOFMyaEgnwxgEtVFi1uErxVayVJ.XC83qC8QKI0FpsSj).  The slides used in that presentation are available [here](http://whealy.com/acoustics/PA_Calculator/Porous%20Absorber%20(Print).pdf)
 
-All the Rust coding examples shown below are taken from the Git repo for the [Porous Absorber Calculator](https://github.com/ChrisWhealy/porous_absorber)
+All the Rust coding examples shown below are taken from the Git repo for the [Porous Absorber Calculator](https://github.com/chriswhealy/porous_absorber)
 
 ## Introduction
 
@@ -24,11 +25,11 @@ My interest in room acoustics started in 2003 when I became involved in the desi
 
 In Excel, the Control Room Calculator look like this:
 
-[![Control Room Spreadsheet](/assets/ChrisWhealy/Control%20Room%20Excel%20Screenshot.png)](http://whealy.com/acoustics/Control%20Room%20Calculator%20V2.67%20XL2007.zip)
+[![Control Room Spreadsheet](/assets/chriswhealy/Control%20Room%20Excel%20Screenshot.png)](http://whealy.com/acoustics/Control%20Room%20Calculator%20V2.67%20XL2007.zip)
 
 And the Porous Absorber Calculator look like this:
 
-[![Porous Absorber Spreadsheet](/assets/ChrisWhealy/Porous%20Abs%20Excel%20Screenshot.png)](http://whealy.com/acoustics/Porous%20Absorber%20Calculator%20V1.59.xlsm.zip)
+[![Porous Absorber Spreadsheet](/assets/chriswhealy/Porous%20Abs%20Excel%20Screenshot.png)](http://whealy.com/acoustics/Porous%20Absorber%20Calculator%20V1.59.xlsm.zip)
 
 
 Unfortunately due to their age, these spreadsheets will only function correctly in the Windows version of Excel (sorry, Mac users...)
@@ -39,14 +40,14 @@ Having just been made redundant from my previous job and having lots of time on 
 
 Seeing as this was my first real-life app, it took me a while to work out how to get all the pieces to fit together, but after a couple of months of battling my own inexperience, I was able to get this Web-based app up and running.
 
-[![Porous Absorber Web App](/assets/ChrisWhealy/Porous%20Abs%20Screenshot.png)](http://whealy.com/acoustics/PA_Calculator/index.html)
+[![Porous Absorber Web App](/assets/chriswhealy/Porous%20Abs%20Screenshot.png)](http://whealy.com/acoustics/PA_Calculator/index.html)
 
 
 ## General Architecture
 
 The app was developed in Microsoft's Visual Studio and uses the following hierarchy of Rust modules (for the sake of simplicity, some modules have been omitted):
 
-![High-level Architecture](/assets/ChrisWhealy/Rust%20Architecture.png)
+![High-level Architecture](/assets/chriswhealy/Rust%20Architecture.png)
 
 The objective here was to create an app that runs in the browser; however, since a browser cannot directly execute a native Rust application, it must first be compiled into a format that a browser can execute &mdash; and this is where WebAssembly comes in.
 
@@ -72,7 +73,7 @@ $ wasm-pack build --release --target web
 
 The addition of the `--target web` parameter tells `wasm-pack` that we wish to run the generated WebAssembly module in the browser, and `wasm-pack` then helpfully generates a JavaScript polyfill for us.
 
-![Generated WASM File](/assets/ChrisWhealy/Generated%20WASM%20File.png)
+![Generated WASM File](/assets/chriswhealy/Generated%20WASM%20File.png)
 
 The polyfill acts as a wrapper around the WebAssembly module and enables us to use the JavaScript `import` statement as we would for any other JavaScript module.
 
@@ -254,7 +255,7 @@ features = [
 
 #### Accessing Specific DOM Elements
 
-Using these `web-sys` features, we are now able to access not only the HTML `canvas` element, but the 2D rendering context object within the `canvas` element.  The following code is taken from function [`device_diagram`](https://github.com/ChrisWhealy/porous_absorber/blob/32ed616b3f613a96d2182ac7941c67f885164e91/src/chart/render/draw.rs#L47) in the module `chart::render::draw`:
+Using these `web-sys` features, we are now able to access not only the HTML `canvas` element, but the 2D rendering context object within the `canvas` element.  The following code is taken from function [`device_diagram`](https://github.com/chriswhealy/porous_absorber/blob/32ed616b3f613a96d2182ac7941c67f885164e91/src/chart/render/draw.rs#L47) in the module `chart::render::draw`:
 
 ```rust
 pub fn device_diagram(

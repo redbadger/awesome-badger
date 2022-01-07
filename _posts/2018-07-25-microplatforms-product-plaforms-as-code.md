@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Microplatforms - Product Platforms as Code"
+permalink: /:slug
 date:   2018-07-25 12:00:00 +0000
 user: stuartharris
 author: Stuart Harris
