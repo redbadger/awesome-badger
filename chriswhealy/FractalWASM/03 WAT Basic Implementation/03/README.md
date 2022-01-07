@@ -7,7 +7,7 @@
 
 ## 3.3: Generate the Colour Palette
 
-Since we are interested in runtime performance, we will precalculate all the possible 4-byte colour values that could be obtained from the range of iteration values between `0` and `max_iters`.  This will then become our colour lookup table.
+Since we are interested in runtime performance, we will precalculate all the possible 4-byte colour values that could be obtained from the range of iteration values between `0` and `max_iters`.  This will then become our colour palette lookup table.
 
 ### Note on Coding Style
 
@@ -122,7 +122,7 @@ This particular palette generation algorithm produces colours that are distribut
 )
 ```
 
-There are several of things to notice about this function:
+There are several things to notice about this function:
 
 1. Since this function will only be invoked from the host environment, the internal name has been omitted and only an exported name has been defined.
 1. This function does not return a specific value, it writes to shared memory; therefore, it has no `result` clause.

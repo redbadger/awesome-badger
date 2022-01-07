@@ -6,9 +6,9 @@
 
 ## 5: Plotting a Julia Set
 
-Now that we have an efficient means of plotting the Mandelbrot Set, we can now add a second HTML `canvas` element to the Web page to display a Julia Set.
+Now that we have an efficient means of plotting the Mandelbrot Set, we can add a second HTML `canvas` element to display the Julia Set.
 
-For every point on the Mandelbrot Set, there is a corresponding Julia Set.  So as the mouse pointer moves over the Mandelbrot Set, a completely new Julia Set needs to be rendered.  Consequently, every time a `mousemove` event goes off over the `canvas`, our now dual-purpose plot function will be called.
+For every point on the Mandelbrot Set, there is a corresponding Julia Set.  So as the mouse pointer moves over the Mandelbrot Set, a completely new Julia Set needs to be rendered.  Consequently, every time a `mousemove` event goes off over the Mandelbrot `canvas`, our now dual-purpose plot function needs to be called.
 
 This is where we start to see the benefits of writing in WebAssembly Text.  Since we can focus on low-level efficiency, we can produce a very small, very fast program.
 
@@ -40,4 +40,4 @@ drwxr-xr-x   3 chris  staff     96  9 Dec 14:42 02
 
 Wow! Only 712 bytes!
 
-Compare this with the 74Kb module created by `wasm-pack` from a Rust implementation mentioned in the [introduction](/chriswhealy/plotting-fractals-in-webassembly).
+This is not as small as the program could be, but its a big step forwards (downwards?) compared to the 74Kb module mentioned in the [introduction](/chriswhealy/plotting-fractals-in-webassembly).

@@ -59,7 +59,7 @@ const host_fns = {
 
 #### Write a `mousemove` Event Handler
 
-Since a new Julia Set must be calculated every time the mouse moves over the Mandelbrot Set image, we need to attach an event handler function to the `mousemove`  event of the `juliaImage` HTML `canvas` element.
+Since a new Julia Set must be calculated every time the mouse moves over the Mandelbrot Set image, we need to attach an event handler function to the `mousemove`  event of the `mandelImage` HTML `canvas` element.
 
 This event handler must do the following things:
 1. Transform the mouse pointer's `X` ,`Y` position over the image into the `X`, `Y` coordinates of the complex plane
@@ -72,8 +72,8 @@ This event handler function also uses some helper functions to calculate exactly
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Partial function to translate the mouse X or Y canvas position to the corresponding X or Y coordinate in the complex
 // plane.
-const canvas_pxl_to_coord = (cnvsDim, ppu, origin) => mousePos => origin + ((mousePos - (cnvsDim / 2)) / ppu)
-const mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH, PPU, DEFAULT_X_ORIGIN)
+const canvas_pxl_to_coord   = (cnvsDim, ppu, origin) => mousePos => origin + ((mousePos - (cnvsDim / 2)) / ppu)
+const mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH,  PPU, DEFAULT_X_ORIGIN)
 const mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, DEFAULT_Y_ORIGIN)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -121,7 +121,7 @@ const mouse_track = evt => {
 }
 ```
 
-Lastly for this section, attach the event handler function to the `canvas` element's `mousemove` event:
+Lastly for this section, attach the event handler function to the Mandelbrot `canvas` element's `mousemove` event:
 
 ```javascript
 mCanvas.addEventListener('mousemove', mouse_track, false)

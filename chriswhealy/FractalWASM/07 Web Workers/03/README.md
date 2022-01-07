@@ -11,14 +11,16 @@ The coding for a Web Worker needs to be in a separate file from the main thread,
 
 In order for a worker to react to messages from the main thread, you must follow these minimal requirements:
 
-1. Create an asynchronous event handler method called `onmessage`
-1. In order to process a message, extract the `data` property of the message passed to the `onmessage` event handler, then take whatever action is appropriate for that given message
+1. Create an asynchronous event handler function called `onmessage`
+1. In order to process a message, extract the `data` property of the argument passed to the `onmessage` event handler, then take whatever action is appropriate for that given message
 1. Typically, the worker will send some sort of completion message back to the main thread.  The worker does this by calling its `postMessage` method and sending whatever data is needed as a response.
 
 ```javascript
 onmessage = async ({ data }) => {
   // Do something with the contents of data
 
+  // Report the success/failure of this action to your parent process
+  // This could either be the main thread or some other Web Worker
   postMessage(/* some sort of message data */)
 }
 ```

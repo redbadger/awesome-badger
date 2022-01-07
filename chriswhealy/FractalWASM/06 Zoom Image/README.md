@@ -6,7 +6,7 @@
 
 ## 6: Zooming In
 
-Now that we can dynamically plot the Julia Set for any location on the Mandelbrot Set, it would be nice to be able to zoom in on the Mandelbrot Set.
+Now that we can dynamically plot a Julia Set corresponding to any location on the Mandelbrot Set, it would be nice to be able to zoom in on the Mandelbrot Set.
 
 However, in order to see a reasonable level of detail as we zoom in, it will also be necessary to increase the maximum number of iterations.
 

@@ -25,7 +25,7 @@ Previously, the `memory` declaration specified only the initial number of memory
 (import "js" "shared_mem" (memory 46))
 ```
 
-This is fine in situations where you share memory only between WebAssembly and the host environment.  However, we additionally need to share memory between multiple WebAssembly module instances.  This means that our `memory` declaration also include the total number of pages and the fact that this memory is now shared:
+This is fine in situations where you share memory only between WebAssembly and the host environment.  However, we additionally need to share memory between multiple WebAssembly module instances.  This means that our `memory` declaration must also include the total number of pages and the fact that this memory is now shared:
 
 ```wast
 (import "js" "shared_mem" (memory 46 46 shared))
@@ -33,7 +33,7 @@ This is fine in situations where you share memory only between WebAssembly and t
 
 OK, let's try compiling this:
 
-```shell
+```console
 $ wat2wasm colour_palette.wat
 colour_palette.wat:2:4: error: memories may not be shared
   (import "js" "shared_mem" (memory 46 46 shared))
@@ -44,7 +44,7 @@ Oh dear, the compiler is telling us we can't do the very thing we need to do...
 
 To fix this problem, we must tell the compiler that we will be using WebAssembly threads:
 
-```shell
+```console
 $ wat2wasm --enable-threads colour_palette.wat
 $
 ```

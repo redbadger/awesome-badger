@@ -23,7 +23,7 @@ However, we're going to take a different approach.  Instead of modifying the bas
 
 However, this will require several basic changes to be made:
 
-1. The combined efforts of multiple instances of function `mj_plot` will now be used to calculate a single fractal image.  Therefore, this function must be adapted so that while each performs its own loop, no two instances ever attempt to calculate the same pixel value.
+1. The combined efforts of multiple instances of function `mj_plot` will now be used to calculate a single fractal image.  Therefore, this function must be adapted so that multiple parallel instances can all perform their own loops, but no two instances will ever attempt to calculate the same pixel value.
 1. The JavaScript coding that creates an instance of the WebAssembly module must be moved into a Web Worker
 1. The main Web page must be adapted to create multiple Web Worker instances and then send them appropriate messages any time a user changes a value such as the zoom level or the maximum iterations.
 

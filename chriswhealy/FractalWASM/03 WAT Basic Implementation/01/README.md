@@ -23,7 +23,7 @@ So we will require about one and a half megabytes to store the image.  However, 
 Math.ceil(1440000 / 65536) = 22 pages
 ```
 
-In addition to the memory needed for the image, we also need to allocate some memory for the colour.[^1]
+In addition to the memory needed for the image, we also need to allocate some memory for the colour palette.[^1]
 
 The colour palette is simply a precalculated lookup table that allows us to translate an iteration value into a colour.  Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
 
@@ -64,7 +64,7 @@ We do however, still need to create an 8-bit, unsigned integer array to act as a
 
 ### Decide How Shared Memory Should be Used
 
-Now that we have a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what data structures live where and be very careful not to trample on our own data![^2]
+Now that we have written the JavaScript code to allocate a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what data structures live where and be very careful not to trample on our own data![^2]
 
 In our case, the simplest way to do this is to say that the image data will start at offset 0 and the colour palette data will start at the full page boundary after the image data.  This does means that there will be a few bytes of wasted space, but this is not a particularly critical issue.
 
@@ -83,11 +83,11 @@ giving a memory layout that looks like this:
 
 ### Sharing JavaScript Memory with Web Assembly
 
-Now that we have allocated enough memory and know where within that memory our two blocks of data can be found, we can now share this memory with our WebAssembly module (that we have not written yet...)
+The next step is to share this block of memory with our WebAssembly module (that we have not written yet...)
 
 If the host environment needs to share any of its resources with a WebAssembly module, those resources must be made available at the time the WebAssembly module is instantiated.
 
-Sharing host resources with WebAssembly is done simply by creating a JavaScript object structured as a two layer namespace, whose property names are entirely arbitrary.  For instance, below we create an object called `host_fns` for sharing the memory and offset values we have created:
+Sharing host resources with WebAssembly is done simply by creating a JavaScript object structured as a two layer namespace and whose property names are entirely arbitrary.  For instance, below we create an object called `host_fns` for sharing the memory and offset values we have created:
 
 ```javascript
 const host_fns = {
@@ -104,7 +104,7 @@ Now, assuming that our (as yet, unwritten) WebAssembly module lives in the same 
 ```javascript
 const wasmObj = await WebAssembly.instantiateStreaming(
   fetch('./mandel_plot.wasm'), // Asynchronously fetch the .wasm file
-  host_fns                     // Host environment resources being shared with this module instance
+  host_fns                     // The host environment resources being shared with this module instance
 )
 ```
 

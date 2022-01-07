@@ -25,9 +25,11 @@ Since the `mandel_plot` function is now dual-purpose, this functionality should 
 
 When we were only plotting the Mandelbrot Set, we didn't care about either the type of image we were plotting (there was only one), or where the mouse pointer was located over that image.  However, in order for this function to also plot a Julia Set, we need some extra information.  We need to know:
 
-1. The mouse pointer's coordinates over the Mandelbrot Set.  These are supplied as two `f64` values called `zx` and `zy`
-1. Whether we are plotting the Mandelbrot Set or a Julia Set.  This is supplied as a Boolean flag called `is_mandelbrot`.
-1. The memory offset where the data for the current image starts. This is supplied as an `i32` argument called `image_offset`.[^1]
+1. The mouse pointer's coordinates over the Mandelbrot Set.<br>These are supplied as two `f64` values called `zx` and `zy`
+
+1. Whether we are plotting the Mandelbrot Set or a Julia Set.<br>This is supplied as a Boolean flag called `is_mandelbrot`.
+
+1. The memory offset where the data for the current image starts.<br>This is supplied as an `i32` argument called `image_offset`.[^1]
 
 The function signature has now expanded and looks like this:
 
@@ -35,16 +37,16 @@ The function signature has now expanded and looks like this:
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot or Julia set
 (func (export "mj_plot")
-       (param $width i32)         ;; Canvas width
-       (param $height i32)        ;; Canvas height
-       (param $origin_x f64)      ;; X origin coordinate
-       (param $origin_y f64)      ;; Y origin coordinate
-       (param $zx f64)            ;; Mouse X coordinate in Mandelbrot Set
-       (param $zy f64)            ;; Mouse Y coordinate in Mandelbrot Set
-       (param $ppu i32)           ;; Pixels per unit (zoom level)
-       (param $max_iters i32)     ;; Maximum iteration count
-       (param $is_mandelbrot i32) ;; Are we plotting the Mandelbrot Set?
-       (param $image_offset i32)  ;; Shared memory offset of image data
+      (param $width i32)         ;; Canvas width
+      (param $height i32)        ;; Canvas height
+      (param $origin_x f64)      ;; X origin coordinate
+      (param $origin_y f64)      ;; Y origin coordinate
+      (param $zx f64)            ;; Mouse X coordinate in Mandelbrot Set
+      (param $zy f64)            ;; Mouse Y coordinate in Mandelbrot Set
+      (param $ppu i32)           ;; Pixels per unit (zoom level)
+      (param $max_iters i32)     ;; Maximum iteration count
+      (param $is_mandelbrot i32) ;; Are we plotting the Mandelbrot Set?
+      (param $image_offset i32)  ;; Shared memory offset of image data
 ```
 
 #### Skip Early Bailout Check For Julia Sets

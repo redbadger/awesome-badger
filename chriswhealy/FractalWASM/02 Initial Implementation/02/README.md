@@ -11,11 +11,11 @@ As previously implemented, the `escapeTime` function uses a brute-force approach
 
 ![Mandelbrot Regions](/assets/chriswhealy/Mandelbrot%20Regions.png)
 
-Any point lying within these two regions is a member of the Mandelbrot Set which means that its value will never escape to infinity.  The problem is that using our current approach, for every pixel within these regions, we will have to run the escape-time algorithm until it hits the `max_iters` limit simply to determine something we could discover using a significantly smaller amount of CPU time.
+Any point lying within these two regions is a member of the Mandelbrot Set which means that its value will ***never*** escape to infinity.  The problem is that using our current approach, for every pixel within these regions, we have to run the escape-time algorithm until it hits the `max_iters` limit simply to determine something we could discover using a significantly smaller amount of CPU time.
 
 All we need to do now is add a check that takes the (`x`,`y`) coordinates of the pixel location, and checks whether it lies within either of these two regions.
 
-The exact implementation of these functions is not important at the moment; we will simply assume that such function are available and that calling them is much cheaper than running the escape-time algorithm to completion:
+The exact implementation of these functions is not important at the moment; we will simply assume that such functions are available and that calling them is much cheaper than running the escape-time algorithm to completion:
 
 ```javascript
 const isInMainCardioid   = (x, y) => ...

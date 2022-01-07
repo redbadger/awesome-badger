@@ -7,8 +7,10 @@
 
 Now that the WebAssembly side of the coding has been written, we need an HTML page to display the rendered image.
 
-> ***IMPORTANT***
-> In order for the Web page shown below to function correctly, it must be served to your browser from a Web server.  WebAssembly `.wasm` files cannot be opened by a browser using the `file://` protocol.
+> ***IMPORTANT***<br>
+> In order for the Web page shown below to function correctly, it must be served to your browser from a Web server.
+>
+> For security reasons, WebAssembly `.wasm` files cannot be opened by a browser using the `file://` protocol.
 
 ![Basic WAT Implementation](/assets/chriswhealy/basic-rendered-mbset.png)
 
@@ -100,7 +102,7 @@ start()
 
 The JavaScript coding in this Web page does the following things:
 
-1. Defines a helper function and various constant values
+1. Defines various constant values and a helper function called `microPrecision` that returns a time value rounded to the nearest microsecond.
 1. Accesses the HTML `canvas` element called `mandelImage`, defines its dimensions and works out how many WebAssembly memory pages will be needed for an image of that particular size
 1. Allocates the required amount of WebAssembly memory
 1. Defines a two-layer object that references the various host resources being shared with the WebAssembly module

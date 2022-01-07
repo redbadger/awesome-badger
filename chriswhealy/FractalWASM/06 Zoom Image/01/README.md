@@ -26,7 +26,7 @@ Since both the zoom level and the coordinates of the image's centre pixel are no
 This firstly means that functions `mandel_x_pos_to_ccord` and `mandel_y_pos_to_ccord` can no longer be constants:
 
 ```javascript
-let mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH, PPU, X_ORIGIN)
+let mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH,  PPU, X_ORIGIN)
 let mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
 ```
 
@@ -60,7 +60,7 @@ const zoom = zoom_in => evt => {
   }
 
   // Update the mouse position helper functions using the new X/Y origin and zoom level
-  mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH, PPU, X_ORIGIN)
+  mandel_x_pos_to_coord = canvas_pxl_to_coord(CANVAS_WIDTH,  PPU, X_ORIGIN)
   mandel_y_pos_to_coord = canvas_pxl_to_coord(CANVAS_HEIGHT, PPU, Y_ORIGIN)
 
   // Redraw the Mandelbrot Set
@@ -70,7 +70,7 @@ const zoom = zoom_in => evt => {
 
 Notice also that the call to the WebAssembly function `mj_plot` has been moved into a function called `draw_fractal`.
 
-Now, the zoom event handler is added to the `canvas` HTML element for both the left (`click`) and right (`contextmenu`) mouse click events:
+Now, the zoom event handler is added to the Mandelbrot `canvas` HTML element for both the left (`click`) and right (`contextmenu`) mouse click events:
 
 ```javascript
 mCanvas.addEventListener('click',       zoom(true),  false)

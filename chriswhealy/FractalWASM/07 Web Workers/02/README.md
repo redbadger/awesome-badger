@@ -13,7 +13,7 @@ In order to understand the changes that are needed here, let's first lay out the
 
 The main thread needs to allocate the memory that will be shared with the multiple instances of our WebAssembly module.
 
-![Allocate WebAssembly Memory](/assets/chriswhealy/7.2.1.png)
+<img alt ="Allocate WebAssembly Memory" src="/assets/chriswhealy/7.2.1.png" width="587">
 
 #### Generate Worker Threads
 
@@ -33,7 +33,7 @@ Each WebAssembly module instance now has access to the same block of memory.
 
 The second step of the initialisation process is to invoke the `mj_plot` function to create the initial image of the Mandelbrot Set.
 
-The difference now is that the details of the current pixel being plotted are written to shared memory where they can be read by all the running instances of the `mj_plot` function.
+The difference now is that the details of the current pixel being plotted are located in shared memory where they can be read by all the running instances of the `mj_plot` function.
 
 In order to know which pixel to plot next, the `mj_plot` function performs an atomic read-modify-write operation in which it reads the next pixel from memory, increments the value and then writes it back.[^1]
 

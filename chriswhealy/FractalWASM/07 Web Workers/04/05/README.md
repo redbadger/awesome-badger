@@ -26,14 +26,14 @@ This means two fundamental changes need to be made (one of which is very simple)
 
    Each instance of `mj_plot` can then safely read-modify-write this single value.
 
-   > ***IMPORTANT***
-   > After each image has been plotted, this pixel counter must be reset to 0.
+   > ***IMPORTANT***<br>
+   > After all the workers have finished plotting an image, this pixel counter must be reset to 0.
    >
    > This action is not performed in the WebAssembly coding, but in the main thread's message handler when it detects that all the workers have finished.
 
 ### Modifying Module `mj_plot`
 
-In the same way that we needed to change the `memory` declaration in the `colur_palette` module, we must declare that module `mj_plot.wat` will use shared memory.
+In the same way we needed to change the `memory` declaration in the `colour_palette` module, we must make a corresponding change in module `mj_plot.wat`:
 
 ```wast
 (module
@@ -44,6 +44,7 @@ In the same way that we needed to change the `memory` declaration in the `colur_
 ```
 
 > ***GOTCHA***
+>
 > If you forget to make this change, then you will not see any errors at compile time.
 >
 > At runtime however, you will see this slightly-less-then-helpful error message in the browser console:
@@ -55,11 +56,11 @@ In the same way that we needed to change the `memory` declaration in the `colur_
 
 ### Modifying Function `mj_plot`
 
-The first thing we need to establish is where in shared memory the pixel counter lives.  Here, we are free to choose any locations we like - so long as everyone looks in the same place!  We are plotting two fractal images, so we need two pixel counters: one for the Mandelbrot Set and the other for the Julia Set.
+The first thing we need to establish is where in shared memory the pixel counters will live.  Here, we are free to choose any locations we like - so long as everyone looks in the same place!  We are plotting two fractal images, so we need two pixel counters: one for the Mandelbrot Set and the other for the Julia Set.
 
 For simplicity, both pixel counters will be `i32` values and live at offsets `0` and `4` for the Mandelbrot and Julia Sets respectively.  This in turn means that the previous memory location of the Mandelbrot image data (offset zero) must be shifted down by 8 bytes.
 
-> ***IMPORTANT***
+> ***IMPORTANT***<br>
 > Here's a perfect example of where, within its own memory space, a WebAssembly program is only as memory-safe as you make it!
 >
 > If you accidentally write data to the wrong offset, too bad!
@@ -68,7 +69,7 @@ For simplicity, both pixel counters will be `i32` values and live at offsets `0`
 >
 > 😱
 
-So first we create some local variables to keep track of how many pixels need to be calculated, what the current pixel is, and where in memory can I find the next pixel value.
+So first we create some local variables to keep track of how many pixels need to be calculated, what the current pixel is, and where in memory the next pixel value is located.
 
 The following code snippets show the relevant changes to function `mj_plot`.  So right at the start, we need to add:
 
@@ -118,7 +119,7 @@ Now, we simply have a single loop that performs an atomic read-modify-write on t
   (if (i32.gt_u
     (local.get $pixel_count)
     (local.tee $this_pixel
-      (i32.atomic.rmw.add (local.get $next_pixel_offset) (i32.const 1))
+      (i32.atomic.rmw.add (local.get $next_pixel_offset) (i32.const 1))  ;; This is all-important statement!
     )
   )
   (then

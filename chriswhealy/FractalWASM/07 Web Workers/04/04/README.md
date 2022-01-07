@@ -70,7 +70,7 @@ const worker_msg_handler = ({ data }) => {
           default:
         }
 
-        // Reset X,Y iteration counters in shared memory
+        // Reset Mandelbrot and Julia pixel counters in shared memory
         wasmMem32[0] = 0x00000000
         wasmMem32[1] = 0x00000000
 

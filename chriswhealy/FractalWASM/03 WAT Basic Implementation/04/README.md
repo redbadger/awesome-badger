@@ -19,7 +19,7 @@ Since this particular algorithm can be used for plotting either the Mandelbrot o
 | `$cy` | Pixel Y coordinate (imaginary part) | Caller must transform pixel location to a coordinate
 | `$max_iters` | Iteration limit |
 
-If you have read [§8](Introduction%20to%20WebAssembly%20Text/08/) on Loops from the blog series [Introduction to WebAssembly Text](Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.
+If you have read [§8](../../../Introduction%20to%20WebAssembly%20Text/08/) on Loops from the blog series [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.
 
 This coding style is used here.
 

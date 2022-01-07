@@ -9,7 +9,7 @@
 
 At the end of [§3.1](../01/) we assumed that our WebAssembly module would be called `mandel_plot.wasm`, so it would probably be a good idea to create this module now.
 
-> The following coding has been performed in MS Visual Studio Code using the [WebAssembly Extension](https://marketplace.visualstudio.com/items?itemName=dtsvet.vscode-wasm) supplied by the WebAssembly Foundation.
+> The following coding has been written in MS Visual Studio Code using the [WebAssembly Extension](https://marketplace.visualstudio.com/items?itemName=dtsvet.vscode-wasm) supplied by the WebAssembly Foundation.
 
 Having created a file called `mandel_plot.wat`, start by defining the module and the resources that need to be imported from the host environment:
 
@@ -25,7 +25,7 @@ Having created a file called `mandel_plot.wat`, start by defining the module and
 )
 ```
 
-Notice how the two-layer namespace is used to identify each property in the JavaScript object we created called `host_fns`.
+Notice how the `import` statement uses the two-layer namespace to access the relevant properties in the `host_fns` JavaScript object.
 
 > ***IMPORTANT***
 >

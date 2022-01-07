@@ -19,9 +19,9 @@ const bailout  = 4
 ### Helper Functions
 
 We need a few helper functions:
-* `pixel2XCoord` and `pixel2YCoord`
+* `pixel2XCoord` and `pixel2YCoord`<br>
    These functions translate pixel X and Y locations to complex plane X and Y coordinates
-* `iter2Colour`
+* `iter2Colour`<br>
    Transforms an iteration number into a colour
 
 At the moment, we don't care how these helper functions have been implemented
@@ -32,7 +32,7 @@ const bailout  = 4
 
 const pixel2XCoord = pos => ...
 const pixel2YCoord = pos => ...
-const iter2Colour  = n => ...
+const iter2Colour  = n   => ...
 ```
 
 ### Working with a `canvas` HTML ELement
@@ -55,9 +55,9 @@ Next we need to create an `ArrayBuffer` large enough to hold the actual image da
 let buf = new ArrayBuffer(mImage.data.length)
 ```
 
-This `ArrayBuffer` is the data structure into which we will write the image data, but we also have a bit of a problem: JavaScript does allow direct access to the contents of an `ArrayBuffer`.
+This `ArrayBuffer` is the data structure into which we will write the image data, but we also have a bit of a problem: JavaScript does not allow direct access to the contents of an `ArrayBuffer`.
 
-So the way we can read and write data to and from an `ArrayBuffer` is by creating two overlays, or masks, that sit over top of the `ArrayBuffer`.  Then, through these overlays, we will be able to access the contents of the `ArrayBuffer`
+So the way we read/write data to/from an `ArrayBuffer` is by creating one or more overlay objects, or masks, that sit over top of the `ArrayBuffer`.  Then, by accessing the overlaid objects, we are able to access the contents of the `ArrayBuffer`.
 
 ```javascript
 let buf8  = new Uint8ClampedArray(buf)
@@ -81,7 +81,7 @@ for (let iy = 0; iy < mCanvas.height; ++iy) {
     // Translate the iteration value into a colour
     let colour = iter2Colour(iter)
 
-    // Write the 4 bytes colour data to the ArrayBuffer using the 32-bit overlay
+    // Write the 4 bytes of colour data to the ArrayBuffer using the 32-bit overlay
     buf32[iy * mCanvas.width + ix] = colour
   }
 }
@@ -90,6 +90,8 @@ for (let iy = 0; iy < mCanvas.height; ++iy) {
 mImage.data.set(buf8)
 mCanvas.putImageData(mIMage, 0, 0)
 ```
+
+Notice what's happening here: within the loop, we use the `buf32` overlay to write 4 bytes of colour data into the `ArrayBuffer` in a single assignment; then after the loop has finished, we use the `buf8` overlay to transfer the contents of the `ArrayBuffer` into the canvas image.
 
 Ignoring questions of efficiency for the time being, we now have a working loop structure.
 

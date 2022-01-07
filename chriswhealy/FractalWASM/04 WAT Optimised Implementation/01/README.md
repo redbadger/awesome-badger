@@ -21,11 +21,11 @@ Then test the following equality:
 q * (q + (x - 0.25)) <= y^2 / 4
 ```
 
-If this returns true, then there is no need to run the escape time algorithm.
+If this returns true, then the point lies within the main cardioid and there is therefore no need to run the escape time algorithm.
 
 So, let's now create a WAT function that implements this check.
 
-If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](../../../07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.  Hence this function returns an `i32`:
+If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](../../../Introduction%20to%20WebAssembly%20Text/07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.  Hence this function returns an `i32`:
 
 ```wast
 ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -97,7 +97,7 @@ Finally, we can combine these two functions into a simple check for early bailou
       (param $y f64)
       (result i32)
   (i32.or
-    (call $is_in_main_cardioid (local.get $x) (local.get $y))
+    (call $is_in_main_cardioid   (local.get $x) (local.get $y))
     (call $is_in_period_two_bulb (local.get $x) (local.get $y))
   )
 )
