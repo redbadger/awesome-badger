@@ -13,11 +13,11 @@ Houston, we have a problem! We made distributed applications too hard! And now w
 
 Docker containers were so much lighter than virtual machines that we used them everywhere to package up all the pieces of our new microservices applications. Then we invented Kubernetes to manage them for us. But we forgot how many concerns we have to manage in order to be secure, scalable, reliable, and resilient.
 
-![Containers, that'll fix it!](/assets/{{ page.user }}/containers.jpeg)
+![Containers, that'll fix it!](/assets/stuartharris/containers.jpeg)
 
 So we added a bunch of other tooling on top of Kubernetes to do that for us. And we made the [CNCF Landscape][cncf-landscape], which currently has nearly a thousand products (with a market cap of $15T and funding of $16B). A whole new industry, which we expect DevOps-focused teams to navigate. The bar of the “T” (of our T-shaped engineers) is suddenly wider than the Suez Canal, and we’re in danger of getting seriously stuck.
 
-![CNCF Landscape](/assets/{{ page.user }}/cncf.png)
+![CNCF Landscape](/assets/stuartharris/cncf.png)
 
 When I look at a complex landscape like this, I wonder if all that complexity is actually just propping up the wrong solution.
 
@@ -37,13 +37,13 @@ Kubernetes is right at the centre of the CNCF landscape, it has become the de fa
 
 Now it feels like we can make the platform all together more intelligent, bringing it up to meet the core logic in our services, whilst allowing us to simultaneously reduce their weight. We can see this happening already.
 
-![Platform evolution](/assets/{{ page.user }}/platform.svg)
+![Platform evolution](/assets/stuartharris/platform.svg)
 
 [Istio][istio], and other service meshes like [Linkerd][linkerd], augment the platform at the network level. That’s a great start, which [Dapr][dapr] builds upon by augmenting the platform at the application level and acting more like an application framework (abstracting away IO, storage and other technical concerns). They both build on top of Kubernetes and even though, in my opinion, they give more than they take away, they do add to the cognitive load and complexity of the platform.
 
 We are not removing the complexity, we are just moving it around — although we’re pushing it to the outer layers in the Onion architecture, so it’s a step in the right direction.
 
-![Onion architecture](/assets/{{ page.user }}/onion.svg)
+![Onion architecture](/assets/stuartharris/onion.svg)
 
 However, our microservices, whilst becoming more focused, are still subject to the underlying network topology, requiring us to understand, in detail, exactly how each part will communicate with the other parts of the system.
 

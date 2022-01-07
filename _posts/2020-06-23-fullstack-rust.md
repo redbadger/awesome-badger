@@ -19,7 +19,7 @@ The demo application expands on the ubiquitous [TODO MVC][todomvc] application, 
 
 This is a rough diagram of the setup (drawn in the excellent [excalidraw][excalidraw]), where all the orange boxes are either fully, or partially (in the case of the gateway), written in Rust:
 
-![architecture](/assets/{{ page.user }}/architecture.svg)
+![architecture](/assets/charypar/architecture.svg)
 
 The browser runs the TODO client, which is compiled to WASM. The Envoy filter is also compiled to wasm and injected (by Istio) into either the ingress gateway or the relevant sidecar (either approach is sound). The GraphQL API and the Web server are lightweight and fast. On my laptop, round trips through a release build of the API and a PostgreSQL database, take roughly a millisecond!
 
@@ -272,7 +272,7 @@ That's actually it! There is literally nothing more to it.
 
 A GraphQL API with queries and mutations (not shown here, but just as easy), backed onto a SQL database, that can turn around queries in a millisecond...
 
-![round-trip times](/assets/{{ page.user }}/round-trip.png)
+![round-trip times](/assets/charypar/round-trip.png)
 
 ... and it comes in at under 200 lines of Rust. Check out the full source code at [https://github.com/redbadger/feature-targeting/tree/master/examples/todomvc][todomvc_api].
 
@@ -345,7 +345,7 @@ It's good that there are a few choices of web frameworks in the Rust ecosystem. 
 
 For example, in the screenshot, look at the "All", "Active" and "Completed" filter buttons, and at how they are implemented in the code-box below:
 
-![ui screenshot](/assets/{{ page.user }}/ui.png)
+![ui screenshot](/assets/charypar/ui.png)
 
 ```rust
 fn view_filters(current_filter: TodoFilter) -> Node<Msg> {

@@ -85,7 +85,7 @@ let someObj = { toString: () => "Blah", valueOf: () => "Surprise!" }
 someObj + ""   // 'Surprise!'    Huh?! Why wasn't toString() called?
 ```
 
-![Think](/assets/{{ page.user }}/Think.png)
+![Think](/assets/ChrisWhealy/Think.png)
 
 ## Strange, but Consistent
 
@@ -137,4 +137,4 @@ And converting the `date` object to a string by overloading the `+` operator wil
 date + ""           // 'Fri Sep 24 2021 12:08:36 GMT+0100 (British Summer Time)'
 ```
 
-![WAT](/assets/{{ page.user }}/wat.jpeg)
+![WAT](/assets/ChrisWhealy/wat.jpeg)

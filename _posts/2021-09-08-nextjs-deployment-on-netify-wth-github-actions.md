@@ -114,10 +114,10 @@ of that configuration when deploying from Github Actions.
 After creating the site, open your `Site Settings` on Netlify and disable builds and
 preview deploys:
 
-![Netlify build settings off](/assets/{{ page.user }}/netlify-build-settings.png)
+![Netlify build settings off](/assets/ruiramos/netlify-build-settings.png)
 *Netlify build settings off*
 
-![Netlify deploy previews off](/assets/{{ page.user }}/netlify-deploy-previews.png)
+![Netlify deploy previews off](/assets/ruiramos/netlify-deploy-previews.png)
 *Netlify deploy previews off, thanks though!*
 
 
@@ -384,7 +384,7 @@ branch](https://github.com/ruiramos/nextjs-netlify-ghactions/deployments/activit
 This will also enrich our PR page with the status and a link to
 the live deployment:
 
-![Github Pull Request with Deployment info](/assets/{{ page.user }}/github-pr-view-deployment.png)
+![Github Pull Request with Deployment info](/assets/ruiramos/github-pr-view-deployment.png)
 *Github Pull Request with Deployment info* ([link](https://github.com/ruiramos/nextjs-netlify-ghactions/pull/1))
 
 

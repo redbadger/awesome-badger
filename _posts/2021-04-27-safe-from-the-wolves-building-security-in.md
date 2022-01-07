@@ -7,13 +7,13 @@ author: Tim Lee
 excerpt: Last week I virtually attended the reasonably interesting <a href="https://devopscon.io/london">DevOpsCon London</a> event. My main takeaway is that <i>Shift Left on Security</i> is the current buzz-phrase in the DevOps community, with some suggesting an expansion of the existing merger to create <i>DevSecOps</i>.
 ---
 
-![angry wolf](/assets/{{ page.user }}/wolf2.gif)
+![angry wolf](/assets/timlee/wolf2.gif)
 
 Last week I virtually attended the reasonably interesting [DevOpsCon London](https://devopscon.io/london/) event. My main takeaway is that _Shift Left on Security_ is the current buzz-phrase in the DevOps community, with some suggesting an expansion of the existing merger to create _DevSecOps_.  This throws open the door and welcomes in the cold and shivering form of Security, who's been guarding the entrance this whole time and yet never once been offered a cup of tea by Automated Testing and Continuous Integration, who've been merrily sat around, warming their toes by the fire. And it's about time, too.
 
 In a world where automation rules and there's an emphasis on checking for issues early and often to keep the feedback loop tight, it's only natural that security should be brought into the fold, especially when the number of wolves prowling the streets, looking for straw houses full of little piggies to blow over, continues to grow.
 
-![angry wolf](/assets/{{ page.user }}/wolf.jpeg)
+![angry wolf](/assets/timlee/wolf.jpeg)
 
 There are many tools we can use to ensure that our house is built of bricks, which I will discuss in this article.
 
@@ -49,7 +49,7 @@ There are a [large number of analysers recognised by OWASP](https://owasp.org/ww
 
 The first one I tried was [LGTM](https://lgtm.com/) since it's free (for open-source projects), can scan Javascript and integrates nicely with Github. Once you log in with a Github account it's quick to set-up - you just have to give authorisation for Github organisation access and point to the repository to run tests against and you're away. A scan will be performed for every merge to the main branch and (once switched on) any pull requests.
 
-![LGTM screenshot from Github showing 2 alerts](/assets/{{ page.user }}/lgtm.png)
+![LGTM screenshot from Github showing 2 alerts](/assets/timlee/lgtm.png)
 
 Of the 8 or so issues in the PR code changes, it only identified a disappointing 2 (evil regex and the XSS vulnerability). Despite these "alerts", it did not label the check as failing and I could not see any way to configure the threat tolerance level, making it a bit redundant for enforcing best security practices in a live project.
 
@@ -57,7 +57,7 @@ Of the 8 or so issues in the PR code changes, it only identified a disappointing
 
 This open-source project is a bit more light-weight and is available as both a CLI and Github Action, although the low verbosity of output of the Github action is enough to know there are issues but not what those issues are, which would slow down debugging and remediation.
 
-![Insider screenshot from Github showing 3 errors](/assets/{{ page.user }}/insider.png)
+![Insider screenshot from Github showing 3 errors](/assets/timlee/insider.png)
 
 It found 3 issues in the JS code (two hardcoded secrets - a private key and DB password, and reading from a non-static, user-provided file name), identified the vulnerable dependency and picked up the hardcoded secrets in the Terraform config, so definitely more effective than LGTM, but still some holes.
 
@@ -65,13 +65,13 @@ It found 3 issues in the JS code (two hardcoded secrets - a private key and DB p
 
 The ability of this versatile and thoroughly effective JS/TS linter to accept plugins makes it an ideal security scanner, because applying rules to code is what it was made for. Furthermore, it can show errors and warnings directly in your IDE (shortening the feedback cycle considerably), it can prevent committing when there are detected issues with a pre-commit hook and also run as a pipeline step with no extra configuration.
 
-![es-lint showing a regex error inline in VS Code](/assets/{{ page.user }}/eslint-inline.png)
+![es-lint showing a regex error inline in VS Code](/assets/timlee/eslint-inline.png)
 
 A number of plugins are available to enforce security-related rules, including:
 -  eslint-plugin-security - solid set of security checks
 -  eslint-plugin-scanjs-rules - additional rules from Mozilla's deprecated ScanJS product
 
-![es-lint showing 4 errors found when run in the terminal](/assets/{{ page.user }}/eslint-score.png)
+![es-lint showing 4 errors found when run in the terminal](/assets/timlee/eslint-score.png)
 
 Using these plugins identified 4 of the issues in the JS code. Compared to the previous two tools, and given the possibility of writing additional, custom rules, this option is probably the simplest, leanest and most effective way of adding a safety net to the coding process.
 
@@ -93,7 +93,7 @@ The CLI takes a public Github repository URI as it's argument rather than scanni
 
 ES-lint to the rescue again! With the installation of the `eslint-plugin-no-secrets` plugin, all secret checking can be performed as part of the regular linting process. Like Trufflehog, it uses entropy and pattern matching to identify secrets and it does it very well, picking up the hardcoded keys in the test code (within the JS files, at least).
 
-![es-lint showing a hardcoded secret error inline in VS Code](/assets/{{ page.user }}/eslint-inline-secret.png)
+![es-lint showing a hardcoded secret error inline in VS Code](/assets/timlee/eslint-inline-secret.png)
 
 #### Verdict
 
@@ -109,7 +109,7 @@ This is where dependency checkers come in, scanning your packages for versions w
 
 [Dependabot](https://dependabot.com/#how-it-works) is one of the best known dependency checkers. It's easy to set up through Github and periodically checks the project's installed package versions against the latest problematic dependencies, notifying you when it finds anything and even (if configured) automatically creating pull requests to update to the latest, safest versions.
 
-![Dependabot alert in github](/assets/{{ page.user }}/dependabot.png)
+![Dependabot alert in github](/assets/timlee/dependabot.png)
 
 This is great for ongoing security, since other tools will generally only check new pull requests, however the list of known vulnerabilities is constantly changing and more dormant projects could easily fall behind without realising it.
 
@@ -119,7 +119,7 @@ This does not necessarily protect against the issue of [typosquatting](https://b
 
 Both `yarn` and `npm` package managers have a built-in function called `audit` to catch known issues, making it really simple to add as a pipeline step or pre-commit hook.
 
-![yarn audit identifying a dodgy dependency in the terminal](/assets/{{ page.user }}/yarn-audit.png)
+![yarn audit identifying a dodgy dependency in the terminal](/assets/timlee/yarn-audit.png)
 
 This easily caught the insecure package in my test repo, with a clear debug message and indication of severity.
 
@@ -135,7 +135,7 @@ As with third-party packages, when using or building on top of a public Docker i
 
 This [open source CLI tool](https://github.com/anchore/grype) from Anchore has a [Github action](https://github.com/marketplace/actions/anchore-container-scan) that's really simple to configure and executes very quickly (under 20 seconds).
 
-![Anchore identifying errors during build time](/assets/{{ page.user }}/anchore.png)
+![Anchore identifying errors during build time](/assets/timlee/anchore.png)
 
 As well as checking the base image, it also doubles as a dependency checker and scanned all the node modules too, catching the dodgy SSRI dependency, plus 17 more possibly problematic packages including some with critical issues... updating to latest only fixed 1 of them (the deliberate vulnerability).
 
@@ -155,7 +155,7 @@ One of the many benefits of using infrastructure-as-code is that our resources a
 
 The Github Action couldn't be any easier to set up, it runs quickly (2s for my small sample file) and picks up many valid issues, such as missing key security parameters, encryption options set to false, lack of monitoring and hardcoded secrets.
 
-![Checkov identifying infrastructure config issues during the CI build](/assets/{{ page.user }}/checkov.png)
+![Checkov identifying infrastructure config issues during the CI build](/assets/timlee/checkov.png)
 
 You can choose to skip specific checks and pass the build even on failures (soft fail), but what seems to be missing is an acceptance threshold, where only errors (instead of warnings) fail the build.
 

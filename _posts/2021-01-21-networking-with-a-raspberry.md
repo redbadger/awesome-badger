@@ -7,7 +7,7 @@ author: Tim Lee
 excerpt: Want to learn about networking, proxies and web servers? Read on.
 ---
 
-![Raspberry Pi logo](/assets/{{ page.user }}/raspberry-pi-logo.webp)
+![Raspberry Pi logo](/assets/timlee/raspberry-pi-logo.webp)
 
 ## Introduction
 
@@ -32,7 +32,7 @@ To do that we'll need to cover off a few things:
 
 A Raspberry Pi (I used a [Raspberry Pi 4b](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)) connected to your local WiFi network. However, if you don't have a Pi to hand, you can use pretty much any other machine on your network.
 
-![Raspberry Pi circuit illustration](/assets/{{ page.user }}/raspberry-pi.svg)
+![Raspberry Pi circuit illustration](/assets/timlee/raspberry-pi.svg)
 
 ## Step 1: Web server
 
@@ -42,7 +42,7 @@ If you want people to be able to access your site then you need to have a way of
 
 A web server is just some software running on a networked machine. It can be dumb, like a file server used to serve static documents (might sound familiar if you've ever used cloud storage solutions like an AWS S3 bucket, Google Cloud Storage or Azure Blob Storage) or a bit smarter, interpreting requests and doing some processing to dynamically render web pages (termed server-side rendering) or providing results to API requests (for example, a GraphQL API running on a NodeJS server).
 
-![Servers](/assets/{{ page.user }}/servers.png)
+![Servers](/assets/timlee/servers.png)
 
 ### Server options
 
@@ -80,7 +80,7 @@ We need to provide a mechanism to convert that memorable name that a user enters
 
 [The Domain Name System](https://en.wikipedia.org/wiki/Domain_Name_System) is the address book of the internet, making sure each browser doesn't get lost. A huge web of dedicated, interlinked DNS servers help answer every query on the internet, receiving requests like "badgerland.com?" and responding with "47.43.22.52".
 
-![DNS](/assets/{{ page.user }}/dns.png)
+![DNS](/assets/timlee/dns.png)
 
 You can go to your computer settings and view the DNS servers that you've got configured for your WiFi - you'll probably see an entry like `1.1.1.1` (Cloudflare's DNS server) or `8.8.8.8` (Google's DNS server).
 
@@ -120,7 +120,7 @@ The handshake to establish TLS goes (sort of) as follows:
 - Server: wlkejf23iojfewooioiwaejf?
 - Client: koijewf2903u0932i9evirj!!!
 
-![TCP handshake](/assets/{{ page.user }}/ssl.png)
+![TCP handshake](/assets/timlee/ssl.png)
 
 The box with an open lock on it in this over-stretched personification is a public key - part of an [asymmetric key](https://en.wikipedia.org/wiki/Public-key_cryptography) set. Data can be encrypted by anyone who has the public key (closing the lock) but it can only be decrypted by the person with the private key (opening the lock). In this case, that's the server.
 
@@ -136,7 +136,7 @@ In addition to containing a public key, an SSL certificate is used to prove a si
 
 Each CA holds their own certificate signed by a **Root Certificate Authority** (root CA) - this is an organisation that is trusted by _The Internet_ (Google, Mozilla, Apple, Microsoft...) to only endorse responsible CAs. This chain of signed notes is used to create a link of trust from the top authority down to each web site.
 
-![Chain of trust](/assets/{{ page.user }}/chain-of-trust.png)
+![Chain of trust](/assets/timlee/chain-of-trust.png)
 
 To acquire an SSL certificate you need to prove that you actually own the domain so you can't pretend to be, like, Facebook or something.
 
@@ -209,7 +209,7 @@ A reverse proxy can improve performance, increase flexibility and boost security
 
 Reverse proxies in particular always frightened me - I thought that no one really understood them and people just used phrases like 'reverse proxy' to sound smart and scare junior devs. It turns out, they're actually really simple.
 
-![A forward vs a reverse proxy](/assets/{{ page.user }}/proxies.png)
+![A forward vs a reverse proxy](/assets/timlee/proxies.png)
 
 A standard (forward) proxy server sits in front of a network and relays requests from the machines on the network out to the internet, returning the responses to each machine.
 

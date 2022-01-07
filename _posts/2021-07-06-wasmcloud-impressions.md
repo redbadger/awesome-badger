@@ -4,7 +4,7 @@ title:  "wasmCloud Impressions"
 date:   2021-07-06 12:00:00 +0000
 user: davidlaban
 author: David Laban
-execerpt: Early impressions of WasmCloud
+excerpt: Early impressions of WasmCloud
 ---
 
 First impressions of technologies are quite important for driving adoption, so I've started writing down my early impressions as I explore different technologies.

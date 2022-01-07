@@ -19,11 +19,11 @@ Microfrontends is an approach for decomposing a monolithic frontend application 
 
 Let's imagine a dashboard for users of a SaaS product. Each page of the dashboard has a header on the top (blue), a navigation bar on the left (yellow), and a main content area (red).
 
-![Dashboard example](/assets/{{ page.user }}/dashboard.png)
+![Dashboard example](/assets/matt-thomson/dashboard.png)
 
 To start with, the dashboard is deployed as a single monolithic single page app. As the product grows, more and more pages are added to the dashboard, and they become more and more complex. Different teams start to own different pages, but are still working within the same monolith. This means that it gets increasingly difficult for the teams to ship independently, as their code is tightly coupled with that of other teams. Upgrading libraries and maintaining green builds are tasks that need co-ordination between teams, as they all have dependencies on each other.
 
-![Dashboard services](/assets/{{ page.user }}/services.png)
+![Dashboard services](/assets/matt-thomson/services.png)
 
 In the microfrontend approach, we would deploy separate services for the header, sidebar, and each content page that we want to display. Another container service is the entrypoint for the dashboard, and is responsible for fetching the relevant services and assembling them into the whole page. Each service just needs to serve a JavaScript bundle for creating its part of the page.
 

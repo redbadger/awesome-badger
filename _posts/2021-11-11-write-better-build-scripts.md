@@ -57,7 +57,7 @@ await $`pwd`;
 
 Check this out:
 
-![zx](/assets/{{ page.user }}/zx.png)
+![zx](/assets/stuartharris/zx.png)
 
 This is the first run (because the hash changed, we run the build):
 
@@ -152,7 +152,7 @@ JLAU7VF3L5IXQ5L66AXEILCHE4
 
 This is how I call it from `zx` (passing it an array on input directories):
 
-![dirsh](/assets/{{ page.user }}/dirsh.png)
+![dirsh](/assets/stuartharris/dirsh.png)
 
 Pretty cool.
 

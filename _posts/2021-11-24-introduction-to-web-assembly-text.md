@@ -5,7 +5,6 @@ date:   2021-11-24 12:00:00 +0000
 user: ChrisWhealy
 author: Chris Whealy
 excerpt: An introduction to programming directly in WebAssembly Text
-content_path: Introduction%20to%20WebAssembly%20Text
 ---
 
 ## What is WebAssembly Text (WAT)?
@@ -24,17 +23,17 @@ This introduction to WebAssembly Text serves as the starting point for subsequen
 
 ## Table of Contents
 
-- [Prerequisites](/{{ page.user }}/{{ page.content_path }}/00/)
-- [Benefits of WebAssembly](/{{ page.user }}/{{ page.content_path }}/01/)
-- [Creating a WebAssembly Module](/{{ page.user }}/{{ page.content_path }}/02/)
-- [Calling WebAssembly from a Host Environment](/{{ page.user }}/{{ page.content_path }}/03/)
-- [WAT Datatypes](/{{ page.user }}/{{ page.content_path }}04/)
-- [Local Variables](/{{ page.user }}/{{ page.content_path }}/05/)
-- [Arrangement of WAT Instructions](/{{ page.user }}/{{ page.content_path }}/06/)
-- [Conditions](/{{ page.user }}/{{ page.content_path }}/07/)
-- [Loops](/{{ page.user }}/{{ page.content_path }}/08/)
-- [More About Functions](/{{ page.user }}/{{ page.content_path }}/09/)
-- [WASM and Shared Memory](/{{ page.user }}/{{ page.content_path }}/10/)
+- [Prerequisites](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/00/)
+- [Benefits of WebAssembly](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/01/)
+- [Creating a WebAssembly Module](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/02/)
+- [Calling WebAssembly from a Host Environment](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/03/)
+- [WAT Datatypes](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text04/)
+- [Local Variables](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/05/)
+- [Arrangement of WAT Instructions](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/06/)
+- [Conditions](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/07/)
+- [Loops](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/08/)
+- [More About Functions](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/09/)
+- [WASM and Shared Memory](/ChrisWhealy/Introduction%20to%20WebAssembly%20Text/10/)
 
 
 

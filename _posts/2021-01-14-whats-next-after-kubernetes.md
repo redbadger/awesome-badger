@@ -27,7 +27,7 @@ Imagine the concentric layers of an onion where you can only call inwards (i.e. 
 
 I've augmented each layer's description with a simple code example. I've used [Rust][rust] for this, because it's awesome! [Fight me][rust-post]. Even if you don't know Rust, it should be easy to understand this example, but I've added a commentary that may help, just in case. You can try out the example from this [Github repository][onion-code].
 
-![Onion Architecture](/assets/{{ page.user }}/onion.svg)
+![Onion Architecture](/assets/stuartharris/onion.svg)
 
 The _core_ is pure in the functional sense, i.e. it has no side-effects. This is where our business logic resides. It is exceptionally easy to test because its pure functions only take and return values. In our example, our _core_ is just a single function that takes 2 integers and adds them together. In the _core_, we don't think about IO at all.
 
@@ -122,13 +122,13 @@ Ok, now we have that out of the way, let's see how we can shed the outer 2 layer
 
 So today, we typically host our microservices in Kubernetes, something like this:
 
-![Microservices in Kubernetes](/assets/{{ page.user }}/microservices.svg)
+![Microservices in Kubernetes](/assets/stuartharris/microservices.svg)
 
 If each microservice talks to its own database, say in a cloud hosted service such as Azure CosmosDB, then each would include the same libraries and similar glue code in order to talk to the DB. Even worse, if each service is written in a different language, then we would be including (and maintaining) different libraries and glue code for each language.
 
 This problem is addressed today, for networking-related concerns, by a Service Mesh such as [Istio][istio] or [Linkerd][linkerd]. These products abstract away traffic, security, policy and instrumentation into a sidecar container in each pod. This helps a lot because we now no longer need to implement this functionality in each service (and in each service's language).
 
-![Microservices with Service Mesh](/assets/{{ page.user }}/servicemesh.svg)
+![Microservices with Service Mesh](/assets/stuartharris/servicemesh.svg)
 
 But, and this is where the fun starts, we can also apply the same logic to abstracting away other application concerns such as those in the outer 2 layers of our onion.
 
@@ -136,11 +136,11 @@ Amazingly, there is an open source product available today that does just this! 
 
 Dapr abstracts away IO-related concerns (i.e. those in our _infra_ and _api_ layers) and adds distributed application capabilities. If you use Dapr in Kubernetes, it is also implemented as a sidecar:
 
-![Microservices with Dapr](/assets/{{ page.user }}/dapr.svg)
+![Microservices with Dapr](/assets/stuartharris/dapr.svg)
 
 In fact, we can use Dapr and a Service Mesh together, ending up with 2 sidecars and our service (with no networking or IO concerns) in each pod:
 
-![Microservices with Service Mesh and Dapr](/assets/{{ page.user }}/servicemesh_and_dapr.svg)
+![Microservices with Service Mesh and Dapr](/assets/stuartharris/servicemesh_and_dapr.svg)
 
 Now we're getting somewhere! Our service becomes business logic and nothing else! This is incredibly important! Now, when we look at the source code for our service, we can see the wood — because all the non-functional, non-core, non-business-logic, dull, repetitive, boilerplate code is no longer there.
 
@@ -174,11 +174,11 @@ So to recap, we want to reduce our code to just the functional business logic �
 
 I think [WasmCloud][wasmcloud] (in the process of being renamed from [waSCC][wasmcloud] – the WebAssembly Secure Capabilities Connector) is heading in this direction. Something like this will be what comes next, after Kubernetes.
 
-![A waSCC host](/assets/{{ page.user }}/wascc-host.svg)
+![A waSCC host](/assets/stuartharris/wascc-host.svg)
 
 A WasmCloud (or waSCC) host securely connects cryptographically signed Wasm actors to the declared capabilities of well-known providers. The actors are placed and managed by the host nodes, which can self-form a Lattice when connected as [NATs][nats] leaf nodes. Actors can be placed near to suitable providers or distributed across heterogeneous networks that span on-prem, Cloud, edge, IoT, embedded devices, etc.
 
-![A waSCC Lattice](/assets/{{ page.user }}/wascc-lattice.svg)
+![A waSCC Lattice](/assets/stuartharris/wascc-lattice.svg)
 
 WasmCloud is not the only thing out there that is following this path. [Lunatic][lunatic] is also interesting (and also written in Rust). Go check it out.
 
