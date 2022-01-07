@@ -3,43 +3,60 @@ layout: default
 ---
 
 <div class="home">
-  {%- if page.title -%}
+    {%- if page.title -%}
     <h1 class="page-heading">{{ page.title }}</h1>
-  {%- endif -%}
+    {%- endif -%}
 
-  {{ content }}
+    {{ content }}
 
-  {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
 
-  {% if site.contributors.size > 0 %}
-    <h2 class="post-list-heading">{{ page.list_title | default: "Blogs and Tutorials" }}</h2>
+    {% if site.paginate %}
+    {% assign posts = paginator.posts %}
+    {% else %}
+    {% assign posts = site.posts %}
+    {% endif %}
+
+
+    {%- if posts.size > 0 -%}
+    {%- if page.list_title -%}
+    <h2 class="post-list-heading">{{ page.list_title }}</h2>
+    {%- endif -%}
     <ul class="post-list">
-      {% for contributor in site.contributors %}
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        {%- for post in posts -%}
         <li>
-          <div class="post-contributor-div">
-            <a href="{{ contributor.user }}" class="post-contributor">{{ contributor.author }}</a>
-            <!--
-              This inner loop is a very inefficient way of doing things, but Liquid scripts have no access
-              to the filesystem without the use of a plugin...
-            -->
-            {% if site.posts.size > 0 %}
-            <table>
-              {% for post in site.posts %}
-                {% if post.categories contains contributor.user %}
-                <tr><td class="post-meta">{{ post.date | date: date_format }}</td>
-                    <td><h3><a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
-                      {%- if site.show_excerpts -%}
-                      {{ post.excerpt }}
-                      {%- endif -%}
-                      </td></tr>
-                {% endif %}
-              {% endfor %}
-            </table>
-            {% endif %}
-          </div>
+            <a href="{{ post.category }}">{{ post.author }}</a>
+            <span class="post-meta">{{ post.date | date: date_format }}</span>
+            <h3>
+                <a class="post-link" href="{{ post.url | relative_url }}">
+                    {{ post.title | escape }}
+                </a>
+            </h3>
+            {%- if site.show_excerpts -%}
+            {{ post.excerpt }}
+            {%- endif -%}
         </li>
-      {% endfor %}
+        {%- endfor -%}
     </ul>
-  {% endif %}
+
+    {% if site.paginate %}
+    <div class="pager">
+        <ul class="pagination">
+            {%- if paginator.previous_page %}
+            <li><a href="{{ paginator.previous_page_path | relative_url }}" class="previous-page">{{ paginator.previous_page }}</a></li>
+            {%- else %}
+            <li><div class="pager-edge">•</div></li>
+            {%- endif %}
+            <li><div class="current-page">{{ paginator.page }}</div></li>
+            {%- if paginator.next_page %}
+            <li><a href="{{ paginator.next_page_path | relative_url }}" class="next-page">{{ paginator.next_page }}</a></li>
+            {%- else %}
+            <li><div class="pager-edge">•</div></li>
+            {%- endif %}
+        </ul>
+    </div>
+    {%- endif %}
+
+    {%- endif -%}
 
 </div>

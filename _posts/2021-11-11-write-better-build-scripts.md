@@ -3,7 +3,7 @@ layout: post
 title:  "Write Better Build Scripts"
 date:   2021-11-11 12:00:00 +0000
 redirect_from: /stuartharris/build-scripts/
-categories: stuartharris
+category: stuartharris
 author: Stuart Harris
 excerpt: We need simple and efficient build automation both locally, when developing, and in CI pipelines. The use case is slightly different but the goals are the same — scripts need to be simple to write, simple to read and understand, and they need to be repeatable, but we don’t want to repeat unnecessary work.
 ---

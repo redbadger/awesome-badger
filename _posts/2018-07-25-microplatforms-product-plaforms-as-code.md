@@ -2,7 +2,7 @@
 layout: post
 title:  "Microplatforms - Product Platforms as Code"
 date:   2018-07-25 12:00:00 +0000
-categories: stuartharris
+category: stuartharris
 author: Stuart Harris
 excerpt: Microplatforms are an automation-based approach to provisioning and operating platforms running digital products and services, which emphasises autonomy of cross-functional product teams.
 ---
