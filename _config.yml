@@ -1,0 +1,46 @@
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+#
+# If you need help with YAML syntax, here are some quick references for you:
+# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
+# https://learnxinyminutes.com/docs/yaml/
+
+# Site settings
+title: Awesome Badger
+email: hello@red-badger.com
+description: Assorted thinking (mostly) about technology written by the Badgers.
+baseurl: ""
+url: "https://awesome.red-badger.com/"
+twitter_username: RedBadgerTeam
+github_username:  redbadger
+linkedin_username: red-badger
+author: Red Badger
+show_excerpts: true
+
+# Custom fields
+copyright: "Red Badger Consulting Ltd"
+logo: /assets/sally.svg
+
+plugins:
+  - jekyll-redirect-from
+
+# All contributors must be listed here.  Default sort order is alphabetically by surname
+# "user" is the GitHub user id
+# "author" is the contributor's display name
+contributors:
+  - user: charypar
+    author: Victor Charypar
+  - user: stuartharris
+    author: Stuart Harris
+  - user: davidlaban
+    author: David Laban
+  - user: timlee
+    author: Tim Lee
+  - user: pataruco
+    author: Pedro Martin
+  - user: ruiramos
+    author: Rui Ramos
+  - user: matt-thomson
+    author: Matt Thomson
+  - user: chriswhealy
+    author: Chris Whealy

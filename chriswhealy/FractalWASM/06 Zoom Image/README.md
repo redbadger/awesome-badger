@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Up](../) | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
+| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
 
 ## 6: Zooming In
 
@@ -13,4 +15,3 @@ In this particular section, we will only be changing the JavaScript and HTML cod
 1. [Add Zoom In/Out Functionality](./01/)
 1. [Add Slider for Changing `max_iters`](./02/)
 1. [Looking at the Problem We've Just Created](./03/)
-

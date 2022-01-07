@@ -1,8 +1,10 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [6: Zooming In](../../../06%20Zoom%20Image/) | [Up](../../../) |
+| [6: Zooming In](../../../06%20Zoom%20Image/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) |
 | [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) |
-| [7.4.4 7.4.4: Send/Receive Web Worker Messages](../04/)  | [7.4: Adapt the Main Thread Coding](../) | 
+| [7.4.4 7.4.4: Send/Receive Web Worker Messages](../04/)  | [7.4: Adapt the Main Thread Coding](../) |
 
 ### 7.4.5: Adapt WebAssembly Function `mj_plot`
 
@@ -13,22 +15,22 @@ This means two fundamental changes need to be made (one of which is very simple)
 1. The value of the pixel currently being plotted must be held in shared memory.
 
    This means that function `mj_plot` can no longer use private index counters such as `$x_pos` and `$y_pos` to keep track which row and column is currently being worked on.  Instead, the next pixel to be calculated must be read from shared memory, incremented, then written back again as an ***atomic operation***.  This is known as an atomic read-modify-write (`atomic.rmw`) operation.
-   
+
    In this manner, multiple instances of the function `mj_plot` can read their next pixel from shared memory, increment it and write it back again without duplicating the work of any other `mj_plot` instance.
-   
+
 1. Function `mj_plot` is currently structured as a nested loop.  We first loop around all the rows in the image, then within each row, we loop around each column.  Hence the need for two internal index counters `$x_pos` and `$y_pos`.
 
    This is fine when there's only one instance of `mj_plot` running, but now that multiple instances will all be running in parallel, we cannot safely perform two atomic read-modify-write operations and expect the values of `$x_pos` and `$y_pos` to remain related to each other.
-   
+
    What we now need to do instead is store a single pixel counter value in shared memory that represents the current pixel being worked on.  This value will continue to grow until it reaches the total number of pixels in the image (I.E. `$pixel_count = $width  * $height`).
-   
+
    Each instance of `mj_plot` can then safely read-modify-write this single value.
-   
-   > ***IMPORTANT***  
+
+   > ***IMPORTANT***
    > After each image has been plotted, this pixel counter must be reset to 0.
-   > 
+   >
    > This action is not performed in the WebAssembly coding, but in the main thread's message handler when it detects that all the workers have finished.
- 
+
 ### Modifying Module `mj_plot`
 
 In the same way that we needed to change the `memory` declaration in the `colur_palette` module, we must declare that module `mj_plot.wat` will use shared memory.
@@ -36,34 +38,34 @@ In the same way that we needed to change the `memory` declaration in the `colur_
 ```wast
 (module
   (import "js" "shared_mem" (memory 46 46 shared))
-  
+
   ;; snip
 )
 ```
 
-> ***GOTCHA***  
+> ***GOTCHA***
 > If you forget to make this change, then you will not see any errors at compile time.
-> 
+>
 > At runtime however, you will see this slightly-less-then-helpful error message in the browser console:
 >
 > `LinkError: WebAssembly.instantiate(): mismatch in shared state of memory, declared = 0, imported = 1`
-> 
+>
 > This means this particular module has not declared the use of shared memory, but the memory being imported from the host environment has been created as shared
- 
- 
+
+
 ### Modifying Function `mj_plot`
 
 The first thing we need to establish is where in shared memory the pixel counter lives.  Here, we are free to choose any locations we like - so long as everyone looks in the same place!  We are plotting two fractal images, so we need two pixel counters: one for the Mandelbrot Set and the other for the Julia Set.
 
 For simplicity, both pixel counters will be `i32` values and live at offsets `0` and `4` for the Mandelbrot and Julia Sets respectively.  This in turn means that the previous memory location of the Mandelbrot image data (offset zero) must be shifted down by 8 bytes.
 
-> ***IMPORTANT***  
+> ***IMPORTANT***
 > Here's a perfect example of where, within its own memory space, a WebAssembly program is only as memory-safe as you make it!
-> 
+>
 > If you accidentally write data to the wrong offset, too bad!
-> 
+>
 > Other than attempting to write outside the bounds of your entire memory space, WebAssembly does not perform any internal boundary checks to prevent you from doing this...
-> 
+>
 > 😱
 
 So first we create some local variables to keep track of how many pixels need to be calculated, what the current pixel is, and where in memory can I find the next pixel value.
@@ -143,9 +145,9 @@ Now, we simply have a single loop that performs an atomic read-modify-write on t
         )
       )
     )
-    
+
     ;; snip
-    
+
   )
 ) ;; end of $pixels loop
 ```
@@ -161,6 +163,3 @@ The result is that the original value is now on the top of the stack ready for u
 Next, we convert the value of `$this_pixel` into the corresponding row (`$cy`) and column (`$cx`) coordinates using some precalculated intermediate values stored in `$cy_int` and `$cx_int`.
 
 Now that we have derived the correct X and Y coordinates, we simply continue as before...
-
-
-

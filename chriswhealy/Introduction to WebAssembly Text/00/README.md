@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| | [Top](../README.md) | [Benefits of WebAssembly](../01/README.md)
+| | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Benefits of WebAssembly](../01/)
 
 ## 0: Prerequisites
 ### WebAssembly Tools
@@ -13,4 +13,4 @@ Please refer to [`wasmer.io`](https://wasmer.io/) for installation details
 
 ### Development Environment
 
-All WebAssembly development has been done in Visual Studio Code using the *"WebAssembly Toolkit for VSCode"* extension  
+All WebAssembly development has been done in Visual Studio Code using the *"WebAssembly Toolkit for VSCode"* extension

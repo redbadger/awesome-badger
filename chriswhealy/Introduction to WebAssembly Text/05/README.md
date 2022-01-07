@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [WAT Datatypes](../04/README.md) | [Top](../README.md) | [Arrangement of WAT Instructions](../06/README.md)
+| [WAT Datatypes](../04/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Arrangement of WAT Instructions](../06/)
 
 ## 5: Local Variables
 
@@ -14,7 +14,7 @@ As with any other programming language, you can declare variables.  These variab
 
 Here, we have declared a local variable called `$my_value` to be of type `i32`.
 
-> **IMPORTANT**
+> **IMPORTANT**<br>
 > Local variables are automatically initialised to zero
 
 Now that we have a local variable, we can store a value in it:
@@ -23,7 +23,7 @@ Now that we have a local variable, we can store a value in it:
 (local.set $my_value (i32.const 5))
 ```
 
-> **IMPORTANT**
+> **IMPORTANT**<br>
 > `local.set` consumes the top value from the stack and stores it in the named variable
 >
 > This behaviour might become clearer if we use the sequential notation for the same assignment:
@@ -49,9 +49,9 @@ This might sound pretty weird, but the point is that only humans benefit from hu
 (local i32 i32 f64)  ;; Declare three unnamed variables, two i32s and an f64
 ```
 
-Uh, OK....
+Uh, OK....  So how do you reference these local values?
 
-So how do you reference these local values?  Assuming these are the first local variables declared in a function, then the two `i32`s will be variables `0` and `1`, and the `f64` will be variable `2`.
+Assuming these are the first local variables declared in a function, then the two `i32`s will be variables `0` and `1`, and the `f64` will be variable `2`.
 
 The point here is that even if you do not assign a human-readable name to a local variable, that variable can always be accessed using its index number.[^2]
 

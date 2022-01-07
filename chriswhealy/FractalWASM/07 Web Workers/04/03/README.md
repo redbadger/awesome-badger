@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [6: Zooming In](../../../06%20Zoom%20Image/) | [Up](../../../) |
+| [6: Zooming In](../../../06%20Zoom%20Image/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) |
 | [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) |
 | [7.4.2 Split WebAssembly Coding](../02/)  | [7.4: Adapt the Main Thread Coding](../) | [7.4.4 Send/Receive Web Worker Messages](../04/)
 
@@ -19,7 +21,7 @@ Notice that the function below has been written as an event handler in that it c
 > ***GOTCHA***
 >
 > You might think that if a slider range `input` element can only have numeric values, then the `evt.target.value` property ought to return a number...
-> 
+>
 > Nope! `evt.target.value` returns a string...  🤔
 >
 > If you want the numeric representation of this value, then call `evt.target.valueAsNumber`
@@ -45,7 +47,7 @@ const rebuild_workers = evt => {
     // Create new set of workers
     for (let i=0; i<WORKERS; i++) {
       // snip UI stuff...
-      
+
       let w = new Worker('worker.js')
 
       // Respond to messages received from the worker
@@ -56,7 +58,7 @@ const rebuild_workers = evt => {
 
       worker_list.push(w)
     }
-    
+
     // snip more UI stuff...
   }
 }
@@ -113,5 +115,3 @@ const gen_worker_msg = (p_action, p_worker_id, p_fractal, p_zx, p_zy, p_host_fns
       },
     }
 ```
-
-

@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Up](../../) | [6: Zooming In](../06%20Zoom%20Image/) 
+| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [6: Zooming In](../../06%20Zoom%20Image/)
 | | [5: Plotting a Julia Set](../) | [5.2 WebAssembly Changes](../02/)
 
 ### 5.1: Web Page Changes
@@ -8,7 +10,7 @@
 #### Extend the HTML
 
 The following HTML `canvas` and `div` elements have been added
-   
+
 ```html
 <canvas id="juliaImage" style="border: 1px solid black"></canvas>
 <div>Julia Set corresponding to
@@ -27,7 +29,7 @@ The memory requirements for the new Julia Set image are calculated in exactly th
 const jCanvas  = $id('juliaImage')
 jCanvas.width  = CANVAS_WIDTH
 jCanvas.height = CANVAS_HEIGHT
-   
+
 const jContext     = jCanvas.getContext('2d')
 const jImage       = jContext.createImageData(jCanvas.width, jCanvas.height)
 const jImagePages  = Math.ceil(jImage.data.length / WASM_PAGE_SIZE)
@@ -140,7 +142,7 @@ let wasmObj
 // Async function to create WASM module instance, generate colour palette and plot Mandelbrot Set
 const start = async () => {
   wasmObj = await WebAssembly.instantiateStreaming(fetch('./mj_plot.wasm'), host_fns)
-  
+
   // snip...
 }
 

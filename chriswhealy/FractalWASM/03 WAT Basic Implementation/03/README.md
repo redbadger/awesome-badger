@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) |
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/)
 | [3.2: Create the WebAssembly Module](../02/) | [3: Basic WAT Implementation](../) | [3.4: Escape-Time Algorithm](../04/)
 
 ## 3.3: Generate the Colour Palette
@@ -52,7 +54,7 @@ The `$8_bit_clamp` function shown below lives within the `module` definition in 
 
 With the `$8_bit_clamp` function in place, we can now create three colour functions in which the hard-coded colour thresholds are defined.
 
-> ***Stylistic Note***
+> ***Stylistic Note***<br>
 > Since these functions are very small, their definitions can be compressed into a single line:
 
 ```wast
@@ -65,7 +67,7 @@ With the `$8_bit_clamp` function in place, we can now create three colour functi
 
 Finally, we take each of the colour component values, shift them left by the appropriate number of bits, then `OR` them all together to form the 32-bit colour value.
 
-> ***IMPORTANT***
+> ***IMPORTANT***<br>
 > Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
 
 ```wast

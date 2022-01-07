@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| | [Up](../) | [2: Initial Implementation](../02%20Initial%20Implementation/)
+| | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [2: Initial Implementation](../02%20Initial%20Implementation/)
 
 # 1: Plotting Fractals
 
@@ -16,7 +18,7 @@ This greatly improves runtime efficiency, and will also be demonstrated here.
 
 ## The Mandelbrot Set
 
-![Mandelbrot Set](./Mandelbrot%20Set.png)
+![Mandelbrot Set](/assets/chriswhealy/Mandelbrot%20Set.png)
 
 The [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set) is created as follows:
 
@@ -28,11 +30,11 @@ The [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set) is created as
    <img src="https://render.githubusercontent.com/render/math?math=\Large Z_{n%2b1} = Z_{n}^2 %2b c">
 
    For any given starting point `c` on the complex plane and with <tt>Z<sub>0</sub> = 0</tt>, pass these values through the above equation to derive the new value <tt>Z<sub>1</sub></tt>.
-   
+
    Repeatedly derive <tt>Z<sub>n+1</sub></tt> by passing <tt>Z<sub>n</sub></tt> into the equation (counting the number of iterations) until either `|Z| > bailout` or we hit the iteration limit defined by `max_iters`
 
-1. Colour each pixel according to the number of times the equation is iterated.  
-   Any pixel whose iteration value hits the `max_iters` limit is arbitrarily coloured black.  
+1. Colour each pixel according to the number of times the equation is iterated.
+   Any pixel whose iteration value hits the `max_iters` limit is arbitrarily coloured black.
    The other pixels can be coloured according whatever aesthetically pleasing colour scheme you choose
 
 1. Repeat steps 2 and 3 for every pixel in the image
@@ -41,4 +43,4 @@ The [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set) is created as
 
 For every point on the Mandelbrot Set, there is a corresponding [Julia Set](https://en.wikipedia.org/wiki/Julia_set).  This means that there are an infinite number of possible Julia Sets, and the one shown here corresponds to the location (-0.755, -0.19) on the Mandelbrot Set.
 
-![Julia Set](Julia%20Set.png)
+![Julia Set](/assets/chriswhealy/Julia%20Set.png)

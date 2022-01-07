@@ -1,13 +1,15 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [1: Plotting Fractals](../../01%20Plotting%20Fractals/) | [Up](../) | [3: WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/)
+| [1: Plotting Fractals](../../01%20Plotting%20Fractals/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [3: WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/)
 | [2.1: Basic Escape-Time Implementation](../01/) | [2: Initial Implementation](../) |
 
 ## 2.2: Optimised Escape-Time Implementation
 
 As previously implemented, the `escapeTime` function uses a brute-force approach because the loop only stops when one of our two hard limits is exceeded.  Fortunately however, there are two simple checks we can perform that allow us to avoid running the expensive escape-time loop if the given point lies within either the main cardioid or the period 2 bulb.
 
-![Mandelbrot Regions](Mandelbrot%20Regions.png)
+![Mandelbrot Regions](/assets/chriswhealy/Mandelbrot%20Regions.png)
 
 Any point lying within these two regions is a member of the Mandelbrot Set which means that its value will never escape to infinity.  The problem is that using our current approach, for every pixel within these regions, we will have to run the escape-time algorithm until it hits the `max_iters` limit simply to determine something we could discover using a significantly smaller amount of CPU time.
 
@@ -21,7 +23,7 @@ const isInPeriod2Bulb    = (x, y) => ...
 const mandelEarlyBailout = (x, y) => isInMainCardioid(x,y) || isInPeriod2Bulb(x,y)
 ```
 
-One other important point to note is that these functions must be passed the (`x`,`y`) ***coordinate*** value of the pixel, not its pixel ***location*** in the canvas.  This means that for the sake of efficiency, we need to convert the pixel location values stored in the loop counters `ix` and `iy` into coordinates of the complex plane before passing them either to the early bail out check, or the escape time algorithm itself.  
+One other important point to note is that these functions must be passed the (`x`,`y`) ***coordinate*** value of the pixel, not its pixel ***location*** in the canvas.  This means that for the sake of efficiency, we need to convert the pixel location values stored in the loop counters `ix` and `iy` into coordinates of the complex plane before passing them either to the early bail out check, or the escape time algorithm itself.
 
 Hence the calls to `pixel2XCoord` and `pixel2YCoord` have been moved out of function `escapeTime()`
 
@@ -46,7 +48,7 @@ for (let iy = 0; iy < mCanvas.height; ++iy) {
         colour = iter2Colour(iter)
       }
     }
-  
+
     // Write the 4-byte colour data to the ArrayBuffer using the 32-bit overlay
     buf32[iy * mCanvas.width + ix] = colour
   }
@@ -55,4 +57,4 @@ for (let iy = 0; iy < mCanvas.height; ++iy) {
 
 You can examine and run the coding of this [optimized implementation](optimised-implementation.html)
 
-As you can see from the rendering time, adding this simple check makes the plot time between 5 and 6 times faster!
+As you can see from the rendering time, adding this simple check reduces the plot time by a factor of between 5 and 6!

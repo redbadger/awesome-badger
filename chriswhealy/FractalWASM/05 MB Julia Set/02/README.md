@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Up](../../) | [6: Zooming In](../06%20Zoom%20Image/)
+| [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [6: Zooming In](../../06%20Zoom%20Image/)
 | [5.1 Web Page Changes](../01/) | [5: Plotting a Julia Set](../) |
 
 ### 5.2: WebAssembly Changes

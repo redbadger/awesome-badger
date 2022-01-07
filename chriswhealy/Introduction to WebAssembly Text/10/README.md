@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [More About Functions](../09/README.md) | [Top](../README.md) |
+| [More About Functions](../09/) | [Up](/chriswhealy/introduction-to-web-assembly-text) |
 
 ## 10: WASM and Shared Memory
 
@@ -16,16 +16,16 @@ WebAssembly is often touted as a language that offers complete memory-safety.  U
 
 It is true that a WebAssembly program has no access to the memory space outside its own sand-boxed environment; however, to conclude that this then makes a WebAssembly program truly memory-safe is to misunderstand the nature of memory safety.  True memory safety must provide the following three guarantees:
 
-* **Spatial Safety:**
+* **Spatial Safety:**<br>
    Out-of-bounds read/write access is prevented.  This applies both to the entire memory space in general, and to not writing beyond the bounds of a particular data structure.
-* **Temporal Safety:**
+* **Temporal Safety:**<br>
    Once designated as "free", memory cannot be surreptitiously used for exploitative purposes
-* **Pointer Integrity:**
+* **Pointer Integrity:**<br>
    A memory address cannot be fabricated from a non-address value
 
-These guarantees are all met when looking at WebAssembly from the outside, but from within its own memory space however, a WebAssembly program is still vulnerable to the same types of memory issues as other programs.  Simple corruption or even explicitly malicious behaviour is still possible because a WebAssembly program can still:
+These guarantees are all met when looking at WebAssembly from the outside, but from within its own execution scope, a WebAssembly program is still vulnerable to the same types of memory issues as other programs.  Simple corruption or even explicitly malicious behaviour is still possible because a WebAssembly program can still:
 
-* Read or write values that are within the bounds of its own linear memory, but outside the bounds of its own data structures. In other words, it could trample on its own data
+* Read or write values that are within the bounds of its own linear memory, but outside the bounds of its defined data structures. In other words, by not accurately keeping track of the length of a data structure, it could end up trampling on its own data
 * Not keep an accurate track of which areas of linear memory are or are not in use
 * Construct memory addresses from data that is not intended to represent an address
 
@@ -71,7 +71,7 @@ The object passed to the `WebAssembly.Memory()` function has two further propert
 }
 ```
 
-> ***IMPORTANT***  
+> ***IMPORTANT***<br>
 > If the `shared` flag is set to `true`, then the `maximum` value must be explicitly specified, even if it is the same as the `initial` value.
 > Also, the WebAssembly module must be compiled with option `--enable-threads`
 
@@ -81,7 +81,7 @@ Any resources in the host environment that need to be shared with WebAssembly mu
 
 In addition to sharing memory, another common requirement is for the host environment to share "OS level" functionality or language libraries with WebAssembly.
 
-> ***IMPORTANT***  
+> ***IMPORTANT***<br>
 > The term "OS level" has been deliberately placed in quotation marks to indicate the fact that such functionality might not be derived from the machine's actual operating system.
 >
 > As far as WebAssembly is concerned, it needs access to functionality that lies outside the borders of its own little world.  Therefore such functionality must be supplied by the host environment in response to WebAssembly `import` statements.  Beyond this, it's of little importance to WebAssembly whether that functionality came from the language runtime or from the actual operating system.

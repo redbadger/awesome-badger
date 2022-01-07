@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/) | [Up](../) | [6: Zooming In](../06%20Zoom%20Image/) 
+| [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [6: Zooming In](../06%20Zoom%20Image/)
 
 ## 5: Plotting a Julia Set
 
@@ -38,4 +40,4 @@ drwxr-xr-x   3 chris  staff     96  9 Dec 14:42 02
 
 Wow! Only 712 bytes!
 
-Compare this with the 74Kb module created by `wasm-pack` from a Rust implementation mentioned in the [introduction](../).
+Compare this with the 74Kb module created by `wasm-pack` from a Rust implementation mentioned in the [introduction](/chriswhealy/plotting-fractals-in-webassembly).

@@ -1,6 +1,8 @@
+# Plotting Fractals in WebAssembly
+
 | Previous | | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Up](../) |
+| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/)
 | [3.3: Generate the Colour Palette](../03/) | [3: Basic WAT Implementation](../) | [3.5: Calculating the Mandelbrot Set Image](../05/)
 
 ## 3.4: Escape-Time Algorithm

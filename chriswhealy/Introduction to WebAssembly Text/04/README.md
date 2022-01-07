@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Calling WebAssembly from a Host Environment](../03/README.md) | [Top](../README.md) | [Local Variables](../05/README.md)
+| [Calling WebAssembly from a Host Environment](../03/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Local Variables](../05/)
 
 ## 4: WAT Datatypes
 
@@ -28,4 +28,4 @@ This means that when applied to integers, certain comparison instructions such a
 
 <hr>
 
-[^1]: Don't be concerned at the lack of a specific Boolean datatype because this is, in fact, just syntactic sugar.  In WAT, the outcome of a condition is stored simply as an `i32` where zero means `false`, and any non-zero value means `true`.  It's that simple...
+[^1]: Don't be concerned at the lack of a specific Boolean datatype because this is, in fact, just syntactic sugar.<br>In WAT, the outcome of a condition is stored simply as an `i32` where zero means `false`, and any non-zero value means `true`.  It's that simple...

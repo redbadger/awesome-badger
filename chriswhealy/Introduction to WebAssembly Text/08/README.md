@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Conditions](../07/README.md) | [Top](../README.md) | [More About Functions](../09/README.md)
+| [Conditions](../07/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [More About Functions](../09/)
 
 ## 8: Loops
 
@@ -22,12 +22,12 @@ Say what...?
 
 The point here is that WAT makes the basic assumption that a loop should ***not*** continue unless we have specifically decided otherwise.  This means that unless otherwise instructed, when we hit the close parenthesis at the end of the loop body, we will simply drop out of the loop and continue with whatever instructions come next.
 
-> ***IMPORTANT***
-> * A WAT loop is merely a block of code that has a labeled start point
-> * If you do not provide a human-readable label for the loop, as with local variables, the loop will be referenced by its index number
-> * A loop will ***not*** be repeated automatically
-> * If the coding in a loop body is to be repeated, you must explicitly issue a branch `br` instruction to jump back to the start of the loop
-> * You cannot branch to the start of a loop from outside the loop body
+***IMPORTANT***<br>
+* A WAT loop is merely a block of code that has a labeled start point
+* If you do not provide a human-readable label for the loop, as with local variables, the loop will be indentified by its index number
+* A loop block will ***not*** be repeated automatically
+* If the coding in a loop block is to be repeated, you must explicitly issue a branch `br` instruction to jump back to the start of the loop
+* You cannot branch to the start of a loop from outside the loop body
 
 Generally speaking therefore, WAT loops are structured like this:
 
@@ -38,7 +38,7 @@ Generally speaking therefore, WAT loops are structured like this:
   (if (i32.gt_u (local.get $loop_limit) (local.get $loop_counter))
     (then
       ;; Do repetitive stuff here
-      
+
       ;; Increment $loop_counter
       (local.set (i32.add (local.get $loop_counter) (i32.const 1)))
 
@@ -51,10 +51,10 @@ Generally speaking therefore, WAT loops are structured like this:
 
 The point to get used to here is the way in which loop execution is controlled
 
-***Check for Termination***  
+***Check for Termination***<br>
 Most languages assume that the loop should continue, then repeatedly ask "*Should I stop now?*".
 
 That's fine and you could certainly structure a loop this way in WAT...
 
-***Check for Continuation***  
+***Check for Continuation***<br>
 In WAT however, it is more idiomatic to assume that the loop should stop, then repeatedly ask "*Should I continue?*".
