@@ -2,7 +2,6 @@
 layout: post
 title:  "Full-stack Rust"
 date:   2020-06-23 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /stuartharris/full-stack-rust-1/
 categories: stuartharris
 author: Stuart Harris

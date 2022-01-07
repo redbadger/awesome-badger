@@ -2,7 +2,6 @@
 layout: post
 title:  "Writing a Browser-based WebAssembly Application in Rust"
 date:   2020-10-12 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /chriswhealy/RustWASM/
 categories: chriswhealy
 author: Chris Whealy

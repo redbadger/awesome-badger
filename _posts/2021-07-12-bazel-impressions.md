@@ -2,7 +2,6 @@
 layout: post
 title:  "Bazel Impressions"
 date:   2021-07-12 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /davidlaban/bazel-impressions/
 categories: davidlaban
 author: David Laban

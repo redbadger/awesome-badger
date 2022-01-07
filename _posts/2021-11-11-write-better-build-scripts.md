@@ -2,7 +2,6 @@
 layout: post
 title:  "Write Better Build Scripts"
 date:   2021-11-11 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /stuartharris/build-scripts/
 categories: stuartharris
 author: Stuart Harris

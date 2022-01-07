@@ -2,7 +2,6 @@
 layout: post
 title:  "Platform (R)evolution"
 date:   2021-04-09 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /stuartharris/platform-revolution/
 categories: stuartharris
 author: Stuart Harris

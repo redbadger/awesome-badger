@@ -2,7 +2,6 @@
 layout: post
 title:  "Microfrontends"
 date:   2021-03-19 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /matt-thomson/microfrontends/
 categories: matt-thomson
 author: Matt Thomson

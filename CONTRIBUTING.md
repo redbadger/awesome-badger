@@ -47,7 +47,6 @@ Once your blog file has been created, the first few lines of the file must conta
 layout: post
 title: "Guiding Principles for Agile Technology Choices"
 date: 2020-07-20 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /charypar/tech-principles/
 categories: charypar
 author: Victor Charypar
@@ -62,9 +61,8 @@ The following fields are used:
 | `layout` | `post` | Mandatory value
 | `title` | | The title used by Jekyll when generating the overview page
 | `date` | `YYYY-MM-DD HH:MM:SS <timezone offset in minutes>` | The blog creation datestamp used by Jekyll to list your blogs in chronological order.<br>The exact value of the time part is only important if you have blogged more than once on the same day, but the date part ***must*** be the same as the date in the blog filename
-| `permalink` | `/:categories/:slug` | Jekyll generates a short URL slug from your user name and blog title
 | `redirect_from` | Old blog URL | Do ***not*** add this field if you are writing a new blog.<br>It is only needed to ensure that the old URLs of blogs posted before the site was rebranded continue to work
-| `categories` | Github userid | This must be the same name you entered for the `contributors.user` field in `_config.yml`.<br>Normally Jekyll uses this value to categorise blog posts, but here we have hijacked it to hold the user name.  This value is then referenced by the `permalink` definition above
+| `categories` | Github userid | This must be the same name you entered for the `contributors.user` field in `_config.yml`.<br>Normally Jekyll uses this value to categorise blog posts, but here we have hijacked it to hold the user name.  This value is then referenced by the `permalink` definition in `_config.yml`
 | `author` | Your display name | This must be the same name you entered for the `contributors.author` field in `_config.yml`
 | `excerpt` | | A brief description of the blog used on the overview page
 

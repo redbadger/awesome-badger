@@ -2,7 +2,6 @@
 layout: post
 title:  "wasmCloud Impressions"
 date:   2021-07-06 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /davidlaban/wasmcloud-impressions/
 categories: davidlaban
 author: David Laban

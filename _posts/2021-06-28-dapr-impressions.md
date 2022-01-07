@@ -2,7 +2,6 @@
 layout: post
 title:  "Dapr Impressions"
 date:   2021-06-28 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /davidlaban/dapr-impressions/
 categories: davidlaban
 author: David Laban

@@ -2,7 +2,6 @@
 layout: post
 title:  "Extending Istio with Rust and WebAssembly"
 date:   2020-06-19 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /charypar/proxy-wasm-1/
 categories: charypar
 author: Victor Charypar

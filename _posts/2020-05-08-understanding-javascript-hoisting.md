@@ -2,7 +2,6 @@
 layout: post
 title:  "Understanding JavaScript: Hoisting"
 date:   2020-05-08 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /chriswhealy/InsideJavaScript/03%20Hoisting/
 categories: chriswhealy
 author: Chris Whealy

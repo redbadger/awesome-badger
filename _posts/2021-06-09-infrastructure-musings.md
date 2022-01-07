@@ -2,7 +2,6 @@
 layout: post
 title:  "Infrastructure Musings"
 date:   2021-06-09 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /davidlaban/infrastructure-musings/
 categories: davidlaban
 author: David Laban

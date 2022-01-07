@@ -2,7 +2,6 @@
 layout: post
 title: "Guiding Principles for Agile Technology Choices"
 date: 2020-07-20 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /charypar/tech-principles/
 categories: charypar
 author: Victor Charypar

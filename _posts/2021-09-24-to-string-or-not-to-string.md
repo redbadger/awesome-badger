@@ -2,7 +2,6 @@
 layout: post
 title:  "toString || !toString"
 date:   2021-09-24 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /chriswhealy/toStringOrNotToString/
 categories: chriswhealy
 author: Chris Whealy

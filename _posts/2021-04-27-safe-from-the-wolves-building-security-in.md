@@ -2,7 +2,6 @@
 layout: post
 title:  "Safe From the Wolves - Building Security In"
 date:   2021-04-27 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /timlee/safe-from-the-wolves/
 categories: timlee
 author: Tim Lee

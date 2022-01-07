@@ -2,7 +2,6 @@
 layout: post
 title:  "Networking with a Raspberry"
 date:   2021-01-21 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /timlee/networking-with-a-raspberry/
 categories: timlee
 author: Tim Lee

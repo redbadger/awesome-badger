@@ -2,7 +2,6 @@
 layout: post
 title:  "NATS Impressions"
 date:   2021-07-06 13:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /davidlaban/nats-impressions/
 categories: davidlaban
 author: David Laban

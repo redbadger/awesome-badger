@@ -2,7 +2,6 @@
 layout: post
 title:  "What's Next, After Kubernetes?"
 date:   2021-01-14 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /stuartharris/wasmcloud/
 categories: stuartharris
 author: Stuart Harris

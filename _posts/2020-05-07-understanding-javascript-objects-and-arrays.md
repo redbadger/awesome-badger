@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Understanding JavaScript: Objects and Arrays"
-permalink: /:categories/:slug
 redirect_from: /chriswhealy/InsideJavaScript/02%20Objects%20and%20Arrays/
 date:   2020-05-07 12:00:00 +0000
 categories: chriswhealy

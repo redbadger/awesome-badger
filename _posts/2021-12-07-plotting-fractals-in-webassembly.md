@@ -2,7 +2,6 @@
 layout: post
 title:  "Plotting Fractals in WebAssembly"
 date:   2021-12-07 12:00:00 +0000
-permalink: /:categories/:slug
 redirect_from: /chriswhealy/FractalWASM/
 categories: chriswhealy
 author: Chris Whealy
