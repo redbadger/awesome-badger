@@ -2,10 +2,10 @@
 layout: post
 title:  "Writing a Browser-based WebAssembly Application in Rust"
 date:   2020-10-12 12:00:00 +0000
-user: chriswhealy
+user: ChrisWhealy
 author: Chris Whealy
 excerpt: Based on a personal project that started back in 2004 as an Excel spreadsheet, this blog describes how to create a Rust application, compile it to WebAssembly and then run in the browser.
-img_path: /assets/chriswhealy/
+img_path: /assets/ChrisWhealy/
 ---
 
 # Porous Absorber Calculator

@@ -2,7 +2,7 @@
 layout: post
 title:  "Introduction to WebAssembly Text"
 date:   2021-11-24 12:00:00 +0000
-user: chriswhealy
+user: ChrisWhealy
 author: Chris Whealy
 excerpt: An introduction to programming directly in WebAssembly Text
 content_path: Introduction%20to%20WebAssembly%20Text

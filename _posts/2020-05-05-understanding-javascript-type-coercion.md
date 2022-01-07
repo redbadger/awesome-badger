@@ -2,7 +2,7 @@
 layout: post
 title:  "Understanding JavaScript: Type Coercion"
 date:   2020-05-05 12:00:00 +0000
-user: chriswhealy
+user: ChrisWhealy
 author: Chris Whealy
 excerpt: <p>Since JavaScript is a dynamically typed language, it employs a strategy called "type coercion".  This behaviour means that under certain circumstances, values of one datatype will automatically be transformed into the equivalent value of another datatype.</p><p>In this blog we take a light-hearted look at not only how and when type coercion takes place, but also some of its more unexpected consequences.</p>
 content_path: InsideJavaScript/Type%20Coercion

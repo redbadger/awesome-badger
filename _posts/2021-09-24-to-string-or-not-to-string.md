@@ -2,7 +2,7 @@
 layout: post
 title:  "toString || !toString"
 date:   2021-09-24 12:00:00 +0000
-user: chriswhealy
+user: ChrisWhealy
 author: Chris Whealy
 excerpt: toString, or not toString?<br>That is the question&mdash;<br>Whether 'tis nobler in the mind to suffer the slings and arrows of ourageous type coercion...
 ---

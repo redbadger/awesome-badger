@@ -73,7 +73,7 @@ After the front matter section, write your blog content and format it using Git 
 
 If your blog requires the use of images (or any other non-markdown file type) and don't already have one, using your Github userid as the name, please create your own directory under `/assets`.
 
-For instance, many of [Chris'][chris] blogs contain references to file types such as images, JavaScript and WebAssembly Text. All of these are located in `/assets/chriswhealy`.  Any time a reference is then needed from one of your blogs, you can simply link to `/assets/{{ page.user }}/<filename>`
+For instance, many of [Chris'][chris] blogs contain references to file types such as images, JavaScript and WebAssembly Text. All of these are located in `/assets/ChrisWhealy`.  Any time a reference is then needed from one of your blogs, you can simply link to `/assets/{{ page.user }}/<filename>`
 
 ## 5. Get a Review
 
@@ -94,4 +94,4 @@ In no particular order:
 - Add any sort of helpful automation you think is a good idea
 
 [stu]: stuartharris/
-[chris]: chriswhealy/
+[chris]: ChrisWhealy/
