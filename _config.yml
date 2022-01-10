@@ -17,6 +17,7 @@ github_username:  redbadger
 linkedin_username: red-badger
 author: Red Badger
 show_excerpts: true
+rss: RSS Feed
 
 # Custom fields
 copyright: "Red Badger Consulting Ltd"
@@ -24,6 +25,7 @@ logo: /assets/sally.svg
 
 plugins:
   - jekyll-redirect-from
+  - jekyll-feed
 
 # All contributors must be listed here.  Default sort order is alphabetically by surname
 # "user" is the GitHub user id
