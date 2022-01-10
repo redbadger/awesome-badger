@@ -6,7 +6,7 @@
 
 ## 4: WAT Datatypes
 
-At the moment, there are only four WebAssembly datatypes:
+At the moment, there are only four WebAssembly numeric datatypes:
 
 | | 32-bit | 64-bit
 |---|---|---
@@ -18,6 +18,8 @@ That's it &mdash; just numbers...
 No string datatype; no character datatype.
 
 In fact, there isn't even a Boolean type! [^1]
+
+Other data types exist such as the Vector type [`v128`](https://webassembly.github.io/spec/core/syntax/types.html#vector-types), [reference types](https://webassembly.github.io/spec/core/syntax/types.html#reference-types) and [function types](https://webassembly.github.io/spec/core/syntax/types.html#function-types), but these are beyond the scope of this introduction and will not be discussed here.
 
 ### Interpreting Integers
 One very important point here concerns how you interpret integers.
