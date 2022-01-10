@@ -213,17 +213,17 @@
 
 .post-contributor-div {
   width: $content-width * 0.66;
-  border-top: 1px solid $grey-color-dark;
 }
 
 .post-contributor {
-  @include relative-font-size(1.75);
+  @include relative-font-size(1.15);
   color: $grey-color-dark;
+  padding-right: $spacing-unit * 0.25;
 }
 
 .post-link {
   display: block;
-  @include relative-font-size(1.25);
+  @include relative-font-size(1.5);
 }
 
 
