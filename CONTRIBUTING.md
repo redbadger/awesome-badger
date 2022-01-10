@@ -73,7 +73,7 @@ You will not need to give your blog a level one heading, because Jekyll will aut
 
 ### 4.3: Non-Markdown Content (Images etc)
 
-If your blog requires images or any other non-markdown file type, please place these files in your own directory under `/assets`.
+If your blog requires images or any other non-markdown file type, then please place these files in your own directory under `/assets`.
 
 For instance, many of [Chris'][chris] blogs contain references to file types such as images, JavaScript and WebAssembly Text. All of these are located in `/assets/chriswhealy`.
 
