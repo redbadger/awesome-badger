@@ -17,12 +17,9 @@ When you clone this repo, you will notice that there are various directories suc
 
 If this is the first time you are contributing to the Awesome Badger blog site, please follow these initials steps:
 
-1. Edit the file [`_config.yml`](_config.yml) and add your details to the `contributors` object.  There are several things to be aware of here:
-   * The value of `user` must be your GitHub userid, and the value of `author` is your display name.
-   * Jekyll does not sort this list, so please insert your details so that your name appears sorted alphabetically by surname.
-   * Jekyll uses these values to identify you as the author of a blog post, and the same value will appear in the front matter of all your blog posts.
-1. Using the same value you gave for `user` (your Github userid), create a top level directory and optionally, your own subdirectory under `/assets`.  (If you want your blogs to contain images and other non-markdown files, you'll need to put these files here)
-1. Within your user folder, create a `README.md` file and write a description of yourself that includes things like your role at Red Badger, links to yourself on social media sites, what you do outside of work, etc etc.  Take a look at [Stu's profile][stu] as an example.
+1. Using your Github userid as the name, create a top level directory
+1. Within your top level user folder, create a `README.md` file and write a description of yourself that includes things like your role at Red Badger, links to yourself on social media sites, what you do outside of work, etc etc.  Take a look at [Stu's profile][stu] as an example.
+1. Optionally, if you want your blogs to contain images and other non-markdown files, then using your Github userid again, create your own subdirectory under `/assets`
 
 ## 3: Create a Blog File
 
@@ -61,22 +58,22 @@ The following fields are used:
 | `layout` | `post` | Mandatory value
 | `title` | | The title used by Jekyll when generating the overview page
 | `date` | `YYYY-MM-DD HH:MM:SS <timezone offset in minutes>` | The blog creation datestamp used by Jekyll to list your blogs in chronological order.<br>The exact value of the time part is only important if you have blogged more than once on the same day, but the date part ***must*** be the same as the date in the blog filename
-| `redirect_from` | Old blog URL | Do ***not*** add this field if you are writing a new blog.<br>It is only needed to ensure that the old URLs of blogs posted before the site was rebranded continue to work
-| `category` | Github userid | This must be the same name you entered for the `contributors.user` field in `_config.yml`.<br>Normally Jekyll uses this value to categorise blog posts, but here we have hijacked it to hold the user name.  This value is then referenced by the `permalink` definition in `_config.yml`
-| `author` | Your display name | This must be the same name you entered for the `contributors.author` field in `_config.yml`
-| `excerpt` | | A brief description of the blog used on the overview page
+| `redirect_from` | Old blog URL | You do ***not*** need to add this field if you are writing a new blog.<br>It is only needed to ensure that the old URLs of blogs posted before the site was rebranded continue to work
+| `category` | Github userid | Normally Jekyll uses this value to categorise blog posts, but here we have hijacked it to hold the user name (I.E. your Github userid).<br>This value is then referenced by the `permalink` definition in `_config.yml`
+| `author` | Your display name | Your name as you want it to appear in the blog list
+| `excerpt` | | A brief description of your blog.  This will appear on the overview page
 
 If you understand how to use the Liquid scripting language, then you can add your own fields into the front matter and reference them in the blog body using the syntax `{{ page.<field_name> }}`.  For instance, if you want to display your own name, you would enter the script tag `{{ page.author }}`.  However, please be aware that these placeholders are only substituted after Jekyll has generated the Github Pages site.  When looking at markdown files directly in Github, any links containing such placeholders will be broken.
 
 ### 4.2: Write Your Blog Content
 
-After the front matter section, write your blog content and format it using Git Flavored Markdown.
+After the front matter section, write your blog content and format it using [Git Flavored Markdown](https://docs.gitlab.com/ee/user/markdown.html).
 
 You will not need to give your blog a level one heading, because Jekyll will automatically add the page title for you when the page is rendered.
 
 ### 4.3: Non-Markdown Content (Images etc)
 
-If your blog requires the use of images (or any other non-markdown file type) and don't already have one, using your Github userid as the name, please create your own directory under `/assets`.
+If your blog requires images or any other non-markdown file type, then please place these files in your own directory under `/assets`.
 
 For instance, many of [Chris'][chris] blogs contain references to file types such as images, JavaScript and WebAssembly Text. All of these are located in `/assets/chriswhealy`.
 
