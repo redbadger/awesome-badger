@@ -34,7 +34,7 @@ This introduction to WebAssembly Text serves as the starting point for a subsequ
 - [Benefits of WebAssembly](/chriswhealy/Introduction%20to%20WebAssembly%20Text/01/)
 - [Creating a WebAssembly Module](/chriswhealy/Introduction%20to%20WebAssembly%20Text/02/)
 - [Calling WebAssembly from a Host Environment](/chriswhealy/Introduction%20to%20WebAssembly%20Text/03/)
-- [WAT Datatypes](/chriswhealy/Introduction%20to%20WebAssembly%20Text04/)
+- [WAT Datatypes](/chriswhealy/Introduction%20to%20WebAssembly%20Text/04/)
 - [Local Variables](/chriswhealy/Introduction%20to%20WebAssembly%20Text/05/)
 - [Arrangement of WAT Instructions](/chriswhealy/Introduction%20to%20WebAssembly%20Text/06/)
 - [Conditions](/chriswhealy/Introduction%20to%20WebAssembly%20Text/07/)
