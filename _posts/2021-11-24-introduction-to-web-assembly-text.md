@@ -10,9 +10,15 @@ excerpt: An introduction to programming directly in WebAssembly Text
 
 ## What is WebAssembly Text (WAT)?
 
-If you pass a compiled WebAssembly[^1] module (a `.wasm` file) through a decompiler, you will get the text representation of the [op codes](https://pengowray.github.io/wasm-ops/) used by that program.
+If you write a program in C or Rust and then instruct the compiler to generate a WebAssembly[^1] file, the result will be a `.wasm` file containing the binary [op codes](https://webassembly.github.io/spec/core/binary/instructions.html) for your program.  This file contains the executable code and is therefore intended only to be machine-readable, not human-readable.  However, as part of your development process, you may very well need to look inside this machine-readable file: and at this point you will need a set of tools that can translate the WebAssembly op codes back into a human-readable format.
 
-This text representation is known as WebAssembly Text (or WAT), and it is now possible to write programs directly in this text representation.
+This is where the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt) (WABT) becomes a vital resource in your development tool bag.  Once installed, you have a variety of tools that can work directly with not only WebAssembly binary files, but also their text representation.
+
+Using the WABT disassembler called `wasm2wat`, you can transform a compiled WebAssembly module (a `.wasm` file) back into a file containing the plain text op codes used by that program (a `.wat` file).  This plain text representation is known as WebAssembly Text (or WAT).
+
+In addition to disassembling `.wasm` files to plain text `.wat` files, WABT also provides you with a tool called `wat2wasm` that does the reverse.  It takes a plain text WebAssembly Text file and assembles into an executable `.wasm` file.
+
+The object of this tutorial is to give an introduction to writing programs directly in WebAssembly Text format.
 
 ## But WebAssembly is Just a Compilation Target, So Why Bother?
 
@@ -20,7 +26,7 @@ WebAssembly certainly is a compilation target, and it is certainly true that the
 
 Although it is a very low-level development process, writing WebAssembly Text programs by hand brings the benefits of being able to build a very small, very efficient program suitable for performing highly repetitive, CPU-intensive tasks.
 
-This introduction to WebAssembly Text serves as the starting point for subsequent posts that will describe how to implement the CPU-intensive calculations needed to plot the Mandelbrot and Julia Sets.
+This introduction to WebAssembly Text serves as the starting point for a subsequent tutorial that describes how to implement the CPU-intensive calculations needed to [plot the Mandelbrot and Julia Sets](./plotting-fractals-in-webassembly).
 
 ## Table of Contents
 
