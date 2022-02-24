@@ -21,7 +21,7 @@ rss: RSS Feed
 
 # Custom fields
 copyright: "Red Badger Consulting Ltd"
-logo: /assets/logo-awesome.png
+logo: /assets/sally.svg
 
 plugins:
   - jekyll-redirect-from
