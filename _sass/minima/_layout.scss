@@ -3,7 +3,7 @@
  */
 .site-header {
   border-top: 2px solid $grey-color-dark;
-  border-bottom: 1px solid #CCCCCC;
+  border-bottom: 1px solid $border-color;
   padding-top: $spacing-unit;
   padding-bottom: $spacing-unit;
   min-height: $spacing-unit * 1.865;
@@ -104,7 +104,7 @@
  * Site footer
  */
 .site-footer {
-  border-top: 1px solid #CCCCCC;
+  border-top: 1px solid $border-color;
   padding: $spacing-unit 0;
 }
 
@@ -174,7 +174,7 @@
   padding: $spacing-unit 0;
   flex: 1;
   @include media-query($on-laptop) {
-    padding: $spacing-unit/2 $spacing-unit/2;
+    padding: $spacing-unit / 2;
   }
 }
 
@@ -191,7 +191,7 @@
   list-style: none;
 
   > li {
-    margin-bottom: 2* $spacing-unit;
+    margin-bottom: 2 * $spacing-unit;
   }
 }
 
@@ -244,7 +244,7 @@
 
 .post-title {
   @include relative-font-size(2.5);
-  font-family: 'Sentinel';
+  font-family: 'Sentinel-Bold';
   letter-spacing: -1px;
   line-height: 1;
   font-weight: 600;

@@ -47,7 +47,7 @@
 
 
 @font-face {
-  font-family: 'Sentinel';
+  font-family: 'Sentinel-Bold';
   src: url('/assets/fonts/Sentinel-Bold.otf') format('truetype');
   font-weight: bold;
 }
@@ -60,13 +60,13 @@
 
 @font-face {
   font-family: 'ProximaNova-Bold';
-  src: url('/assets/fonts/322627_0_0.woff2') format('woff2'),
-  url('/assets/fonts/322627_0_0.woff') format('woff'), url('/assets/fonts/322627_0_0.ttf') format('truetype');
+  src: url('/assets/fonts/ProximaNova.woff2') format('woff2'),
+  url('/assets/fonts/ProximaNova.woff') format('woff'), url('/assets/fonts/ProximaNova.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
   font-family: 'ProximaNova-Light';
-  src: url('/assets/fonts/322627_1_0.woff2') format('woff2'),
-  url('/assets/fonts/322627_1_0.woff') format('woff'), url('/assets/fonts/322627_1_0.ttf') format('truetype');
+  src: url('/assets/fonts/ProximaNova-Light.woff2') format('woff2'),
+  url('/assets/fonts/ProximaNova-Light.woff') format('woff'), url('/assets/fonts/ProximaNova-Light.ttf') format('truetype');
 }
