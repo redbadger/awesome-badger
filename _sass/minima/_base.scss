@@ -248,10 +248,10 @@ table {
 .masthead{
   line-height: 1.2;
   font-family: 'Sentinel-Bold';
-  margin: 30px 0px 80px 0px;
+  margin: 30px 0px 80px;
   font-size: 50px;
   @include media-query($on-laptop) {
     font-size: 25px;
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 20px;
   }
 }
