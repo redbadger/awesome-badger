@@ -6,7 +6,7 @@
 
 ## 7: Conditions
 
-WebAssembly includes the high-level flow control statements `if/then/else/end` for conditional branching.  By default, the `if` statement must complete without leaving any values behind on the stack.
+WebAssembly includes the high-level flow control statements `if/then/else/end` for conditional branching.  Unless you explicitly state otherwise, the `if` statement must complete without leaving any values behind on the stack.
 
 ### Simple Value Test
 
@@ -22,7 +22,7 @@ else
 end
 ```
 
-The point here is that any expression can be used to evaluate a condition as long as an `i32` value is left on the top of the stack.  The `if` statement then examines this `i32` value and if it is zero, this means `false`, and any non-zero value means `true`.
+The point here is that as long as an expression leaves an `i32` value on top of the stack, that value can be treated as a Boolean describing the outcome of a condition.  The `if` statement then interprets the value as `false` if it is zero, and `true` for anything non-zero.
 
 It's as simple as that.
 
@@ -50,37 +50,37 @@ In sequential notation, the `then` keyword is not used but the `end` keyword is.
 
 Simply testing whether a local `i32` variable contains a non-zero value is not a very realistic use-case for `if`.  More realistically, we will need to compare two values: for instance, whether some counter has reached a particular limit.
 
-The following code[^1] sample is part of a larger loop construct, but at the moment, the condition is the part that interests us:
+The following code[^1] sample is part of a larger loop construct, but at the moment, the condition is the part that interests us.  Here, we want to repeat a particular set of instructions 5 times; so our counter starts at zero and each time around the loop (not shown in this code), we check that the hard coded limit (`i32.const 5`) remains greater than our counter.
 
 ```wast
 (local $counter i32)
 
-;; As long as the limit is greater than the counter
+;; Is the limit greater than the counter?
 (if (i32.gt_u (i32.const 5) (local.get $counter))
   (then
-    ;; True. Top of stack contains a non-zero i32
+    ;; Yes, the top of stack is non-zero, so the loop continues
     ;; Do something here
 
     ;; Increment the counter
     (local.set $counter (i32.add (local.get $counter) (i32.const 1)))
   )
   (else
-    ;; False. Top of the stack is a zero i32
+    ;; Nope, the top of the stack is zero, so the loop terminates
   )
 )
 ```
 
-Remember that we have a choice over how we interpret integer values.
+Remember, we have a choice over how integer values are to be interpretted.
 
-Consequently, all integer comparison statements must identify not only the type of comparison to be performed (`lt`, `gt`, `le`, `ge` etc), but must additionally specify whether the `i32` is to be treated as a signed or unsigned value &mdash; hence the comparison operations end with the additional suffix of `_u` or `_s` for unsigned or sign respectively.
+Consequently, all integer comparison statements must identify not only the type of comparison to be performed (`lt`, `gt`, `le`, `ge` etc), but must additionally specify whether the `i32` is to be treated as a signed or unsigned value &mdash; hence the comparison operations end with the additional suffix of `_s` or `_u` for signed or unsigned respectively.
 
 In this case, it makes no sense to check whether we've gone round a loop a negative number of times, so there is no need to treat `$counter` as a signed value: hence we test for `i32.gt_u` (greater than, unsigned) as opposed to `i32.gt_s` (greater than, signed)
 
 ### Using `if` as an Expression
 
-Up til now, the way we have used the `if` statement assumes that it does not leave a new value behind on the stack.
+Up til now, the way we have used the `if` statement assumes that it does not leave a value behind on the stack.
 
-But what if we want to perform some sort of conditional assignment?
+But what if we do want to leave a value on the stack; say, if we're performing a conditional assignment?
 
 Consider this little block of JavaScript code that is actually used to optimize performance when calculating the Mandelbrot Set.  For some pixel location on the screen (given by `x` and `y`), we can avoid the expensive call to function `mjEscapeTime()` by checking whether this particular pixel is located within certain areas of the Mandelbrot Set.
 
@@ -90,7 +90,7 @@ let iters = isInMainCardioid(x, y) || isInPeriod2Bulb(x,y)
             : mjEscapeTime(x, y)
 ```
 
-The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `x` `y` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does, then we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
+The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `(x,y)` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does, then we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
 
 **Q**: That's nice, but how do we replicate this construct in WebAssembly?<br>
 **A:** We can transform `if` from a *statement* into an *expression* by assigning it a return type
@@ -124,6 +124,44 @@ The implementation of functions `$is_in_main_cardioid` and `$is_in_period_2_bulb
 ```
 
 Whatever `i32` value the `if` expression leaves on the stack, is then assigned to the local variable `$iters`.
+
+### Selecting Between Different Values
+
+A very useful variation on the `if` statement is `select`.  This expression consumes the top three values from the stack.  It returns either the third or second value based on the value of the first value (the outcome of a comparison).
+
+For example:
+
+[07-select.wat](/assets/chriswhealy/07-select.wat)
+```wast
+(module
+  (func (export "do_select")
+        (result i32)
+
+    (local $lower_limit i32)
+    (local $upper_limit i32)
+    (local $test_val i32)
+
+    (local.set $lower_limit (i32.const 20))
+    (local.set $upper_limit (i32.const 100))
+    (local.set $test_val    (i32.const 40))
+
+    (select
+      (i32.const 111)   ;; Return this value if true.  Stack = [111]
+      (i32.const 999)   ;; Return this value if false. Stack = [999,111]
+
+      ;; Is $test_val greater than $lower_limit?       Stack = [1,999,111]
+      (i32.gt_u (local.get $test_val) (local.get $lower_limit))
+    )  ;; Stack = [111]
+  )
+)
+```
+
+Run the WAT file using `wasmer`
+
+```bash
+wasmer 07-select.wat -i do_select
+111
+```
 
 <hr>
 

@@ -6,13 +6,18 @@
 
 ## 3: Calling WebAssembly from a Host Environment
 
-Now that we have a slightly less useless WebAssembly module that we can call from the command line, let's now look at using JavaScript to act as the host environment for this module.
+Now that we have a slightly less useless WebAssembly module that we can call from the command line, let's look at using JavaScript to act as the host environment for this module.
 
 ### Create a `.wasm` file
 
-When working from the command line, we used the `wasmer` tool to both compile and run the WebAssembly module in a single step.  Now we need simply to compile the WebAssembly Text file and ensure that the generated `.wasm` file is accessible to our JavaScript runtime environment.
+`wasmer` performs two tasks for us at once:
 
-To compile the WebAssembly Text file, change into the same directory as the `.wat` file, then invoke the `wat2wasm` tool:
+1. Compiles the `.wat` file into a `.wasm` file, then
+1. Executes the `.wasm` file
+
+However, when running a WebAssembly module from within a host environment, these two tasks are typically performed at different times in the development process.
+
+To assemble the WebAssembly Text file into a `.wasm` file, change into the same directory as the `.wat` file, then invoke the `wat2wasm` tool:
 
 ```bash
 wat2wasm 02-slightly-less-useless.wat
@@ -21,6 +26,12 @@ wat2wasm 02-slightly-less-useless.wat
 This now creates a `.wasm` file that is a mere 39 bytes in size.
 
 ### Create a WebAssembly Host Environment in JavaScript
+
+In this example, we will use server-side JavaScript invoked using NodeJS.  However, in order for this to work, we must first create a `package.json` file containing the single line:
+
+```json
+{ "type": "module" }
+```
 
 [03-wasm-host-env.js](/assets/chriswhealy/03-wasm-host-env.js)
 ```javascript
@@ -42,12 +53,6 @@ Here, we create an asynchronous function called `start` that does the following 
 1. Pass the contents of the `.wasm` file to `WebAssembly.instantiate()`.  This will asynchronously create a WebAssembly object
 1. After we've waited for the WebAssembly object to be created, using the `instance` property, we can call the `answer` function via the `exports` property.
 
-In order to be able to run this JavaScript program in NodeJs, we must first create a `package.json` file containing the single line:
-
-```json
-{ "type": "module" }
-```
-
 Open a command line and run the above program using NodeJS
 
 ```bash
@@ -56,11 +61,10 @@ Answer = 42
 ```
 
 > ***IMPORTANT***<br>
-> In this example, our Host Environment was written in JavaScript and then invoked using NodeJS.
+> In this example, NodeJs is acting as our host environment.  However, should you wish to run this JavaScript from within a browser, you must be aware of the following differences and restrictions:
 >
-> Should you wish to run this JavaScript from within a browser, you must be aware of the following differences and restrictions:
->
->  1. Remove the `import` statement and replace the call to `readFileSync()` with an `await` call to `fetch()`
+>  1. Remove the `import` statement
+>  1. Replace the call to `readFileSync()` with an `await` call to `fetch()`
 >  1. For security reasons, browsers will not open `.wasm` files using the `file://` protocol.  This means therefore that the web page within which your JavaScript coding executes cannot be opened simply by pointing your browser at the `.html` file in your local file system.  The Web page **must** be supplied to the browser using your local Web Server.
 >  1. Your local Web Server must be correctly configured to transfer `.wasm` files using the MIME type `application/wasm`
 >  1. If you are developing a JavaScript program that uses Web Workers to create multiple instances of the same WebAssembly module, then your local Web Server must be additionally configured to include the following HTTP headers:

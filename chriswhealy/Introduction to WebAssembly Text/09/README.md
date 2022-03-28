@@ -17,8 +17,8 @@ A function is declared using the keyword `func`.
 > ***IMPORTANT***<br>
 > WebAssembly functions can be given two, possibly different, human-readable names:[^1]
 >
-> 1. A name used when calling the function from **inside** the WebAssembly module
-> 1. A name used when calling the function from **outside** the WebAssembly module
+> 1. An internal name, visible only to other functions within the WebAssembly module
+> 1. An external name, visible only from outside the WebAssembly module.  Taken together, these external names form the WebAssembly module's "Public API"
 
 If we wish to call a WebAssembly function from inside the module, then the internal name is declared as follows:
 
@@ -49,7 +49,8 @@ It also might be the case that we need to call this function from both inside an
 )
 ```
 
-> ***IMPORTANT***<br>
+> ***IMPORTANT***
+>
 > It is entirely possible for the internal and external names of a function to be different!
 
 ### Function Arguments and Return Values
@@ -94,9 +95,6 @@ The implementation of this function simply uses Pythagoras' formula to work out 
       (f64.mul (local.get $imag) (local.get $imag))
     )
   )
-
-  ;; The f64.sqrt operation leaves a single f64 value on the stack; therefore, this
-  ;; becomes the function's return value
 )
 ```
 
