@@ -29,7 +29,7 @@ error: failed to run `02-useless.wat`
 ╰─> 1: The module has no exported functions to call.
 ```
 
-Well, that's hardly surprising since the module doesn't contain any functions at all!
+Well, that's hardly surprising since this is an empty module!
 
 ### Adding a Function
 
@@ -38,11 +38,14 @@ Let's now make the above module slightly less useless by adding a function that 
 [`02-slightly-less-useless.wat`](/assets/chriswhealy/02-slightly-less-useless.wat)
 ```wast
 (module
-  (func               ;; Declare a function that can be called from
-    (export "answer") ;; outside the WASM module using the name "answer"
-    (result i32)      ;; that returns a 32-bit integer
+  (func               ;; Declare a function
+    (export "answer") ;; Expose this function using the name "answer"
+    (result i32)      ;; Declare that this function returns a 32-bit integer
     (i32.const 42)    ;; Push 42 onto the stack
-  )                   ;; Exit the function. Any value left on the stack becomes the function's return value
+  )                   ;; Exit the function
+  ;; Any value left on the stack becomes automatically that function's return value.
+  ;; It is your responsibility to ensure that this value's data type matches the
+  ;; declared return type
 )
 ```
 
@@ -61,11 +64,18 @@ error: failed to run `02-slightly-less-useless.wat`
        Try with: wasmer 02-slightly-less-useless.wat -i answer
 ```
 
-OK, let's rerun the program with the extra `-i` argument (meaning `invoke`)
+Unless you say otherwise, `wasmer` attempts to run a function called `_start`.  So at this point we have two options:
+
+1. We could rename the function `answer` to have the default name `_start`, then it would be executed automatically (however, the return value would be suppressed[^1]); or,
+1. We can pass `wasmer` the `invoke` argument (`-i`) and then provide the function name we wish to run
 
 ```bash
 wasmer 02-slightly-less-useless.wat -i answer
 42
 ```
 
-There!  Although this is still pretty useless, this is the smallest functional WebAssembly module we can create.
+There!  Although this module is still pretty useless, we have just created the smallest functional WebAssembly module possible.
+
+<hr>
+
+[^1]: A basic design concept here is the idea that a WebAssembly module instantce should persist for some extended period of time.  By design therefore, the `_start` function exists simply to perform whatever start-up functionality is required for that instance, and thereafter, functionality is invoked through the module's API of exported functions.  Consequently, `wasmer` assumes that the default function `_start` will not return any value: in fact `wasmer` suppresses `_start`'s return value.  Even if we did use the default function name `_start`, we would only see its return value if we explicitly specify the function name using `wasmer 02-slightly-less-useless.wat -i _start`

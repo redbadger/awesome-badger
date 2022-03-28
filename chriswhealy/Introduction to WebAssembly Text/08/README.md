@@ -10,7 +10,7 @@ Let's now extend the previous code fragment to see how it could be used to contr
 
 ### It's a Loop Jim, but Not as we Know it..
 
-A loop in a WAT program is structured differently from loop constructs in other languages.  If we were to build a WAT loop like this, then it would not loop at all...
+A loop in a WAT program is structured somewhat differently from loop constructs in other languages.  If we were to build a WAT loop like this, then it would not loop at all...
 
 ```wast
 (loop %some_optional_label
@@ -20,9 +20,10 @@ A loop in a WAT program is structured differently from loop constructs in other 
 
 Say what...?
 
-The point here is that WAT makes the basic assumption that a loop should ***not*** continue unless we have specifically decided otherwise.  This means that unless otherwise instructed, when we hit the close parenthesis at the end of the loop body, we will simply drop out of the loop and continue with whatever instructions come next.
+The point here is that WAT makes the basic assumption that all loops should terminate unless we specifically decide otherwise.  This means that when we hit the close parenthesis at the end of the loop body, unless there is a specific instruction to branch back to the start of the loop, we will simply drop out and continue with whatever instructions come next.
 
-***IMPORTANT***<br>
+***IMPORTANT***
+
 * A WAT loop is merely a block of code that has a labeled start point
 * If you do not provide a human-readable label for the loop, as with local variables, the loop will be indentified by its index number
 * A loop block will ***not*** be repeated automatically
@@ -34,7 +35,7 @@ Generally speaking therefore, WAT loops are structured like this:
 ```wast
 (loop $loop_label
   ;; Test for continuation, not termination
-  ;; As long as the loop limit is greater than the loop conter, then continue
+  ;; As long as the loop limit is greater than the loop counter, then continue
   (if (i32.gt_u (local.get $loop_limit) (local.get $loop_counter))
     (then
       ;; Do repetitive stuff here
@@ -49,12 +50,14 @@ Generally speaking therefore, WAT loops are structured like this:
 )
 ```
 
-The point to get used to here is the way in which loop execution is controlled
+The point to get used to here is the way in which loop execution is controlled:
 
-***Check for Termination***<br>
+***Check for Termination***
+
 Most languages assume that the loop should continue, then repeatedly ask "*Should I stop now?*".
 
 That's fine and you could certainly structure a loop this way in WAT...
 
-***Check for Continuation***<br>
+***Check for Continuation***
+
 In WAT however, it is more idiomatic to assume that the loop should stop, then repeatedly ask "*Should I continue?*".

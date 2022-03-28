@@ -17,7 +17,4 @@
       (f64.mul (local.get $imag) (local.get $imag))
     )
   )
-
-  ;; The square root operation leaves a single f64 value on the stack
-  ;; We now exit and this becomes the function's return value
 )
