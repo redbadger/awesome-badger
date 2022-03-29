@@ -28,7 +28,7 @@ WebAssembly certainly is a compilation target, and it is certainly true that the
 
 Although this development process requires you to write the very low-level WebAssembly Text instructions by hand, it brings with it the benefits of being able to build an extremely small, highly efficient program ideally suited for performing CPU-bound tasks.
 
-This introduction to WebAssembly Text serves as the starting point for a subsequent tutorial that describes how to [plot the Mandelbrot and Julia Sets](./plotting-fractals-in-webassembly).
+This introduction to WebAssembly Text serves as the starting point for a subsequent tutorial that describes how write a browser-based WebAssembly Text program that plots the [Mandelbrot and Julia Sets](./plotting-fractals-in-webassembly).
 
 ## Table of Contents
 
