@@ -92,8 +92,8 @@ let iters = isInMainCardioid(x, y) || isInPeriod2Bulb(x,y)
 
 The important point to understand here is that the value assigned to the variable `iters` is determined by the outcome of a condition.  Here, we are checking whether the current pixel at location `(x,y)` falls within the Mandelbrot Set's main cardioid (the big heart-shaped blob in the centre) or within the period-2 bulb (the smaller circle to the left).  If it does, then we can bypass the expensive call to `mjEscapeTime()` and can arbitrarily set the value of `iters` to the maximum iteration value.
 
-**Q**: That's nice, but how do we replicate this construct in WebAssembly?<br>
-**A:** We can transform `if` from a *statement* into an *expression* by assigning it a return type
+***Q:*** That's nice, but how do we replicate this construct in WebAssembly?<br>
+***A:*** We can transform `if` from a *statement* into an *expression* by assigning it a return type
 
 The implementation of functions `$is_in_main_cardioid` and `$is_in_period_2_bulb` is not important here, suffice it to say that these functions both return `i32` values that can be treated as Booleans.
 
@@ -127,7 +127,7 @@ Whatever `i32` value the `if` expression leaves on the stack, is then assigned t
 
 ### Selecting Between Different Values
 
-A very useful variation on the `if` statement is `select`.  This expression consumes the top three values from the stack.  It returns either the third or second value based on the value of the first value (the outcome of a comparison).
+A very useful variation on the `if` statement is `select`.  This expression consumes the top three values from the stack.  It returns the value pushed either first or second, based on the value pushed third (the outcome of a comparison).
 
 For example:
 
@@ -156,7 +156,7 @@ For example:
 )
 ```
 
-Run the WAT file using `wasmer`
+Running this WAT file using `wasmer` gives:
 
 ```bash
 wasmer 07-select.wat -i do_select

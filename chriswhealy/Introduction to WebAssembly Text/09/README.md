@@ -14,48 +14,45 @@ So far, we have only looked at a very simple WebAssembly function &mdash; one th
 
 A function is declared using the keyword `func`.
 
-> ***IMPORTANT***<br>
-> WebAssembly functions can be given two, possibly different, human-readable names:[^1]
->
-> 1. An internal name, visible only to other functions within the WebAssembly module
-> 1. An external name, visible only from outside the WebAssembly module.  Taken together, these external names form the WebAssembly module's "Public API"
+***IMPORTANT***
 
-If we wish to call a WebAssembly function from inside the module, then the internal name is declared as follows:
+WebAssembly functions can be given two, possibly different, human-readable names:[^1]
+
+1. An internal name, visible only to other functions within the WebAssembly module
+1. An external name, visible only from outside the WebAssembly module.  Taken together, these external names form the WebAssembly module's "Public API"
+
+If we wish to call a WebAssembly function from some other function inside the same module, then we can declare an internal name:
 
 ```wast
-(func $my_func       ;; The function's internal name
+(func $my_func       ;; The function's private, internal name
 
   ;; Function body goes here
 )
 ```
 
-If a WebAssembly function only needs to be called from outside the module, then the internal name can be omitted.  The external name is defined using the `export` keyword followed by some string that becomes the function's external (or exported) name:
+However, if a WebAssembly function is part of the module's public API (I.E. it must be callable from outside the module), then the internal name can be omitted.  The external name is defined using the `export` keyword followed by some string that becomes the function's public (or exported) name:
 
 ```wast
 (func
-  (export "wasm_fn") ;; The function's external name
+  (export "wasm_fn") ;; The function's public, external name
 
   ;; Function body goes here
 )
 ```
 
-It also might be the case that we need to call this function from both inside and outside the module.  In this case, specify both names:
+It also might be the case that we need to call this function from both inside and outside the module.  In this case, specify both names (which could well be different):
 
 ```wast
-(func $my_func       ;; The function's internal name
-  (export "wasm_fn") ;; The function's external name
+(func $my_func       ;; The function's private, internal name
+  (export "wasm_fn") ;; The function's public, external name
 
   ;; Function body goes here
 )
 ```
-
-> ***IMPORTANT***
->
-> It is entirely possible for the internal and external names of a function to be different!
 
 ### Function Arguments and Return Values
 
-If a WebAssembly function needs to be passed any arguments, these must be specified immediately after the function name(s).  Similarly, if a function returns any values, these must be specified after any arguments have been defined.
+If a WebAssembly function needs to be passed any arguments, these must be specified immediately after the function name(s).  Similarly, if a function returns any values, these values' data types must be specified after any arguments have been defined.
 
 Here's a real-life example.  Let's say we have a function that finds the magnitude (or hypotenuse length) of a complex number; that is, the distance from origin to the point on the complex plane.
 
@@ -98,7 +95,7 @@ The implementation of this function simply uses Pythagoras' formula to work out 
 )
 ```
 
-After the `f64.sqrt` instruction has been executed, it pushes its result onto the stack and this implicitly becomes the function's return value.
+After the `f64.sqrt` instruction has been executed, it pushes its result onto the stack then the function exits.  Any value left on the stack when the function exits implicitly becomes the return value.
 
 You can run this function using `wasmer`:
 
@@ -137,6 +134,8 @@ wasmer 09-multiple-return-values.wat -i conj -- -5 3
 -5 -3
 ```
 
+> ***IMPORTANT***
+>
 > Notice the double hyphens `--` between `-i conj` and the function arguments.<br>
 > This is necessary to prevent the shell from interpreting the minus sign in front of `-5` as a shell option
 

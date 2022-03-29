@@ -6,7 +6,7 @@
 
 ## 8: Loops
 
-Let's now extend the previous code fragment to see how it could be used to control a loop.
+Let's now extend the previous code fragment to see how a condition is used to control a loop.
 
 ### It's a Loop Jim, but Not as we Know it..
 

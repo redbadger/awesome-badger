@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Calling WebAssembly from a Host Environment](../03/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Local Variables](../05/)
+| [Using a Language Runtime as a WebAssembly Host Environment](../03/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Local Variables](../05/)
 
 ## 4: WAT Datatypes
 
@@ -24,7 +24,7 @@ Other data types exist such as the Vector type [`v128`](https://webassembly.gith
 ### Interpreting Integers
 One very important point here concerns how you interpret integers.
 
-A floating point number always carries a sign value, but when examining an integer, you are free to choose whether the value is interpreted as an unsigned sequence of bits, or as a twos-complement integer.
+A floating point number always carries a sign value, but when examining an integer, you are free to choose whether the value is interpreted as an unsigned sequence of bits, or as a [two's complement](https://en.wikipedia.org/wiki/Two%27s_complement) integer.
 
 This means that when applied to integers, certain comparison instructions such as `gt` or `lt` must additionally state whether or not the most significant bit should be treated as the sign bit.
 
