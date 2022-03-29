@@ -41,7 +41,8 @@ Next, we need to create a JavaScript program that does the following:
 1. Create an executable instance of the `.wasm` file using `WebAssembly.instantiate()`
 1. Using the `wasmObj`'s `instance` property, we can call the `answer` function via the `exports` property.
 
-[03-wasm-host-env.js](/assets/chriswhealy/03-wasm-host-env.js)
+[03-nodejs-host-env.js](/assets/chriswhealy/03-nodejs-host-env.js)
+
 ```javascript
 import { readFileSync } from 'fs'
 
@@ -64,9 +65,9 @@ Answer = 42
 
 ### Using JavaScript (Browser) as the WebAssembly Host Environment
 
-If we now want to run the same WebAssembly module in a browser, we must make the following changes.
+If we now want to run the same WebAssembly module in a browser, we must modify the ablove JvaScript code slightly and wrap it in HTML:
 
-Create an HTML file containing the following code:
+[03-browser-host-env.html](/assets/chriswhealy/03-browser-host-env.html)
 
 ```html
 <!DOCTYPE html>
@@ -84,17 +85,20 @@ Create an HTML file containing the following code:
 </html>
 ```
 
-Place this file in under your local webserver's document root directory and display it through the browser.  In the developer tools, you will see `Answer = 42` in the console.
+Place this file under your local webserver's document root directory and display it through the browser.  In your browser's developer tools, you will see `Answer = 42` displayed in the console.
+
+<hr>
 
 ***IMPORTANT TECHNICAL DETAILS***
 
-1. For security reasons, browsers will not open `.wasm` files using the `file://` protocol.  This means therefore that the web page within which your JavaScript coding executes cannot be opened simply by pointing your browser at the `.html` file in your local file system.  Any Web page containing a WebAssembly module **must** be supplied to the browser using your local Web Server.
+1. For security reasons, browsers will not open `.wasm` files using the `file://` protocol.  This means therefore that the web page within which this JavaScript code executes cannot be opened simply by pointing your browser at the `.html` file in your local file system.  Any Web page containing a WebAssembly module **must** be supplied to the browser using your local Web Server.
 
-1. Your local Web Server must be correctly configured to add the `application/wasm` MIME type to a `.wasm` file.
+1. Your local Web Server must be correctly configured to send `.wasm` files with the correct MIME type of `application/wasm`.
 
-   For example on a macOS machine, ensure that the file `/private/etc/apache2/mime.types` contains the line <code>application/wasm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wasm</code>
+   For example on a macOS machine, ensure that the file `/private/etc/apache2/mime.types` contains the line:<br>
+   <code>application/wasm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wasm</code>
 
-1. If you are developing a JavaScript program that uses Web Workers to create multiple instances of the same WebAssembly module, then your local Web Server must additionally be configured to include the following HTTP headers:
+1. If you are developing a WebAssembly program in which multiple instances of the same module will simultaneously act upon the same block of shared memory (by means of JavaScript Web Workers), then your local Web Server must additionally be configured to supply the `.wasm` file with the following HTTP headers:
 
    ```
    Cross-Origin-Embedder-Policy: require-corp
@@ -109,5 +113,6 @@ Place this file in under your local webserver's document root directory and disp
        Header set Cross-Origin-Opener-Policy "same-origin"
     </IfModule>
    ```
+<hr>
 
 Let's now take a more detailed look at how to write a useful WebAssembly Text program.

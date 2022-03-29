@@ -14,12 +14,18 @@ So far, we have only looked at a very simple WebAssembly function &mdash; one th
 
 A function is declared using the keyword `func`.
 
+<hr>
+
 ***IMPORTANT***
 
 WebAssembly functions can be given two, possibly different, human-readable names:[^1]
 
 1. An internal name, visible only to other functions within the WebAssembly module
-1. An external name, visible only from outside the WebAssembly module.  Taken together, these external names form the WebAssembly module's "Public API"
+1. An external name, visible only from outside the WebAssembly module.
+
+Taken together, the set of all external function names form the WebAssembly module's "Public API"
+
+<hr>
 
 If we wish to call a WebAssembly function from some other function inside the same module, then we can declare an internal name:
 
@@ -95,7 +101,7 @@ The implementation of this function simply uses Pythagoras' formula to work out 
 )
 ```
 
-After the `f64.sqrt` instruction has been executed, it pushes its result onto the stack then the function exits.  Any value left on the stack when the function exits implicitly becomes the return value.
+After the `f64.sqrt` instruction has been executed, it pushes its result onto the stack, then the function exits.  The value left on the stack implicitly becomes the function's return value.
 
 You can run this function using `wasmer`:
 

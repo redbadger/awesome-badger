@@ -74,7 +74,7 @@ The object passed to the `WebAssembly.Memory()` function has two further propert
 ```javascript
 {
   initial : 1,     // Start with one 64Kb page
-  maximum : 20,    // Growth is possible up 20 pages
+  maximum : 20,    // Growth is possible up to 20 pages
   shared  : true,  // Multiple WebAssembly modules instance will share this linear memory
 }
 ```
@@ -88,7 +88,7 @@ Setting the `shared` flag to `true` has two immediate consequences:
 
 ### Sharing Host Environment Functionality with WebAssembly
 
-By design, WebAssembly has a limited instruction set and no access to "operating system" level functionality.[^4]  Therefore, if a WebAssembly module wants to perform anthing more than CPU-bound computations, access to such resources and functionality must be provided by the host environment at the time the WebAssembly module is instantiated.
+By design, WebAssembly has a limited instruction set and no access to "operating system" level functionality.[^4]  Therefore, if a WebAssembly module wants to perform anything more than CPU-bound computations, access to such resources and functionality must be provided by the host environment at the time the WebAssembly module is instantiated.
 
 In practice, all the host environment needs to do is place references to these resources into an arbitrary object supplied at instantiation time.
 
@@ -172,14 +172,11 @@ const wasmObj   = await WebAssembly.instantiate(wasmBytes, hostEnv)
 
 // Call the exported WebAssembly function passing in some meaningless numbers
 const bytesWritten = wasmObj.instance.exports.expensive_calc(12,34)
-
-// We can now read shared memory and pull out the data we're interested in
-let interestingStuff = wasmMem8.slice(hostEnv.mem.data_offset, hostEnv.mem.data_offset + bytesWritten)
 ```
 
 #### Running in a Browser
 
-A browser reads the `.wasm` file asynchronously from the Web server using `fetch`; but other than that, the coding is the same:
+A browser reads the `.wasm` file asynchronously from the Web server using `fetch`.  `fetch` returns a promise that can be passed to `WebAssenbly.instantiateStreaming()`:
 
 ```javascript
 const wasmMemory = new WebAssembly.Memory({ initial : 1 })
@@ -223,7 +220,7 @@ Three different types of declaration are made here:
    * Given the internal names `$sin`, `$cos` and `$log`
    * Declared to accept one `f64` as input and give back a single `f64`
 1. The host environment's block of shared memory is accessed via the object property `mem.pages`.
-1. Finally, we declare a global constant called `$data_offset` whose value is picked up by importing the `i32` in `mem.pages`
+1. Finally, we declare a global constant called `$data_offset` whose value is picked up by importing the `i32` in `mem.data_offset`
 
 ### Writing to Shared Memory in WebAssembly
 
@@ -305,10 +302,10 @@ Here's a minimal and unoptimized loop that performs some expensive but undescrib
 So far, our JavaScript code has:
 
 * Created some shared memory
-* Passed the shared memory and some other host environment resources a WebAssembly module instance
+* Passed the shared memory and some other host environment resources to a WebAssembly module instance
 * Called the `expensive_calc()` function
 
-Now we need to retrieve the data from shared memory, so the final statement show below is added:
+Now we need to retrieve the data from shared memory, so the final statement shown below is added:
 
 ```javascript
 const wasmMemory = new WebAssembly.Memory({ initial : 1 })

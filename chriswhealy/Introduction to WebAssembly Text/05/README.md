@@ -14,9 +14,13 @@ As with any other programming language, you can declare variables inside a funct
 
 Here, we have declared that within a function (not shown here) we have a local variable of type `i32` called `$my_value`.
 
-> **IMPORTANT**<br>
-> 1. Variable names must start with a dollar sign
-> 1. Local variables are automatically initialised to zero
+<hr>
+
+**IMPORTANT**<br>
+1. Variable names must start with a dollar sign
+1. Local variables are automatically initialised to zero
+
+<hr>
 
 Now that we have a local variable, we can store a value in it:
 
@@ -43,11 +47,13 @@ This might sound pretty weird, but the point is that human-readable names are on
 
 Uh, OK...  So how do you reference these local values?
 
-Internally, WebAssembly uses index numbers to reference variables and functions.
+### Using Index Numbers to Reference Variables and Functions
 
-Within the scope of a module, functions are indexed from `0` on the basis of the order in which the function declarations are encountered.
+Internally, WebAssembly always refers to variables and functions using index numbers.
 
-Within the scope of a function, variables are indexed from `0` on the basis of their declaration order.
+Within the scope of a module, functions are identified using zero-based index numbers on the basis of the order in which the function declarations are encountered.
+
+Within the scope of a function, variables are identified using zero-based index numbers on the basis of their declaration order.
 
 Assuming these are the first local variables declared in a function, then the two `i32`s will be variables `0` and `1`, and the `f64` will be variable `2`.
 

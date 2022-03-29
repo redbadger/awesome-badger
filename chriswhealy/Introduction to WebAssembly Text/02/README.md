@@ -7,7 +7,7 @@
 
 ## 2: Creating a WebAssembly Module
 
-Remember that a WebAssembly program can only be invoked from a host environment.  This will typically be a language runtime such as JavaScript or Rust, or it could be the WebAssembly System Interface (WASI).  Either way, from the perspective of the host environment, the WebAssembly module is the basic unit of instantiation.
+Remember that a WebAssembly program can only be invoked from a host environment.  This will either be a language runtime such as JavaScript or Rust, or it could be a WebAssembly System Interface (WASI) such as the one provided by `wasmer`.  Either way, from the perspective of the host environment, the WebAssembly module is the basic unit of instantiation.
 
 Here's a syntactically correct, but completely useless WebAssembly module.
 
@@ -39,7 +39,7 @@ Let's now make the above module slightly less useless by adding a function that 
 ```wast
 (module
   (func               ;; Declare a function
-    (export "answer") ;; Expose this function using the name "answer"
+    (export "answer") ;; Expose this function using the external name "answer"
     (result i32)      ;; Declare that this function returns a 32-bit integer
     (i32.const 42)    ;; Push 42 onto the stack
   )                   ;; Exit the function
@@ -74,8 +74,10 @@ wasmer 02-slightly-less-useless.wat -i answer
 42
 ```
 
-There!  Although this module is still pretty useless, we have just created the smallest functional WebAssembly module possible.
+There!
+
+Although this module is still pretty useless, we have just created the smallest functional WebAssembly module possible.
 
 <hr>
 
-[^1]: A basic design concept here is the idea that a WebAssembly module instance should persist for some extended period of time.  By design therefore, the `_start` function exists simply to perform whatever start-up functionality is required to create a persistent module instance, and thereafter, functionality is invoked through the module's API of exported functions.  Consequently, `wasmer` assumes that the default function `_start` will not return any value: in fact `wasmer` suppresses `_start`'s return value.  Even if we did use the default function name `_start`, we would only see its return value if we explicitly specify the function name using the `invoke` (`-i`) argument.
+[^1]: A basic design concept here is that a WebAssembly module instance should persist for some extended period of time.  By design therefore, the `_start` function exists simply to perform whatever start-up functionality is required to prepare a persistent module instance for use.  Once started, its functionality is then invoked through the module's public API of exported functions.<br><br>Consequently, `wasmer` assumes that the default function `_start` will not return any value: in fact `wasmer` suppresses `_start`'s return value.  Even if we did use the default function name `_start`, we would only see its return value if we explicitly specify the function name using the `invoke` (`-i`) argument.

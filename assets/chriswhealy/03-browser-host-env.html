@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<script>
+  const start = async () => {
+    const wasmObj = await WebAssembly.instantiateStreaming(fetch('./02-slightly-less-useless.wasm'))
+
+    console.log(`Answer = ${wasmObj.instance.exports.answer()}`)
+  }
+
+  start()
+</script>
+
+</html>
