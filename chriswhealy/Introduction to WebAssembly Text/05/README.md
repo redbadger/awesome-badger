@@ -12,7 +12,7 @@ As with any other programming language, you can declare variables inside a funct
 (local $my_value i32)
 ```
 
-Here, we have declared the within a function (not shown here) we have a local variable of type `i32` called `$my_value`.
+Here, we have declared that within a function (not shown here) we have a local variable of type `i32` called `$my_value`.
 
 > **IMPORTANT**<br>
 > 1. Variable names must start with a dollar sign
@@ -25,7 +25,7 @@ i32.const 5              ;; Push a value onto the stack
 local.set $my_value      ;; Pop the value off the stack and store it in the named variable
 ```
 
-Now that variable `$my_value` copntains `5`, we can use `local.get` to push a copy of that value back onto the stack:
+Now that variable `$my_value` contains `5`, we can use `local.get` to push a copy of that value back onto the stack:
 
 ```wast
 local.get $my_value      ;; Stack = [5]

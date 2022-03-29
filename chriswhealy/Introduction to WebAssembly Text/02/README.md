@@ -2,7 +2,7 @@
 
 | Previous | | Next
 |---|---|---
-| [Benefits of WebAssembly](../01/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Calling WebAssembly From a Host Environment](../03/)
+| [Benefits of WebAssembly](../01/) | [Up](/chriswhealy/introduction-to-web-assembly-text) | [Using a Language Runtime as a WebAssembly Host Environment](../03/)
 
 
 ## 2: Creating a WebAssembly Module
@@ -43,7 +43,7 @@ Let's now make the above module slightly less useless by adding a function that 
     (result i32)      ;; Declare that this function returns a 32-bit integer
     (i32.const 42)    ;; Push 42 onto the stack
   )                   ;; Exit the function
-  ;; Any value left on the stack becomes automatically that function's return value.
+  ;; Any value left on the stack automatically becomes that function's return value.
   ;; It is your responsibility to ensure that this value's data type matches the
   ;; declared return type
 )
@@ -78,4 +78,4 @@ There!  Although this module is still pretty useless, we have just created the s
 
 <hr>
 
-[^1]: A basic design concept here is the idea that a WebAssembly module instantce should persist for some extended period of time.  By design therefore, the `_start` function exists simply to perform whatever start-up functionality is required for that instance, and thereafter, functionality is invoked through the module's API of exported functions.  Consequently, `wasmer` assumes that the default function `_start` will not return any value: in fact `wasmer` suppresses `_start`'s return value.  Even if we did use the default function name `_start`, we would only see its return value if we explicitly specify the function name using `wasmer 02-slightly-less-useless.wat -i _start`
+[^1]: A basic design concept here is the idea that a WebAssembly module instance should persist for some extended period of time.  By design therefore, the `_start` function exists simply to perform whatever start-up functionality is required to create a persistent module instance, and thereafter, functionality is invoked through the module's API of exported functions.  Consequently, `wasmer` assumes that the default function `_start` will not return any value: in fact `wasmer` suppresses `_start`'s return value.  Even if we did use the default function name `_start`, we would only see its return value if we explicitly specify the function name using the `invoke` (`-i`) argument.

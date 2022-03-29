@@ -27,6 +27,7 @@ True memory safety must provide the following three guarantees:
    Once designated as "free", memory cannot be surreptitiously used for exploitative purposes
 
 * **Pointer Integrity:**
+
    A memory address cannot be fabricated from a non-address value
 
 These guarantees are all met when looking at WebAssembly from outside the scope of a module, but from within its own execution scope, a WebAssembly program is still vulnerable to the same memory issues as other programs.  Simple corruption or even explicitly malicious behaviour is still possible because a WebAssembly program can:
@@ -47,20 +48,20 @@ Given that the WebAssembly specification is currently in a state of development 
 1. If a WebAssembly program needs to allocate memory, then allocation values range between:
     *  Minimum:  1 page (64Kb)
     *  Maximum:  32767 pages (~2Gb)
-1. Memory growth is monotonic.  That is, once allocated, a WebAssembly memory page cannot be deallocated until that program terminates.
+1. Over the lifespan of a WebAssembly module, memory growth is monotonic.<br>That is, at runtime, a WebAssembly program can request more memory (up to the maximum defined at instantiation time); but once allocated, those pages cannot be deallocated until the program terminates.
 1. Memory allocated by the host environment can be shared with one or more WebAssembly modules.
     * The host environment must allocate some initial block of memory before instantiating the WebAssembly module(s)
     * A reference to the host memory must be supplied at the time the WebAssembly module is instantiated
     * If multiple WebAssembly modules need access the same block of memory, then this is possible, but these modules must be compiled with the compiler option `--enable-threads`
 1. Memory allocated by the WebAssembly module can be shared with host environment, but only if it has been explicitly exported
-1. You, the developer, are responsible for keeping track of what data lives at which location within linear memory.  How you choose to do this is entirely up to you, but as mentioned in the section above on memory safety, you must take care of ensuring that:
-    * `store` and `load` instructions remain within the bounds of your data structures
+1. You, the developer, are responsible for keeping track of what data lives at which location within linear memory.  How you choose to do this is entirely up to you, but as mentioned in the section above on memory safety, you must take care to ensure that:
+    * `store` and `load` instructions always operate within the boundaries of your data structures
     * Unused areas of memory remain truly unused
     * Data not intended to represent a memory address is not used as a memory address
 
-### Allocating Memory in the Host Environment
+### Sharing Host Environment Memory with WebAssembly
 
-When allocating WebAssembly memory, at the very least, you must specify the initial number of pages to be allocated.  In JavaScript, you would write:
+When the host environment allocates memory to be shared with WebAssembly, at the very least, you must specify the initial number of pages to be allocated.  In JavaScript, you would write:
 
 ```javascript
 const wasmMemory = new WebAssembly.Memory({ initial : 1 })
@@ -68,30 +69,32 @@ const wasmMemory = new WebAssembly.Memory({ initial : 1 })
 
 This simply says "*Allocate me one, 64Kb memory page*"
 
-The object passed to the `WebAssembly.Memory()` function has two further properties: `maximum` and `shared`.  If we need to allocate up to 20 memory pages that will be shared by multiple WebAssembly instances, then the memory allocation object would look like this:
+The object passed to the `WebAssembly.Memory()` function has two further properties: `maximum` and `shared`.  For instance, if we need to allocate up to 20 memory pages that will be shared by multiple WebAssembly instances, then the memory allocation object would look like this:
 
 ```javascript
 {
-  initial : 1,
-  maximum : 20,
-  shared : true,
+  initial : 1,     // Start with one 64Kb page
+  maximum : 20,    // Growth is possible up 20 pages
+  shared  : true,  // Multiple WebAssembly modules instance will share this linear memory
 }
 ```
 
-> ***IMPORTANT***
->
-> If the `shared` flag is set to `true`, then `maximum` must be explicitly specified, even if it has the same value as `initial`.
-> Also, the WebAssembly module must be compiled with option `--enable-threads`
+***IMPORTANT***
+
+Setting the `shared` flag to `true` has two immediate consequences:
+
+1. `maximum` must be explicitly specified, even if it has the same value as `initial`
+1. Any WebAssembly modules sharing this memory must be compiled with the `--enable-threads` option
 
 ### Sharing Host Environment Functionality with WebAssembly
 
-By design, WebAssembly has a limited instruction set and no access to "operating system" level functionality.[^4]  Therefore, if a WebAssembly module wants to perform anthing more than CPU-bound computations, access to those resources and functionality must be provided by the host environment at the time the WebAssembly module is instantiated.
+By design, WebAssembly has a limited instruction set and no access to "operating system" level functionality.[^4]  Therefore, if a WebAssembly module wants to perform anthing more than CPU-bound computations, access to such resources and functionality must be provided by the host environment at the time the WebAssembly module is instantiated.
 
-In practice, all the host environment needs to do place references to these resources into an arbitrary object supplied at instantiation time.
+In practice, all the host environment needs to do is place references to these resources into an arbitrary object supplied at instantiation time.
 
 In this example, we will write some JavaScript code that makes three resources available to a WebAssembly module called `some_module.wasm`:
-1. One page of shared memory
-2. The JavaScript `Math` library[^5]
+1. One page of shared memory (Allocated by JavaScript)
+2. The entire JavaScript `Math` library[^5]
 3. A variable containing the offset in shared memory at which WebAssembly should start writing its data
 
 So, first we allocate one page of WebAssembly memory:
@@ -118,21 +121,25 @@ Other than representing a two-level namespace, you are free to give this object 
 * `hostEnv.mem.pages` points to the host environment's block of shared, linear memory.  Both JavaScript and WebAssembly have full read/write access to this memory
 * `hostEnv.mem.data_offset` identifies the offset within shared memory at which WebAssembly will start writing its response data
 
-> ***IMPORTANT***
->
-> Whatever object you create as your `hostEnv` object, it represents a namespace that is limited to a maximum of two levels.  Therefore, since in the above example, we wish to share the entire JavaScript `Math` library, it must be represented at the top level as `hostEnv.math`.  This within this, WebAssembly will be able to access `hostEnv.math.sin` or `hostEnv.math.cos` etc.
->
-> Alternatively, if we only want to expose the basic trigonometric functions, we could have represented them as:
->
-> ```javascript
-> const hostEnv = {
->   "math" : {
->     "sin" : Math.sin,
->     "cos" : Math.cos,
->     "tan" : Math.tan,
->   }
-> }
-> ```
+<hr>
+
+***IMPORTANT***
+
+Whatever object you create as your `hostEnv` object, it represents a namespace that is limited to a maximum of two levels.  Therefore, since in the above example, we wish to share the entire JavaScript `Math` library, it must be represented at the top level as `hostEnv.math`.  Then within this, WebAssembly will be able to access `hostEnv.math.sin` or `hostEnv.math.cos` etc.
+
+Alternatively, if we only want to expose the basic trigonometric functions, we could have represented them as:
+
+```javascript
+const hostEnv = {
+  "math" : {
+    "sin" : Math.sin,
+    "cos" : Math.cos,
+    "tan" : Math.tan,
+  }
+}
+```
+
+<hr>
 
 Now all we need to do is pass this object as an argument to `WebAssembly.instantiate()`.  The coding shown below assumes that:
 
@@ -186,14 +193,10 @@ const hostEnv = {
   }
 }
 
-const wasmBytes = await fetch('./some_module.wasm')
-const wasmObj   = await WebAssembly.instantiate(wasmBytes, hostEnv)
+const wasmObj = await WebAssembly.instantiateStreaming(fetch('./some_module.wasm'), hostEnv)
 
 // Call the exported WebAssembly function passing in some meaningless numbers
 const bytesWritten = wasmObj.instance.exports.expensive_calc(12,34)
-
-// We can now read shared memory and pull out the data we're interested in
-let interestingStuff = wasmMem8.slice(hostEnv.mem.data_offset, hostEnv.mem.data_offset + bytesWritten)
 ```
 
 ### Using Host Environment Resources in WebAssembly
@@ -216,15 +219,16 @@ Immediately after the `module` definition, we need to add the following declarat
 
 Three different types of declaration are made here:
 
-1. The JavaScript `Math.sin`, `Math.cos` and `Math.log` functions are identified using the two-level namespace system.
-1. These imported functions are given the names `$sin`, `$cos` and `$log` respectively and declared to be functions that each accept one `f64` as input and give back a single `f64`.
+1. The JavaScript `Math.sin`, `Math.cos` and `Math.log` functions are identified using the two-level namespace system.  These imported functions are:
+   * Given the internal names `$sin`, `$cos` and `$log`
+   * Declared to accept one `f64` as input and give back a single `f64`
 1. The host environment's block of shared memory is accessed via the object property `mem.pages`.
 1. Finally, we declare a global constant called `$data_offset` whose value is picked up by importing the `i32` in `mem.pages`
 
 ### Writing to Shared Memory in WebAssembly
 
 A WebAssembly instruction obtains it arguments by popping the required number of values off the stack.  The instruction to write a 4-byte `i32` value to memory is `i32.store` and requires two arguments:
-* An `i32` holding the address in linear memory
+* An `i32` holding the address in linear memory where we are to start writing
 * An `i32` holding the value that will be stored at the specified address
 
 Therefore, prior to issuing the `i32.store` instruction, we must ensure that its arguments have already been pushed onto the stack.
@@ -238,15 +242,15 @@ So to start with, we refer to the imported value `mem.data_offset` in order to k
 ```
 
 Here's a minimal and unoptimized loop that performs some expensive but undescribed task many times.  Each time around the loop we:
-* Keep a loop counter in local variable `$idx`
-* Call another WebAssembly function called `$some_func` that performs an expensive calculation with arguments `$x` and `$y`
-* The result of calling `$some_func` is stored in the local variable `$next_val`
+* Keep track of the number of loop iterations in a local variable called `$idx`
+* Call another WebAssembly function called `$some_expensive_func` that takes arguments `$x` and `$y`
+* The result of calling `$some_expensive_func` is stored in the local variable `$next_val`
 * The memory offset at which we store `$next_val` is calculated by multiplying `$idx` by 4 (because each `i32` value is 4 bytes long) then adding this to the base address stored in `$data_offset`
-* The multiply by 4 could have been written as:
+* The instruction to multiply `$idx` by 4 could have been written as:
 
    `(i32.mul (local.get $idx) (i32.const 4))`
 
-    But because `$idx` is an unsigned integer, multiplying by 4 can be implemented by using the much faster shift left instruction, and shifting by 2 binary places:
+   However, because `$idx` is an unsigned integer, we can optimise this operation using the much faster `i32.shl` ("shift left") instruction, and shifting by 2 binary places:
 
    `(i32.shl (local.get $idx) (i32.const 2))`
 
@@ -265,7 +269,7 @@ Here's a minimal and unoptimized loop that performs some expensive but undescrib
     (local.set $next_val
       ;; Call some function that performs an expensive calculation on arguments
       ;; $x and $y, then store the result in $next_val
-      (call $some_func (local.get $x) (local.get $y))
+      (call $some_expensive_func (local.get $x) (local.get $y))
     )
 
     ;; Write contents of $next_val to memory
@@ -298,7 +302,13 @@ Here's a minimal and unoptimized loop that performs some expensive but undescrib
 
 ### Reading from Shared Memory in JavaScript
 
-From the JavaScript perspective, the only code we have executed so far is this:
+So far, our JavaScript code has:
+
+* Created some shared memory
+* Passed the shared memory and some other host environment resources a WebAssembly module instance
+* Called the `expensive_calc()` function
+
+Now we need to retrieve the data from shared memory, so the final statement show below is added:
 
 ```javascript
 const wasmMemory = new WebAssembly.Memory({ initial : 1 })
@@ -322,11 +332,7 @@ const bytesWritten = wasmObj.instance.exports.expensive_calc(12,34)
 let interestingStuff = wasmMem8.slice(hostEnv.mem.data_offset, hostEnv.mem.data_offset + bytesWritten)
 ```
 
-After the call to `expensive_calc` has completed, we have an updated `wasmMemory` object, and the number of updated bytes in the constant `bytesWritten`
-
-We now need to get this data out of `wasmMemory`.
-
-Notice that after the `wasmMemory` object is created, there is the declaration of an array of unsigned, 8-bit bytes that sits over top of the WebAssembly linear memory object.
+Notice that after the `wasmMemory` object is created, there is the declaration of an array of unsigned, 8-bit bytes that acts as an overlay on top of the WebAssembly linear memory object.
 
 ```javascript
 const wasmMemBuff = new Uint8ClampedArray(wasmMemory.buffer)
