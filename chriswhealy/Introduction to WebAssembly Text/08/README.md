@@ -13,7 +13,7 @@ Let's now extend the previous code fragment to see how a condition is used to co
 A loop in a WAT program is structured somewhat differently from loop constructs in other languages.  If we were to build a WAT loop like this, then it would not loop at all...
 
 ```wast
-(loop %some_optional_label
+(loop $some_optional_label
   ;; Do stuff here
 )
 ```

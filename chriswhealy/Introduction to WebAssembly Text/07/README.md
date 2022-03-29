@@ -70,7 +70,7 @@ The following code[^1] sample is part of a larger loop construct, but at the mom
 )
 ```
 
-Remember, we have a choice over how integer values are to be interpretted.
+Remember, we have a choice over how integer values are to be interpreted.
 
 Consequently, all integer comparison statements must identify not only the type of comparison to be performed (`lt`, `gt`, `le`, `ge` etc), but must additionally specify whether the `i32` is to be treated as a signed or unsigned value &mdash; hence the comparison operations end with the additional suffix of `_s` or `_u` for signed or unsigned respectively.
 
