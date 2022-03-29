@@ -1,8 +1,4 @@
-<img alt="Sally Badger" src="/assets/sally.svg" width="50">
-
-# Awesome Badger
-
-[awesome.red-badger.com](https://awesome.red-badger.com/)
+[<img alt="Sally Badger" src="assets/logo-awesome.png" height="150">](https://awesome.red-badger.com/)
 
 This website is a collection of assorted thinking and mental ramblings about technology (mostly) written
 by [the Badgers](https://red-badger.com/people/). All Badgers are welcome to contribute!
