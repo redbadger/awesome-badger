@@ -20,68 +20,11 @@ We recently worked with a client who asked us to create a freestyle web canvas, 
 
 This was a complex epic, and there was definitely some head scratching. However we finished it on time and the end result is beautiful, responsive and fully covered by end to end tests. We used [DndKit](https://dndkit.com/) for dragging and dropping, [D3 Zoom](https://github.com/d3/d3-zoom) for panning and zooming and [Cypress](https://www.cypress.io/) for the tests, which were all a pleasure to work with, and we would do so again.
 
-## Panning and Zooming
-
-A very stripped down version of the Canvas component is shown below, with the code required to hook up to D3 Zoom, and to apply the tranform.
-
-The transform is applied to the canvas element, and the browser will automatically apply the transform to anything under it in the DOM tree, so nothing on the canvas needs to do anything.
-
-```tsx
-export const Canvas = ({ children }: CanvasProps) => {
-  const canvasRef = useRef<HTMLDivElement | null>(null);
-
-  // store the current transform from d3
-  const [transform, setTransform] = useState(d3.zoomIdentity);
-
-  // update the transform when d3 zoom notifies of a change
-  const updateTransform = ({ transform }: { transform: d3.ZoomTransform }) => {
-    setTransform(transform);
-  };
-
-  // create the d3 zoom object, and useMemo to retain it for rerenders
-  const zoomBehavior = useMemo(() => d3.zoom<HTMLDivElement, unknown>(), []);
-
-  useLayoutEffect(() => {
-    if (!canvasRef.current) return;
-
-    // get transform changed notifications from d3 zoom
-    zoomBehavior.on("zoom", updateTransform);
-
-    // attach d3 zoom to the canvas div element, which will handle
-    // mousewheel and drag events automatically for pan / zoom
-    return d3
-      .select<HTMLDivElement, unknown>(canvasRef.current)
-      .call(zoomBehavior);
-  }, [zoomBehavior, canvasRef]);
-
-  // animated Zoom In, which can be called from a button event (not shown in this example)
-  const zoomIn = () => {
-    d3.transition()?.call(zoomBehavior.scaleBy, 1.5);
-  };
-
-  return (
-    <div ref={canvasRef}>
-      <div
-        style={{
-          // apply the transform from d3
-          transformOrigin: "top left",
-          transform: CSS.Transform.toString({
-            ...transform,
-            scaleX: transform.k,
-            scaleY: transform.k,
-          }),
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-};
-```
-
 ## Drag Drop from Tray
 
 In order to create insightful visual arrangements, users wanted to be able to see all of their products and placeholder cards in a tray, and to drag them from there on to the canvas. None of the DndKit examples were that close to what we wanted, so we had to strike out on our own (although the documentation is excellent, which made things easier.)
+
+![Drag drop from tray](/assets/ceddlyburge/visual-sort/drag-drop-from-tray.png)
 
 ### Display cards on the canvas
 
@@ -265,6 +208,65 @@ export const Addable = ({ id, children }: Props) => {
 };
 ```
 
+## Panning and Zooming
+
+A very stripped down version of the Canvas component is shown below, with the code required to hook up to D3 Zoom, and to apply the tranform.
+
+The transform is applied to the canvas element, and the browser will automatically apply the transform to anything under it in the DOM tree, so nothing on the canvas needs to do anything.
+
+```tsx
+export const Canvas = ({ children }: CanvasProps) => {
+  const canvasRef = useRef<HTMLDivElement | null>(null);
+
+  // store the current transform from d3
+  const [transform, setTransform] = useState(d3.zoomIdentity);
+
+  // update the transform when d3 zoom notifies of a change
+  const updateTransform = ({ transform }: { transform: d3.ZoomTransform }) => {
+    setTransform(transform);
+  };
+
+  // create the d3 zoom object, and useMemo to retain it for rerenders
+  const zoomBehavior = useMemo(() => d3.zoom<HTMLDivElement, unknown>(), []);
+
+  useLayoutEffect(() => {
+    if (!canvasRef.current) return;
+
+    // get transform changed notifications from d3 zoom
+    zoomBehavior.on("zoom", updateTransform);
+
+    // attach d3 zoom to the canvas div element, which will handle
+    // mousewheel and drag events automatically for pan / zoom
+    return d3
+      .select<HTMLDivElement, unknown>(canvasRef.current)
+      .call(zoomBehavior);
+  }, [zoomBehavior, canvasRef]);
+
+  // animated Zoom In, which can be called from a button event (not shown in this example)
+  const zoomIn = () => {
+    d3.transition()?.call(zoomBehavior.scaleBy, 1.5);
+  };
+
+  return (
+    <div ref={canvasRef}>
+      <div
+        style={{
+          // apply the transform from d3
+          transformOrigin: "top left",
+          transform: CSS.Transform.toString({
+            ...transform,
+            scaleX: transform.k,
+            scaleY: transform.k,
+          }),
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+```
+
 ## Cards should not overlap
 
 One of the requirements was that cards should not overlap on the canvas, so we needed to detect when collissions would occur and prevent them.
@@ -281,7 +283,7 @@ const doCardsCollide = (card1: Coordinates, card2: Coordinates) =>
 
 When dragging, if a card on the canvas would collide, we add a red overlay to it. When dragging around the canvas, we show the last know good position of a card with a dashed outline, which is where the card will go if it is dropped. This updates as a card is dragged, and snaps to the grid. Where a card on the canvas would cause a collission, the last known position simply stays where it is, until the dragged card is moved in to a collission free space.
 
-todo: maybe add an image of this, if we turn the images off then there wouldn't be an issue with annoying levi's i think. Maybe use a placeholder as then case use completely custom text.
+![Collision detection](/assets/ceddlyburge/visual-sort/collision-detection.png)
 
 ## Drag Cards on the canvas
 
@@ -300,7 +302,7 @@ The `DndContext` is much the same as before
 </DndContext>
 ```
 
-The cards on the tray are slightly more complex, as the have to position themselves on the canvas, and update their position temporarily while they are being dragged.
+The cards on the canvas are slightly more complex, as they have to position themselves on the canvas, and update their position temporarily while they are being dragged.
 
 ```tsx
 export const Draggable = ({
