@@ -67,11 +67,7 @@ export const Canvas = ({ children }: CanvasProps) => {
         style={{
           // apply the transform from d3
           transformOrigin: "top left",
-          transform: CSS.Transform.toString({
-            ...transform,
-            scaleX: transform.k,
-            scaleY: transform.k,
-          }),
+          transform: `translate3d(${transform.x}, ${transform.y}, ${transform.k})`,
         }}
       >
         {children}
@@ -83,7 +79,7 @@ export const Canvas = ({ children }: CanvasProps) => {
 
 ## Drag Drop from Tray
 
-In order to create insightful visual arrangements, users wanted to be able to see all of their product and placeholder cards in a tray, and to drag them from there on to the canvas. None of the DndKit examples were that close to what we wanted, so we had to strike out on our own (although the documentation is excellent, which made things easier.)
+In order to create insightful visual arrangements, users wanted to be able to see all of their cards in a tray, and to drag them from there on to the canvas. None of the DndKit examples were that close to what we wanted, so we had to strike out on our own (although the documentation is excellent, which made things easier.)
 
 ![Drag drop from tray](/assets/ceddlyburge/visual-sort/drag-drop-from-tray.png)
 
@@ -162,7 +158,7 @@ The Canvas has a [transform property (from D3)](https://github.com/d3/d3-zoom#zo
 
 We already had canvas card components from earlier, but the zoom transform was being applied to the parent canvas component, so we still needed to size the drag overlay correctly.
 
-This was achieved using the same css transform that was applied to the canvas:
+This was achieved using the same scale transform that was applied to the canvas:
 
 ```tsx
 <div
@@ -236,7 +232,7 @@ There is a `DndContext`, that DndKit uses to store all the state:
 <DndContext
   sensors={sensors}
   onDragStart={handleDragStart} // stores the activeCard
-  onDragMove={handleDragMove} // uses customCollisionDetectionStrategy
+  onDragMove={handleDragMove} // uses doCardsCollide (see "Cards should not overlap" later)
   onDragEnd={handleDragEnd} // uses calculateCanvasPosition, adds activeCard to children
   collisionDetection={customCollisionDetectionStrategy()}
 >
@@ -278,7 +274,7 @@ The `DndContext` is much the same as before
 <DndContext
   sensors={sensors}
   onDragStart={handleDragStart} // stores the activeCard
-  onDragMove={handleDragMove} // uses doCardsCollide, updates pixelCoordinates
+  onDragMove={handleDragMove} // uses doCardsCollide (see "Cards should not overlap" later), updates pixelCoordinates
   onDragEnd={handleDragEnd} // updates position of activeCard
 >
   {children}
@@ -338,7 +334,7 @@ const doCardsCollide = (card1: Coordinates, card2: Coordinates) =>
   Math.abs(card1.y - card2.y) < cardSize;
 ```
 
-When dragging, if a card on the canvas would collide, we add a red overlay to it. When dragging around the canvas, we show the last know good position of a card with a dashed outline, which is where the card will go if it is dropped. This updates as a card is dragged, and snaps to the grid. Where a card on the canvas would cause a collission, the last known position simply stays where it is, until the dragged card is moved in to a collission free space.
+When dragging, if a card on the canvas would collide, we add a red overlay to it. When dragging around the canvas, we show the last known good position of a card with a dashed outline, which is where the card will go if it is dropped. This updates as a card is dragged, and snaps to the grid. Where a card on the canvas would cause a collission, the last known position simply stays where it is, until the dragged card is moved in to a collission free space.
 
 ![Collision detection](/assets/ceddlyburge/visual-sort/collision-detection.png)
 
@@ -391,7 +387,7 @@ Cypress.Commands.add(
 We can then use the custom command in tests like this.
 
 ```ts
-cy.findAllByText(mensTop.pc9).dragOntoCanvas({
+cy.findAllByText("cb894").dragOntoCanvas({
   start: { clientX: 50, clientY: 50 },
   end: { clientX: 700, clientY: 200 },
 });
