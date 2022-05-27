@@ -154,7 +154,7 @@ const customCollisionDetectionStrategy = () => {
 
 ### The drag overlay / mouse cursor should size based on the currrent zoom level of the canvas (so that it displays as it will appear on the canvas)
 
-The Canvas has a [transform property (from D3)](https://github.com/d3/d3-zoom#zoom-transforms), which has an `x` and a `y` property to define the panning, and a `z` property to define the zoom.
+The Canvas has a [transform property (from D3)](https://github.com/d3/d3-zoom#zoom-transforms), which has an `x` and a `y` property to define the panning, and a `k` property to define the zoom.
 
 We already had canvas card components from earlier, but the zoom transform was being applied to the parent canvas component, so we still needed to size the drag overlay correctly.
 
@@ -183,7 +183,7 @@ We already store and have access to the zoom level and the panning position of t
 
 The DndKit drop event gives us the delta of the drag operation, but sadly doesn't give us the initial position of the drag. It does however allow us to attach some custom data via a `ref` in `useDraggable`, so we store `getBoundingClientRect()` as `initialRect`, and can access it in the drop event with `active.data.current.initialRect`. This allows us to calculate the window / viewport drop position, which then allows us to calculate the drop position on the canvas.
 
-The full code looks like this. `transform` controls the pan (`x, y`) and zoom (`z`) of the canvas.
+The full code looks like this. `transform` controls the pan (`x, y`) and zoom (`k`) of the canvas.
 
 ```ts
 const calculateCanvasPosition = (
