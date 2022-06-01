@@ -10,11 +10,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        name: Checkout
       - uses: actions/jekyll-build-pages@v1
-      - uses: actions/upload-artifact@v1
+        name: Build page with Jekkyl
+      - uses: actions/upload-artifact@v0
+        name: Upload Artifact
         with:
           path: ./_site
-          retention-days: 1
 
   deploy:
     needs: build
