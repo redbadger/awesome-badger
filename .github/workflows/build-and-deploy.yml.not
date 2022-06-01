@@ -1,3 +1,8 @@
+# This workflow will build and deploy the site on a push to main, but it only
+# works if the site is set up on the github ui, in which case github automatically
+# does basically the same thing, so this is not required.
+# It seems like a shame that we can't easily use an explicit workflow, instead
+# of relying on the slightly obscure github implicit one.
 name: Build and deploy
 
 on:
