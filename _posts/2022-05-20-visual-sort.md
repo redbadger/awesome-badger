@@ -64,11 +64,11 @@ export const Canvas = ({ children }: CanvasProps) => {
   return (
     <div ref={canvasRef}>
       <div
-        style={{
+        style=/\{\{/
           // apply the transform from d3
           transformOrigin: "top left",
           transform: `translate3d(${transform.x}, ${transform.y}, ${transform.k})`,
-        }}
+        \}\}
       >
         {children}
       </div>
@@ -89,12 +89,12 @@ When an item is drag / dropped from the tray it needs to appear on the canvas, s
 
 ```tsx
 <div
-  css={{
+  css=\{\{
     position: "absolute",
     origin: "top left",
     top: `${pixelCoordinates.y}px`,
     left: `${pixelCoordinates.x}px`,
-  }}
+  \}\}
 >
   {children}
 </div>
@@ -162,10 +162,10 @@ This was achieved using the same scale transform that was applied to the canvas:
 
 ```tsx
 <div
-    style={{
+    style=\{\{
         transformOrigin: 'top left',
         transform: `scale(${transform.k})`,
-      }}
+      \}\}
 >
 ```
 
@@ -298,18 +298,18 @@ export const Draggable = ({
   return (
     <div
       // position of card on canvas
-      css={{
+      css=\{\{
         position: "absolute",
         origin: "top left",
         top: `${pixelCoordinates.y}px`,
         left: `${pixelCoordinates.x}px`,
-      }}
+      \}\}
       // temporary change to this position when dragging
-      style={
+      style=\{\{
         transform
           ? { transform: `translate3d(${transform.x}, ${transform.y}, 0)` }
           : {}
-      }
+      \}\}
       ref={setNodeRef}
       {...listeners}
       {...attributes}
