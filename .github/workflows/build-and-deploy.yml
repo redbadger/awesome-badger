@@ -1,0 +1,26 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/jekyll-build-pages@v1
+
+deploy:
+  needs: build
+  runs-on: ubuntu-latest
+  permissions:
+    pages: write
+    id-token: write
+  environment:
+    name: github-pages
+    url: ${{ steps.deployment.outputs.page_url }}
+  steps:
+    - id: deployment
+      uses: actions/deploy-pages@v1
