@@ -24,10 +24,10 @@ I don’t think there’s anything wrong with the pyramid. It’s just not quite
 
 To make a better version of the pyramid, I will need to make some assumptions about the kind of system we’re testing, and the high-level ways of working of the team, and roles involved in the building of the product. At a high level, I will assume that:
 
-* We’re building a distributed system, composed of independently deployed services and applications. Running the entire system requires an environment.
-* Our system has external dependencies which we don’t control - services delivered by separate organisations or other, indepedent teams in our organisation
-* We’re doing continuous delivery, even continuous deployment to production, and therefore heavily rely on a Continuous Integration (CI) service
-* Our branching workflow resembles Github flow - we have a single main branch, into which contributions are made in the form of small pull requests which get reviewed before merging
+- We’re building a distributed system, composed of independently deployed services and applications. Running the entire system requires an environment.
+- Our system has external dependencies which we don’t control - services delivered by separate organisations or other, independent teams in our organisation
+- We’re doing continuous delivery, even continuous deployment to production, and therefore heavily rely on a Continuous Integration (CI) service
+- Our branching workflow resembles Github flow - we have a single main branch, into which contributions are made in the form of small pull requests which get reviewed before merging
 
 This feels like a pretty typical situation most digital product teams find themselves in. The situation is probably different for game developers, desktop software developers, machine learning engineers and data scientists, and others. So, as always, your mileage may vary.
 
@@ -57,10 +57,10 @@ No other discipline building even remotely complicated things approaches testing
 
 You might also argue that layers 2 and 3 seem like an artificial split. We should be able to test everything on layer 3, surely. And in an ideal world, we could. The problem with testing against non-production environments of external dependencies is purely practical:
 
-* They are not always available
-* They are often slow or rate limited
-* They lack test data or require creating it for every run
-* They are stateful
+- They are not always available
+- They are often slow or rate limited
+- They lack test data or require creating it for every run
+- They are stateful
 
 All these reasons make repeatable, reliable testing solely against external systems difficult. But fully relying on mocks is not a reliable strategy either. We need to be sure that the mocks still behave like the actual system. We need to do both.
 
