@@ -45,7 +45,7 @@ In other words, the lower layers are an optimisation of executing the upper laye
 
 ### Changing tests with implementation is fine, top-heavy pyramids are not fine
 
-Some will argue that pushing tests lower, closer to the implementation will lead to us having to regularly change tests when we change implementation, and that the execution time saved will instead be spent on keeping the lower layer tests up to date. To that, I will say that the idea that it should possible to change implementation without changing tests is just… nonsense.
+Some will argue that pushing tests lower, closer to the implementation will lead to us having to regularly change tests when we change implementation, and that the execution time saved will instead be spent on keeping the lower layer tests up to date. To that, I will say that the idea that it should be possible to change implementation without changing tests is just… nonsense.
 
 If it were true, it would mean that everything can be exhaustively tested through the interfaces it is consumed through - through the UI or public API, or something very close to it. That thinking obviously completely ignores the “physics” of software, and all the reasons we are building systems in a decomposed, modular way, which encapsulates and reuses logic. The sheer number of test cases necessary to capture all the nuances of all our business logic all at once is just not practical. And it’s not difficult to show that.
 
@@ -73,7 +73,7 @@ So, we now have a more complete version of the pyramid. To make it an actionable
 1. When a layer of testing starts slowing you down, reduce the volume of that layer and replace it by coverage on the lower layers. Introduce new forms of testing on lower layers.
 1. Do not give in to the temptation of moving layers “left” in the development process, executing the more expensive ones earlier or more often.
 
-The last principle is worth talking about a little more. It suggests, for example, that running automated, system level, end to end test on each pull requests, as tempting as it sounds, is not worth the effort and complexity. End to end tests require an environment to run in (see assumptions), which would need to be created and destroyed (or allocated and cleaned up) for each pull request. In my experience, this is really complex, slow and highly unlikely to pay off in additional confidence gained, compared to running the end to end tests on the main branch, after merging the pull request.
+The last principle is worth talking about a little more. It suggests, for example, that running automated, system level, end to end test on each pull requests, as tempting as it sounds, is not worth the effort and complexity. End to end tests require an environment to run in (see assumptions), which would need to be created and destroyed (or allocated and cleaned up) for each pull request. In my experience, this is really complex, slow and highly unlikely to pay off in additional confidence gained, compared to running the end to end test(s) on the main branch, after merging the pull request.
 
 With these principles, I hope the model is now actually useful - clear, complete and actionable. It should be possible to take every form of testing you can think of, decide what layer it belongs to, and therefore where and when it should execute.
 
