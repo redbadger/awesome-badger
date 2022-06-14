@@ -16,7 +16,7 @@ _Image source: <https://betterprogramming.pub/the-test-pyramid-80d77535573>_
 
 We’ve all seen this picture. It is a seemingly helpful guide: To minimise cost of testing and maximise reliability and resulting quality, put more effort into, and rely more on tests closer to the implementation than the tests that are covering a wider scope. Seems intuitively correct, but fails my criteria: It’s unclear what integration tests and even unit tests actually are, specifically. It also doesn’t help answer questions like “Should I run end to end tests on every pull request?”. And where does static analysis fit in? – it’s unclear, incomplete, and it isn’t actionable.
 
-As a consequence, people don’t seem to find it particularly helpful, and even propose various modifications which resonate with their experience better, like the testing trophy, proposed by Kent C. Dodds. I think these variants come down to the misalignment about what the individual layers of the pyramid are, what value they bring, and how costly they are to execute. And I’ve seen one too many testing strategies in which the pyramid is completely upside down, but the engineering team just doesn’t know how to do their testing any better. The pyramid is supposed to guide them, alas it stays quiet.
+As a consequence, people don’t seem to find it particularly helpful, and even propose various modifications which resonate with their experience better, like the [testing trophy, proposed by Kent C. Dodds](https://kentcdodds.com/blog/write-tests). I think these variants come down to the misalignment about what the individual layers of the pyramid are, what value they bring, and how costly they are to execute. And I’ve seen one too many testing strategies in which the pyramid is completely upside down, but the engineering team just doesn’t know how to do their testing any better. The pyramid is supposed to guide them, alas it stays quiet.
 
 I don’t think there’s anything wrong with the pyramid. It’s just not quite detailed enough to be useful. Good first approximation, but I think we can do better.
 
@@ -69,7 +69,7 @@ All these reasons make repeatable, reliable testing solely against external syst
 So, we now have a more complete version of the pyramid. To make it an actionable model, we just need some overall guiding principles:
 
 1. All layers of the pyramid are necessary in order to achieve a high confidence in your system.
-1. Always prefer testing functionality on lowest possible layer. Testing lower down will be harder, but worth the effort.
+1. Always prefer testing functionality on lowest possible layer.
 1. When a layer of testing starts slowing you down, reduce the volume of that layer and replace it by coverage on the lower layers. Introduce new forms of testing on lower layers.
 1. Do not give in to the temptation of moving layers “left” in the development process, executing the more expensive ones earlier or more often.
 
