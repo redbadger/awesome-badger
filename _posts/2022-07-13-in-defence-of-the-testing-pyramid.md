@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "In defence of the testing pyramid"
-date: 2022-07-13 20:00:00 +0000
+date: 2022-06-13 20:00:00 +0000
 category: charypar
 author: Viktor Charypar
 excerpt: I don’t think there’s anything wrong with the testing pyramid. It’s just not quite detailed enough to be useful. Good first approximation, but we can do better.
