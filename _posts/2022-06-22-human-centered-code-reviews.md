@@ -52,7 +52,7 @@ For companies that have leaned into continuous delivery and continuous integrati
 
 So what does this all mean? 
 
-The need for a second pair of eyes notwithstanding, the code review has gone from being one of a handful of practices to ensure code quality to just one among many. And even at that, it’s prime responsibility of ensuring more than one dev has seen the code is satisfied by the emergency of another rival practice - pair programming.
+The code review has gone from being one of a handful of practices to ensure code quality to just one amongst many. Verifying that our code can be safely merged is now also possible through another rival practice - pair programming.
 
 
 ## Shifting left
@@ -98,9 +98,9 @@ However, pull requests consisting of only one or two commits don’t gel very we
 
 But what about batching together many commits so instead of many small ones you just have one big one? You can do this but it has a cost attached. 
 
-Blending many commits into a single pull request means the surface area of change is much greater, leading to a proportionally higher review time. While good test names and commit messages can mitigate this, the overall goal of what’s being achieved can become blurred, mandating a slower line-by-line approach to reviewing code to see what's changed and where. Overly stuffed pull requests do not clearly reveal their intention like their smaller counterparts.
+Blending many commits into a single pull request means that the surface area of change is much greater, leading to a proportionally higher review time. While good test names and commit messages can mitigate this, the overall goal of what’s being achieved can become blurred, mandating a slower line-by-line approach to reviewing code to see what's changed and where. Overly stuffed pull requests do not clearly reveal their intention like their smaller counterparts.
 
-Or even worse if there the surface area of change is massive then something could just slip by entirely e.g. renaming a file while also making business logic changes that could be lost in the revision comparison tool. Being “too big to review” is a risk too.
+Or even worse if the surface area of change is massive then something could just slip by entirely e.g. renaming a file while also making business logic changes that could be lost in the revision comparison tool. Being “too big to review” is a risk too.
 
 Ultimately teams need to come to their own conclusions about how big or small code reviews should be but either way there’s a cost involved regardless.
 
