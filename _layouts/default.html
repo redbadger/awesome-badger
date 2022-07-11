@@ -15,6 +15,9 @@
 
     {%- include footer.html -%}
 
+    {%- if jekyll.environment == 'production' -%}
+      {%- include beampipe-analytics.html -%}
+    {%- endif -%}
   </body>
 
 </html>
