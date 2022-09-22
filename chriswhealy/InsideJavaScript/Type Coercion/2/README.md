@@ -15,16 +15,19 @@ var strValue = "-1"    // strValue is a character string
 +strValue              // Returns the numeric value -1
 ```
 
-But wait a minute, `strValue` is a character string, and everyone knows that character strings cannot necessarily be converted to numbers!  This is quite correct; but in this case, JavaScript looks at the operation we want to perform and tries to be helpful...
-
-1. The unary[^1] `+` operator attempts to return the numeric representation of its operand
-
-    > ***Aside***
-    > Don't be misled by the use of the "plus" symbol for this operator.  This operator returns only the numeric value of its operand, not its ***positive*** numeric value
+But wait a minute, the variable `strValue` contains a character string, and everyone knows that character strings cannot necessarily be converted to numbers!
+This is quite correct; but in this case, JavaScript looks at the operation we want to perform and tries to be helpful in the following ways...
 
 1. The value supplied in the variable `strValue` is the character string `"-1"`
-1. The unary `+` operator now attempts to squeeze a numeric value out of the character string `"-1"`
+1. The unary[^1] `+` operator now attempts to squeeze a numeric value out of the character string `"-1"`
 1. Phew, we've been lucky!! String value `"-1"` converts nicely to the numeric value `-1`
+
+    > ***WARNING***
+    >
+    > Don't be misled by the use of the "plus" symbol for this operator.
+    > This operator returns only the numeric value of its operand, not its ***positive*** numeric value.
+    >
+    > This is why `+"-1"` gives back `-1` not `+1`!
 
 So, we can see that under the surface, JavaScript has automatically converted (or coerced) a character string into a number for us.
 
@@ -32,21 +35,23 @@ This is an example of where we explicitly instruct the coding to perform type co
 
 But what about this situation:
 
-
 ```javascript
 var strValue = "cat"   // strValue is a character string
-+strValue              // Returns the special value NaN (Not a number)
++strValue              // Returns the special value NaN (Not a Number)
 ```
 
 ![I Can Haz Integer?](/assets/chriswhealy/I%20Can%20Haz%20Integer.png)
 
 Sorry, not this time!
 
-The logic of coding is exactly the same and all that has changed here is the value stored in variable `strValue` is now `"cat"`", whereas before it was `"-1"`&mdash;yet the result is completely different.
+The logic of coding is exactly the same.
+All that has changed is the value stored in variable `strValue`: now it is `"cat"`, whereas before it was `"-1"`.
 
-JavaScript went through exactly the same sequence of steps described above, but this time it discovered that the character string `"cat"` has no numeric representation, so we got the correct, but possibly unexpected response of `NaN`, or *"Not a Number"*.
+JavaScript attempts to derive the numerical value of the character string `"cat"`, so although `NaN` is technically the correct answer, it is unhelpful&mdash;especially if the code that follows is expecting to receive a number.
 
-So, type coercion does not always do either what you want or what you might expect.
+So here is an example of where the same piece of coding will behave in two very different ways depending on what value happens to be stored in the variable `strValue`.
+
+Type coercion does not always do either what you want, or what you might expect.
 
 ## Overloading the `+` Operator
 
@@ -56,7 +61,8 @@ So, what would you expect to happen in this situation?
 1 + 2          // 3   Trick question :-)
 ```
 
-Here, we are using `+` as the binary operator for arithmetic addition, and since both operands are numeric, everything is fine and we get the expect answer `3`.
+Here, we are using `+` as the binary operator for arithmetic addition.
+Since both operands are numeric, everything is fine and we get the expect answer `3`.
 
 But what happens in these situations?
 
@@ -67,22 +73,27 @@ But what happens in these situations?
 
 Buh!?
 
-Here, we have a situation in which we are trying to perform the arithmetic operation `add` on one or more non-numeric values.
+Here, we have a situation in which we are trying to perform the arithmetic operation of addition on one or more non-numeric values.
 
 In order for an arithmetic operation to be successful, both operands must be numeric.
 
 ***Q:***&nbsp;&nbsp; Is it safe simply to assume that both operands can be converted to numbers and then added?<br>
 ***A:***&nbsp;&nbsp; It's probably foolish to try to discover the numeric value of a `"cat"`&hellip;
 
-* It is not safe to assume that all string values have a numeric representation
-* But it is safe to assume that all numbers have a string representation
+So, when it comes to converting between strings and numbers, the safety of type coercion only works in one direction:
+
+***UNSAFE:*** Not all string values have a numeric representation<br>
+***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAFE:*** All numbers have a string representation
 
 So JavaScript automatically and silently does two things here:
 
-1. It coerces the non-numeric operand into a string
-1. It coerces the `+` operator to perform string concatenation instead of arithmetic addition
+1. It identifies that one of the operands to the `+` operator is non-numeric
+1. It coerces the non-numeric operand to a string
+1. It further coerces the `+` operator to perform string concatenation instead of arithmetic addition
 
-Operation coercion is also known as *"overloading"*.  This is where the "`+`" symbol switch operations from arithmetic addition to string concatenation depending on the data type of the arguments it receives.
+Operation coercion is also known as *"overloading"*.
+This is where the "`+`" symbol switches from performing arithmetic addition, and instead, performs string concatenation.
+All of this happens silently and depends on the datatype of the arguments it receives at runtime.
 
 Consequently, `1 + "2"` means that the numeric `1` is first converted to character `"1"`, then `"1"` and `"2"` are concatenated giving `"12"`.
 
@@ -148,17 +159,21 @@ The logical NOT operator `!` is another unary operator that expects a Boolean op
 
 In the first example, there's no problem because `false` is a Boolean value and when the NOT operator is applied, we get the expected value of `true`.
 
-However, in the second example, `!` has been passed an integer.  So, before we can take the logical NOT of an integer, that integer must first be coerced to a Boolean value.  The rule JavaScript follows is simply this:  irrespective of their sign or magnitude, all non-zero numbers coerce to `true`.  Zero is the only number which coerces to `false`.
+However, in the second example, `!` has been passed an integer.
 
-> ***Aside***
->
-> JavaScript code minimizers seek to reduce your source code down to the smallest possible representation.<br>
-> In order to save a couple of bytes, they often use a trick that reduces the Boolean values `true` and `false` from 4 or 5 bytes, down to 2.
->
-> `!0` is used to represent `true`.  Integer `0` coerces to `false`, `!false` is `true`<br>
-> `!1` is used to represent `false`.  Integer `1` coerces to `true`, `!true` is `false`
->
-> So, both Boolean values can now be represented using only two characters
+* Before we can take the logical NOT of an integer, that integer must first be coerced to a Boolean value.
+* The rule JavaScript follows is simply this: irrespective of their sign or magnitude, all non-zero numbers coerce to `true`.
+* Zero is the only number which coerces to `false`.
+
+### Code Minimizers
+
+JavaScript code minimizers seek to reduce your source code down to the smallest possible representation.
+By taking advantage of this type coercion behaviour, the Boolean keywords `true` and `false` can be reduced from 4 or 5 bytes, down to just 2.
+
+* `!0` is used to represent `true` since integer `0` coerces to `false`, and `!false` is `true`
+* `!1` is used to represent `false` since integer `1` coerces to `true`, and `!true` is `false`
+
+### Looping Using Boolean Type Coercion
 
 Here's another type coercion trick that can be used if you have a loop that should stop after counting down to zero:
 
@@ -170,7 +185,7 @@ while (n--) {
 }
 ```
 
-Here, we are relying on the fact that all non-zero integers coerce to `true`; thus as long as `n` remains greater than zero, the loop continues to run.
+Here, we are relying on the fact that all non-zero integers coerce to `true`; thus as long as `n` remains greater than zero, the condition evaluated by the `while` loop will always be `true`; therefore, the loop continues to run.
 
 ```javascript
 Stop when n = 0. n is now 4
@@ -183,6 +198,5 @@ Stop when n = 0. n is now 0
 As soon as `n` becomes zero, zero coerces to `false` and the loop terminates.
 
 ---
-***Endnotes***
 
 [^1]: An operator is said to be *"unary"* if it requires only one operand

@@ -30,7 +30,8 @@ var person1 = {}
 
 ### Creating Object Properties
 
-We can now bind any value we like to any object property we like.  However, depending on what names we want to assign to these properties, we might need to write the coding using one of two different syntaxes.
+We can now bind any value we like to any object property we like.
+However, depending on what names we want to assign to these properties, we might need to write the coding using one of two different syntaxes.
 
 If the property name does not need to contain any characters that have reserved meanings such as `-` or `+` or `@`, then you can use the refinement operator `.` (that's the fancy technical name for the dot in between the object name and the property name):
 
@@ -49,7 +50,9 @@ person1.listHobbies = function() {
 
 ### But Objects Also Have Array-like Properties...
 
-But what if you need to have a property whose name contains a reserved character?  In this case, you can use the array syntax.  This is possible because all JavaScript objects can be treated as if they are arrays containing ***named*** elements (not numbered elements).
+But what if you need to have a property whose name contains a reserved character?
+In this case, you can use the array syntax.
+This is possible because all JavaScript objects can be treated as if they are arrays containing ***named*** elements (not numbered elements).
 
 ```javascript
 // Create an empty object
@@ -64,7 +67,9 @@ person2["listHobbies"] = function() {
 }
 ```
 
-Notice that the `person2` object now contains two properties (`first-name` and `last-name`) whose names contain the reserved minus "`-`" character.  Due to the presence of this reserved character in the name, it is now impossible to refer to these properties using the refinement operator (`.`).  Any attempt to do so would create a syntax error:
+Notice that the `person2` object now contains two properties (`first-name` and `last-name`) whose names contain the reserved minus "`-`" character.
+Due to the presence of this reserved character in the name, it is now impossible to refer to these properties using the refinement operator (`.`).
+Any attempt to do so would create a syntax error:
 
 ```javascript
 > console.log(person2.last-name)
@@ -98,12 +103,11 @@ delete aGlobalProperty    // true
 aGlobalProperty           // undefined (this property no longer exists in the global object)
 ```
 
-
 ## JavaScript Arrays Are Also Objects...
 
 JavaScript arrays are in fact just JavaScript objects&mdash;but with a special twist
 
-> ***IMPORTANMT***
+> ***IMPORTANT***
 >
 > JavaScript Array elements are simply object properties whose names are the ***string representation*** of the element's index number
 
@@ -121,7 +125,8 @@ listOfThings.1          // Uncaught SyntaxError: Unexpected number
 listOfThings."1"        // Uncaught SyntaxError: Unexpected string
 ```
 
-So, here we can see that the element at index `1` can be referenced using either the integer `1` ***or*** by the string representation of that integer `"1"`.  These two references are equivalent.
+So, here we can see that the element at index `1` can be referenced using either the integer `1` ***or*** by the string representation of that integer `"1"`.
+These two references are equivalent.
 
 ***Q:***&nbsp;&nbsp;&nbsp; Ok, so what about adding new elements to the array?
 ***A:***&nbsp;&nbsp;&nbsp; Again, there are multiple ways of doing this.
@@ -159,8 +164,8 @@ listOfThings["first"] = "Some value"
 listOfThings["first"]                        // "Some value"
 listOfThings.first                           // "Some value"
 
-listOfThings.length                          // 4 - Huh?
-listOfThings = ["ball","cup","pen","car"]    // But didn't we just add a new array element?
+listOfThings.length                          // 4 - Huh? Wait!
+listOfThings = ["ball","cup","pen","car"]    // Didn't we just add a new array element?
 ```
 
 The problem here is that we have added a new property called `first` to the `listOfThings` ***object***, but that property is not recognised as being an element of the ***array*** because its name is not the string representation of a number.
@@ -171,11 +176,12 @@ So, the mistake here was to confuse the properties of object `listOfItems` with 
 
 > IMPORTANT
 >
-> The elements of an Array object are nothing more than a specially named subset of that object's properties
+> The elements of an Array object are nothing more than a special subset of object properties, where the element names are the string representations of numerical indices.
 
 ### What the Array `.length` Property Does Not Mean...
 
-The `.length` property of an array does not always return the expected value.  For instance:
+The `.length` property of an array ***does not*** necessarily return the number of elements you expect to find in an array.
+For instance, consider this little snippet:
 
 ```javascript
 // Create an empty array

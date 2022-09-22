@@ -11,12 +11,12 @@ Ok, now it's time to switch your brain into [lateral thinking](https://en.wikipe
 ### Coercing an Empty Object
 
 ***Q:***&nbsp;&nbsp; What do you get if you coerce an empty object `{}` to a string?<br>
-***A:***&nbsp;&nbsp; The accurate, but generally unhelpful answer of `"{object Object}"`
+***A:***&nbsp;&nbsp; The accurate, but generally unhelpful answer of `"[object Object]"`
 
 So, if we coerce (or overload) the `+` operator to perform string concatenation instead of arithmetic addition, what will we get?
 
 ```javascript
-1 + {}       // "1{object Object}"
+1 + {}      // "1{object Object}"
 ```
 
 Ok, that kinda makes sense...
@@ -24,11 +24,10 @@ Ok, that kinda makes sense...
 But what about:
 
 ```javascript
-!{}          // false of course...
+!{}         // false of course...
 ```
 
-Well, given that JavaScript arbitrarily coerces an empty object to `true`, I suppose it makes sense because the logical NOT of `true` is `false`...
-
+Well, given that JavaScript arbitrarily coerces all objects to `true`, I suppose it makes sense because the logical NOT of `true` is `false`...
 
 ### Coercing an Empty Array
 
@@ -38,25 +37,25 @@ Well, given that JavaScript arbitrarily coerces an empty object to `true`, I sup
 So, this makes perfect sense...
 
 ```javascript
-1 + []       // "1"
+1 + []      // "1"
 ```
 
-But as with empty object `{}`, empty array `[]` is also arbitrarily coerced to `true`; so, this also makes perfect sense:
+But since an `Array` is just an object and all objects are coerced to `true`, we shouldn't be surprised to see this:
 
 ```javascript
-![]        // false
+![]         // false
 ```
 
-***Q:***&nbsp;&nbsp; What do you get if you try to coerce an array `[]` to a number?<br>
+***Q:***&nbsp;&nbsp; What do you get if you try to coerce an empty array `[]` to a number?<br>
 ***A:***&nbsp;&nbsp; Well, that depends on what the first element of the array contains...
 
 
 ```javascript
-+[]        // 0. The array is empty, so element zero is undefined and undefined coerces to 0
-+[""]      // 0. Element zero is the empty string which coerces to false, and false coerces to 0
-+["2"]     // 2. Element zero contains a numeric string, so this converts successfully
-+["Hi"]    // NaN. Element zero is a string with no valid numeric representation
-+[1,"2"]   // NaN - because it just does alright!!
++[]         // 0    The array is empty, so element zero is undefined and undefined coerces to 0
++[""]       // 0    Element zero is the empty string which coerces to false, and false coerces to 0
++["2"]      // 2    Element zero contains a numeric string, so this converts successfully
++["Hi"]     // NaN  Element zero is a string with no valid numeric representation
++[1,"2"]    // NaN  Because it just does alright!!
 ```
 
 ![WAT](/assets/chriswhealy/wat.jpeg)
@@ -67,7 +66,7 @@ With apologies to [Gary Bernhardt](https://www.destroyallsoftware.com/talks/wat)
 Of course, an empty array referenced by an empty array inside an empty array is clearly `undefined`:
 
 ```javascript
-[][[]]         // undefined
+[][[]]      // undefined
 ```
 
 Finally! Something that makes sense...
@@ -77,9 +76,9 @@ Finally! Something that makes sense...
 So, we could derive the Boolean values in a backwards kind of way:
 
 ```javascript
-![]        // false
-!![]       // true
-!+[]       // true
+![]         // false
+!![]        // true
+!+[]        // true
 ```
 
 Hey, why not use Boolean truthiness to coerce these values back to numbers?
