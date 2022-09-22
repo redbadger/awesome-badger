@@ -82,7 +82,7 @@ Let's now take the perfectly reasonable step of giving our custom object both a 
 
 ```javascript
 let someObj = { toString: () => "Blah", valueOf: () => "Surprise!" }
-`${someObj}    // 'Blah'         Yup, that's what we want
+`${someObj}`   // 'Blah'         Yup, that's what we want
 someObj + ""   // 'Surprise!'    Huh?! Why wasn't toString() called?
 ```
 
