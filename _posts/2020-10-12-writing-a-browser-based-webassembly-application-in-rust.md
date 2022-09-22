@@ -15,33 +15,34 @@ img_path: /assets/chriswhealy/
 
 The purpose of this blog is not to explain any of the principles of acoustics or how to interpret the data plotted on the graphs shown below, but rather to describe the architecture of a browser-based WebAssembly application written in Rust.
 
-If you wish to see an explanation of the basic acoustic principles behind the Porous Absorber Calculator spreadsheet, please watch this [video](https://genomics.zoom.us/rec/share/QAOteL-hsuIyW4BgccBDIILheEHAiJigpxOoIkOFMyaEgnwxgEtVFi1uErxVayVJ.XC83qC8QKI0FpsSj).  The slides used in that presentation are available [here](http://whealy.com/acoustics/PA_Calculator/Porous%20Absorber%20(Print).pdf)
+If you wish to see an explanation of the basic acoustic principles behind the Porous Absorber Calculator spreadsheet, please watch this [video](https://genomics.zoom.us/rec/share/QAOteL-hsuIyW4BgccBDIILheEHAiJigpxOoIkOFMyaEgnwxgEtVFi1uErxVayVJ.XC83qC8QKI0FpsSj).
+The slides used in that presentation are available [here](http://whealy.com/acoustics/PA_Calculator/Porous%20Absorber%20(Print).pdf)
 
 All the Rust coding examples shown below are taken from the Git repo for the [Porous Absorber Calculator](https://github.com/chriswhealy/porous_absorber)
 
 ## Introduction
 
-My interest in room acoustics started in 2003 when I became involved in the design and build of a recording studio control room.  As part of studying this subject, I implemented what I had learnt in two Excel spreadsheets: the first was a general purpose tool for determining the [reverberation time of a rectilinear control room](http://whealy.com/acoustics/Control%20Room%20Calculator%20V2.67%20XL2007.zip), and the second was a tool for plotting the [absorption curve of a porous absorber](http://whealy.com/acoustics/Porous%20Absorber%20Calculator%20V1.59.xlsm.zip)
+My interest in room acoustics started in 2003 when I became involved in the design and build of a recording studio control room.
+As part of studying this subject, I implemented what I had learnt in two Excel spreadsheets: the first was a general purpose tool for determining the [reverberation time of a rectilinear control room](http://whealy.com/acoustics/Control%20Room%20Calculator%20V2.67%20XL2007.zip), and the second was a tool for plotting the [absorption curve of a porous absorber](http://whealy.com/acoustics/Porous%20Absorber%20Calculator%20V1.59.xlsm.zip)
 
 In Excel, the Control Room Calculator look like this:
 
-[![Control Room Spreadsheet](/assets/chriswhealy/Control%20Room%20Excel%20Screenshot.png)](http://whealy.com/acoustics/Control%20Room%20Calculator%20V2.67%20XL2007.zip)
+![Control Room Spreadsheet](/assets/chriswhealy/Control%20Room%20Excel%20Screenshot.png)
 
 And the Porous Absorber Calculator look like this:
 
-[![Porous Absorber Spreadsheet](/assets/chriswhealy/Porous%20Abs%20Excel%20Screenshot.png)](http://whealy.com/acoustics/Porous%20Absorber%20Calculator%20V1.59.xlsm.zip)
-
+![Porous Absorber Spreadsheet](/assets/chriswhealy/Porous%20Abs%20Excel%20Screenshot.png)]
 
 Unfortunately due to their age, these spreadsheets will only function correctly in the Windows version of Excel (sorry, Mac users...)
 
 ### Fast Forward to 2019
 
-Having just been made redundant from my previous job and having lots of time on my hands, I decided to learn Rust &mdash; primarily because it compiles to WebAssembly.  After completing the simpler coding exercises, I needed a more real-life application to work on and decided to reimplement my Porous Absorber spreadsheet as a Web-based, WebAssembly app.
+Having just been made redundant from my previous job and having lots of time on my hands, I decided to learn Rust &mdash; primarily because it compiles to WebAssembly.
+After completing the simpler coding exercises, I needed a more real-life application to work on and decided to reimplement my Porous Absorber spreadsheet as a Web-based, WebAssembly app.
 
 Seeing as this was my first real-life app, it took me a while to work out how to get all the pieces to fit together, but after a couple of months of battling my own inexperience, I was able to get this Web-based app up and running.
 
 [![Porous Absorber Web App](/assets/chriswhealy/Porous%20Abs%20Screenshot.png)](http://whealy.com/acoustics/PA_Calculator/index.html)
-
 
 ## General Architecture
 
@@ -53,11 +54,14 @@ The objective here was to create an app that runs in the browser; however, since
 
 ### Compiling Rust to WebAssembly
 
-To compile a Rust application into a WebAssembly module, you need to use a tool such as [`wasm-pack`](https://rustwasm.github.io/wasm-pack/installer/).  This tool acts as a wrapper around `cargo build` and generates a WebAssembly module (a `.wasm` file) from the compiled Rust code.
+To compile a Rust application into a WebAssembly module, you need to use a tool such as [`wasm-pack`](https://rustwasm.github.io/wasm-pack/installer/).
+This tool acts as a wrapper around `cargo build` and generates a WebAssembly module (a `.wasm` file) from the compiled Rust code.
 
-However, WebAssembly modules can be executed in a wide variety host environments.  In our case, we wish to execute this WebAssembly module in a browser, so our specific host environment will be the JavaScript runtime environment within a browser.  This therefore means that the `--target` parameter of `wasm-pack` must be set to `web`.
+However, WebAssembly modules can be executed in a wide variety host environments.
+In our case, we wish to execute this WebAssembly module in a browser, so our specific host environment will be the JavaScript runtime environment within a browser.
+This therefore means that the `--target` parameter of `wasm-pack` must be set to `web`.
 
-```console
+```bash
 $ wasm-pack build --release --target web
 [INFO]: 🎯  Checking for the Wasm target...
 [INFO]: 🌀  Compiling to Wasm...
@@ -80,11 +84,11 @@ The polyfill acts as a wrapper around the WebAssembly module and enables us to u
 This makes consumption of WebAssembly-based functionality super-easy.
 
 ```javascript
-import init
-, { porous_absorber
-  , slotted_panel
-  , perforated_panel
-  , microperforated_panel
+import init,
+  { porous_absorber,
+    slotted_panel,
+    perforated_panel,
+    microperforated_panel,
   } from '../pkg/porous_absorber_calculator.js'
 ```
 
@@ -99,11 +103,10 @@ $ cargo new --lib some_project
      Created library `some_project` package
 ```
 
-
 ### Declare a Dependency on `wasm-bindgen`
 
-
-When writing a Rust application for WebAssembly, the first thing to do is declare a dependency on the [`wasm-bindgen`](https://rustwasm.github.io/docs/wasm-bindgen/introduction.html) crate.  As with all Rust dependencies, this declaration is made in your project's `Cargo.toml` file:
+When writing a Rust application for WebAssembly, the first thing to do is declare a dependency on the [`wasm-bindgen`](https://rustwasm.github.io/docs/wasm-bindgen/introduction.html) crate.
+As with all Rust dependencies, this declaration is made in your project's `Cargo.toml` file:
 
 ```toml
 [dependencies.wasm-bindgen]
@@ -111,7 +114,7 @@ version = "^0.2"
 features = ["serde-serialize"]
 ```
 
-In addition to stating our dependency on the `wasm-bindgen` crate, the above statement additionally declares the use of the optional crate feature `serde-serialize` (JSON (de)serialization functionality will be needed when transferring information to and from JavaScript)
+In addition to stating our dependency on the `wasm-bindgen` crate, the above statement additionally declares the use of the optional crate feature `serde-serialize` (JSON (de)serialization functionality will be needed when transferring information to and from JavaScript).
 
 Now that this basic dependency has been stated, we can start to write some Rust coding that is intended for invocation from the WebAssembly host environment.
 
@@ -121,7 +124,7 @@ In the top-level `./src/lib.rs` file, we need to declare at least one function t
 
 In the case of this Porous Absorber Calculator app, there are four entry points - one for each type of absorption device:
 
-* Porous Absober
+* Porous Absorber
 * Slotted Panel Absorber
 * Perforated Panel Absorber
 * Microperforated Panel Absorber
@@ -135,7 +138,8 @@ pub fn porous_absorber(wasm_arg_obj: JsValue) -> JsValue {
 }
 ```
 
-This macro identifies the subsequent function as an entry point for coding running in the WebAssembly host environment.  In other words, we're using this macro to construct the WebAssembly module's public API.
+This macro identifies the subsequent function as an entry point for coding running in the WebAssembly host environment.
+In other words, we're using this macro to construct the WebAssembly module's public API.
 
 There are a couple of things to notice here:
 
@@ -144,21 +148,22 @@ There are a couple of things to notice here:
 
 ### So, What Values are of Type `JsValue`?
 
-At the moment, the datatype `JsValue` is something of an untyped-type and does not exist as a specific datatype in Rust.  The actual transfer of data between Rust and the JavaScript host environment happens in the generated JavaScript coding.
+At the moment, the datatype `JsValue` is something of an untyped-type and does not exist as a specific datatype in Rust.
+The actual transfer of data between Rust and the JavaScript host environment happens in the generated JavaScript coding.
 
-Suffice it to say, when you call the exposed `porous_absorber` function from JavaScript, all you need to do is pass in a regular JavaScript object.  Then, when the data arrives on the Rust side of the interface, you will receive a serialized JSON object as a text string.
-
+Suffice it to say, when you call the exposed `porous_absorber` function from JavaScript, all you need to do is pass in a regular JavaScript object.
+Then, when the data arrives on the Rust side of the interface, you will receive a serialized JSON object as a text string.
 
 #### Handling Incoming JavaScript Data in Rust
 
 Upon arrival in the Rust function, the serialized JSON object must first be deserialized; however, this process usually happens in two steps:
 
-1. Deserialize the entire JSON string into a Rust struct whose fields are all of type `String`.
-1. Then if necessary, parse the individual `String` values into the relevant Rust data type.
+1. Deserialize the entire JSON string into a Rust `struct` whose fields are all of type `String`.
+1. Then if necessary, parse the individual `String` values into the relevant Rust datatype.
 
 In the case of the `porous_absorber` function, this receives the `wasm_arg_obj` parameter from JavaScript and passes it straight through to function `do_porous_absorber_device` which then does the following:
 
-1. First the JSON string is deserialized into a predefined struct whose fields are all of type `String`:
+1. First the JSON string is deserialized into a predefined `struct` whose fields are all of type `String`:
 
     ```rust
     #[derive(Deserialize)]
@@ -203,9 +208,10 @@ JsValue::from_serde(&chart_info).unwrap()
 
 ### Calling JavaScript Functionality from Rust
 
-In order for the Rust coding to invoke functionality in the host environment, we need to use the `#[wasm-bindgen]` macro in conjunction with Rust's Foreign Function Interface (FFI)
+In order for the Rust coding to invoke functionality in the host environment, we need to use the `#[wasm-bindgen]` macro in conjunction with Rust's Foreign Function Interface (FFI).
 
-A typical task for a Web-based application is to be able to write trace/debug output to the Browser's console.  This can be done as follows:
+A typical task for a Web-based application is to be able to write trace/debug output to the Browser's console.
+This can be done as follows:
 
 In any module that requires this functionality, declare the use of an FFI in conjunction with the `#[wasm-bindgen]` macro:
 
@@ -235,7 +241,8 @@ To do this, first need to declare the use of another crate: `web-sys`.
 
 The `web-sys` crate provides access to all aspects of the Browser's API; however, as you might well realise, a Browser's API contains a ***huge*** number of functions - most of which are not relevant for our immediate task.
 
-Therefore, in order to avoid declaring dependencies on functions that will never be needed, each API function is exposed as an optional Rust crate `feature`.  Now, rather than making a single declaration that pulls in all the functions in the API, each required function must be declared on an as-needed basis.
+Therefore, in order to avoid declaring dependencies on functions that will never be needed, each API function is exposed as an optional Rust crate `feature`.
+Now, rather than making a single declaration that pulls in all the functions in the API, each required function must be declared on an as-needed basis.
 
 So, your `Cargo.toml` entry for `web-sys` must explicitly list each required function as a `feature` and would look something like this:
 
@@ -243,19 +250,20 @@ So, your `Cargo.toml` entry for `web-sys` must explicitly list each required fun
 [dependencies.web-sys]
 version = "^0.3.4"
 features = [
-  'CanvasRenderingContext2d'
-, 'Document'
-, 'Element'
-, 'HtmlCanvasElement'
-, 'HtmlImageElement'
-, 'TextMetrics'
-, 'Window'
+  'CanvasRenderingContext2d',
+  'Document',
+  'Element',
+  'HtmlCanvasElement',
+  'HtmlImageElement',
+  'TextMetrics',
+  'Window'
 ]
 ```
 
 #### Accessing Specific DOM Elements
 
-Using these `web-sys` features, we are now able to access not only the HTML `canvas` element, but the 2D rendering context object within the `canvas` element.  The following code is taken from function [`device_diagram`](https://github.com/chriswhealy/porous_absorber/blob/32ed616b3f613a96d2182ac7941c67f885164e91/src/chart/render/draw.rs#L47) in the module `chart::render::draw`:
+Using these `web-sys` features, we are now able to access not only the HTML `canvas` element, but the 2D rendering context object within the `canvas` element.
+The following code is taken from function [`device_diagram`](https://github.com/chriswhealy/porous_absorber/blob/32ed616b3f613a96d2182ac7941c67f885164e91/src/chart/render/draw.rs#L47) in the module `chart::render::draw`:
 
 ```rust
 pub fn device_diagram(
@@ -295,7 +303,9 @@ It is also worth commenting on the use of function `dyn_into::<T>()`.
 
 Since JavaScript is an untyped language, when we call `get_element_by_id`, we just have to trust that the object we get back really is of the type we expect.
 
-So when the `canvas_el` object is created in the coding above, the Rust compiler is unable to make any guarantees that the returned object really is an HTML `canvas` element.  Consequently, we need to perform a dynamic cast of the object that ***might*** be a `canvas` element into an object that ***really is*** a `canvas` element.  This is why from time to time, we have to call function `dyn_into::<T>()`.
+So when the `canvas_el` object is created in the coding above, the Rust compiler is unable to make any guarantees that the returned object really is an HTML `canvas` element.
+Consequently, we need to perform a dynamic cast of the object that ***might*** be a `canvas` element into an object that ***really is*** a `canvas` element.
+This is why from time to time, we have to call function `dyn_into::<T>()`.
 
 #### Manipulating the HTML Canvas
 
@@ -329,11 +339,12 @@ fn draw_point(
 ```
 
 > ***Another Aside***<br>
-> If you're wondering why the constant `TAU` pops up every now and again instead of the expected value `2.0 * std::f64::consts::PI`, then please read the [Tau Manifesto](https://tauday.com/tau-manifesto/)
-
+> If you're wondering why the constant `TAU` pops up every now and again instead of the expected value `2.0 * std::f64::consts::PI`, then please read the [Tau Manifesto](https://tauday.com/tau-manifesto/).
 
 ## Conclusion
 
-In reality, writing a browser-based app in Rust is not much harder than writing a browser-based app in JavaScript.  There are of course fundamental differences in the language constructs being employed, but the additional steps of compiling a Rust app to WebAssembly, then consuming that WebAssembly module via its JavaScript polyfill are both very straight-forward.
+In reality, writing a browser-based app in Rust is not much harder than writing a browser-based app in JavaScript.
+There are of course fundamental differences in the language constructs being employed, but the additional steps of compiling a Rust app to WebAssembly, then consuming that WebAssembly module via its JavaScript polyfill are both very straight-forward.
 
-There are however, certain areas of Rust functionality that do not yet *"play nicely"* with the interface between WebAssembly and JavaScript &mdash; most noticably is the fact that the `JsValue` data type mentioned above cannot be used in multi-threaded coding.  Even with this restriction though, very useful and powerful applications can be written in Rust which, when compiled to WebAssembly, will run very smoothly in the browser.
+There are however, certain areas of Rust functionality that do not yet *"play nicely"* with the interface between WebAssembly and JavaScript &mdash; most noticeable is the fact that the `JsValue` data type mentioned above cannot be used in multi-threaded coding.
+In spite of this restriction, very useful and powerful applications can be written in Rust which, when compiled to WebAssembly, will run very smoothly in the browser.
