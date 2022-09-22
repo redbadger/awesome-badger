@@ -5,7 +5,7 @@ date:   2021-09-24 12:00:00 +0000
 redirect_from: /chriswhealy/toStringOrNotToString/
 category: chriswhealy
 author: Chris Whealy
-excerpt: toString, or not toString?<br>That is the question&mdash;<br>Whether 'tis nobler in the mind to suffer the slings and arrows of ourageous type coercion...
+excerpt: toString, or not toString?<br>That is the question&mdash;<br>Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous type coercion...
 ---
 
 > toString, or not toString? That is the question&mdash;<br>
@@ -58,19 +58,21 @@ Let's say that our custom object no longer has a `toString` function, but instea
 let someObj = { valueOf: () => "Surprise!" }
 ```
 
-Again, let's try our two approaches for performing string conversion.  First, let's use a template literal:
+Again, let's try our two approaches for performing string conversion.
+First, let's use a template literal:
 
 ```javascript
 `${someObj}`    // '[object Object]'  Uhhh, what!?
 ```
 
-Hmmm, that didn't work.  Let's try overloading the `+` operator:
+Hmmm, that didn't work.
+Let's try overloading the `+` operator:
 
 ```javascript
 someObj + ""    // 'Surprise!'  OK, that's better
 ```
 
-The problem here is that the template literal specifically calls an object's `toString` function, but if that function is missing, it simply gives up and prints `[object Object]`
+The problem here is that the template literal specifically calls an object's `toString` function, but if that function is missing, it simply gives up and prints `[object Object]`.
 
 The overloaded `+` operator on the other hand, appears to see that the object does not contain a `toString` function, and instead of giving up, calls the next best function &ndash; `valueOf` (then converts whatever value it receives into a string).
 
