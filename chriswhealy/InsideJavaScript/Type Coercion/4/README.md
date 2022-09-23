@@ -98,13 +98,19 @@ So, based on the above explanation, we now understand how and why this code snip
 
 The `person` function expects to receive an argument call `fName`, so if a runtime argument is supplied for `fName`:
 
-1. We know that the OR operator stops testing as soon as the first truthy operand is encountered
-1. The OR operator returns the value of the last operand it tested&mdash;which in this case, is the value supplied in argument `fName`
+1. The caller supplies a value for the `fName` argument&mdash;and we are counting on that value being truthy
+1. The OR operator stops testing as soon as it encounters a truthy operand
+1. The OR operator returns the value of the last operand it tested
 
-However, if no argument value is supplied, then `fName` automatically takes on the value `undefined`:
+Hence, the argument value supplied in `fName` is assigned to the object property `firstName`
 
-1. We know both that `undefined` is falsey and that the OR operator returns the value of the ***last*** operand it tests
-1. The last operand is the hard-coded string `"Not specified"`, so this value is returned; hence, the property takes on the default value
+However, if no argument value is supplied for `fName`:
+
+1. The caller does not supply a value for `fName`, so it automatically becomes `undefined`&mdash; which is falsey
+1. The OR operator stops testing as soon as it encounters a truthy operand
+1. The OR operator returns the value of the last operand it tests
+
+Hence, the default value `"Not specified"` is assigned to the object property `firstName`
 
 ## WARNING! We Have Made a Dangerous Assumption!
 
