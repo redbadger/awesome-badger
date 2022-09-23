@@ -143,12 +143,12 @@ The above code works as follows:
 1. We declare a constant called `typeOf` that, using the arrow syntax, is of type `function`.
 
    ```javascript
-   const typeOf = x => ...
+   > const typeOf = x => ...
    ```
    This function takes a single argument `x` that represents the thing whose datatype we wish to discover.
 
 1. ```javascript
-   const typeOf = x => Object.prototype.toString...
+   > const typeOf = x => Object.prototype.toString...
    ```
 
    As with all JavaScript objects, the universal object `Object` inherits its properties from a `prototype` that contains (among other things) a function called `toString` that returns a printable representation of the object to which it belongs.
