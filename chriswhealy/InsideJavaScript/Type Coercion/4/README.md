@@ -30,7 +30,7 @@ In JavaScript, the Boolean operators AND and OR are expressions: this means that
 | Operator | If `true` is returned, this is&hellip; | If `false` is returned, this is&hellip;
 |---|---|---
 | AND `&&` | The value of the ***last*** operand to be evaluated | The ***first*** operand that evaluates to `false`
-| OR `\|\|` | The ***first*** operand that evaluates to `true` | The value of the ***last*** operand to be evaluated
+| OR <code>&vert;&vert;</code> | The ***first*** operand that evaluates to `true` | The value of the ***last*** operand to be evaluated
 
 Knowing this, we can simplify certain parts of our code.
 
