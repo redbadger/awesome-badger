@@ -147,7 +147,7 @@ The above code works as follows:
    ```
    This function takes a single argument `x` that represents the thing whose datatype we wish to discover.
 
-1. ```
+1. ```javascript
    const typeOf = x => Object.prototype.toString...
    ```
 
