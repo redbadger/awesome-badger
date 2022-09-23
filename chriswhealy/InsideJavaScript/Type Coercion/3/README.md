@@ -136,34 +136,52 @@ However, if you're not using any such library, it’s easy enough to create your
 const typeOf = x => Object.prototype.toString.apply(x).slice(8).slice(0, -1)
 ```
 
-> ***Explanation***
->
-> The above code works as follows:
->
-> `const typeOf = x => ...`
->
-> We declare a constant called `typeOf` that, using the arrow syntax, is of type `function`.
-This function takes a single argument `x` that represents the thing whose datatype we wish to discover.
->
-> `const typeOf = x => Object.prototype.toString()...`
->
-> As with all JavaScript objects, the universal object `Object` inherits its properties from a `prototype` that contains (among other things) a function called `toString`.
->
-> The `toString` function returns the string representation of whatever object it belongs to.
-> However, if we directly called `Object.prototype.toString()`, it would return the string representation of `Object.prototype`&mdash;which is not what we want.
-> So we call the `apply` function belonging to function `toString` and supply the argument `x` received by our `typeOf` function.
-> The use of `apply` allows us to call `x.toString()` without needing to know exactly what `x` is.
->
-> `const typeOf = x => Object.prototype.toString.apply(x)...`
->
-> We now have the full string representation of the object in question.
->
-> However, this string contains extra characters we're not interested in, so the last thing to do is chop off the first 8 characters using `slice(8)`, then chop off the last character using `slice(0,-1)`.
+### Explanation
 
-On its own, this function will return a character string containing the actual datatype of whatever value it is passed.
-In addition, running this function without passing any argument returns the accurate value `Undefined`.
+The above code works as follows:
 
-This function can then easily be used as the foundation to create simple predicate functions:
+1. We declare a constant called `typeOf` that, using the arrow syntax, is of type `function`.
+
+   ```javascript
+   const typeOf = x => ...
+   ```
+   This function takes a single argument `x` that represents the thing whose datatype we wish to discover.
+
+1. ```
+   const typeOf = x => Object.prototype.toString...
+   ```
+
+   As with all JavaScript objects, the universal object `Object` inherits its properties from a `prototype` that contains (among other things) a function called `toString` that returns a printable representation of the object to which it belongs.
+
+   However, if we directly called `Object.prototype.toString()`, it would return the string representation of `Object.prototype`&mdash;which is not what we want.
+   So we call the `apply` function belonging to function `toString` and supply the argument `x` received by our `typeOf` function.
+
+   The `apply` function provides an indirect means for calling `x.toString()` without needing to know exactly what `x` is.
+
+1. ```javascript
+   > const typeOf = x => Object.prototype.toString.apply(x)
+   > typeOf("")
+   '[object String]'
+   > typeOf(null)
+   '[object Null]'
+   ```
+
+   We now have the full string representation of whatever value we pass to `typeOf`.
+
+1. However, as you can see, this string contains extra characters that are of no interest to us.
+   So the last thing to do is chop off the first 8 characters using `slice(8)`, then chop off the last character using `slice(0,-1)`.
+
+   ```javascript
+   const typeOf = x => Object.prototype.toString.apply(x).slice(8).slice(0, -1)
+   ```
+
+
+Now we have a custom `typeOf` function that returns a character string containing the ***actual*** datatype of whatever value it is passed.
+In addition, running this function without passing any argument returns the accurate response `Undefined`.
+
+### Datatype Predicate Functions
+
+Our custom `typeOf` function can now be used as the foundation to create simple predicate functions:
 
 ```javascript
 // Return the actual datatype of the argument
