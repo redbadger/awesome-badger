@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "WebAssembly Memory Growth and the Detached ArrayBuffer Problem"
-date:   2022-10-06 12:00:00 +0000
+date:   2022-10-05 12:00:00 +0000
 category: chriswhealy
 author: Chris Whealy
 excerpt: When JavaScript acts as the host environment for WebAssembly, shared memory is visible to JavaScript as an ArrayBuffer.  WebAssembly memory is allowed to grow, but JavaScript ArrayBuffers are not; so what happens when your Rust program (compiled to WebAssembly) asks for more memory?
