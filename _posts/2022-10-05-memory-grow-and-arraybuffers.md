@@ -10,7 +10,7 @@ excerpt: When JavaScript acts as the host environment for WebAssembly, shared me
 ## Context
 
 * A WebAssembly module and its host environment can share a block of linear memory.
-* If JavaScript acts as the host environment, then shared memory is appears as a JavaScript [`ArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
+* If JavaScript acts as the host environment, then shared memory appears as a JavaScript [`ArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 * JavaScript cannot directly manipulate the contents of an `ArrayBuffer`.
    Instead, it must use some sort of overlay or mask such as a `Uint8Array` or a `Uint32Array`.
    Then the data in the `ArrayBuffer` can be accessed using the overlaid structure's semantics.
