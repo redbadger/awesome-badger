@@ -7,7 +7,7 @@
 
 ## 3.1: Shared Memory
 
-When JavaScript and WebAssembly interact, it is typical for these two runtime environments access a shared block of memory.
+When JavaScript and WebAssembly interact, it is typical for these two runtime environments to exchange data using a block of shared memory.
 
 
 ### How Much Shared Memory Do We Need?
@@ -30,15 +30,15 @@ Therefore, we need to calculate how many whole memory pages to allocate:
 Math.ceil(1440000 / 65536) = 22 pages
 ```
 
-### Colour Palette Memory
+#### Colour Palette Memory
 
 In addition to the memory needed for the image, we also need to allocate some memory for the colour palette.[^1]
 
-The colour palette is simply a precalculated lookup table that allows us to translate an iteration value into a colour.
+The colour palette is simply a precalculated lookup table that allows us to translate an iteration value into an RGBA colour value.
 Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
 
 ```javascript
-(32768 * 4) / 65536 = 2 pages
+(32768 colours * 4 bytes per colour) / 65536 = 2 pages
 ```
 
 #### Total Memory Requirements
@@ -70,7 +70,7 @@ const wasmMemory = new WebAssembly.Memory({
 const wasmMem8 = new Uint8ClampedArray(wasmMemory.buffer)
 ```
 
-In the case of WebAssembly memory however, we do not need to allocate a specific `ArrayBuffer` object because one is created for us when we call `new WebAssembly.Memory()`.[^2]
+Since we are allocating memory in JavaScript, then sharing it with WebAssembly, we do not need to allocate a specific `ArrayBuffer` object because one is created for us when we call `new WebAssembly.Memory()`.[^2]
 
 We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer`.
 This will be needed to transfer the image data from WebAssembly shared memory to the `canvas`.
@@ -120,7 +120,7 @@ Now, assuming that our (as yet, unwritten) WebAssembly module lives in the same 
 ```javascript
 const wasmObj = await WebAssembly.instantiateStreaming(
   fetch('./mandel_plot.wasm'), // Asynchronously fetch the .wasm file
-  host_fns                     // The host environment resources being shared with this module instance
+  host_fns                     // The host resources being shared with this module instance
 )
 ```
 
@@ -129,5 +129,5 @@ Notice that instantiating a WebAssembly module requires the use of `await`; ther
 ---
 
 [^1]: It is possible to avoid the need for storing colour palette information by dynamically calculating the colour value each time a pixel iteration value is calculated; however, this is not a very efficient approach because each iteration value translates to a static colour value.  Therefore, it is much more efficient to precalculate all the colour values from 1 to `max_iters` and store them in a lookup table.
-[^2]: We will not need to deal with this particular problem here, but it is worth knowing that under certain circumstances, the `ArrayBuffer` used by JavaScript to access WebAssembly's shared memory can become invalid, and will need to be recreated.  See [this blog](https://awesome.red-badger.com/chriswhealy/memory-grow-and-arraybuffers) for details
+[^2]: We will not need to deal with this particular problem here, but it is worth knowing that under certain circumstances, the `ArrayBuffer` used by JavaScript to share memory with a WebAssembly module can become invalid.  At this point, you must throw away the old JavaScript `ArrayBuffer` and allocate a new one.<br>See [this blog](https://awesome.red-badger.com/chriswhealy/memory-grow-and-arraybuffers) for details
 [^3]: Pay attention here!  This a good example of where, within its own memory space, a WebAssembly program only has the memory safety you give it.  If you're not careful, you can end up writing code that tramples over top of other data structures in your own memory.
