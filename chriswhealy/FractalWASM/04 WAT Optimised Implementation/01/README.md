@@ -30,7 +30,7 @@ If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to
 Hence, the `i32` returned by this function can be treated as a Boolean:
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Main cardioid check
 (func $is_in_main_cardioid
       (param $x f64)
@@ -71,7 +71,7 @@ Again, in JavaScript, this is:
 Here's the WebAssembly function that implements this check:
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Period 2 bulb check: ($x + 1)^2 + $y^2 <= 0.0625
 (func $is_in_period_two_bulb
       (param $x f64)
@@ -95,7 +95,7 @@ Here's the WebAssembly function that implements this check:
 Finally, we can combine these two functions into a simple check for early bailout
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Check for early bailout
 (func $early_bailout
       (param $x f64)
