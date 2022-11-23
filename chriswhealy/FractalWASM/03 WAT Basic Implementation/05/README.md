@@ -8,14 +8,14 @@
 Now that we have a bare-bones function to calculate the value of a single pixel, we can simply call this function for every pixel in the image.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot set
 (func (export "mandel_plot")
       (param $width i32)     ;; Canvas width
       (param $height i32)    ;; Canvas height
       (param $origin_x f64)  ;; X origin coordinate
       (param $origin_y f64)  ;; Y origin coordinate
-      (param $ppu i32)       ;; Number of canvas pixels per unit on the complex plane (I.E. zoom level)
+      (param $ppu i32)       ;; Canvas pixels per unit on the complex plane (I.E. zoom level)
       (param $max_iters i32) ;; Maximum iteration count
 
   (local $x_pos i32)
@@ -135,17 +135,17 @@ When looking through the coding, the following points are important:
 1. Since this function works using two different frames of reference (pixel locations in the canvas image and coordinates on the complex plane), it needs to know:
     1.  How to transform a canvas pixel location to the corresponding coordinates in the complex plane.
     These two frames of reference are linked by supplying the arguments `$origin_x` and `$origin_y`.
-    These are the X and Y coordinates of the central pixel in the image and vary as the user zooms in an out of different areas of the Mandelbrot Set.
+    These are the X and Y coordinates of the central pixel in the image and vary as the user zooms in and out of different areas of the Mandelbrot Set.
     
     1. At what zoom level is the image being rendered?
     
        To answer this question, we must supply the argument `$ppu` (or pixels per unit).
-       To plot the entire Mandelbrot Set, we need 200 pixels per unit on the complex plane: hence `$ppu = 200`.
+       To plot the initial view of the entire Mandelbrot Set, one unit on the complex plane occupies 200 pixels in our 800 by 450 pixel image: hence `$ppu = 200`.
 
 1. The basic structure of the WAT function follows the structure used in the JavaScript implementation; that is, a pair of nested loops.
 
 1. Certain optimisations have been implemented in order to avoid calculating the same value multiple times.
-   Hence the need for intermediate values such as `$half_width`, `$half_height`, `$cx_int` and `$cy_int`
+   Hence intermediate values such as `$half_width`, `$half_height`, `$cx_int` and `$cy_int`
 
 1. It is very important to remember that the `$x_pos` and `$y_pos` loop counters are integers that count off pixel positions in the canvas, but the escape-time algorithm requires coordinate values.
    This has two consequences:
