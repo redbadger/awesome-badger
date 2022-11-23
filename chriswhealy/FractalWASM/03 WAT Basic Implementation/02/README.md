@@ -27,13 +27,12 @@ Having created a file called `mandel_plot.wat`, start by defining the module and
 
 Notice how the `import` statement uses the two-level namespace to access the relevant properties in the `host_fns` JavaScript object.
 
-***IMPORTANT***
-
-The number of memory pages referenced in the `(memory ...)` clause must be hard-coded to match number of memory pages either supplied or expected by the host environment.
-This value cannot be picked up dynamically from a variable.
+***IMPORTANT***<br>
+The number of memory pages referenced in the `(memory ...)` clause must be hard-coded to match number of memory pages expected from the host environment.
+Unfortunately, this value cannot be defined dynamically from a variable.
 
 For the sake of simplicity, we used WebAssembly global names that are the same as the JavaScript property names.
 So the WebAssembly global value `$image_offset` has the same name as the `host_fns` property `js.image_offset` from which its value has been obtained.
 
 Should you wish to, the global names used within the WebAssembly module can be different from the property names supplied by the host environment.
-However, consider whether having different internal and external names will help or hinder the clarity of your code...
+However, consider whether having different internal and external names for the same value will help or hinder the clarity of your code...
