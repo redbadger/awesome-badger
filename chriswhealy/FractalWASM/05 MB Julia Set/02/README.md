@@ -36,7 +36,7 @@ However, in order for this function to also plot a Julia Set, some extra informa
 The function signature has now expanded and looks like this:
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot or Julia set
 (func (export "mj_plot")
       (param $width i32)         ;; Canvas width
@@ -53,7 +53,7 @@ The function signature has now expanded and looks like this:
 
 #### Skip Early Bailout Check For Julia Sets
 
-Since the test for early bailout only applies when plotting the Mandelbrot Set, we must first what sort of fractal we are plotting.
+Since the test for early bailout only applies when plotting the Mandelbrot Set, we must first check what sort of fractal we are plotting.
 
 All we need to do here is extend the early bailout test by `AND`ing it with the value of the `$is_mandelbrot` flag:
 
