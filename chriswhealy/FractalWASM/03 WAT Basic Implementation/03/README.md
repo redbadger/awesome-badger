@@ -24,7 +24,7 @@ The coding that generates the colour palette does not need to be described in de
 The `$8_bit_clamp` function shown below lives within the `module` definition in file `mandel_plot.wat`
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Derive a single colour component from the iteration and colour threshold values
 (func $8_bit_clamp
       (param $n i32)
@@ -64,7 +64,7 @@ With the `$8_bit_clamp` function in place, we can now create three colour functi
 Since these functions are very small, their definitions can be compressed into a single line:
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Generate colour components
 (func $red   (param $iter i32) (result i32) (call $8_bit_clamp (local.get $iter) (i32.const   0)))
 (func $green (param $iter i32) (result i32) (call $8_bit_clamp (local.get $iter) (i32.const 128)))
@@ -77,7 +77,7 @@ Finally, we take each of the colour component values, shift them left by the app
 Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Transform an iteration value to an ABGR colour
 (func $colour
       (param $iter i32)
@@ -105,7 +105,7 @@ Due to the fact that all modern processors are [little-endian](https://en.wikipe
 This particular palette generation algorithm produces colours that are distributed evenly across their range between `0` and `max_iters`.  However, since we need to generate a static lookup table, should `max_iters` ever change,[^3] then this table will need to be regenerated.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Generate entire colour palette
 (func (export "gen_palette")
       (param $max_iters i32)
@@ -130,7 +130,7 @@ This particular palette generation algorithm produces colours that are distribut
 
 There are several things to notice about this function:
 
-1. Since know that this function will only be invoked from the host environment, and never from another WebAssembly function, there is no need to give this function an internal name.
+1. Since know that this function will only be invoked from the host environment and never from another WebAssembly function, there is no need to give this function an internal name.
 1. This function does not return a specific value, it writes to shared memory; therefore, it has no `result` statement.
 1. In [§3.2](../02/), at the start of the module, we defined a global constant called `$palette_offset` whose value is imported from the host environment as property `js.palette_offset`.
 This value acts as the starting point for calculating where the next `i32` colour value will be written in memory
