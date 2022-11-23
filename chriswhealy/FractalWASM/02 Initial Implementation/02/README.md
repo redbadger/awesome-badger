@@ -7,13 +7,16 @@
 
 ## 2.2: Optimised Escape-Time Implementation
 
-As previously implemented, the `escapeTime` function uses a brute-force approach because the loop only stops when one of our two hard limits is exceeded.  Fortunately however, there are two simple checks we can perform that allow us to avoid running the expensive escape-time loop if the given point lies within either the main cardioid or the period 2 bulb.
+As previously implemented, the `escapeTime` function uses a brute-force approach because the loop only stops when one of our two hard limits is exceeded.
+Fortunately however, there are two simple checks that allow us to avoid running the expensive escape-time loop if the point lies within either the main cardioid or the period 2 bulb.
 
 ![Mandelbrot Regions](/assets/chriswhealy/Mandelbrot%20Regions.png)
 
-Any point lying within these two regions is a member of the Mandelbrot Set which means that its value will ***never*** escape to infinity.  The problem is that using our current approach, for every pixel within these regions, we have to run the escape-time algorithm until it hits the `max_iters` limit simply to determine something we could discover using a significantly smaller amount of CPU time.
+Any point lying within these two regions is a member of the Mandelbrot Set; which means that its value will ***never*** escape to infinity.
+The problem is that using our current approach, for every pixel within these regions, we have to run the escape-time algorithm `max_iters` times when we could discover the same result using a significantly faster computation.
 
-All we need to do now is add a check that takes the (`x`,`y`) coordinates of the pixel location, and checks whether it lies within either of these two regions.
+All we need to do is check whther the (`x`,`y`) coordinates of the pixel location lie within either of these two regions.
+If either of these checks tell us that the current pixel ***is*** a member of the Mandbrot Set, then we don't even start running the escape-time algorith: we simply "bail out" early.
 
 The exact implementation of these functions is not important at the moment; we will simply assume that such functions are available and that calling them is much cheaper than running the escape-time algorithm to completion:
 
@@ -23,7 +26,8 @@ const isInPeriod2Bulb    = (x, y) => ...
 const mandelEarlyBailout = (x, y) => isInMainCardioid(x,y) || isInPeriod2Bulb(x,y)
 ```
 
-One other important point to note is that these functions must be passed the (`x`,`y`) ***coordinate*** value of the pixel, not its pixel ***location*** in the canvas.  This means that for the sake of efficiency, we need to convert the pixel location values stored in the loop counters `ix` and `iy` into coordinates of the complex plane before passing them either to the early bail out check, or the escape time algorithm itself.
+One other important point to note is that these functions must be passed the (`x`,`y`) ***coordinates*** of the point in the complex plane, not the pixel ***location*** on the canvas.
+Therefore, we need to transform the pixel location in the loop counters `ix` and `iy`, into complex plane coordinates before passing them either to the early bail out check, or the escape time algorithm itself.
 
 Hence the calls to `pixel2XCoord` and `pixel2YCoord` have been moved out of function `escapeTime()`
 

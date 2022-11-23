@@ -7,29 +7,41 @@
 
 ## 3.1: Shared Memory
 
+When JavaScript and WebAssembly interact, it is typical for these two runtime environments access a shared block of memory.
+
+
 ### How Much Shared Memory Do We Need?
 
-Irrespective of whether the fractal image is calculated by a JavaScript program or a WebAssembly program, the image displayed on the HTML `canvas` is stored in an `ArrayBuffer`.  We must therefore decide how large this `ArrayBuffer` needs to be.
+#### Image Memory
 
-We know that our `canvas` image is 800 by 450 pixels in size and that each pixel requires 4 bytes (one for each of the Red, Green and Blue values and one byte for the opacity, or alpha channel):
+We know that we will be using an HTML `canvas` element to display an image that is 800 by 450 pixels in size.
+We also know that each pixel requires 4 bytes (one byte for each of the Red, Green and Blue values and an additional byte for the opacity, or alpha channel).
+Therefore, we will need:
 
 ```javascript
 800 * 450 * 4 bytes per pixel = 1,440,000 bytes
 ```
 
-So we will require about one and a half megabytes to store the image.  However, we also know that WebAssembly memory can only be allocated in 64Kb pages.  Therefore, we need to calculate how many whole memory pages to allocate:
+So to store the image alone, we will require about one and a half megabytes of memory.
+However, we also know that WebAssembly allocates memory in units (or pages) of 64Kb.
+Therefore, we need to calculate how many whole memory pages to allocate:
 
 ```javascript
 Math.ceil(1440000 / 65536) = 22 pages
 ```
 
+### Colour Palette Memory
+
 In addition to the memory needed for the image, we also need to allocate some memory for the colour palette.[^1]
 
-The colour palette is simply a precalculated lookup table that allows us to translate an iteration value into a colour.  Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
+The colour palette is simply a precalculated lookup table that allows us to translate an iteration value into a colour.
+Assuming we limit the maximum number of iterations to 32,768 and each colour requires 4 bytes, then we will need to allocate a further 2 pages of WebAssembly memory:
 
 ```javascript
 (32768 * 4) / 65536 = 2 pages
 ```
+
+#### Total Memory Requirements
 
 So in total, we need to allocate `22 + 2 = 24` memory pages.
 
@@ -58,15 +70,18 @@ const wasmMemory = new WebAssembly.Memory({
 const wasmMem8 = new Uint8ClampedArray(wasmMemory.buffer)
 ```
 
-In the case of WebAssembly memory however, we do not need to allocate a specific `ArrayBuffer` object because one is created for us when we call `new WebAssembly.Memory()`.
+In the case of WebAssembly memory however, we do not need to allocate a specific `ArrayBuffer` object because one is created for us when we call `new WebAssembly.Memory()`.[^2]
 
-We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer` in order to transfer the image data from WebAssembly shared memory to the `canvas`.
+We do however, still need to create an 8-bit, unsigned integer array to act as an overlay on this `ArrayBuffer`.
+This will be needed to transfer the image data from WebAssembly shared memory to the `canvas`.
 
 ### Decide How Shared Memory Should be Used
 
-Now that we have written the JavaScript code to allocate a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.  And here, we are free to follow any scheme we like &mdash; we just have to keep track of what data structures live where and be very careful not to trample on our own data![^2]
+Now that we have written the JavaScript code to allocate a block of linear memory large enough to hold both the image and the colour palette, we must decide how this block of memory is to be subdivided.
+And here, we are free to follow any scheme we like &mdash; we just have to keep track of what data structures live where and be very careful not to trample on our own data![^3]
 
-In our case, the simplest way to do this is to say that the image data will start at offset 0 and the colour palette data will start at the full page boundary after the image data.  This does means that there will be a few bytes of wasted space, but this is not a particularly critical issue.
+In our case, the simplest way to do this is to say that the image data will start at offset 0 and the colour palette data will start at the full page boundary after the image data.
+This does means there will be a few bytes of wasted space, but since we're not running on a device with very limited memory, this is not a particularly critical issue.
 
 So we can arbitrarily define our two memory offsets to be:
 
@@ -85,9 +100,10 @@ giving a memory layout that looks like this:
 
 The next step is to share this block of memory with our WebAssembly module (that we have not written yet...)
 
-If the host environment needs to share any of its resources with a WebAssembly module, those resources must be made available at the time the WebAssembly module is instantiated.
+If the host environment has created resources that need to be shared with a WebAssembly module, those resources must be made available at the time the WebAssembly module is instantiated.
 
-Sharing host resources with WebAssembly is done simply by creating a JavaScript object structured as a two layer namespace and whose property names are entirely arbitrary.  For instance, below we create an object called `host_fns` for sharing the memory and offset values we have created:
+Sharing host resources with WebAssembly is done simply by creating a JavaScript object structured as a two-level namespace and whose property names are entirely arbitrary.
+For instance, below we create an object called `host_fns` for sharing the memory and offset values we have created:
 
 ```javascript
 const host_fns = {
@@ -113,4 +129,5 @@ Notice that instantiating a WebAssembly module requires the use of `await`; ther
 ---
 
 [^1]: It is possible to avoid the need for storing colour palette information by dynamically calculating the colour value each time a pixel iteration value is calculated; however, this is not a very efficient approach because each iteration value translates to a static colour value.  Therefore, it is much more efficient to precalculate all the colour values from 1 to `max_iters` and store them in a lookup table.
-[^2]: Pay attention here!  This a good example of where, within its own memory space, a WebAssembly program only has the memory safety you give it.  If you're not careful, you can end up writing code that tramples over top of other data structures in your own memory.
+[^2]: We will not need to deal with this particular problem here, but it is worth knowing that under certain circumstances, the `ArrayBuffer` used by JavaScript to access WebAssembly's shared memory can become invalid, and will need to be recreated.  See [this blog](https://awesome.red-badger.com/chriswhealy/memory-grow-and-arraybuffers) for details
+[^3]: Pay attention here!  This a good example of where, within its own memory space, a WebAssembly program only has the memory safety you give it.  If you're not careful, you can end up writing code that tramples over top of other data structures in your own memory.

@@ -7,14 +7,15 @@
 
 ### 5.2: WebAssembly Changes
 
-Our existing WebAssembly function `mandel_plot` is already very close to what we need for plotting a Julia Set.  Only a few changes are needed:
+Our existing WebAssembly function `mandel_plot` is already very close to what we need for plotting a Julia Set.
+Only a few changes are needed:
 
 #### Rename Function From `mandel_plot` To `mj_plot`
 
 Since the `mandel_plot` function is now dual-purpose, this functionality should be reflected in the name.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Plot Mandelbrot or Julia set
 (func (export "mj_plot")
 
@@ -23,7 +24,8 @@ Since the `mandel_plot` function is now dual-purpose, this functionality should 
 
 #### Supply Function `mj_plot` With Additional Arguments
 
-When we were only plotting the Mandelbrot Set, we didn't care about either the type of image we were plotting (there was only one), or where the mouse pointer was located over that image.  However, in order for this function to also plot a Julia Set, we need some extra information.  We need to know:
+When we were only plotting the Mandelbrot Set, we didn't care about either the type of image we were plotting (there was only one), or where the mouse pointer was located over that image.
+However, in order for this function to also plot a Julia Set, some extra information must be supplied:
 
 1. The mouse pointer's coordinates over the Mandelbrot Set.<br>These are supplied as two `f64` values called `zx` and `zy`
 
@@ -51,7 +53,7 @@ The function signature has now expanded and looks like this:
 
 #### Skip Early Bailout Check For Julia Sets
 
-The test for early bailout only applies when plotting the Mandelbrot Set; therefore, before checking for early bailout, we must first know that we are plotting the Mandelbrot Set .
+Since the test for early bailout only applies when plotting the Mandelbrot Set, we must first what sort of fractal we are plotting.
 
 All we need to do here is extend the early bailout test by `AND`ing it with the value of the `$is_mandelbrot` flag:
 
@@ -94,9 +96,6 @@ Hence the call to `escape_time_mj` contains an `if` expression that reverses the
 )
 ```
 
-
 ---
-
-
 
 [^1]: Now that function `mj_plot` is used to plot both types of fractal, it is simpler to supply the memory offset at which the image data should be written as an argument, rather than trying to decide which of several possible memory offsets should be used that have been supplied from the host environment.

@@ -10,22 +10,23 @@
 
 In our case, the `onmessage` event handler will simply be a `switch` statement that can respond to a known set of messages.
 
-The first thing to do is extract the `action` and `payload` properties from the `data` property of the argument object.  The easiest way to do this is by means of a destructuring assignment.
+The first thing to do is extract the `action` and `payload` properties from the `data` property of the argument object.
+The easiest way to do this is by means of a destructuring assignment.
 
 ```javascript
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Inbound message handler
 onmessage = async ({ data }) => {
   const { action, payload } = data
 
   switch(action) {
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Create WebAssembly module instance and draw initial Mandelbrot Set
     case 'init':
       // snip...
       break
 
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Draw a fractal image
     case 'exec':
       // snip...
@@ -77,7 +78,7 @@ const draw_fractal = (fractal, max_iters) => {
 In order to extract the relevant values from the `data.payload` object, we need to add a further destructuring statement at the start of the `onmessage` event handler:
 
 ```javascript
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Inbound message handler
 onmessage = async ({ data }) => {
   const { action, payload } = data
@@ -99,7 +100,7 @@ When a worker thread receives an `init` message, the worker:
 1. Sends a completion message back to the main thread
 
 ```javascript
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // Create WebAssembly module instance and draw initial Mandelbrot Set
   case 'init':
     my_worker_id = worker_id
@@ -120,7 +121,7 @@ When a worker thread receives an `init` message, the worker:
 When a worker thread receives an `exec` message, it simply calls `mj_plot` to draw the request fractal image, then sends a completion message back to the main thread.
 
 ```javascript
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // Draw a fractal image
   case 'exec':
     times.exec = draw_fractal(fractal, max_iters)

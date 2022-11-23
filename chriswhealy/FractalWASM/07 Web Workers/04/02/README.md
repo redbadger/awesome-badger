@@ -10,7 +10,8 @@
 
 Currently, our WebAssembly module contains the coding both for plotting a fractal image ***and*** for generating the colour palette.
 
-Given that generating a colour palette is a very lightweight task, there is no reason to keep this coding in a module that will be instantiated multiple times.  Therefore, we will extract all the coding related to the colour palette and put it in its own module called `colour_palette.wat`
+Given that generating a colour palette is a very lightweight task, there is no reason to keep this coding in a module that will be instantiated multiple times.
+Therefore, we will extract all the coding related to the colour palette and put it in its own module called `colour_palette.wat`
 
 After collapsing the function bodies, the source code of our new `colour_palette.wat` module looks like this:
 
@@ -25,7 +26,9 @@ Previously, the `memory` declaration specified only the initial number of memory
 (import "js" "shared_mem" (memory 46))
 ```
 
-This is fine in situations where you share memory only between WebAssembly and the host environment.  However, we additionally need to share memory between multiple WebAssembly module instances.  This means that our `memory` declaration must also include the total number of pages and the fact that this memory is now shared:
+This is fine in situations where you share memory only between WebAssembly and the host environment.
+However, we additionally need to share memory between multiple WebAssembly module instances.
+This means that our `memory` declaration must also include the total number of pages and the fact that this memory is now shared:
 
 ```wast
 (import "js" "shared_mem" (memory 46 46 shared))
@@ -60,14 +63,14 @@ So our `start` function now:
 1. Initialises the UI using the helper function `init_slider`
 1. Creates an instance of the WebAssembly module `colour_palette.wasm`
 1. Calls the `gen_palette()` WebAssembly function
-1. Calls function `rebuild_workers()` to create the initial number of Web Workers.  (This function is described in the next section).
+1. Calls function `rebuild_workers()` to create the initial number of Web Workers (described in the next section).
 
 ```javascript
 let wasm_colour
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Async function to initialise the UI, create WASM colour palette module, generate colour palette then create the
-// required number of Web Workers
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Async function to initialise the UI, create WASM colour palette module, generate colour palette
+// then create the required number of Web Workers
 const start = async () => {
   // Initialise the UI
   init_slider("max_iters", RANGE_MAX_ITERS, MAX_ITERS, "input", update_max_iters)

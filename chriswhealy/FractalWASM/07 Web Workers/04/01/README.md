@@ -8,7 +8,8 @@
 
 ### 7.4.1 Extend the HTML
 
-Since we are demonstrating the performance improvements that can be made with Web Workers, it would be helpful if the number of worker threads can be adjusted dynamically.  Also, we will need to display not only the overall execution time, but also the individual execution times of each worker thread.
+Since we are demonstrating the performance improvements that can be made with Web Workers, it would be helpful if the number of worker threads can be adjusted dynamically.
+Also, we will need to display not only the overall execution time, but also the individual execution times of each worker thread.
 
 Therefore, the `canvas` elements will be placed inside a `table`, and down the right side of the Mandelbrot Set `canvas`, we will have another table showing the last execution time of each worker thread.
 

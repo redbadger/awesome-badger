@@ -14,22 +14,26 @@ This means two fundamental changes need to be made (one of which is very simple)
 
 1. The value of the pixel currently being plotted must be held in shared memory.
 
-   This means that function `mj_plot` can no longer use private index counters such as `$x_pos` and `$y_pos` to keep track which row and column is currently being worked on.  Instead, the next pixel to be calculated must be read from shared memory, incremented, then written back again as an ***atomic operation***.  This is known as an atomic read-modify-write (`atomic.rmw`) operation.
+   This means that function `mj_plot` can no longer use private index counters such as `$x_pos` and `$y_pos` to keep track which row and column is currently being worked on.
+   Instead, the next pixel to be calculated must be read from shared memory, incremented, then written back again as an ***atomic operation***.
+   This is known as an atomic read-modify-write (`atomic.rmw`) operation.
 
-   In this manner, multiple instances of the function `mj_plot` can read their next pixel from shared memory, increment it and write it back again without duplicating the work of any other `mj_plot` instance.
+   In this manner, multiple instances of the function `mj_plot` can read their next pixel from shared memory, increment it and write it back again without duplicating (or interferring with) the work of any other `mj_plot` instance.
 
-1. Function `mj_plot` is currently structured as a nested loop.  We first loop around all the rows in the image, then within each row, we loop around each column.  Hence the need for two internal index counters `$x_pos` and `$y_pos`.
+1. Function `mj_plot` is currently structured as a nested loop.
+   We first loop around all the rows in the image, then within each row, we loop around each column.
+   Hence the need for two internal index counters `$x_pos` and `$y_pos`.
 
    This is fine when there's only one instance of `mj_plot` running, but now that multiple instances will all be running in parallel, we cannot safely perform two atomic read-modify-write operations and expect the values of `$x_pos` and `$y_pos` to remain related to each other.
 
-   What we now need to do instead is store a single pixel counter value in shared memory that represents the current pixel being worked on.  This value will continue to grow until it reaches the total number of pixels in the image (I.E. `$pixel_count = $width  * $height`).
+   What we now need to do instead is store a single pixel counter value in shared memory that represents the current pixel being worked on.
+   This value will continue to grow until it reaches the total number of pixels in the image (I.E. `$pixel_count = $width  * $height`).
 
    Each instance of `mj_plot` can then safely read-modify-write this single value.
 
-   > ***IMPORTANT***<br>
-   > After all the workers have finished plotting an image, this pixel counter must be reset to 0.
-   >
-   > This action is not performed in the WebAssembly coding, but in the main thread's message handler when it detects that all the workers have finished.
+   ***IMPORTANT***<br>
+   After all the workers have finished plotting an image, this pixel counter must be reset to 0.
+   This action is not performed in the WebAssembly coding, but in the main thread's message handler when it detects that all the workers have finished.
 
 ### Modifying Module `mj_plot`
 
@@ -43,35 +47,44 @@ In the same way we needed to change the `memory` declaration in the `colour_pale
 )
 ```
 
-> ***GOTCHA***
->
-> If you forget to make this change, then you will not see any errors at compile time.
->
-> At runtime however, you will see this slightly-less-then-helpful error message in the browser console:
->
-> `LinkError: WebAssembly.instantiate(): mismatch in shared state of memory, declared = 0, imported = 1`
->
-> This means this particular module has not declared the use of shared memory, but the memory being imported from the host environment has been created as shared
+***`<GOTCHA>`***<br>
+If you forget to make this change, then you will not see any errors at compile time.
+
+At runtime however, you will see this slightly-less-then-helpful error message in the browser console:
+
+`LinkError: WebAssembly.instantiate(): mismatch in shared state of memory, declared = 0, imported = 1`
+
+This means this particular module has not declared the use of shared memory, but the memory being imported from the host environment has been created as shared<br>
+***`</GOTCHA>`***
 
 
 ### Modifying Function `mj_plot`
 
-The first thing we need to establish is where in shared memory the pixel counters will live.  Here, we are free to choose any locations we like - so long as everyone looks in the same place!  We are plotting two fractal images, so we need two pixel counters: one for the Mandelbrot Set and the other for the Julia Set.
+The first thing we need to establish is where in shared memory the pixel counters will live.
+Here, we are free to choose any locations we like - so long as everyone looks in the same place!
+We are plotting two fractal images, so we need two pixel counters: one for the Mandelbrot Set and the other for the Julia Set.
 
-For simplicity, both pixel counters will be `i32` values and live at offsets `0` and `4` for the Mandelbrot and Julia Sets respectively.  This in turn means that the previous memory location of the Mandelbrot image data (offset zero) must be shifted down by 8 bytes.
+For simplicity, both pixel counters will be `i32` values and live at offsets `0` and `4` for the Mandelbrot and Julia Sets respectively.
+This in turn means that the previous memory location of the Mandelbrot image data (offset zero) must be shifted down by 8 bytes.
 
-> ***IMPORTANT***<br>
-> Here's a perfect example of where, within its own memory space, a WebAssembly program is only as memory-safe as you make it!
->
-> If you accidentally write data to the wrong offset, too bad!
->
-> Other than attempting to write outside the bounds of your entire memory space, WebAssembly does not perform any internal boundary checks to prevent you from doing this...
->
-> 😱
+***`<GOTCHA>`***<br>
+Here's a perfect example of where, within its own memory space, a WebAssembly program is only as memory-safe as you make it!
 
-So first we create some local variables to keep track of how many pixels need to be calculated, what the current pixel is, and where in memory the next pixel value is located.
+If you accidentally write data to the wrong offset, too bad!
 
-The following code snippets show the relevant changes to function `mj_plot`.  So right at the start, we need to add:
+Other than attempting to write outside the bounds of your entire memory space, WebAssembly does not perform any internal boundary checks to prevent you from doing this...
+
+😱<br>
+***`</GOTCHA>`***
+
+So first we create some local variables to keep track of things like:
+
+* How many pixels need to be calculated
+* What the current pixel is
+* Where in memory is the next pixel value located.
+
+The following code snippets show the relevant changes to function `mj_plot`.
+So right at the start, we need to add:
 
 ```wast
 (local $pixel_count i32)
@@ -153,7 +166,8 @@ Now, we simply have a single loop that performs an atomic read-modify-write on t
 ) ;; end of $pixels loop
 ```
 
-Notice the `i32.atomic.rmw.add` statement.  This is the read-modify-write statement that performs three operations as an atomic unit:
+Notice the `i32.atomic.rmw.add` statement.
+This is the read-modify-write statement that performs three operations as an atomic unit:
 
 1. It reads an `i32` value from the offset in shared memory found in the first argument (`$next_pixel_offset`) and pushes it onto the stack
 1. It then adds the value found in the second argument (`i32.const 1`)

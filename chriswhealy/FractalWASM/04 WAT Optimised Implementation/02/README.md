@@ -5,14 +5,15 @@
 | [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [5: Plotting a Julia Set](../../05%20MB%20Julia%20Set/)
 | [4.1 Check for Early Bailout](../01/) | [4: Optimised WAT Implementation](../) |
 
-### 4.2: Modify Render Loop
+### 4.2: Modify the Render Loop
 
 In our previous implementation of the WAT function `mandel_plot`, we simply looped around every pixel in the image:
 
 1. Converting each pixel's location to the corresponding coordinates on the complex plane, then
 1. Arbitrarily calling function `escape_time_mj`
 
-Now, before calling function `escape_time_mj`, we must first check where the current pixel is located.  If it lies within either the main cardioid or the period 2 bub, we can skip calling `escape_time_mj`
+Now, before calling function `escape_time_mj`, we must first check where the current pixel is located.
+If it lies within either the main cardioid or the period 2 bub, we can skip the call `escape_time_mj` and simply return the colour black.
 
 The innermost `if` expression in function `mandel_plot` has now been extended to perform this additional test:
 

@@ -13,7 +13,8 @@ In order for a worker to react to messages from the main thread, you must follow
 
 1. Create an asynchronous event handler function called `onmessage`
 1. In order to process a message, extract the `data` property of the argument passed to the `onmessage` event handler, then take whatever action is appropriate for that given message
-1. Typically, the worker will send some sort of completion message back to the main thread.  The worker does this by calling its `postMessage` method and sending whatever data is needed as a response.
+1. Typically, the worker will send some sort of completion message back to the main thread.
+   The worker does this by calling its `postMessage` method and sending whatever data is needed as a response.
 
 ```javascript
 onmessage = async ({ data }) => {
@@ -27,7 +28,8 @@ onmessage = async ({ data }) => {
 
 Beyond this, you can implement almost any other coding you like within the worker.
 
-Here, the coding for our Web Worker will be quite straight forward.  It is simply handles messages received from the main thread.
+Here, the coding for our Web Worker will be quite straight forward.
+It is simply handles messages received from the main thread.
 
 1. [Define the Message Structure](./01/)
 1. [Implement the `onmessage` Event Handler](./02/)

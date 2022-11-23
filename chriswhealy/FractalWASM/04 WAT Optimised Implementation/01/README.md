@@ -9,7 +9,8 @@
 
 #### Main Cardioid Check
 
-To check whether the current location on the complex plane falls within the Mandelbrot Set's main cardioid, we must first derive an intermediate value `q` from the `x` and `y` coordinates of the current pixel:
+To check whether the current location on the complex plane falls within the Mandelbrot Set's main cardioid, we must first derive an intermediate value `q` from the `x` and `y` coordinates of the current pixel.
+In JavaScript, we do that as follows:
 
 ```javascript
 q = (x - 0.25)^2 + y^2
@@ -21,14 +22,15 @@ Then test the following equality:
 q * (q + (x - 0.25)) <= y^2 / 4
 ```
 
-If this returns true, then the point lies within the main cardioid and there is therefore no need to run the escape time algorithm.
+If this returns true, then the point lies within the main cardioid and there is no point running the escape-time algorithm.
 
-So, let's now create a WAT function that implements this check.
+So, let's now write a WAT function that implements this check.
 
-If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](../../../Introduction%20to%20WebAssembly%20Text/07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.  Hence this function returns an `i32`:
+If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](../../../Introduction%20to%20WebAssembly%20Text/07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.
+Hence, the `i32` returned by this function can be treated as a Boolean:
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Main cardioid check
 (func $is_in_main_cardioid
       (param $x f64)
@@ -40,10 +42,14 @@ If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to
   (local $q f64)
 
   (local.set $x_minus_qtr (f64.sub (local.get $x) (f64.const 0.25)))
-  (local.set $y_sqrd (f64.mul (local.get $y) (local.get $y)))
+  (local.set $y_sqrd      (f64.mul (local.get $y) (local.get $y)))
 
   ;; Intermediate value $q = ($x - 0.25)^2 + $y^2
-  (local.set $q (f64.add (f64.mul (local.get $x_minus_qtr) (local.get $x_minus_qtr)) (local.get $y_sqrd)))
+  (local.set $q
+    (f64.add (f64.mul (local.get $x_minus_qtr) (local.get $x_minus_qtr))
+             (local.get $y_sqrd)
+    )
+  )
 
   ;; Main cardioid check: $q * ($q + ($x - 0.25)) <= $y^2 / 4
   (f64.le
@@ -55,18 +61,17 @@ If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to
 
 #### Period 2 Bulb Check
 
-To check whether current location on the complex plane falls within the period 2 bulb, we test the following equality:
+To check whether the current location on the complex plane falls within the period 2 bulb, we test the following equality.
+Again, in JavaScript, this is:
 
 ```javascript
 (x + 1)^2 + y^2 <= 0.0625
 ```
 
-If this returns true, then there is no need to run the escape time algorithm.
-
-Here's the WebAssembly function that implements this check
+Here's the WebAssembly function that implements this check:
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Period 2 bulb check: ($x + 1)^2 + $y^2 <= 0.0625
 (func $is_in_period_two_bulb
       (param $x f64)
@@ -90,7 +95,7 @@ Here's the WebAssembly function that implements this check
 Finally, we can combine these two functions into a simple check for early bailout
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Check for early bailout
 (func $early_bailout
       (param $x f64)

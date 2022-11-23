@@ -8,9 +8,12 @@
 
 ### 7.3.1 Define the Message Structure
 
-We know that the `onmessage` event handler is passed an object containing a `data` property.  We now need to decide what structure to expect within this `data` property.
+We know that the `onmessage` event handler is passed an object containing a `data` property.
+We now need to decide what structure to expect within this `data` property.
 
-In our case, the main thread will send requests to the worker threads to perform various actions.  In order to complete these actions, there must be a further set of values specific to each action.  Therefore, in the above message, we will make the `data` property into an object having the following two properties:
+In our case, the main thread will send requests to the worker threads to perform various actions.
+In order to complete these actions, there must be a further set of values specific to each action.
+Therefore, in the above message, we will make the `data` property into an object having the following two properties:
 
 ```javascript
 { data: {
@@ -83,10 +86,6 @@ Since the call to the WebAssembly function `mj_plot` has been moved from the mai
   },
 }
 ```
-
-
-
-
 
 ---
 [^1]: Relax!  We're not writing production code here, so our message protocol does not need to include any form of error reporting.

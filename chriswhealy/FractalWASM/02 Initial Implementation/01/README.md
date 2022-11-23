@@ -19,9 +19,13 @@ const bailout  = 4
 ### Helper Functions
 
 We need a few helper functions:
-* `pixel2XCoord` and `pixel2YCoord`<br>
-   These functions translate pixel X and Y locations to complex plane X and Y coordinates
-* `iter2Colour`<br>
+
+* `pixel2XCoord` and `pixel2YCoord`
+
+   These functions translate X and Y canvas positions to coordinates on the complex plane
+   
+* `iter2Colour`
+
    Transforms an iteration number into a colour
 
 At the moment, we don't care how these helper functions have been implemented
@@ -88,7 +92,7 @@ for (let iy = 0; iy < mCanvas.height; ++iy) {
 
 // Transfer the ArrayBuffer data into the image, then display it in the canvas
 mImage.data.set(buf8)
-mCanvas.putImageData(mIMage, 0, 0)
+mCanvas.putImageData(mImage, 0, 0)
 ```
 
 Notice what's happening here: within the loop, we use the `buf32` overlay to write 4 bytes of colour data into the `ArrayBuffer` in a single assignment; then after the loop has finished, we use the `buf8` overlay to transfer the contents of the `ArrayBuffer` into the canvas image.
@@ -121,4 +125,4 @@ const escapeTime = (xPixel, yPixel) => {
 
 Here is a working version of this unoptimized [basic implementation](basic-implementation.html)
 
-As you can see, it takes several hundred milliseconds to render the entire image.
+As you can see, this is not a very efficient implementation since it takes several hundred milliseconds to render the entire image.

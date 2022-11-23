@@ -9,7 +9,8 @@
 
 Next we will add a slider for changing the value of `max_iters`.
 
-Every time `max_iters` changes, we will need to redraw both the Mandelbrot and current Julia Sets to account for the new level of detail.  In addition to this, we must also remember that the value of `max_iters` defines the number of colours in the palette; therefore, the colour palette will also need to be rebuilt.
+Every time `max_iters` changes, we will need to redraw both the Mandelbrot and current Julia Sets to account for the new level of detail.
+In addition, we must also remember that the value of `max_iters` defines the number of colours in the palette; therefore, the colour palette will also need to be rebuilt.
 
 #### Change the HTML
 
@@ -50,7 +51,7 @@ let last_julia = {
   y_coord : null
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Max iters slider event handler
 const update_max_iters = evt => {
   MAX_ITERS = evt.target.value
@@ -71,7 +72,7 @@ const update_max_iters = evt => {
 Finally, in the `start` function, the slider properties are applied to the HTML `input` element and the event handler is attached:
 
 ```javascript
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Async function to create WASM module instance, generate colour palette and plot Mandelbrot Set
 const start = async () => {
   let max_iters_slider   = $id("max_iters")

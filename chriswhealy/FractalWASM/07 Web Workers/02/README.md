@@ -17,13 +17,15 @@ The main thread needs to allocate the memory that will be shared with the multip
 
 #### Generate Worker Threads
 
-The main thread instantiates as many Web Workers as are required for the particular task.  Each Web Worker instance receives a reference to the block of WebAssembly memory.
+The main thread instantiates as many Web Workers as are required for the particular task.
+Each Web Worker instance receives a reference to the block of WebAssembly memory.
 
 ![Generate Web Workers](/assets/chriswhealy/7.2.2.png)
 
 #### Initialise Each Web Worker
 
-In our case, the first thing we do after all the worker instances have started is to send each an initialisation message.  Upon receiving this message, the worker creates its own instance of the WebAssembly module and, most importantly, passes that module a reference to the shared memory created by the main thread.
+In our case, the first thing we do after all the worker instances have started is to send each an initialisation message.
+Upon receiving this message, the worker creates its own instance of the WebAssembly module and, most importantly, passes that module a reference to the shared memory created by the main thread.
 
 ![Initialise the Web Workers](/assets/chriswhealy/7.2.3.png)
 

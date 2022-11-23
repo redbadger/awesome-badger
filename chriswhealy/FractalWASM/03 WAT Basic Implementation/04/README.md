@@ -7,26 +7,29 @@
 
 ## 3.4: Escape-Time Algorithm
 
-The next function we need to write is the escape-time algorithm that actually calculates the iteration value of a given pixel in the fractal image.  To start with, we will not worry about performance optimisations &mdash; these will be added later.
+The next function we need to write is the escape-time algorithm that actually calculates the iteration value of a given pixel in the fractal image.
+To start with, we will not worry about performance optimisations &mdash; these will be added later.
 
-Since this particular algorithm can be used for plotting either the Mandelbrot or Julia Sets, we need a function whose signature is appropriate for either fractal.  This does mean however, that when plotting the Mandelbrot Set, two of the argument values will always be zero.
+Since this particular algorithm can be used for plotting either the Mandelbrot or Julia Sets, the function name ends with `_mj` (for Mandelbrot, Julia) and the signature has been extended to make it suitable for either fractal.
+This does mean however, that when plotting the Mandelbrot Set, two of the argument values will always be zero.
 
 | Argument | Description | Notes
 |---|---|---
 | `$zx` | Real part of Iterated value | For the Mandelbrot Set, `z` always starts at 0
 | `$zy` | Imaginary part of iterated value | For the Mandelbrot Set, `z` always starts at 0
-| `$cx` | Pixel X coordinate (real part) | Caller must transform pixel location to a coordinate
-| `$cy` | Pixel Y coordinate (imaginary part) | Caller must transform pixel location to a coordinate
+| `$cx` | Pixel X coordinate (real part) | Caller must transform the pixel position to a coordinate
+| `$cy` | Pixel Y coordinate (imaginary part) | Caller must transform the pixel position to a coordinate
 | `$max_iters` | Iteration limit |
 
-If you have read [§8](../../../Introduction%20to%20WebAssembly%20Text/08/) on Loops from the blog series [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish then test for continuation, rather than assuming the loop will repeat, then testing for termination.
+If you have read [§8](../../../Introduction%20to%20WebAssembly%20Text/08/) on loops from the blog series [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish, then test for continuation, rather than assuming the loop will repeat, then testing for termination.
 
 This coding style is used here.
 
-This function takes two complex numbers `z` and `c` and repeatedly squares `z` and adds `c` until one of the continuation conditions become false.  However, since WebAssembly has no complex number datatype, the real and imaginary parts of the complex arguments `z` and `c` are supplied as two pairs of `f64`s: `zx` and `zy`, and `cx` and `cy`.
+This function takes two complex numbers `z` and `c` and repeatedly squares `z` and adds `c` until one of the continuation conditions become false.
+However, since WebAssembly has no complex number datatype, the complex arguments `z` and `c` are supplied as two pairs of `f64`s: `zx` and `zy`, and `cx` and `cy`.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ;; Escape time algorithm for calculating either the Mandelbrot or Julia sets
 ;; Iterates z[n]^2 + c => z[n+1]
 (func $escape_time_mj
@@ -56,8 +59,18 @@ This function takes two complex numbers `z` and `c` and repeatedly squares `z` a
       (then
         ;; $zy = $cy + (2 * $zy * $zx)
         ;; $zx = $cx + ($zx_sqr - $zy_sqr)
-        (local.set $zy (f64.add (local.get $cy) (f64.mul (local.get $zy) (f64.add (local.get $zx) (local.get $zx)))))
-        (local.set $zx (f64.add (local.get $cx) (f64.sub (local.get $zx_sqr) (local.get $zy_sqr))))
+        (local.set $zy
+          (f64.add (local.get $cy)
+                   (f64.mul (local.get $zy)
+                            (f64.add (local.get $zx) (local.get $zx))
+                   )
+          )
+        )
+        (local.set $zx
+          (f64.add (local.get $cx)
+                   (f64.sub (local.get $zx_sqr) (local.get $zy_sqr))
+          )
+        )
 
         (local.set $iters (i32.add (local.get $iters) (i32.const 1)))
 
@@ -72,4 +85,6 @@ This function takes two complex numbers `z` and `c` and repeatedly squares `z` a
 
 Certain optimisations have been added to avoid the need for either expensive function calls or unnecessary calculations.
 
-For instance, testing the magnitude of a complex number requires the use of the Pythagorean formula (`a = sqrt(b^2 + c^2)`).  Not only is the call to `sqrt` expensive, but in our case, it is actually unnecessary since we only need to check that the sum of the squares (`a^2 + b^2`) is less than the square of the bailout value.  Hence the global value `$BAILOUT` is set to `4` not `2`
+For instance, testing the magnitude of a complex number requires the use of the Pythagorean formula (`a = sqrt(b^2 + c^2)`).
+Not only is the call to `sqrt` expensive, but in our case, it is actually unnecessary since we only need to check that the sum of the squares (`a^2 + b^2`) is less than the square of the bailout value.
+Hence the global value `$BAILOUT` is set to `4` not `2`

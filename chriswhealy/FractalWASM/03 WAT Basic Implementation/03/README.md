@@ -13,8 +13,10 @@ Since we are interested in runtime performance, we will precalculate all the pos
 
 You are free to lay out the source code of a WebAssembly Text program any way you like, but I have found the following conventions to be helpful:
 
-1. Since WebAssembly Text programs can become deeply nested, set the indentation level to 2 spaces.  Anything more than this and your source code will start to become unnecessarily wide
-1. Function signatures have a variety of optional clauses that, if used, must immediately follow the `func` keyword.  SInce the open parentheses plus the word `func` plus a space occupies 6 characters, it is helpful to indent clauses related to the function signature by 6 characters to provide a visual cue that they are not part of the function body.
+1. Since WebAssembly Text programs can become deeply nested, an indentation level of 2 spaces helps avoid source code becoming unnecessarily wide due to indentation
+
+1. Function signatures have a variety of optional statements that, if used, must immediately follow the `func` keyword.
+Since the open parentheses plus the word `func` plus a space occupies 6 characters, I find it helpful to indent function signature statements by 6 characters to provide a visual cue that they are not part of the function body.
 
 ### Transform an Iteration Value into an RGBA[^1] Colour Value
 The coding that generates the colour palette does not need to be described in detail, suffice it to say that a single iteration value can be translated into the red, green and blue colour components by multiplying it by 4 (implemented as a shift left instruction), then passing it through an algorithm that derives an 8-bit value for each colour component using fixed thresholds.[^2]
@@ -22,7 +24,7 @@ The coding that generates the colour palette does not need to be described in de
 The `$8_bit_clamp` function shown below lives within the `module` definition in file `mandel_plot.wat`
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ;; Derive a single colour component from the iteration and colour threshold values
 (func $8_bit_clamp
       (param $n i32)
@@ -31,13 +33,17 @@ The `$8_bit_clamp` function shown below lives within the `module` definition in 
 
   (local $temp i32)
 
-  ;; Add colour-specific threshold, then mask out all but the junior 10 bits
+  ;; Add a colour-specific threshold, then mask out all but the junior 10 bits
   ;; $temp = ($n + $threshold) & 1023
-  (local.set $temp (i32.and (i32.add (local.get $n) (local.get $threshold)) (i32.const 1023)))
+  (local.set $temp
+    (i32.and (i32.add (local.get $n) (local.get $threshold))
+             (i32.const 1023)
+    )
+  )
 
   ;; How many bits does $temp use?
   (if (result i32)
-    ;; At least 9 bits
+    ;; 9 or more bits?
     (i32.ge_u (local.get $temp) (i32.const 256))
     (then
       ;; If bit 10 is switched off invert value, else return zero
@@ -54,24 +60,24 @@ The `$8_bit_clamp` function shown below lives within the `module` definition in 
 
 With the `$8_bit_clamp` function in place, we can now create three colour functions in which the hard-coded colour thresholds are defined.
 
-> ***Stylistic Note***<br>
-> Since these functions are very small, their definitions can be compressed into a single line:
+***Stylistic Note***<br>
+Since these functions are very small, their definitions can be compressed into a single line:
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Generate colour components
-(func $red   (param $iter i32) (result i32) (call $8_bit_clamp (local.get $iter) (i32.const 0)))
+(func $red   (param $iter i32) (result i32) (call $8_bit_clamp (local.get $iter) (i32.const   0)))
 (func $green (param $iter i32) (result i32) (call $8_bit_clamp (local.get $iter) (i32.const 128)))
 (func $blue  (param $iter i32) (result i32) (call $8_bit_clamp (local.get $iter) (i32.const 356)))
 ```
 
 Finally, we take each of the colour component values, shift them left by the appropriate number of bits, then `OR` them all together to form the 32-bit colour value.
 
-> ***IMPORTANT***<br>
-> Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
+***IMPORTANT***<br>
+Due to the fact that all modern processors are [little-endian](https://en.wikipedia.org/wiki/Endianness), we must assemble the RGBA values in reverse order.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Transform an iteration value to an ABGR colour
 (func $colour
       (param $iter i32)
@@ -99,7 +105,7 @@ Finally, we take each of the colour component values, shift them left by the app
 This particular palette generation algorithm produces colours that are distributed evenly across their range between `0` and `max_iters`.  However, since we need to generate a static lookup table, should `max_iters` ever change,[^3] then this table will need to be regenerated.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Generate entire colour palette
 (func (export "gen_palette")
       (param $max_iters i32)
@@ -124,15 +130,17 @@ This particular palette generation algorithm produces colours that are distribut
 
 There are several things to notice about this function:
 
-1. Since this function will only be invoked from the host environment, the internal name has been omitted and only an exported name has been defined.
-1. This function does not return a specific value, it writes to shared memory; therefore, it has no `result` clause.
-1. In [§3.2](../02/), at the start of the module we defined a global constant called `$palette_offset` whose value is imported from the host environment as property `js.palette_offset`.  This value acts as the starting point for calculating where the next `i32` colour value will be written in memory
+1. Since know that this function will only be invoked from the host environment, and never from another WebAssembly function, there is no need to give this function an internal name.
+1. This function does not return a specific value, it writes to shared memory; therefore, it has no `result` statement.
+1. In [§3.2](../02/), at the start of the module, we defined a global constant called `$palette_offset` whose value is imported from the host environment as property `js.palette_offset`.
+This value acts as the starting point for calculating where the next `i32` colour value will be written in memory
 1. The loop labeled `$next` continues until our index counter `$idx` exceeds the supplied value of `max_iters`
-1. The `i32.store` instruction takes the top `i32` value off the stack and writes it to memory.  The first argument is the memory offset and the second is the value being stored.  So we call function `$colour` to transform the value of `$idx` into a colour, then store that value at the memory location calculated from `$palette_offset + ($idx * 4)`[^4]
+1. The `i32.store` instruction takes the top `i32` value off the stack and writes it to memory.
+The first argument is the memory offset and the second is the value being stored.
+So we call function `$colour` to transform the value of `$idx` into a colour, then store that value at the memory location calculated from `$palette_offset + ($idx * 4)`[^4]
 3. When this function exits, the block of shared memory starting at the offset defined in `$palette_offset` will contain the colours for all iteration values from 0 to `max_iters`
 
 ---
-
 
 [^1]: RGBA stands for the four values needed to fully define a pixel's colour: Red, Green, Blue and Alpha (opacity)
 [^2]: 0 for red, 128 for green, and 356 for blue

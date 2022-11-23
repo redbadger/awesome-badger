@@ -3,14 +3,18 @@
 | Previous | | Next
 |---|---|---
 | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [6: Zooming In](../06%20Zoom%20Image/)
+| | 5: Plotting a Julia Set | [5.1: Web Page Changes](./01/)
 
 ## 5: Plotting a Julia Set
 
 Now that we have an efficient means of plotting the Mandelbrot Set, we can add a second HTML `canvas` element to display the Julia Set.
 
-For every point on the Mandelbrot Set, there is a corresponding Julia Set.  So as the mouse pointer moves over the Mandelbrot Set, a completely new Julia Set needs to be rendered.  Consequently, every time a `mousemove` event goes off over the Mandelbrot `canvas`, our now dual-purpose plot function needs to be called.
+For every point on the Mandelbrot Set, there is a corresponding Julia Set.
+So as the mouse pointer moves over the Mandelbrot Set, a completely new Julia Set needs to be rendered.
+Consequently, every time a `mousemove` event goes off over the Mandelbrot `canvas`, our now dual-purpose plot function needs to be called.
 
-This is where we start to see the benefits of writing in WebAssembly Text.  Since we can focus on low-level efficiency, we can produce a very small, very fast program.
+This is where we start to see the benefits of writing in WebAssembly Text.
+Since we can focus on low-level efficiency, we can produce a very small, very fast program.
 
 To plot the additional Julia Sets, we need to make two sets of changes:
 

@@ -7,10 +7,9 @@
 
 Now that the WebAssembly side of the coding has been written, we need an HTML page to display the rendered image.
 
-> ***IMPORTANT***<br>
-> In order for the Web page shown below to function correctly, it must be served to your browser from a Web server.
->
-> For security reasons, WebAssembly `.wasm` files cannot be opened by a browser using the `file://` protocol.
+***IMPORTANT***<br>
+For security reasons, WebAssembly `.wasm` files cannot be opened by a browser from the local file system using the `file://` protocol.
+In order for the Web page shown below to function correctly, it must be served to your browser from a Web server.
 
 ![Basic WAT Implementation](/assets/chriswhealy/basic-rendered-mbset.png)
 
@@ -33,7 +32,7 @@ const microPrecision = val => Math.round(val * 10000) / 10000
 const WASM_PAGE_SIZE    = 1024 * 64
 const DEFAULT_MAX_ITERS = 1000
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Canvas
 const DEFAULT_X_ORIGIN = -0.5
 const DEFAULT_Y_ORIGIN = 0
@@ -52,7 +51,7 @@ const mImagePages = Math.ceil(mImage.data.length / WASM_PAGE_SIZE)
 
 const palettePages = 2
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Create WASM shared memory and object for sharing resources from the host environment
 const wasmMemory = new WebAssembly.Memory({
   initial : mImagePages + palettePages
@@ -68,7 +67,7 @@ const host_fns = {
   }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Async function to create and execute WASM instance
 const start = async () => {
   const wasmObj = await WebAssembly.instantiateStreaming(
@@ -103,12 +102,17 @@ start()
 The JavaScript coding in this Web page does the following things:
 
 1. Defines various constant values and a helper function called `microPrecision` that returns a time value rounded to the nearest microsecond.
+
 1. Accesses the HTML `canvas` element called `mandelImage`, defines its dimensions and works out how many WebAssembly memory pages will be needed for an image of that particular size
+
 1. Allocates the required amount of WebAssembly memory
+
 1. Defines a two-layer object that references the various host resources being shared with the WebAssembly module
+
 1. Within an asynchronous function called `start`:
     1. Instantiate the WebAssembly module
     1. Call the WebAssembly function to generate the colour palette
-    1. Making a note of the start time, call the WebAssembly function to generate the Mandelbrot set, then display the execution time
+    1. Making a note of the start time, call the WebAssembly function to generate the Mandelbrot Set, then display the execution time
     1. Display the rendered image by transferring the relevant slice of shared memory to the HTML `canvas` element
+
 1. Calls the asynchronous `start()` function
