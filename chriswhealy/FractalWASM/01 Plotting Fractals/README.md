@@ -14,7 +14,7 @@ In order to calculate the colour of one pixel, we must repeat this iterative cal
 As you can imagine, this type of coding is completely CPU-bound, and is therefore ideally suited for implementation in WebAssembly.
 
 Very conveniently, the value of any one pixel in a fractal image is quite unrelated to the value of any neighbouring pixels; therefore, the calculation of the overall image is said to be "*embarrassingly parallel*".
-That is, we can greatly improve the performance of image calculation by by creating multiple, independent instances of the same program, and then sharing out the pixel claculations across these instances.
+That is, we can greatly improve the performance of image calculation by creating multiple, independent instances of the same program, and then sharing out the pixel claculations across these instances.
 
 This optimisation will also be demonstrated here.
 
