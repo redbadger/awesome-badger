@@ -29,7 +29,7 @@ This function takes two complex numbers `z` and `c` and repeatedly squares `z` a
 However, since WebAssembly has no complex number datatype, the complex arguments `z` and `c` are supplied as two pairs of `f64`s: `zx` and `zy`, and `cx` and `cy`.
 
 ```wast
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; Escape time algorithm for calculating either the Mandelbrot or Julia sets
 ;; Iterates z[n]^2 + c => z[n+1]
 (func $escape_time_mj
