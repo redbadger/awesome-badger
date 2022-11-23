@@ -32,7 +32,7 @@ const microPrecision = val => Math.round(val * 10000) / 10000
 const WASM_PAGE_SIZE    = 1024 * 64
 const DEFAULT_MAX_ITERS = 1000
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Canvas
 const DEFAULT_X_ORIGIN = -0.5
 const DEFAULT_Y_ORIGIN = 0
@@ -51,7 +51,7 @@ const mImagePages = Math.ceil(mImage.data.length / WASM_PAGE_SIZE)
 
 const palettePages = 2
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Create WASM shared memory and object for sharing resources from the host environment
 const wasmMemory = new WebAssembly.Memory({
   initial : mImagePages + palettePages
@@ -67,7 +67,7 @@ const host_fns = {
   }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Async function to create and execute WASM instance
 const start = async () => {
   const wasmObj = await WebAssembly.instantiateStreaming(
