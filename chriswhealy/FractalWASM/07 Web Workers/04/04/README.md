@@ -1,10 +1,10 @@
 # Plotting Fractals in WebAssembly
 
-| Previous | | Next
+| Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [6: Zooming In](../../../06%20Zoom%20Image/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) |
-| [7.2 Schematic Overview](../../02/) | [7: WebAssembly and Web Workers](../../) |
-| [7.4.3 Create Web Workers](../03/)  | [7.4: Adapt the Main Thread Coding](../) | [7.4.5 Adapt WebAssembly Function `mj_plot`](../05/)
+| [6: Zooming In](../../06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](../)  |
+| [7.3 Create the Web Worker](../03/) | 7.4 Adapt the Main Thread Coding |
+| [7.4.3 Create Web Workers](../03/)  | 7.4.4: Send/Receive Web Worker Messages | [7.4.5 Adapt WebAssembly Function `mj_plot`](../05/)
 
 ### 7.4.4: Send/Receive Web Worker Messages
 

@@ -1,8 +1,8 @@
 # Plotting Fractals in WebAssembly
 
-| Previous | | Next
+| Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [2: Initial Implementation](../02%20Initial%20Implementation/)
+| | 1: Plotting Fractals | [2: Initial Implementation](../02%20Initial%20Implementation/)
 
 # 1: Plotting Fractals
 

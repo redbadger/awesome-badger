@@ -1,9 +1,9 @@
 # Plotting Fractals in WebAssembly
 
-| Previous | | Next
+| Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [6: Zooming In](../../06%20Zoom%20Image/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) |
-| [7.1 JavaScript Web Workers](../01/) | [7: WebAssembly and Web Workers](../) | [7.3 Create the Web Worker](../03/)
+| [6: Zooming In](../../06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](../) |
+| [7.1 JavaScript Web Workers](../01/) | 7.2: Schematic Overview | [7.3 Create the Web Worker](../03/)
 
 ### 7.2: Schematic Overview
 

@@ -1,9 +1,9 @@
 # Plotting Fractals in WebAssembly
 
-| Previous | | Next
+| Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
-| | 6: Zooming In | [6.1: Add Zoom In/Out Functionality](./01/)
+| [5: Plotting a Julia Set](../05%20MB%20Julia%20Set/) | 6: Zooming In | [7: WebAssembly and Web Workers](../07%20Web%20Workers/)
+| | | [6.1: Add Zoom In/Out Functionality](./01/)
 
 ## 6: Zooming In
 
