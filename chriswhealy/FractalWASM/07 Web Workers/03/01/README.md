@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [6: Zooming In](../../06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](../)  |
-| [7.2 Schematic Overview](../02/) | 7.3 Create Web Workers | [7.4 Adapt the Main Thread Coding](../04/)
+| [6: Zooming In](../../../06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](../../)  |
+| [7.2 Schematic Overview](../../02/) | 7.3 Create Web Workers | [7.4 Adapt the Main Thread Coding](../../04/)
 | | 7.3.1 Define the Message Structure | [7.3.2 Implement the `onmessage` Event Handler](../02/)
 
 ### 7.3.1 Define the Message Structure

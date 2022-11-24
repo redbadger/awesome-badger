@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [1: Plotting Fractals](../../01%20Plotting%20Fractals/) | [2: Initial Implementation](../) | [3: WAT Basic Implementation](../../03%20WAT%20Basic%20Implementation/)
-| | 2.1: Basic Escape-Time Implementation | [2.2: Optimised Escape-Time Implementation](../02/)
+| [1: Plotting Fractals](/chriswhealy/FractalWASM/01%20Plotting%20Fractals/) | [2: Initial Implementation](/chriswhealy/FractalWASM/02%20Initial%20Implementation) | [3: WAT Basic Implementation](/chriswhealy/FractalWASM/03%20WAT%20Basic%20Implementation/)
+| | 2.1: Basic Escape-Time Implementation | [2.2: Optimised Escape-Time Implementation](/chriswhealy/FractalWASM/02%20Initial%20Implementation/02/)
 
 ## 2.1: Basic Escape-Time Implementation
 
