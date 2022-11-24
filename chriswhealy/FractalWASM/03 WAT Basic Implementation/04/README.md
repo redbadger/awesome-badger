@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [2: Initial Implementation](../../02%20Initial%20Implementation/) | [3: Basic WAT Implementation](../) | [4: Optimised WAT Implementation](../../04%20WAT%20Optimised%20Implementation/)
-| [3.3: Generate the Colour Palette](../03/) | 3.4: Escape-Time Algorithm | [3.5: Calculating the Mandelbrot Set Image](../05/)
+| [2: Initial Implementation](/chriswhealy/FractalWASM/02%20Initial%20Implementation/) | [3: Basic WAT Implementation](/chriswhealy/FractalWASM/03%20WAT%20Basic%20Implementation/) | [4: Optimised WAT Implementation](/chriswhealy/FractalWASM/04%20WAT%20Optimised%20Implementation/)
+| [3.3: Generate the Colour Palette](/chriswhealy/FractalWASM/03%20WAT%20Basic%20Implementation/03/) | 3.4: Escape-Time Algorithm | [3.5: Calculating the Mandelbrot Set Image](/chriswhealy/FractalWASM/03%20WAT%20Basic%20Implementation/05/)
 
 ## 3.4: Escape-Time Algorithm
 
@@ -21,7 +21,7 @@ This does mean however, that when plotting the Mandelbrot Set, two of the argume
 | `$cy` | Pixel Y coordinate (imaginary part) | Caller must transform the pixel position to a coordinate
 | `$max_iters` | Iteration limit |
 
-If you have read [§8](../../../Introduction%20to%20WebAssembly%20Text/08/) on loops from the blog series [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish, then test for continuation, rather than assuming the loop will repeat, then testing for termination.
+If you have read [§8](/chriswhealy/Introduction%20to%20WebAssembly%20Text/08/) on loops from the blog series [Introduction to WebAssembly Text](/chriswhealy/Introduction%20to%20WebAssembly%20Text/), then you will remember that the idiomatic way to write a loop in WebAssembly Text is to assume that the loop will finish, then test for continuation, rather than assuming the loop will repeat, then testing for termination.
 
 This coding style is used here.
 

@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [2: Initial Implementation](../02%20Initial%20Implementation/) | 3: Basic WAT Implementation | [4: Optimised WAT Implementation](../04%20WAT%20Optimised%20Implementation/)
-| | | [3.1: Shared Memory](./01/)
+| [2: Initial Implementation](/chriswhealy/FractalWASM/02%20Initial%20Implementation/) | 3: Basic WAT Implementation | [4: Optimised WAT Implementation](/chriswhealy/FractalWASM/04%20WAT%20Optimised%20Implementation/)
+| | | [3.1: Shared Memory](/chriswhealy/FractalWASM/03%20WAT%20Basic%20Implementation/01/)
 
 # 3: Basic WAT Implementation
 

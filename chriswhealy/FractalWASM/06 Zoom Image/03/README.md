@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [5: Plotting a Julia Set](../../05%20MB%20Julia%20Set/) | [6: Zooming In](../) | [7: WebAssembly and Web Workers](../../07%20Web%20Workers/)
-| [6.2 Add Slider for Changing `max_iters`](../02/) | 6.3: Looking at the Problem We've Just Created |
+| [5: Plotting a Julia Set](/chriswhealy/FractalWASM/05%20MB%20Julia%20Set/) | [6: Zooming In](/chriswhealy/FractalWASM/06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](/chriswhealy/FractalWASM/07%20Web%20Workers/)
+| [6.2 Add Slider for Changing `max_iters`](/chriswhealy/FractalWASM/06%20Zoom%20Image/02/) | 6.3: Looking at the Problem We've Just Created |
 
 ### 6.3: Looking at the Problem We've Just Created
 

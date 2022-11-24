@@ -2,9 +2,9 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [6: Zooming In](../../06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](../)  |
-| [7.2 Schematic Overview](../02/) | 7.3 Create Web Workers | [7.4 Adapt the Main Thread Coding](../04/)
-| | | [7.3.1: Define the Message Structure](./01/)
+| [6: Zooming In](/chriswhealy/FractalWASM/06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](/chriswhealy/FractalWASM/07%20Web%20Workers/)  |
+| [7.2 Schematic Overview](/chriswhealy/FractalWASM/07%20Web%20Workers/02/) | 7.3 Create Web Workers | [7.4 Adapt the Main Thread Coding](/chriswhealy/FractalWASM/07%20Web%20Workers/04/)
+| | | [7.3.1: Define the Message Structure](/chriswhealy/FractalWASM/07%20Web%20Workers/03/01/)
 
 ### 7.3 Create Web Workers
 

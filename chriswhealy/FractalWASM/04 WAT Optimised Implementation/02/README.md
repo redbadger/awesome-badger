@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [4: Optimised WAT Implementation](../) | [5: Plotting a Julia Set](../../05%20MB%20Julia%20Set/)
-| [4.1 Check for Early Bailout](../01/) | 4.2: Modify the Render Loop |
+| [3: Basic WAT Implementation](/chriswhealy/FractalWASM/03%20WAT%20Basic%20Implementation/) | [4: Optimised WAT Implementation](/chriswhealy/FractalWASM/04%20WAT%20Optimised%20Implementation/) | [5: Plotting a Julia Set](/chriswhealy/FractalWASM/05%20MB%20Julia%20Set/)
+| [4.1 Check for Early Bailout](/chriswhealy/FractalWASM/04%20WAT%20Optimised%20Implementation/01/) | 4.2: Modify the Render Loop |
 
 ### 4.2: Modify the Render Loop
 

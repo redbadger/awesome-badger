@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [3: Basic WAT Implementation](../../03%20WAT%20Basic%20Implementation/) | [4: Optimised WAT Implementation](../) | [5: Plotting a Julia Set](../../05%20MB%20Julia%20Set/)
-| | 4.1: Check for Early Bailout | [4.2 Modify Render Loop](../02/)
+| [3: Basic WAT Implementation](/chriswhealy/FractalWASM/03%20WAT%20Basic%20Implementation/) | [4: Optimised WAT Implementation](/chriswhealy/FractalWASM/04%20WAT%20Optimised%20Implementation/) | [5: Plotting a Julia Set](/chriswhealy/FractalWASM/05%20MB%20Julia%20Set/)
+| | 4.1: Check for Early Bailout | [4.2 Modify Render Loop](/chriswhealy/FractalWASM/04%20WAT%20Optimised%20Implementation/02/)
 
 ### 4.1: Check for Early Bailout
 
@@ -26,7 +26,7 @@ If this returns true, then the point lies within the main cardioid and there is 
 
 So, let's now write a WAT function that implements this check.
 
-If you've read the [Introduction to WebAssembly Text](../../../Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](../../../Introduction%20to%20WebAssembly%20Text/07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.
+If you've read the [Introduction to WebAssembly Text](/chriswhealy/Introduction%20to%20WebAssembly%20Text/), you'll remember that in [§7](/chriswhealy/Introduction%20to%20WebAssembly%20Text/07/) we saw how WebAssembly uses `i32` values as Booleans: where zero means `false`, and any non-zero value means `true`.
 Hence, the `i32` returned by this function can be treated as a Boolean:
 
 ```wast

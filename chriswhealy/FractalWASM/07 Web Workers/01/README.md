@@ -2,8 +2,8 @@
 
 | Previous | [Top](/chriswhealy/plotting-fractals-in-webassembly) | Next
 |---|---|---
-| [6: Zooming In](../../06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](../) |
-| | 7.1: JavaScript Web Workers | [7.2 Schematic Overview](../02/)
+| [6: Zooming In](/chriswhealy/FractalWASM/06%20Zoom%20Image/) | [7: WebAssembly and Web Workers](/chriswhealy/FractalWASM/07%20Web%20Workers/) |
+| | 7.1: JavaScript Web Workers | [7.2 Schematic Overview](/chriswhealy/FractalWASM/07%20Web%20Workers/02/)
 
 ### 7.1: JavaScript Web Workers
 
