@@ -91,13 +91,15 @@ We already have a JavaScript function called `draw_fractal` that previously call
 Now that the main thread has delegated this task to the worker threads, we need to adapt this function to send an `exec` message to each of the worker threads.
 
 The only additional consideration is that we must now take into account the fact that plotting a fractal image might be slow.
-Given that we are attempting to plot a new Julia Set every time the mouse pointer moves, it is perfectly possible that multiple `mousemove` events might be triggered in the time taken to plot a single Julia Set.
+
+Given that every time the mouse pointer moves over the Mandelbrot Set, we need to plot a new Julia Set, it is perfectly possible that multiple `mousemove` events might be triggered in the time taken to plot a single Julia Set.
 Therefore, we must avoid triggering a new image calculation before the previous one has finished.
 This is the purpose of `plot_time.isActive` flag.
 
 ```javascript
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// As long as a calculation is not currently running, send a message to every worker to start drawing a new fractal image
+// As long as a calculation is not currently running, send a message to every worker to start
+// drawing a new fractal image
 const draw_fractal = (p_name, p_zx, p_zy) => {
   if (!plot_time.isActive) {
     plot_time.wCount   = 0

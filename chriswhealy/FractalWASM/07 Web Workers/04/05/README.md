@@ -48,13 +48,17 @@ In the same way we needed to change the `memory` declaration in the `colour_pale
 ```
 
 ***`<GOTCHA>`***<br>
-If you forget to make this change, then you will not see any errors at compile time.
+If you forget to make this change, then you will not see any errors at compile time!
+At runtime however, you will see this error message in the browser console:
 
-At runtime however, you will see this slightly-less-then-helpful error message in the browser console:
+```
+LinkError: WebAssembly.instantiate(): mismatch in shared state of memory, declared = 0, imported = 1
+```
 
-`LinkError: WebAssembly.instantiate(): mismatch in shared state of memory, declared = 0, imported = 1`
+The problem here is that the host environment and the WebAssembly module disagree on whether or not they should share memory.
+Here, the host environment says that the 46 pages of memory it created are shared (`imported = 1`), but the WebAssembly module thinks it has exclusive access to that memory (`declared = 0`). 
 
-This means this particular module has not declared the use of shared memory, but the memory being imported from the host environment has been created as shared<br>
+Since this mismatch would violate WebAssembly's safety principles, it cannot be permitted to exist, so a runtime error is thrown.<br>
 ***`</GOTCHA>`***
 
 
@@ -132,7 +136,8 @@ Now, we simply have a single loop that performs an atomic read-modify-write on t
   (if (i32.gt_u
     (local.get $pixel_count)
     (local.tee $this_pixel
-      (i32.atomic.rmw.add (local.get $next_pixel_offset) (i32.const 1))  ;; This is all-important statement!
+      ;; This is all-important statement!
+      (i32.atomic.rmw.add (local.get $next_pixel_offset) (i32.const 1))
     )
   )
   (then
