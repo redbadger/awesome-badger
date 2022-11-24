@@ -56,9 +56,11 @@ LinkError: WebAssembly.instantiate(): mismatch in shared state of memory, declar
 ```
 
 The problem here is that the host environment and the WebAssembly module disagree on whether or not they should share memory.
-Here, the host environment says that the 46 pages of memory it created are shared (`imported = 1`), but the WebAssembly module thinks it has exclusive access to that memory (`declared = 0`). 
 
-Since this mismatch would violate WebAssembly's safety principles, it cannot be permitted to exist, so a runtime error is thrown.<br>
+In our case, the host environment used `WebAssembly.Memory()` to create 46 pages of shared memory ( `shared: true`), but WebAssembly declared `(memory 46)` instead of `(memory 46 46 shared)`.
+So when the WebAssembly module starts up, it see that its own memory has not been declared as shared (`declared = 0`), but the memory it imports from the host environment has been created as shared (`imported = 1`).
+
+Since this mismatch would lead to all sorts of confusion (and violate WebAssembly's safety principles), it cannot be permitted to exist, so a runtime error is thrown.<br>
 ***`</GOTCHA>`***
 
 
