@@ -4,8 +4,9 @@
 |---|---|---
 | [6: Zooming In](../../06%20Zoom%20Image/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) |
 | [7.2 Schematic Overview](../02/) | [7: WebAssembly and Web Workers](../) | [7.4 Adapt the Main Thread Coding](../04/)
+| | 7.3 Create Web Worker | [7.3.1: Define the Message Structure](./01/)
 
-### 7.3 Create the Web Worker
+### 7.3 Create Web Workers
 
 The coding for a Web Worker needs to be in a separate file from the main thread, so we will create a file called `worker.js`.
 

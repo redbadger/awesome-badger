@@ -4,6 +4,7 @@
 |---|---|---
 | [6: Zooming In](../../06%20Zoom%20Image/) | [Top](/chriswhealy/plotting-fractals-in-webassembly) |
 | [7.3 Create the Web Worker](../03/) | [7: WebAssembly and Web Workers](../) |
+| | 7.4 Adapt the Main Thread Coding | [7.4.1: Extend the HTML](./01/)
 
 ### 7.4 Adapt the Main Thread Coding
 
