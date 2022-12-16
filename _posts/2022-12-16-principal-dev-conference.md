@@ -1,9 +1,19 @@
-# Principal Dev Conference
+---
+layout: post
+title:  "Quick notes on how to be a Principal Dev"
+date:   2022-12-16 12:00:00 +0000
+category: timlee
+author: Tim Lee
+excerpt: Do you want to be a principal dev? Look no further. These notes will sort you right out.
+---
+
+# Quick notes on how to be a Principal Dev
 
 _[Tim Lee](../) — 16 December 2022_
 
 ## Introduction
 Short notes from a 2-day [Principal Dev](https://principal.dev/) training I attended, lead by Eduards Sizovs.
+
 Full course slides can be found [here](https://sizovs.net/principal/#1) (arrow to navigate).
 
 ## Short notes
