@@ -42,7 +42,7 @@ So if we now put that object into a [template literal](https://developer.mozilla
 
 Ok, that's fine.
 
-Another way to perform string conversion is to [overload the + operator](../InsideJavaScript/01%20Type%20Coercion/01.2/README.md#overloading-the--operator).
+Another way to perform string conversion is to [overload the + operator](/chriswhealy/InsideJavaScript/Type Coercion/2/#overloading-the--operator).
 
 ```javascript
 someObj + ""    // 'Blah'
