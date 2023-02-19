@@ -2,7 +2,7 @@
 
 [@LogaRhythm](https://twitter.com/LogaRhythm)
 
-As a backend developer, my favourite languages are Rust, WebAssembly and Kotlin
+As a backend developer and technical specialist, my favourite languages are Rust, WebAssembly and Kotlin
 
 * Backend Developer and Technical Specialist: [Lighthouse Consulting](https://lighthouse.no)
    * March 2023 -
