@@ -123,7 +123,7 @@ The coding here takes the simple option and treats WASM shared memory as a buffe
 Whilst this removes the need to worry about all that byte-swapping shennanigans created by the CPU's endianness, it does create a pretty big performance problem.
 The bottom line is that writing data as individual bytes is slow!
 
-The solution would be to use a JavaScript `DataView` and write the data as unsigned, 64-bit values &mdash; but I haven't had time to implement this yet...
+The solution is to use a JavaScript `DataView` and write the data as unsigned, 64-bit values &mdash; but I haven't had time to implement this yet...
 
 To see this performance problem, just run the program against a very large file with performance tracking switch on:
 
@@ -140,7 +140,7 @@ Report result           :    5.773 ms
 Done in 8972.614 ms
 ```
 
-The above statitics are for a file that is nearly 100Mb is size.  Simply simply writing the data to shared memory took about 5 times longer than calculating the actual hash.
+The above statitics are for a file that is nearly 100Mb is size.  It takes 5 times longer to write the data to shared memory than it does to calculate the actual hash.
 Ouch!
 
 ## Convert Binary Hash to Printable String
