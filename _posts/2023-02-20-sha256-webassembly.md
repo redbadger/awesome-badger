@@ -33,7 +33,7 @@ Two challenges had to be overcome during development:
 
 1. The SHA256 algorithm expects to handle data in network byte order, but WebAssembly only has numeric data types that automatically rearrange a value's byte order according to the CPU's endianness.
 1. Unit testing WASM functions within a module is an entirely manual process.
-   This presented an interesting challenge when writing unit tests for WASM functions that did not need to be exported (I.E. private functions)
+   This presented an interesting challenge - especially when writing unit tests for private WASM functions
 
 ## Table of Contents
 

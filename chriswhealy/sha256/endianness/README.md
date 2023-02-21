@@ -39,13 +39,13 @@ So the problem is simply this: before the SHA256 algorithm can start, we must sw
 Fortunately in our case, there is a simple workaround.
 
 The host environment reads the file and writes the data to shared memory ***in network order***.
-The file is then processed in 64-byte chunks, where each chunk is copied to the start of a 256-byte message digest.
+The file is then processed in 64-byte chunks, where each chunk is copied to the start of a 512-byte message digest.
 
 All we need to do is swap the endianness of the data each time we copy a 64-byte chunk to the message digest.
 After that, we no longer need to care about endianness because the data will always appear on the stack in the correct byte order.
 
-Finally, after the SHA256 digest has been generated, we need to generate a character string that swaps the bytes back into network order.
-In our particuular case, the coding in the WebAssembly host environment is responsible for converting the binary hash value into a printable string.
+Finally, after the hash has been generated, we need to generate a character string that swaps the bytes back into network order.
+In our particuular case, the coding in the JavaScript host environment is responsible for converting the binary hash value into a printable string.
 
 ### Parallel Operations
 
@@ -79,7 +79,7 @@ Notice that we are now using instructions belonging to a different dataype: `v12
 The `i8x16` instruction belongs to the `v128` data type and means *"look at this block of 128 bits as if it were 16, 8-bit integers"*.
 
 A block of 128 bits is loaded onto the stack, then we swap the endianness by using `i8x16.swizzle` to rearrange the byte order.
-Then those four `i23` values are written back to memory.
+Then those four `i32` values are written back to memory.
 
 ![Swap Endianness using i8x16.shuffle](/chriswhealy/sha256/img/i8x16.swizzle.png)
 

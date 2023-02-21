@@ -7,7 +7,7 @@ All JavaScript files have been written as ES6 modules (`.mjs` files) containing 
 ## Bare-Bones Architecture
 
 This implementation contains a lot of coding related to activities such as performance measurement, providing WebAssembly with logging functions, and implementing a unit test framework.
-None of this coding will be described as its purpose is only peripheral to the task at hand.
+None of this coding will be described here as its purpose is only peripheral to the task at hand.
 
 What is documented below are the following bare-bones steps:
 
@@ -30,9 +30,6 @@ startWasm(wasmFilePath)
     let hash = wasmMem32.slice(hashIdx32, hashIdx32 + 8).reduce((acc, i32) => acc += i32AsHexStr(i32), "")
 
     console.log(`${hash}  ${fileName}`)
-
-    // Output performance tracking marks
-    perfTracker.listMarks()
   })
 ```
 
@@ -117,7 +114,7 @@ export const populateWasmMemory =
   }
 ```
 
-### OOPS! Performance Problem
+### OOPS! Performance Problem!
 
 The coding here takes the simple option and treats WASM shared memory as a buffer of unsigned, 8-bit integers (`Uint8Array`).
 Whilst this removes the need to worry about all that byte-swapping shennanigans created by the CPU's endianness, it does create a pretty big performance problem.
@@ -140,7 +137,8 @@ Report result           :    5.773 ms
 Done in 8972.614 ms
 ```
 
-The above statitics are for a file that is nearly 100Mb is size.  It takes 5 times longer to write the data to shared memory than it does to calculate the actual hash.
+The above statistics are for a file that is nearly 100Mb is size.  We can see that writing the data to shared memory as unsigned, 8-bit integers takes about 5 times longer than calculating the actual hash!
+
 Ouch!
 
 ## Convert Binary Hash to Printable String

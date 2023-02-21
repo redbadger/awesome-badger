@@ -9,16 +9,16 @@ We will assume that by the time the WebAssembly module is called, the host envir
 * Written the bit length as a big endian, 64-bit integer to the end of the last 512-bit block
 * Calculated the number of 512-bit message blocks to be processed
 
-In addition to this, the host enviroment and the WebAssembly module need to share common knowledge of the memorty offset at which the the file has been written.
-As a future development (design feature), it would probably be worth removing this need for shared knowledge so that the host environment simply picks an exported value from WebAssembly module, then writes the file data to that particular location.
+In addition to this, the host enviroment and the WebAssembly module need to share common knowledge of the memorty offset at which the file has been written.
+As a future development, it would probably be worth removing this need for shared knowledge so that the host environment simply picks up an exported memory offset from the WebAssembly module, then writes the file data to that particular location.
 
 ## WebAssembly Module Assumptions
 
 Within the WebAssembly module, we need certain hardcoded constants to be available.
 These values are the fractional parts of the square roots of the first 16 prime numbers, and the fractional parts of the cube roots of the first 64 prime numbers.
 
-The values are simply hard-coded as `(data)` declarations, living at known memory offsets and whose values are quoted little-endian byte order.
-for example, the fractional parts of the square roots of the first 16 primes are given as:
+The values are simply hard-coded as `(data)` declarations, living at known memory offsets and whose values are supplied in little-endian byte order.
+For example, the fractional parts of the square roots of the first 16 primes are given as:
 
 ```wast
 (data (i32.const 0x000000)
@@ -36,12 +36,12 @@ for example, the fractional parts of the square roots of the first 16 primes are
 ## Publicly Exported Function
 
 This particular module need only export a single function.
-In this case, we will call that function `digest`:
+In this case, we will call that function `sha256_hash`:
 
 ```wast
-(func (export "digest")
+(func (export "sha256_hash")
       (param $msg_blk_count i32)  ;; Number of message blocks
-      (result i32)                ;; The SHA256 digest is the concatenation of the 8, i32s starting at this location
+      (result i32)                ;; The SHA256 hash is the concatenation of the 8, i32s starting at this location
 
   ;; SNIP
 
@@ -63,7 +63,7 @@ This initialsation can be performed by a single `memory.copy` statement.
 We also declare local pointer and local block counter variables.
 
 ```wast
-(func (export "digest")
+(func (export "sha256_hash")
       (param $msg_blk_count i32)  ;; Number of message blocks
       (result i32)                ;; The SHA256 digest is the concatenation of the 8, i32s starting at this location
 
@@ -83,16 +83,16 @@ We also declare local pointer and local block counter variables.
 )
 ```
 
-## Outer Loop in Function `digest`
+## Outer Loop in Function `sha256_hash`
 
-We know we must perform the same 2-phase processing on every 64-byte chunk of the file, so at the top level of function `digest`, we start a loop that iterates as many times as there are chunks in the message.
+We know we must perform the same 2-phase processing on every 64-byte chunk of the file, so at the top level of function `sha256_hash`, we start a loop that iterates as many times as there are chunks in the message.
 
 Within this outer loop, all we need to do is call the private functions `$phase_1` and  `$phase_2`, increment the pointer and counter, then check for loop continuation.
 
 Once the outer loop has finished processing the entire file, the final output is simply the concatenation of these 8 hash values.
 
 ```wast
-(func (export "digest")
+(func (export "sha256_hash")
       (param $msg_blk_count i32)  ;; Number of message blocks
       (result i32)                ;; The SHA256 digest is the concatenation of the 8, i32s starting at this location
 
@@ -125,9 +125,12 @@ Once the outer loop has finished processing the entire file, the final output is
 
 Function `$phase_1` is responsible for building the message digest.
 
-This function contains two loops: this first copies the next 64 bytes of message data into words 0 to 15 of the message digest, then the second loop populates words 16 to 63 based on the message data.
+This function contains two loops: this first copies the next 64 bytes of message data into words 0 to 15 of the message digest, then the second loop populates the remaining 48 words (16 to 63) of the message digest.
 
-Due to the fact that data must be processed in network byte order, we must use the `i8x16.swizzle` instruction to copy a 128-bit block of data, and at the same time, swap the byte order.
+Due to the fact that data must be processed in network byte order, we cannot use the `memory.copy` insteruction.
+Instead, we must use the `i8x16.swizzle` instruction.
+This copies a 128-bit block of data onto the stack, and at the same time, swaps the byte order according to the vector of incdices supplied as the second argument.
+
 This trick is needed due to the fact that almost all computers nowadays use little-endian byte order.
 Therefore we have to reverse the byte order of our data, so that after the CPU has reversed it (into what it thinks is the correct byte order for an `i32` on a little-endian machine), the data appears on the stack in the correct network byte order.
 
@@ -155,9 +158,10 @@ Therefore we have to reverse the byte order of our data, so that after the CPU h
   )
 ```
 
-Now that words 0 to 15 of the message digest have been populated, we can start a second loop to populate the remaining 48 words (16 to 63).
+Now that words 0 to 15 of the message digest have been correctly populated, we can start a second loop to populate the remaining 48 words (16 to 63).
 
-Initially, the second loop inside this function used a hard-coded loop iteration limit; however, to make unit testing easier, it turned out to be very convenient if the number of loop iterations was supplied as a function argument.
+Initially, the second loop inside this function was written to use a hard-coded iteration limit; however, this made the function tricky to unit test.
+Therefore, to make unit testing easier, it turned out to be very convenient to pass the number of loop iterations as a function argument.
 This then allowed a unit test to be created that performed a single loop iteration without the need to change the function itself.
 
 Now that testing is complete and the coding works, it might be more intuitive to replace this argument with a hard-coded iteration value; however, it does no harm to keep this feature.
@@ -275,27 +279,22 @@ Each iteration of the loop does two things:
 
    Again, refer to the [algorithm overview](/chriswhealy/sha256/algorithm-overview/) to see what the `$big_sigma` function does.
 
-* It shunts the values of the working variables:<br>
-    `h = g`, `g = f`, `f = e` etc, but instead of simply assigning `e = d`, `e` is set equal to `d + $temp1`.<br>
-    The shunt then continues with: `d = c`, `c = b` and `b = a`.<br>
-    Finally, rather than rotating `h` back into `a`, `a` is set equal to `$temp1 + $temp2`
+* It shunts the values of the working variables down the list, injecting `$temp1` into the new value of `e` and setting the new value of `a` to be `$temp1 + $temp2` rather than rotating the old value of `h` back into `a`.
+    ```
+    h = g
+    g = f
+    f = e
+    e = d + $temp1
+    d = c
+    c = b
+    b = a
+    a = $temp1 + $temp2
+    ```
 
 When all 64 words of the message digest have been processed, the values of the working variables `a` to `h` are added to the corresponding hash values `h[0]` to `h[7]`.
 Any 32-bit overflows caused by addition (or any other operation for that matter) are ignored.
 
 Phase 2 finishes with a new set of 8, 32-bit hash values.
-
-```wast
-;; Add working variables to hash values and store back in memory - don't worry about overflows
-(i32.store          (global.get $HASH_VALS_PTR)                 (i32.add (local.get $h0) (local.get $a)))
-(i32.store (i32.add (global.get $HASH_VALS_PTR) (i32.const  4)) (i32.add (local.get $h1) (local.get $b)))
-(i32.store (i32.add (global.get $HASH_VALS_PTR) (i32.const  8)) (i32.add (local.get $h2) (local.get $c)))
-(i32.store (i32.add (global.get $HASH_VALS_PTR) (i32.const 12)) (i32.add (local.get $h3) (local.get $d)))
-(i32.store (i32.add (global.get $HASH_VALS_PTR) (i32.const 16)) (i32.add (local.get $h4) (local.get $e)))
-(i32.store (i32.add (global.get $HASH_VALS_PTR) (i32.const 20)) (i32.add (local.get $h5) (local.get $f)))
-(i32.store (i32.add (global.get $HASH_VALS_PTR) (i32.const 24)) (i32.add (local.get $h6) (local.get $g)))
-(i32.store (i32.add (global.get $HASH_VALS_PTR) (i32.const 28)) (i32.add (local.get $h7) (local.get $h)))
-```
 
 ## Finally
 

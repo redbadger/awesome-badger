@@ -1,7 +1,7 @@
 # How Does the SHA256 Algorithm Work?
 
-All the algorithms in the SHA-2 family start by generating a digest of a particular length (512 bits in our case).
-Then, using a one-way compression[^1] algorithm, they generate an output value whose bit pattern is highly susceptible to change.
+All the algorithms in the SHA-2 family start by generating a digest (also known as a "schedule") of a particular length (512 bytes in our case).
+Then, using a one-way compression[^1] algorithm, they generate a unique output value whose bit pattern is highly susceptible to change.
 
 This susceptibility to change is based on the fact that the algorithms exhibit a behaviour known as the [avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect); that is, if a single input bit changes, then there is a 50% probability that every output bit will change.
 
@@ -22,7 +22,7 @@ The SHA-2 family of algorithms perform an initial preparation phase, then repeat
 1. Append sufficient `0` bits to bring the message length up to the next 512-bit boundary, minus 64 bits
 1. Write the bit length as a big-endian, 64-bit integer into the last 64 bits of the message
 
-The message now occupies an integer number of 512-bit blocks
+The message now occupies an integer number of 512-bit blocks.
 
 ## Phase 1: Build The Digest
 
@@ -34,7 +34,7 @@ The message digest is a 512-byte block viewed as 64, 32-bit words (`md[0..63]`)
    <pre>
    for n in 16..63
      &sigma;0    = rotr(md[n-15], 7) XOR rotr(md[n-15], 18) XOR shr(md[n-15], 3)
-     &sigma;1    = rotr(md[n-2], 17) XOR rotr(md[n-2], 19) XOR shr(md[n-2], 10)
+     &sigma;1    = rotr(md[n-2], 17) XOR rotr(md[n-2], 19)  XOR shr(md[n-2], 10)
      md[n] = md[n-16] + &sigma;0 + md[n-7] + &sigma;1
    end
    </pre>
@@ -54,7 +54,7 @@ The message digest is a 512-byte block viewed as 64, 32-bit words (`md[0..63]`)
    h = h[7]
    </pre>
 
-2. Compress each word in the message digest into the working variables
+2. For each word in the message digest, calculate a set of intermediate values and store in the working variables as follows:
 
    <pre>
    for n in 0..63
@@ -78,7 +78,8 @@ The message digest is a 512-byte block viewed as 64, 32-bit words (`md[0..63]`)
    end
    </pre>
 
-3. Phase 2 ends by adding the working variables to the hash values
+3. After the above loop has processed all 64 words in the message digest, phase 2 ends by incrementing the hash values by whatever value is currently in the working variables.
+All arithmetic overflows are simply ignored.
 
    <pre>
    h[0] += a
@@ -96,4 +97,4 @@ The message digest is a 512-byte block viewed as 64, 32-bit words (`md[0..63]`)
 Phases 1 and 2 are repeated as many times as needed to consume the input message, then the final digest is simply the concatenation of the eight hash values `h[0..7]`.
 
 
-[^1]: Be careful not to confuse the "one-way compression" used by the SHA-2 algorithms with the more familiar "data" or "two-way compression" performed by programs such as `ZIP`.<br>Programs such as `ZIP` are only useful because they specifically create a two-way mapping between the compressed form of the data and the original.  Without this, you'd never be able to `unzip` your files.<br>However, in cryptography, this two-way mapping is precisely what we must avoid creating!  Consequently, the SHA-2 family of algorithms have been specifically designed to exclude any practical possibilty of recovering the original data from its compressed form; yet at the same time, the compressed form of the data must be constructed in such a way that it could only have come from the source data.
+[^1]: Be careful not to confuse the "one-way compression" used by the SHA-2 algorithms with the more familiar "data" or "two-way compression" performed by programs such as `zip`.<br>Programs such as `zip` are only useful because they specifically create a two-way mapping between the compressed data and the original data.  Without this, you'd never be able to `unzip` your files.<br>However, in cryptography, this two-way mapping is precisely what we must avoid creating!<br>Consequently, the SHA-2 family of algorithms have been specifically designed to exclude any practical possibilty of recovering the original data from its compressed form; yet at the same time, the compressed form of the data must be constructed in such a way that it could only have come from the source data.
