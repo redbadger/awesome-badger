@@ -75,14 +75,14 @@ Without this reference to shared memory, the WebAssembly function `sha256_hash` 
 
 ## Populate Shared Memory
 
-Now that the WebAssembly module has been instantiated with a minimal memory allocation, we need to read the target file and copy that into shared memory.
+Now that the WebAssembly module has been instantiated with a minimal memory allocation, we need to read the target file and copy that data into shared memory.
 
-The immediate question to answer though is whether or not the minimal block of shared memory allocated when the WebAssmebly module was instatiated will be big enough.
+The immediate question though is whether or not the minimal two pages of shared memory allocated when the WebAssmebly module was instatiated will be big enough to contain the file.
 
 The coding shown below has been stripped back to show only the functional minimum.
-Hence, non-essential arguments havbe been replaced with underscores `_`.
+Hence, non-essential arguments have been replaced with underscores `_`.
 
-`memPages` is a utility function that calculates the number of 64Kb memory pages a file will need (plus the 9 extra buyes needed for the end-of-data marker and the 64-bit data length field).
+`memPages` is a utility function that calculates the number of 64Kb memory pages a file will need (plus the 9 extra bytes needed for the end-of-data marker and the 64-bit length field).
 
 ```javascript
 export const populateWasmMemory =
@@ -119,8 +119,9 @@ export const populateWasmMemory =
 
 ### OOPS! Performance Problem
 
-The coding here treats WASM shared memory as a buffer of unsigned, 8-bit bytes (`Uint8Array`) for the simple reason that we then don't have to worry about any byte-swapping shennanigans created by the CPU's endianness.
-However, this introduces a big performance problem, because writing data as individual bytes is slow!
+The coding here takes the simple option and treats WASM shared memory as a buffer of unsigned, 8-bit integers (`Uint8Array`).
+Whilst this removes the need to worry about all that byte-swapping shennanigans created by the CPU's endianness, it does create a pretty big performance problem.
+The bottom line is that writing data as individual bytes is slow!
 
 The solution would be to use a JavaScript `DataView` and write the data as unsigned, 64-bit values &mdash; but I haven't had time to implement this yet...
 
