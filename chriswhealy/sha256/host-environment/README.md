@@ -37,7 +37,7 @@ startWasm(wasmFilePath)
 
 ```javascript
 import { readFileSync } from "fs"
-import { hostEnv } from "./hostEnvironment.mjs"
+import { hostEnv } from "./utils/hostEnvironment.mjs"
 
 const MIN_WASM_MEM_PAGES = 2
 
