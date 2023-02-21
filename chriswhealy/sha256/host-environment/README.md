@@ -14,8 +14,8 @@ What is documented below are the following bare-bones steps:
 1. Instantiate the `.wasm` module
 2. Using the file name supplied as a `node` command line argument, read the target file into memory
 3. Copy the file contents into WASM shared memory adding the end-of-data marker (`0x80`) and the file's bit length as a big-endian `i64` value
-4. Invoke the WASM module's exported `digest` function passing in the number of 512-bit blocks the file occupies
-5. Using the pointer returned by the `digest` function, convert the 256-bit hash value into a printable string and write to the console.
+4. Invoke the WASM module's exported `sha256_hash` function passing in the number of 512-bit blocks the file occupies
+5. Using the pointer returned by the `sha256_hash` function, convert the 256-bit hash value into a printable string and write it to the console.
 
 ```javascript
 startWasm(wasmFilePath)
@@ -23,13 +23,13 @@ startWasm(wasmFilePath)
     let msgBlockCount = populateWasmMemory(wasmMemory, fileName, _, _)
 
     // Calculate hash then convert byte offset to i32 index
-    let digestIdx32 = wasmExports.digest(msgBlockCount) >>> 2
+    let hashIdx32 = wasmExports.sha256_hash(msgBlockCount) >>> 2
 
     // Convert binary hash to character string
     let wasmMem32 = new Uint32Array(wasmMemory.buffer)
-    let digest = wasmMem32.slice(digestIdx32, digestIdx32 + 8).reduce((acc, i32) => acc += i32AsHexStr(i32), "")
+    let hash = wasmMem32.slice(hashIdx32, hashIdx32 + 8).reduce((acc, i32) => acc += i32AsHexStr(i32), "")
 
-    console.log(`${digest}  ${fileName}`)
+    console.log(`${hash}  ${fileName}`)
 
     // Output performance tracking marks
     perfTracker.listMarks()
@@ -71,7 +71,7 @@ All the imported functions relate to unit testing and are not relevant for produ
 }
 ```
 
-Without this reference to shared memory, the SHA256 `digest` function would have no data to work on.
+Without this reference to shared memory, the WebAssembly function `sha256_hash` would not have any access to the file data.
 
 ## Populate Shared Memory
 
@@ -139,7 +139,7 @@ Report result           :    5.773 ms
 Done in 8972.614 ms
 ```
 
-The above statitics are for a file that is nearly 100Mb is size.  Simply simply writing the data to shared memory took about 5 times longer than calculating the actual digest.
+The above statitics are for a file that is nearly 100Mb is size.  Simply simply writing the data to shared memory took about 5 times longer than calculating the actual hash.
 Ouch!
 
 ## Convert Binary Hash to Printable String
@@ -147,11 +147,11 @@ Ouch!
 After the hash has been calculated, the last remaining job is to convert the binary value to a printable string:
 
 ```javascript
-  let digestIdx32 = wasmExports.sha256_hash(msgBlockCount) >>> 2
+  let hashIdx32 = wasmExports.sha256_hash(msgBlockCount) >>> 2
 
   // Convert binary hash to character string
   let wasmMem32 = new Uint32Array(wasmMemory.buffer)
-  let hash = wasmMem32.slice(digestIdx32, digestIdx32 + 8).reduce((acc, i32) => acc += i32AsHexStr(i32), "")
+  let hash = wasmMem32.slice(hashIdx32, hashIdx32 + 8).reduce((acc, i32) => acc += i32AsHexStr(i32), "")
 ```
 
 Here, the utility function `i32AsHexStr` is used as reducer to perform the necessary conversion.
