@@ -6,7 +6,7 @@ All JavaScript files have been written as ES6 modules (`.mjs` files) containing 
 
 ## Bare-Bones Architecture
 
-This implementation contains a coding related to activities such as performance measurement, providing WebAssembly with logging functions, and implementing a unit test framework.
+This implementation contains a lot of coding related to activities such as performance measurement, providing WebAssembly with logging functions, and implementing a unit test framework.
 None of this coding will be described as its purpose is only peripheral to the task at hand.
 
 What is documented below is the only the coding needed to prepare shared memory, invoke the SHA256 WebAssembly module and format the result.
