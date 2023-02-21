@@ -12,11 +12,13 @@ excerpt: WebAssembly Text (WAT) is ideally suited for implementing CPU intensive
 The SHA256 algorithm is one of the ***S***ecure ***H***ash ***A***lgorithm-2 family of cryptographic functions published by the United States [National Security Agency](https://en.wikipedia.org/wiki/National_Security_Agency) in 2001.
 
 The purpose of these algorithms is to generate an output called a ***hash*** that, for all practical purposes, can be considered unique for the given input.
-In this sense, a hash represents a message's unique digital fingerprint.
+In this sense, a hash can be thought of as a message's unique digital fingerprint.
 
-In the same way that the probability of finding two human beings with identical fingerprints is unfeasibly low, so the probability of finding two input values that generate the same SHA256 hash value is also unfeasibly low.
+In the same way that the probability of finding two human beings with identical fingerprints is unfeasibly low, so the probability that any two input messages will generate the same SHA256 hash value is also unfeasibly low.
 
-In more technical terms, for any secure hash value of length `n` bits, the probability of a brute force attack finding the input value that generated it is one chance in <code>2<sup>n</sup></code>: that's 1 chance in 2<sup>256</sup> or 1.15792089237 * 10<sup>77</sup> &mdash; and herein lies the strength of the SHA-2 family of algorithms; namely, that the chances of being able to use a forged hash value are so astronomically small that it's not even worth starting.
+In more technical terms, for any secure hash value of length `n` bits, the probability of a brute force attack finding the input value that generated it is one chance in <code>2<sup>n</sup></code>.
+
+In our case, we are creating a hash value 256 bits long, so that's 1 chance in 2<sup>256</sup> or 1.15792089237 * 10<sup>77</sup> &mdash; and herein lies the strength of the SHA-2 family of algorithms; namely, that the chances of being able to use a forged hash value are so astronomically small that it's not even worth starting.
 
 ## Development Objectives
 
@@ -39,3 +41,4 @@ Two challenges had to be overcome during development:
 - [WebAssembly Implementation](/chriswhealy/sha256/implementation/)
 - [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/)
 - [Host Environment](/chriswhealy/sha256/host-environment/)
+- [Summary](/chriswhealy/sha256/summary/)
