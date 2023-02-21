@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Implementing the SHA256 Message Digest Algorithm in WebAssembly Text"
+title:  "Implementing the SHA256 Hash Algorithm in WebAssembly Text"
 date:   2023-02-20 12:00:00 +0000
 category: chriswhealy
 author: Chris Whealy
-excerpt: WebAssembly Text (WAT) is ideally suited for implementing CPU intensive algorithms such as calculating a file's SHA256 digest.  This blog describes not only how I got this algorithm working in WebAssembly Text, but takes a wider view at the areas where improvements could be made both in the host environment (JavaScript in this case) and in the overall developer experience of working with WAT.
+excerpt: WebAssembly Text (WAT) is ideally suited for implementing CPU intensive algorithms such as calculating a file's SHA256 hash.  This blog describes not only how I got this algorithm working in WebAssembly Text, but takes a wider view at the areas where improvements could be made both in the host environment (JavaScript, in this case) and in the overall developer experience of working with WAT.
 ---
 
 ## SHA256: What Is It?
@@ -14,7 +14,7 @@ The SHA256 algorithm is one of the ***S***ecure ***H***ash ***A***lgorithm-2 fam
 The purpose of these algorithms is to generate an output called a ***hash*** that, for all practical purposes, can be considered unique for the given input.
 In this sense, a hash can be thought of as a message's unique digital fingerprint.
 
-In the same way that the probability of finding two human beings with identical fingerprints is unfeasibly low, so the probability that any two input messages will generate the same SHA256 hash value is also unfeasibly low.
+In the same way that the probability of finding two human beings with identical fingerprints is unfeasibly low, so the probability that any two input messages will generate the same SHA256 hash value (known as a "collision") is also unfeasibly low.
 
 In more technical terms, for any secure hash value of length `n` bits, the probability of a brute force attack finding the input value that generated it is one chance in <code>2<sup>n</sup></code>.
 
