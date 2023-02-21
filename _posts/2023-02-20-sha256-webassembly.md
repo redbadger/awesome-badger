@@ -20,7 +20,7 @@ In more technical terms, for any secure hash value of length `n` bits, the proba
 
 ## Development Objectives
 
-1. See how small a binary can be produced when the SHA256 digest algrothm is implemented directly in WebAssembly Text
+1. See how small a binary can be produced when the SHA256 digest algorithm is implemented directly in WebAssembly Text
 1. Compare the runtime performance of the WebAssembly module with the native `sha256sum` program supplied with macOS
 
 ## Development Challenges
@@ -38,3 +38,4 @@ Two challenges had to be overcome during development:
 - [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
 - [WebAssembly Implementation](/chriswhealy/sha256/implementation/)
 - [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/)
+- [Host Environment](/chriswhealy/sha256/host-environment/)
