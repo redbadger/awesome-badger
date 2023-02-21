@@ -162,4 +162,9 @@ There are two important details to bear in mind here:
 1. WebAssembly has written the required values to memory as 8, `i32` integers.
    This immediately means that the data will appear in memory in little-endian byte order.
 1. The pointer returned from WebAssembly is a byte offset within shared memory.
-   Since we will be extracing the value as 4-byte `i32`'s, this byte offset must be converted to an `i32` offset &mdash; Hence the unsigned shift right `>>>` to divide this value by 4
+   However, we need to look at the data in shared memory as 8, 4-byte `i32`'s.
+   This means we must do the following:
+
+   * Create a new `Uint32Array` overlay onto shared memory
+   * Divide the byte offset by 4 to convert it to an `i32` offset &mdash; hence the unsigned shift right `>>> 2`
+   * Using the `i32` index value, extract the 8, `i32` hash values via the `Uint32Array` overlay
