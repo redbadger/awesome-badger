@@ -25,6 +25,8 @@ In our case, we are creating a hash value 256 bits long, so that's 1 chance in 2
 1. See how small a binary can be produced when the SHA256 digest algorithm is implemented directly in WebAssembly Text
 1. Compare the runtime performance of the WebAssembly module with the native `sha256sum` program supplied with macOS
 
+The Git repo containing the working software can be [found here](https://github.com/ChrisWhealy/wasm_sha256)
+
 ## Development Challenges
 
 Two challenges had to be overcome during development:
