@@ -1,6 +1,11 @@
 # How Does the SHA256 Algorithm Work?
 
-The SHA256 algorithm performs an initial preparation phase, then repeats a 2-phase compression process that works as follows:
+All the algorithms in the SHA-2 family start by generating a digest of a particular length (512 bits in our case).
+Then, using a one-way compression[^1] algorithm, they generate an output value whose bit pattern is highly susceptible to change.
+
+This susceptibility to change is based on the fact that the algorithms exhibit a behaviour known as the [avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect); that is, if a single input bit changes, then there is a 50% probability that every output bit will change.
+
+The SHA-2 family of algorithms perform an initial preparation phase, then repeat a 2-phase compression process that works as follows:
 
 ## Phase 0: Preparation
 
@@ -12,10 +17,11 @@ The SHA256 algorithm performs an initial preparation phase, then repeats a 2-pha
 
 ### Message Preparation
 
-1. Append a single `1` bit to the message (I.E. `0x80`).
-1. Calculate the message's total bit length (which will always be &ge; 1)
-1. Append sufficient `0` bits to bring the message length up to the next 512-bit boundary, minus 64 bits
-1. Write the bit length as a big-endian, 64-bit integer into the last 64 bits of the message
+1. Append a single `1` bit to the message (I.E. for data obtained from a file, append
+2. `0x80`).
+3. Calculate the message's total bit length (which will always be &ge; 1)
+4. Append sufficient `0` bits to bring the message length up to the next 512-bit boundary, minus 64 bits
+5. Write the bit length as a big-endian, 64-bit integer into the last 64 bits of the message
 
 The message now occupies an integer number of 512-bit blocks
 
@@ -89,3 +95,6 @@ The message digest is a 512-byte block viewed as 64, 32-bit words (`md[0..63]`)
 ## Final Output
 
 Phases 1 and 2 are repeated as many times as needed to consume the input message, then the final digest is simply the concatenation of the eight hash values `h[0..7]`.
+
+
+[^1]: Be careful not to confuse the "one-way compression" used by the SHA-2 algorithms with the more familiar "data" or "two-way compression" performed by programs such as `ZIP`.<br>Programs such as `ZIP` are only useful because they specifically create a two-way mapping between the compressed form of the data and the original.  Without this, you'd never be able to `unzip` your files.<br>However, in cryptography, this two-way mapping is precisely what we must avoid creating!  Consequently, the SHA-2 family of algorithms have been specifically designed to exclude any practical possibilty of recovering the original data from its compressed form; yet at the same time, the compressed form of the data must be constructed in such a way that it could only have come from the source data.
