@@ -56,7 +56,7 @@ It is reasonable to assume that the host environment knows that the return value
 ## Initialisation
 
 To start with, our 8 hash values must initialised to the fractional part of the square roots of the first 8 prime numbers.
-These value were chosen because they can are truly random numbers (as are the cube roots of the first 64 primes).
+These value were chosen because they can be regarded as truly random numbers (as are the cube roots of the first 64 primes).
 
 This initialsation can be performed by a single `memory.copy` statement.
 
@@ -127,7 +127,7 @@ Function `$phase_1` is responsible for building the message digest.
 
 This function contains two loops: this first copies the next 64 bytes of message data into words 0 to 15 of the message digest, then the second loop populates words 16 to 63 based on the message data.
 
-Due to to the fact that data must be processed in network byte order, we must use the `i8x16.swizzle` instruction to copy a 128-bit block of data, and at the same time, swap the byte order.
+Due to the fact that data must be processed in network byte order, we must use the `i8x16.swizzle` instruction to copy a 128-bit block of data, and at the same time, swap the byte order.
 This trick is needed due to the fact that almost all computers nowadays use little-endian byte order.
 Therefore we have to reverse the byte order of our data, so that after the CPU has reversed it (into what it thinks is the correct byte order for an `i32` on a little-endian machine), the data appears on the stack in the correct network byte order.
 
