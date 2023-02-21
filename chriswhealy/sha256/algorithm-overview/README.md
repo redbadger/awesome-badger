@@ -11,17 +11,16 @@ The SHA-2 family of algorithms perform an initial preparation phase, then repeat
 
 ### Seed value preparation
 
-1. Define 16, 32-bit values `s[0..15]` where each value is the fractional part of the square root of the `n`th prime number
-1. Define 64, 32-bit values `k[0..63]` where each value is the fractional part of the cube root of the `n`th prime number
+1. Define 16, 32-bit values `s[0..15]` where each value is the fractional part of the square root of the first 16 prime numbers
+1. Define 64, 32-bit values `k[0..63]` where each value is the fractional part of the cube root of the first 64 prime numbers
 1. Create 8, 32-bit hash values `h[0..7]` and initialise such that `h[n] = s[n]`
 
 ### Message Preparation
 
-1. Append a single `1` bit to the message (I.E. for data obtained from a file, append
-2. `0x80`).
-3. Calculate the message's total bit length (which will always be &ge; 1)
-4. Append sufficient `0` bits to bring the message length up to the next 512-bit boundary, minus 64 bits
-5. Write the bit length as a big-endian, 64-bit integer into the last 64 bits of the message
+1. Append a single `1` bit to the message (I.E. for data obtained from a file, append `0x80`).
+1. Calculate the message's total bit length (which will always be &ge; 1)
+1. Append sufficient `0` bits to bring the message length up to the next 512-bit boundary, minus 64 bits
+1. Write the bit length as a big-endian, 64-bit integer into the last 64 bits of the message
 
 The message now occupies an integer number of 512-bit blocks
 

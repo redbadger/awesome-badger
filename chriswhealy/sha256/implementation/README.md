@@ -2,7 +2,7 @@
 
 ## Host Environment Assumptions
 
-We will assume that the host environment has already done the following:
+We will assume that by the time the WebAssembly module is called, the host environment has already done the following:
 
 * Copied the file into shared memory
 * Added the end-of-data termination bit `0x80`, and

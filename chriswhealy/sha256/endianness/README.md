@@ -3,7 +3,11 @@
 This program needs to account for a fundamental collision of concepts:
 
 1. The basic unit of data processed by the SHA256 algorithm is an uninterpreted sequence of 32 bits (I.E. raw binary)
-1. WebAssembly only has numeric data types; therefore, like it or not, when you read data from memory, that data will be interpreted as an integer whose byte order is determined by the endianness of the CPU on which you're running.
+1. WebAssembly only has numeric data types
+
+And here's where we experience the collision of concepts.
+
+Like it or not, when WebAssembly reads an `i32` value from memory, that data will be interpreted as an integer whose byte order is determined by the endianness of the CPU on which you're running.
 (Almost all processors nowadays are little-endian)
 
 For example, if you call `(i32.load (local.get $some_offset))`, WebAssembly uses the following train of thought:
@@ -35,16 +39,19 @@ So the problem is simply this: before the SHA256 algorithm can start, we must sw
 Fortunately in our case, there is a simple workaround.
 
 The host environment reads the file and writes the data to shared memory ***in network order***.
-The file is then processed in 64-byte chunks, where each chunk is copied to the start of a 256-byte area known as the message schedule.
+The file is then processed in 64-byte chunks, where each chunk is copied to the start of a 256-byte message digest.
 
-All we need to do is swap the endianness of the data each time we copy a 64-byte chunk to the message schedule.
+All we need to do is swap the endianness of the data each time we copy a 64-byte chunk to the message digest.
 After that, we no longer need to care about endianness because the data will always appear on the stack in the correct byte order.
 
-After the SHA256 digest has been generated, we need to generate a character string that swaps the bytes back into network order.
+Finally, after the SHA256 digest has been generated, we need to generate a character string that swaps the bytes back into network order.
+In our particuular case, the coding in the WebAssembly host environment is responsible for converting the binary hash value into a printable string.
+
+### Parallel Operations
 
 We could reverse the byte-order of each `i32` individually, but fortunately, WebAssembly makes a large selection of SIMD (***S***ingle ***I***nstruction, ***M***ultiple ***D***ata) instructions available to us.
 These instructions are designed to peform the same operation in parallel to multiple data values.
-This not only simplifies the coding, but greatly improves performance.
+This not only simplifies the coding, but gives a four-fold performance improvement.
 
 In the loop where the raw binary file data is copied from the message block into the start of the message schedule, instead of using the `memory.copy` instruction, we can use the SIMD instruction `i8x16.swizzle`.
 
@@ -70,8 +77,11 @@ In the loop where the raw binary file data is copied from the message block into
 Notice that we are now using instructions belonging to a different dataype: `v128` (128-bit vector), not `i32`.
 
 The `i8x16` instruction belongs to the `v128` data type and means *"look at this block of 128 bits as if it were 16, 8-bit integers"*.
-These bits are loaded onto the stack then we can swap the endianness by using `i8x16.swizzle` to rearrange the byte order.
+
+A block of 128 bits is loaded onto the stack, then we swap the endianness by using `i8x16.swizzle` to rearrange the byte order.
+Then those four `i23` values are written back to memory.
 
 ![Swap Endianness using i8x16.shuffle](/chriswhealy/sha256/img/i8x16.swizzle.png)
 
-Then when the same block of bytes is read as 4 `i32`s, it will be assumed that they are stored in little-endian byte order, and the bytes will be reversed (put back into network order) before loading onto the stack.
+Now, when those `i32`s are read back onto the stack, WebAssembly will assume that they are stored in little-endian byte order, and the bytes will be reversed.
+Thus by some simple trickery, we have ensured that the data is processed in network byte order, not littel-endian byte order.
