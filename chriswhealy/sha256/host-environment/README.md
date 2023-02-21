@@ -4,9 +4,13 @@ The host environment for this WebAssembly program has been written in server-sid
 
 All JavaScript files have been written as ES6 modules (`.mjs` files) containing exported functions.
 
-## Bare Bones Architecture
+## Bare-Bones Architecture
 
-The minimal amount of coding needed to invoke the SHA256 WebAssembly module is the following:
+A lot of extra coding will be found in this implementation that deals with things like performance measurement, providing logging values that can be called from WebAssembly and implementing a unit test framework.
+None of this coding will be described as its purpose is only peripheral to the task at hand.
+
+What is documented below is the only the coding needed to prepare shared memory, invoke the SHA256 WebAssembly module and format the result.
+The following bare-bones steps are shown:
 
 1. Instantiate the `.wasm` module
 2. Using the file name supplied as a `node` command line argument, read the target file into memory
