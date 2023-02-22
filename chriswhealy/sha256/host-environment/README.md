@@ -18,7 +18,7 @@ This implementation contains a lot of coding related to peripheral activities su
 * Providing WebAssembly with logging functions
 * Implementing a unit test framework
 
-None of the coding related to the above tasks will be described here as this is not central to the task at hand.
+None of the above coding will be described here as this is not central to the task at hand.
 Instead, the following bare-bones steps are documented:
 
 1. Instantiate the `.wasm` module
