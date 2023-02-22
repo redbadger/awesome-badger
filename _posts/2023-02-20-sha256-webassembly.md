@@ -39,7 +39,7 @@ Two challenges had to be overcome during development:
 ## Table of Contents
 
 - [SHA256 Algorithm Overview](/chriswhealy/sha256/algorithm-overview/)
-- [WebAssembly Has No `raw` Data Type](/chriswhealy/sha256/endianness/)
+- [WebAssembly Does Not Have A "raw binary" Data Type](/chriswhealy/sha256/endianness/)
 - [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
 - [WebAssembly Implementation](/chriswhealy/sha256/implementation/)
 - [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/)

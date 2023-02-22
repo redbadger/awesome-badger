@@ -1,11 +1,9 @@
-# How Does the SHA256 Algorithm Work?
-
 All the algorithms in the SHA-2 family start by generating a digest (also known as a "schedule") of a particular length (512 bytes in our case).
 Then, using a one-way compression[^1] algorithm, they generate a unique output value whose bit pattern is highly susceptible to change.
 
 This susceptibility to change is based on the fact that the algorithms exhibit a behaviour known as the [avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect); that is, if a single input bit changes, then each output bit will have a 50% probability of changing.
 
-The SHA-2 family of algorithms perform an initial preparation phase, then repeats a 2-phase compression process:
+The SHA-2 family of algorithms perform an initial preparation phase, then repeat a 2-phase compression process:
 
 ## Phase 0: Preparation
 
@@ -97,4 +95,4 @@ Any arithmetic overflows are simply ignored.
 Phases 1 and 2 are repeated until the input message has been consumed, then the final digest is simply the concatenation of the eight hash values `h[0..7]`.
 
 
-[^1]: Be careful not to confuse the "one-way compression" used by the SHA-2 algorithms with the more familiar "data" or "two-way compression" performed by programs such as `zip`.<br>Programs such as `zip` are only useful because they specifically create a two-way mapping between the compressed data and the original data.  Without this, you'd never be able to `unzip` your files.<br>However, in cryptography, this two-way mapping is precisely what we must avoid creating!<br>Consequently, the SHA-2 family of algorithms have been specifically designed to exclude any practical possibilty of recovering the original data from its compressed form; yet at the same time, the compressed form of the data must be constructed in such a way that it could only have come from the source data.
+[^1]: Be careful not to confuse the "one-way compression" used by the SHA-2 algorithms with the more familiar "data" or "two-way compression" performed by programs such as `zip`.<br>Programs such as `zip` are only useful because they specifically create a two-way mapping between the compressed data and the original data.  Without this, you'd never be able to `unzip` your files.<br>However, in cryptography, this two-way mapping is precisely what we must avoid creating!<br>Consequently, the SHA-2 family of algorithms have been specifically designed to exclude any practical possibilty of recovering the original data from its compressed form; yet at the same time, the compressed form must be constructed in such a way that it could only have come from the source data.

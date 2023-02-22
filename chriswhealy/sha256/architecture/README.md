@@ -1,5 +1,3 @@
-# Architecture
-
 The architecture of the WebAssembly part of this program is laid out in the following block diagram:
 
 [![block diagram](/chriswhealy/sha256/img/sha256.png)](/chriswhealy/sha256/img/sha256.png)

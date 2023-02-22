@@ -1,14 +1,10 @@
-# WebAssembly Does Not Have A `raw` Data Type
+## A Fundamental Collision of Concepts
 
-This program needs to account for a fundamental collision of concepts:
-
-1. The SHA256 algorithm acts on uninterpreted sequences of 32 bits (I.E. raw binary)
+1. The basic unit of data processed by the SHA256 algorithm is an uninterpreted sequence of 32 bits (I.E. raw binary)
 1. WebAssembly only has numeric data types
 
-And here's where we experience the collision of concepts.
-
 WebAssembly can only read data from memory using one of its numeric data types.
-So like it or not, if you read an `i32` value from memory, that value will be interpreted as an integer whose byte order is determined by the endianness of the CPU on which you're running.
+So like it or not, if you use an `i32` instruction to read a value from memory, that value will be interpreted as an integer whose byte order is determined by the endianness of the CPU on which you're running.
 (Almost all processors nowadays are [little-endian](https://en.wikipedia.org/wiki/Endianness))
 
 For example, if you call `(i32.load (local.get $some_offset))`, then WebAssembly will use the following logic:
@@ -38,10 +34,15 @@ So the problem is simply this: before the SHA256 algorithm can start, we must sw
 
 Fortunately in our case, there is a simple workaround.
 
-The host environment reads the file and writes the data to shared memory ***in network order***.
-The file is then processed in 64-byte chunks, where each chunk is copied to the start of a 512-byte message digest.
+The host environment writes the file data to shared memory ***in network order***.
+The file is then divided into 64-byte chunks, where each chunk forms the seed value at the start of the next 512-byte message digest.
 
-All we need to do is swap the endianness of the data each time we copy a 64-byte chunk to the message digest.
+All we need to do is this:
+
+* Treat the data in this 64-byte chunk as if it were 16 `i32` values
+* Swap the endianness of each `i32` value
+* Write the swapped `i32` values to the start of the message digest
+
 After that, we no longer need to care about endianness because the data will always appear on the stack in the correct byte order.
 
 Finally, after the hash has been generated, we need to generate a character string that swaps the bytes back into network order.
@@ -50,10 +51,10 @@ In our particular case, the coding in the JavaScript host environment takes resp
 ### Parallel Operations
 
 We could reverse the byte-order of each `i32` individually, but fortunately, WebAssembly makes a large number of SIMD (***S***ingle ***I***nstruction, ***M***ultiple ***D***ata) instructions available to us.
-These instructions are designed to peform the same operation in parallel to multiple data values.
-This not only simplifies the coding, but gives a four-fold performance improvement.
+These instructions are designed to peform the same operation on multiple data values *in parallel*.
+This not only simplifies the coding, but gives us a four-fold performance improvement.
 
-In the loop where the raw binary file data is copied from the message block into the start of the message schedule, instead of using the `memory.copy` instruction, we can use the SIMD instruction `i8x16.swizzle`.
+In the loop where the raw binary file data is copied from the message block into the start of the message digest, instead of using the `memory.copy` instruction, we can use the SIMD instruction `i8x16.swizzle`.
 
 "Swizzle" is just a goofy name for rearranging a set of things into a new order.
 
@@ -76,10 +77,10 @@ In the loop where the raw binary file data is copied from the message block into
 
 Notice that we are now using instructions belonging to a different dataype: `v128` (128-bit vector), not `i32`.
 
-The `i8x16` instruction belongs to the `v128` data type and means *"look at this block of 128 bits as if it were 16, 8-bit integers"*.
+The `i8x16` instruction belongs to the `v128` data type and means *"treat this block of 128 bits as if it were 16, 8-bit integers"*.
 
 Here, we load a block of 128 bits onto the stack, then using `i8x16.swizzle`, we rearrange the byte order according to the vector of indices supplied as the second argument.
-Then those four `i32` values are written back to memory.
+The same block of data is then treated as a group of four `i32` values which are written back to memory.
 
 ![Swap Endianness using i8x16.shuffle](/chriswhealy/sha256/img/i8x16.swizzle.png)
 

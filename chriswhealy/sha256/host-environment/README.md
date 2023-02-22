@@ -1,5 +1,3 @@
-# SHA256 Host Environment
-
 The host environment for this WebAssembly program has been written in server-side JavaScript run by NodeJS.
 
 All JavaScript files have been written as ES6 modules (`.mjs` files) containing exported functions.
@@ -72,9 +70,12 @@ Without this reference to shared memory, the WebAssembly function `sha256_hash` 
 
 ## Populate Shared Memory
 
-Now that the WebAssembly module has been instantiated with a minimal memory allocation (2, 64Kb pages), we need to read the target file and copy that data into shared memory.
+The WebAssembly module has been instantiated with a default memory allocation of 2, 64Kb pages.
+The first memory page holds various values such as the prime number constants, the 512-byte memory digest, and various pointers.
+The second memory page holds the file data.
 
-The immediate question though is is to determine whether or not the initial two pages of shared memory will be big enough to contain the file.
+However, before writing the file into that second memory page, we must check to see if the file will fit.
+If it does not, we must first grow the memory allocation.
 
 The coding shown below has been stripped back to show only the functional minimum.
 Hence, non-essential arguments have been replaced with underscores `_`.
@@ -118,7 +119,7 @@ export const populateWasmMemory =
 
 The coding here takes the simple option and treats WASM shared memory as a buffer of unsigned, 8-bit integers (`Uint8Array`).
 Whilst this removes the need to worry about all that byte-swapping shennanigans created by the CPU's endianness, it does create a pretty big performance problem.
-The bottom line is that writing data as individual bytes is ***very slow***!
+The bottom line is that writing data into memory as individual bytes is ***very slow***!
 
 The solution is to use a JavaScript `DataView` and write the data as unsigned, 64-bit values &mdash; but I haven't had time to implement this yet...
 
@@ -137,13 +138,14 @@ Report result           :    5.773 ms
 Done in 8972.614 ms
 ```
 
-The above statistics are for a file that is nearly 100Mb is size.  We can see that writing the data to shared memory as unsigned, 8-bit integers takes about 5 times longer than calculating the actual hash!
+The above statistics are for a file that is nearly 100Mb is size.  We can see that writing the data to shared memory takes about 5 times longer than calculating the actual hash!
 
 Ouch!
 
 ## Convert Binary Hash to Printable String
 
-After the hash has been calculated, the last remaining job is to convert the binary value to a printable string:
+After the hash has been calculated, the last remaining job is to convert the binary value to a printable string.
+This functionality is performed by the following JavaScript code:
 
 ```javascript
   let hashIdx32 = wasmExports.sha256_hash(msgBlockCount) >>> 2

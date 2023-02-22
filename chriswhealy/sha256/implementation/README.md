@@ -1,16 +1,15 @@
-# WebAssembly Text Implementation
-
 ## Host Environment Assumptions
 
-We will assume that by the time the WebAssembly module is called, the JavaScript host environment has already done the following:
+We will assume that by the time the WebAssembly module is called, the JavaScript host environment has already performed the following tasks:
 
 * Copied the file into shared memory
 * Added the end-of-data termination bit `0x80`
 * Written the bit length as a big endian, 64-bit integer to the end of the last 512-bit block, and
 * Calculated the number of 512-bit message blocks to be processed
 
-In addition to this, the host enviroment and the WebAssembly module need to share common knowledge of the memory offset at which the file has been written.
-As a future development, it would probably be worth removing the need for this shared knowledge so that the host environment simply picks up an exported memory offset from the WebAssembly module, then writes the file data to that particular location.
+In addition to this, the host enviroment and the WebAssembly module need to share common knowledge of the memory offset at which the file data has been written.
+As a future development, it would probably be worth removing this hardcoded value from the host environment coding.
+Instead, the host environment would pick up an exported memory offset from the WebAssembly module, then write the file data to that particular location.
 
 ## WebAssembly Module Assumptions
 
@@ -51,13 +50,13 @@ In this case, we will call that function `sha256_hash`:
 )
 ```
 
-This function accepts an `i32` argument informing it of how many 512-bit blocks the file hase been broken up, and returns an `i32` pointer to the memory location at which the final hash value starts.
+This function accepts an `i32` argument informing it of how many 512-bit blocks the file has been broken into, and returns an `i32` pointer to the memory location at which the final hash value starts.
 It is reasonable to assume that the host environment knows that the return value is of fixed length, so we need only return a pointer rather than a pointer and a length.
 
 ## Initialisation
 
 To start with, our 8 hash values must be initialised to the fractional part of the square roots of the first 8 prime numbers.
-These values were chosen because whilst they can be defined deterministically, they are truly random numbers (as are the cube roots of the first 64 primes).
+These values were chosen for two reasons: they can be defined deterministically, and their sequence is truly random (as are the cube roots of the first 64 primes).
 
 This initialsation can be performed by a single `memory.copy` statement.
 
@@ -135,7 +134,7 @@ Due to the fact that the SHA256 algorithm expects data to be processed in networ
 Instead, we must swap the data's endianness using the `i8x16.swizzle` instruction.
 This instruction copies a 128-bit block of data onto the stack, and at the same time, swaps the byte order according to the vector of indices supplied as the second argument.
 
-Due to the fact that almost all CPUs nowadays use little-endian byte order, we need to resort to some double bluff trickery to ensure that the data always appears on the stack in the required network byte order.
+Due to the fact that almost all CPUs nowadays use little-endian byte order, we need to resort to some trickery to ensure that the data always appears on the stack in the required network byte order.
 
 ```wast
 (func $phase_1
@@ -163,9 +162,9 @@ Due to the fact that almost all CPUs nowadays use little-endian byte order, we n
 
 Now that words 0 to 15 of the message digest have been correctly populated, we can start a second loop to populate the remaining 48 words (16 to 63).
 
-When this second loop was initially written, a hard-coded iteration limit was used; however, this made unit testing tricky because I needed to test just a single iteration of the loop.
+When I initially wrote this second loop, I used a hard-coded iteration limit; however, this made unit testing tricky because I found I needed to test just a single iteration of the loop.
 Therefore, it turned out to be very convenient to pass the number of loop iterations as a function argument.
-This then allowed a unit test to be created that performed a single loop iteration without the need to change the function itself.
+This then allowed me to create a unit test that performed as many loop iterations as needed, without changing the function itself.
 
 Now that testing is complete and the coding works, it might be more intuitive to replace this argument with a hard-coded iteration value; however, it does no harm to keep this feature.
 

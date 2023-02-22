@@ -62,9 +62,9 @@ It's purpose is simply to compare whether, for a given private WASM function (id
 (module
   (import "test" "checkResult"
     (func $check_result
-          (param i32)  ;; Test id
+          (param i32)  ;; Arg 0 - Arbitrary test id
           (param i32)  ;; Arg 1 - Got value
-          (param i32)  ;; Arg 0 - Expected value
+          (param i32)  ;; Arg 2 - Expected value
     )
   )
 
@@ -94,7 +94,7 @@ const wasmTestCheckResult = (testId, gotI32, expectedI32) => {
 }
 ```
 
-When the host environment instantiates the WASM module, a host environment object must be supplied that contains at least a reference to the above function.
+When the host environment instantiates the WASM module, it must supply an environment object that contains at least a reference to the above function.
 
 ```javascript
 const hostEnv = {
