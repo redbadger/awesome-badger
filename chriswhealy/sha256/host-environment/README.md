@@ -6,14 +6,14 @@ All JavaScript files have been written as ES6 modules (`.mjs` files) containing 
 
 ## Bare-Bones Architecture
 
-This implementation contains a lot of coding related to activities such as performance measurement, providing WebAssembly with logging functions, and implementing a unit test framework.
-None of this coding will be described here as its purpose is only peripheral to the task at hand.
+This implementation contains a lot of coding related to peripheral activities such as performance measurement, providing WebAssembly with logging functions, and implementing a unit test framework.
+None of this coding will be described here as its purpose is not central to the task at hand.
 
 What is documented below are the following bare-bones steps:
 
 1. Instantiate the `.wasm` module
 2. Using the file name supplied as a `node` command line argument, read the target file into memory
-3. Copy the file contents into WASM shared memory adding the end-of-data marker (`0x80`) and the file's bit length as a big-endian `i64` value
+3. Copy the file contents into WASM shared memory appending the end-of-data marker (`0x80`) and the file's bit length as a big-endian `i64` value
 4. Invoke the WASM module's exported `sha256_hash` function passing in the number of 512-bit blocks the file occupies
 5. Using the pointer returned by the `sha256_hash` function, convert the 256-bit hash value into a printable string and write it to the console.
 
@@ -72,9 +72,9 @@ Without this reference to shared memory, the WebAssembly function `sha256_hash` 
 
 ## Populate Shared Memory
 
-Now that the WebAssembly module has been instantiated with a minimal memory allocation, we need to read the target file and copy that data into shared memory.
+Now that the WebAssembly module has been instantiated with a minimal memory allocation (2, 64Kb pages), we need to read the target file and copy that data into shared memory.
 
-The immediate question though is whether or not the minimal two pages of shared memory allocated when the WebAssmebly module was instatiated will be big enough to contain the file.
+The immediate question though is is to determine whether or not the initial two pages of shared memory will be big enough to contain the file.
 
 The coding shown below has been stripped back to show only the functional minimum.
 Hence, non-essential arguments have been replaced with underscores `_`.
@@ -118,11 +118,11 @@ export const populateWasmMemory =
 
 The coding here takes the simple option and treats WASM shared memory as a buffer of unsigned, 8-bit integers (`Uint8Array`).
 Whilst this removes the need to worry about all that byte-swapping shennanigans created by the CPU's endianness, it does create a pretty big performance problem.
-The bottom line is that writing data as individual bytes is slow!
+The bottom line is that writing data as individual bytes is ***very slow***!
 
 The solution is to use a JavaScript `DataView` and write the data as unsigned, 64-bit values &mdash; but I haven't had time to implement this yet...
 
-To see this performance problem, just run the program against a very large file with performance tracking switch on:
+To see this performance problem, just run this program against a very large file with performance tracking switch on:
 
 ```bash
 $ node index.mjs <some_large_file> true
@@ -153,16 +153,16 @@ After the hash has been calculated, the last remaining job is to convert the bin
   let hash = wasmMem32.slice(hashIdx32, hashIdx32 + 8).reduce((acc, i32) => acc += i32AsHexStr(i32), "")
 ```
 
-Here, the utility function `i32AsHexStr` is used as reducer to perform the necessary conversion.
+Here, the utility function `i32AsHexStr` is used within the reducer function to perform the necessary conversion.
 
 There are two important details to bear in mind here:
 
 1. WebAssembly has written the required values to memory as 8, `i32` integers.
-   This immediately means that the data will appear in memory in little-endian byte order.
+   This immediately means that the bytes within these `i32` values will appear in memory in little-endian byte order.
 1. The pointer returned from WebAssembly is a byte offset within shared memory.
-   However, we need to look at the data in shared memory as 8, 4-byte `i32`'s.
+   However, we need to look at the data in shared memory as an array of `i32` values.
    This means we must do the following:
 
    * Create a new `Uint32Array` overlay onto shared memory
-   * Divide the byte offset by 4 to convert it to an `i32` offset &mdash; hence the unsigned shift right `>>> 2`
+   * Divide the byte offset by 4 to convert it to an `i32` offset &mdash; hence the unsigned shift right operation `>>> 2`
    * Using the `i32` index value, extract the 8, `i32` hash values via the `Uint32Array` overlay
