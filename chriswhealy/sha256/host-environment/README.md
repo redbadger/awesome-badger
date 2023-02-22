@@ -93,7 +93,11 @@ Hence, non-essential arguments have been replaced with underscores `_`.
 ```javascript
 export const populateWasmMemory =
   (wasmMemory, fileName, _, _) => {
-    const fileData = readFileSync(fileName, { encoding: "binary" })
+    // TODO Major performance problem here!
+    // Converting the file data from a string to an ASCII array is very slow!
+    const fileData = stringToAsciiArray(
+      readFileSync(fileName, { encoding: "binary" })
+    )
 
     // If the file length plus the extra end-of-data marker (1 byte) plus the 64-bit, unsigned integer holding the
     // file's bit length (8 bytes) won't fit into one memory page, then grow WASM memory
@@ -106,9 +110,7 @@ export const populateWasmMemory =
     let wasmMem64 = new DataView(wasmMemory.buffer)
 
     // Write file data to memory plus end-of-data marker
-    // TODO Major performance problem here!
-    // Writing a large file into WASM memory as a Uint8Array is EXTREMELY slow!!
-    wasmMem8.set(stringToAsciiArray(fileData), MSG_BLOCK_OFFSET)
+    wasmMem8.set(fileData, MSG_BLOCK_OFFSET)
     wasmMem8.set([END_OF_DATA], MSG_BLOCK_OFFSET + fileData.length)
 
     // Write the message bit length as an unsigned, big-endian i64 as the last 64 bytes of the last message block
@@ -125,28 +127,27 @@ export const populateWasmMemory =
 
 ### OOPS! Performance Problem!
 
-The coding here takes the simple option and treats WASM shared memory as a buffer of unsigned, 8-bit integers (`Uint8Array`).
-Whilst this removes the need to worry about all that byte-swapping shennanigans created by the CPU's endianness, it does create a pretty big performance problem.
-The bottom line is that writing data into memory as individual bytes is ***very slow***!
-
-The solution is to use a JavaScript `DataView` and write the data as unsigned, 64-bit values &mdash; but I haven't had time to implement this yet...
+The coding here takes the simple option of reading the file as a string, then converting that string to an ASCII array.
+This is a very slow operation!
+The solution is to get the file data returned directly as a binary array.
 
 To see this performance problem, just run this program against a very large file with performance tracking switch on:
 
 ```bash
 $ node index.mjs <some_large_file> true
 03841701df49179e7be90c5988aed8c61cd1941ca5cec7f0092a485cbe5be555  <some_large_file>
-Start up                :    0.029 ms
-Instantiate WASM module :    2.265 ms
-Read target file        :   83.653 ms
-Populate WASM memory    : 7290.563 ms
-Calculate SHA256 hash   : 1590.331 ms
-Report result           :    5.773 ms
+Start up                :    0.053 ms
+Instantiate WASM module :    2.204 ms
+Read target file        : 7246.185 ms
+Populate WASM memory    :  106.309 ms
+Calculate SHA256 hash   : 1591.737 ms
+Report result           :    5.929 ms
 
-Done in 8972.614 ms
+Done in 8952.418 ms
 ```
 
-The above statistics are for a file that is nearly 100Mb is size.  We can see that writing the data to shared memory takes about 5 times longer than calculating the actual hash!
+The above statistics are for a file that is nearly 100Mb is size.
+We can see that convertiung the data to an ASCII array takes nearly 5 times longer than calculating the actual hash!
 
 Ouch!
 
