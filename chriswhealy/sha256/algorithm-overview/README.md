@@ -1,5 +1,23 @@
 # SHA256 Algorithm Overview
 
+| Previous | [Top](/chriswhealy/sha256-webassembly) | Next
+|---|---|---
+| | SHA256 Algorithm Overview | [WebAssembly Does Not Have A "raw binary" Data Type](/chriswhealy/sha256/endianness/)
+
+## SHA256: What Is It?
+
+The SHA256 hash algorithm is one of the ***S***ecure ***H***ash ***A***lgorithm-2 family of cryptographic functions published by the United States [National Security Agency](https://en.wikipedia.org/wiki/National_Security_Agency) in 2001.
+
+The purpose of this family of algorithms is to generate an output called a ***hash*** that, for all practical purposes, can be considered unique for the given input.
+In this sense, a hash acts like a message's unique digital fingerprint.
+
+In the same way that the probability of finding two human beings with identical fingerprints is unfeasibly low, so the probability that any two input messages will generate the same SHA256 hash value is also unfeasibly low.
+Putting this another way, "hash collisions" are so unlikely that for all practical purposes, a SHA256 hash can be considered entirely unique.
+
+In more technical language, for any secure hash value of length `n` bits, the probability that a brute force attack can discover the input value that generated it is one chance in <code>2<sup>n</sup></code>.
+
+In our case, we are creating a hash value 256 bits long, so that's 1 chance in 2<sup>256</sup> or 1.15792089237 * 10<sup>77</sup> &mdash; and herein lies the strength of the SHA-2 family of algorithms; namely, that the chances of being able to use a forged hash value are so astronomically small that it's not even worth starting.
+
 ## Small Input Changes Create Large Output Changes
 
 All the algorithms in the SHA-2 family start by generating a digest (also known as a "schedule") of a particular length (512 bytes in our case).

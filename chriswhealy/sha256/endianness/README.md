@@ -1,4 +1,9 @@
 # WebAssembly Does Not Have A "raw binary" Data Type
+
+| Previous | [Top](/chriswhealy/sha256-webassembly) | Next
+|---|---|---
+| [SHA256 Algorithm Overview](/chriswhealy/sha256/endianness/) | WebAssembly Does Not Have A "raw binary" Data Type | [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
+
 ## A Fundamental Collision of Concepts
 
 1. The basic unit of data processed by the SHA256 algorithm is an uninterpreted sequence of 32 bits (I.E. raw binary)

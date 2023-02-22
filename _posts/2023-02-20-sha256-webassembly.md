@@ -7,19 +7,15 @@ author: Chris Whealy
 excerpt: WebAssembly Text (WAT) is ideally suited for implementing CPU intensive algorithms such as calculating a file's SHA256 hash.  This blog describes not only how I got this algorithm working in WebAssembly Text, but takes a wider view and looks at the areas where improvements could be made both in the performance of the host environment (JavaScript, in this case) and in the overall developer experience of working with WAT.
 ---
 
-## SHA256: What Is It?
+## Table of Contents
 
-The SHA256 hash algorithm is one of the ***S***ecure ***H***ash ***A***lgorithm-2 family of cryptographic functions published by the United States [National Security Agency](https://en.wikipedia.org/wiki/National_Security_Agency) in 2001.
-
-The purpose of this family of algorithms is to generate an output called a ***hash*** that, for all practical purposes, can be considered unique for the given input.
-In this sense, a hash acts like a message's unique digital fingerprint.
-
-In the same way that the probability of finding two human beings with identical fingerprints is unfeasibly low, so the probability that any two input messages will generate the same SHA256 hash value is also unfeasibly low.
-Putting this another way, "hash collisions" are so unlikely that for all practical purposes, a SHA256 hash can be considered entirely unique.
-
-In more technical language, for any secure hash value of length `n` bits, the probability that a brute force attack can discover the input value that generated it is one chance in <code>2<sup>n</sup></code>.
-
-In our case, we are creating a hash value 256 bits long, so that's 1 chance in 2<sup>256</sup> or 1.15792089237 * 10<sup>77</sup> &mdash; and herein lies the strength of the SHA-2 family of algorithms; namely, that the chances of being able to use a forged hash value are so astronomically small that it's not even worth starting.
+- [SHA256 Algorithm Overview](/chriswhealy/sha256/algorithm-overview/)
+- [WebAssembly Does Not Have A "raw binary" Data Type](/chriswhealy/sha256/endianness/)
+- [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
+- [WebAssembly Implementation](/chriswhealy/sha256/implementation/)
+- [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/)
+- [JavaScript Host Environment](/chriswhealy/sha256/host-environment/)
+- [Summary](/chriswhealy/sha256/summary/)
 
 ## Development Objectives
 
@@ -35,13 +31,3 @@ Two challenges had to be overcome during development:
 1. The SHA256 algorithm expects to handle data in network byte order, but WebAssembly only has numeric data types that automatically rearrange a value's byte order according to the CPU's endianness.
 1. Unit testing WASM functions within a module is an entirely manual process.
    This presented an interesting challenge - especially when writing unit tests for private WASM functions
-
-## Table of Contents
-
-- [SHA256 Algorithm Overview](/chriswhealy/sha256/algorithm-overview/)
-- [WebAssembly Does Not Have A "raw binary" Data Type](/chriswhealy/sha256/endianness/)
-- [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
-- [WebAssembly Implementation](/chriswhealy/sha256/implementation/)
-- [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/)
-- [JavaScript Host Environment](/chriswhealy/sha256/host-environment/)
-- [Summary](/chriswhealy/sha256/summary/)

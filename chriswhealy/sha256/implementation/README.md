@@ -1,5 +1,9 @@
 # WebAssembly Implementation
 
+| Previous | [Top](/chriswhealy/sha256-webassembly) | Next
+|---|---|---
+| [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/) | WebAssembly Implementation | [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/)
+
 ## Host Environment Assumptions
 
 We will assume that by the time the WebAssembly module is called, the JavaScript host environment has already performed the following tasks:

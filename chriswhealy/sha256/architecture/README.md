@@ -1,5 +1,9 @@
 # Architecture
 
+| Previous | [Top](/chriswhealy/sha256-webassembly) | Next
+|---|---|---
+| [WebAssembly Does Not Have A "raw binary" Data Type](/chriswhealy/sha256/endianness/) | WebAssembly Program Architecture | [WebAssembly Implementation](/chriswhealy/sha256/implementation/)
+
 ## Structure Diagram
 
 The architecture of the WebAssembly part of this program is laid out in the following block diagram:

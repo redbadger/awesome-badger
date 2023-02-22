@@ -1,5 +1,9 @@
 # Summary
 
+| Previous | [Top](/chriswhealy/sha256-webassembly) | Next
+|---|---|---
+| [JavaScript Host Environment](/chriswhealy/sha256/host-environment/) | Summary |
+
 ## Key Take-Aways
 
 Several things were learned during this exercise:
