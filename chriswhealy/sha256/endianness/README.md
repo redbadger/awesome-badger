@@ -2,15 +2,16 @@
 
 This program needs to account for a fundamental collision of concepts:
 
-1. The basic unit of data processed by the SHA256 algorithm is an uninterpreted sequence of 32 bits (I.E. raw binary)
+1. The SHA256 algorithm acts on uninterpreted sequences of 32 bits (I.E. raw binary)
 1. WebAssembly only has numeric data types
 
 And here's where we experience the collision of concepts.
 
-Like it or not, when WebAssembly reads an `i32` value from memory, that data will be interpreted as an integer whose byte order is determined by the endianness of the CPU on which you're running.
-(Almost all processors nowadays are little-endian)
+WebAssembly can only read data from memory using one of its numeric data types.
+So like it or not, if you read an `i32` value from memory, that value will be interpreted as an integer whose byte order is determined by the endianness of the CPU on which you're running.
+(Almost all processors nowadays are [little-endian](https://en.wikipedia.org/wiki/Endianness))
 
-For example, if you call `(i32.load (local.get $some_offset))`, WebAssembly uses the following train of thought:
+For example, if you call `(i32.load (local.get $some_offset))`, then WebAssembly will use the following logic:
 
 * The developer wants the 32-bit ***integer*** found in memory at `$some_offset` to be placed on the stack
 * Since I'm running on a little-endian processor, the data in memory ***must*** have been stored in little-endian byte order
@@ -31,8 +32,7 @@ So the raw binary value `0x0A0B0C0D` in memory appears on the stack as `0x0D0C0B
 >
 > This would be great, but I doubt it will be implemented that way...
 
-So the problem is simply this: before the SHA256 algorithm can start, we must swap the endianness of the data so that when it is loaded onto the stack, the bytes appear in the expected network order.
-
+So the problem is simply this: before the SHA256 algorithm can start, we must swap the endianness of the data in memory so that when it is loaded onto the stack, the bytes appear in the expected network order.
 
 ## Workaround
 
@@ -45,11 +45,11 @@ All we need to do is swap the endianness of the data each time we copy a 64-byte
 After that, we no longer need to care about endianness because the data will always appear on the stack in the correct byte order.
 
 Finally, after the hash has been generated, we need to generate a character string that swaps the bytes back into network order.
-In our particuular case, the coding in the JavaScript host environment is responsible for converting the binary hash value into a printable string.
+In our particular case, the coding in the JavaScript host environment takes responsibility for converting the binary hash value into a printable string.
 
 ### Parallel Operations
 
-We could reverse the byte-order of each `i32` individually, but fortunately, WebAssembly makes a large selection of SIMD (***S***ingle ***I***nstruction, ***M***ultiple ***D***ata) instructions available to us.
+We could reverse the byte-order of each `i32` individually, but fortunately, WebAssembly makes a large number of SIMD (***S***ingle ***I***nstruction, ***M***ultiple ***D***ata) instructions available to us.
 These instructions are designed to peform the same operation in parallel to multiple data values.
 This not only simplifies the coding, but gives a four-fold performance improvement.
 
@@ -59,7 +59,7 @@ In the loop where the raw binary file data is copied from the message block into
 
 ```wast
 ;; Transfer the next 64 bytes from the message block to words 0..15 of the message schedule as raw binary
-;; Use v128.swizzle to swap endianness
+;; Use i8x16.swizzle to swap endianness
 (loop $next_msg_sched_vec
   (v128.store
     (i32.add (global.get $MSG_SCHED_OFFSET) (local.get $offset))
@@ -78,10 +78,11 @@ Notice that we are now using instructions belonging to a different dataype: `v12
 
 The `i8x16` instruction belongs to the `v128` data type and means *"look at this block of 128 bits as if it were 16, 8-bit integers"*.
 
-A block of 128 bits is loaded onto the stack, then we swap the endianness by using `i8x16.swizzle` to rearrange the byte order.
+Here, we load a block of 128 bits onto the stack, then using `i8x16.swizzle`, we rearrange the byte order according to the vector of indices supplied as the second argument.
 Then those four `i32` values are written back to memory.
 
 ![Swap Endianness using i8x16.shuffle](/chriswhealy/sha256/img/i8x16.swizzle.png)
 
-Now, when those `i32`s are read back onto the stack, WebAssembly will assume that they are stored in little-endian byte order, and the bytes will be reversed.
-Thus by some simple trickery, we have ensured that the data is processed in network byte order, not littel-endian byte order.
+Now, when those `i32`s are read back onto the stack, WebAssembly will assume that they have been stored in little-endian byte order, and the bytes will be reversed &mdash; back into network byte order.
+
+Thus by some simple trickery, we have ensured that the data is always processed in the correct byte order.
