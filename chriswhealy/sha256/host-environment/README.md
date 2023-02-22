@@ -5,17 +5,21 @@
 | [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/) | JavaScript Host Environment | [Summary](/chriswhealy/sha256/summary/)
 
 ## Overview
-§
+
 The host environment for this WebAssembly program has been written in server-side JavaScript run by NodeJS.
 
 All JavaScript files have been written as ES6 modules (`.mjs` files) containing exported functions.
 
 ## Bare-Bones Architecture
 
-This implementation contains a lot of coding related to peripheral activities such as performance measurement, providing WebAssembly with logging functions, and implementing a unit test framework.
-None of this coding will be described here as its purpose is not central to the task at hand.
+This implementation contains a lot of coding related to peripheral activities such as:
 
-What is documented below are the following bare-bones steps:
+* Performance measurement
+* Providing WebAssembly with logging functions
+* Implementing a unit test framework
+
+None of the coding related to the above tasks will be described here as this is not central to the task at hand.
+Instead, the following bare-bones steps are documented:
 
 1. Instantiate the `.wasm` module
 2. Using the file name supplied as a `node` command line argument, read the target file into memory
