@@ -43,5 +43,5 @@ Two challenges had to be overcome during development:
 - [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
 - [WebAssembly Implementation](/chriswhealy/sha256/implementation/)
 - [Unit Testing WebAssembly Functions](/chriswhealy/sha256/testing/)
-- [Host Environment](/chriswhealy/sha256/host-environment/)
+- [JavaScript Host Environment](/chriswhealy/sha256/host-environment/)
 - [Summary](/chriswhealy/sha256/summary/)

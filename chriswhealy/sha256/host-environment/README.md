@@ -1,3 +1,7 @@
+# JavaScript Host Environment
+
+## Overview
+
 The host environment for this WebAssembly program has been written in server-side JavaScript run by NodeJS.
 
 All JavaScript files have been written as ES6 modules (`.mjs` files) containing exported functions.

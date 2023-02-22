@@ -1,5 +1,7 @@
 # Unit Testing WASM Functions
 
+## Creating a Unit-Test Framework
+
 Given the current state of WebAssembly Text development tools (which is pretty minimal to be honest), the approach adopted here for unit testing individual WASM functions is somewhat cumbersome and less than ideal; however, it does provide a basic framework.
 
 It would not be particularly good practice to take a private WASM function and temporarily give it an `export` definition, simply for the purpose of testing.

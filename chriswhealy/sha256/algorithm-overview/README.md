@@ -1,3 +1,7 @@
+# SHA256 Algorithm Overview
+
+## Small Input Changes Create Large Output Changes
+
 All the algorithms in the SHA-2 family start by generating a digest (also known as a "schedule") of a particular length (512 bytes in our case).
 Then, using a one-way compression[^1] algorithm, they generate a unique output value whose bit pattern is highly susceptible to change.
 

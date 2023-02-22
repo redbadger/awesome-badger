@@ -1,3 +1,5 @@
+# WebAssembly Implementation
+
 ## Host Environment Assumptions
 
 We will assume that by the time the WebAssembly module is called, the JavaScript host environment has already performed the following tasks:
