@@ -10,7 +10,6 @@ Several things were learned during this exercise:
 
 * The resulting binary is only 934 bytes 😎
 * The runtime performance of the WebAssembly module is not as fast as the C implementation, but is pretty respectable
-* The runtime performance of the JavaScript host environment is poor and needs to be improved!
 * WebAssembly would benefit from having a raw binary data type that could include such instructions as `raw32` or `raw64`; that way, we would not need all that `i8x16.swizzle` shenannigans to convert the endianness of data that needs to be processed in network byte order.
 * Unit testing WebAssembly functions (especially private ones) is do-able, but awkward.<br>
    Quite a lot of extra coding in both the WebAssembly module and the host environment is needed to facilite this.

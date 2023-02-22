@@ -64,7 +64,7 @@ export const startWasm =
 ```
 
 The `hostEnv` function creates a JavaScript object containing various functions and values imported by the WebAssembly module.
-All the imported functions relate to unit testing and are not relevant for production use; however, the most important value is a reference to the block of shared memory created and populated by the host environment.
+All the imported functions relate either to unit testing or logging and are therefore not relevant for production use; however, the most important value is a reference to the block of shared memory created and populated by the host environment.
 
 ```javascript
 {
@@ -93,11 +93,7 @@ Hence, non-essential arguments have been replaced with underscores `_`.
 ```javascript
 export const populateWasmMemory =
   (wasmMemory, fileName, _, _) => {
-    // TODO Major performance problem here!
-    // Converting the file data from a string to an ASCII array is very slow!
-    const fileData = stringToAsciiArray(
-      readFileSync(fileName, { encoding: "binary" })
-    )
+    const fileData = readFileSync(fileName)
 
     // If the file length plus the extra end-of-data marker (1 byte) plus the 64-bit, unsigned integer holding the
     // file's bit length (8 bytes) won't fit into one memory page, then grow WASM memory
@@ -124,32 +120,6 @@ export const populateWasmMemory =
     return msgBlockCount
   }
 ```
-
-### OOPS! Performance Problem!
-
-The coding here takes the simple option of reading the file as a string, then converting that string to an ASCII array.
-This is a very slow operation!
-The solution is to get the file data returned directly as a binary array.
-
-To see this performance problem, just run this program against a very large file with performance tracking switch on:
-
-```bash
-$ node index.mjs <some_large_file> true
-03841701df49179e7be90c5988aed8c61cd1941ca5cec7f0092a485cbe5be555  <some_large_file>
-Start up                :    0.053 ms
-Instantiate WASM module :    2.204 ms
-Read target file        : 7246.185 ms
-Populate WASM memory    :  106.309 ms
-Calculate SHA256 hash   : 1591.737 ms
-Report result           :    5.929 ms
-
-Done in 8952.418 ms
-```
-
-The above statistics are for a file that is nearly 100Mb is size.
-We can see that convertiung the data to an ASCII array takes nearly 5 times longer than calculating the actual hash!
-
-Ouch!
 
 ## Convert Binary Hash to Printable String
 
