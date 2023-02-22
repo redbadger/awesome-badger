@@ -2,22 +2,23 @@
 
 ## Host Environment Assumptions
 
-We will assume that by the time the WebAssembly module is called, the host environment has already done the following:
+We will assume that by the time the WebAssembly module is called, the JavaScript host environment has already done the following:
 
 * Copied the file into shared memory
-* Added the end-of-data termination bit `0x80`, and
-* Written the bit length as a big endian, 64-bit integer to the end of the last 512-bit block
+* Added the end-of-data termination bit `0x80`
+* Written the bit length as a big endian, 64-bit integer to the end of the last 512-bit block, and
 * Calculated the number of 512-bit message blocks to be processed
 
-In addition to this, the host enviroment and the WebAssembly module need to share common knowledge of the memorty offset at which the file has been written.
-As a future development, it would probably be worth removing this need for shared knowledge so that the host environment simply picks up an exported memory offset from the WebAssembly module, then writes the file data to that particular location.
+In addition to this, the host enviroment and the WebAssembly module need to share common knowledge of the memory offset at which the file has been written.
+As a future development, it would probably be worth removing the need for this shared knowledge so that the host environment simply picks up an exported memory offset from the WebAssembly module, then writes the file data to that particular location.
 
 ## WebAssembly Module Assumptions
 
 Within the WebAssembly module, we need certain hardcoded constants to be available.
 These values are the fractional parts of the square roots of the first 16 prime numbers, and the fractional parts of the cube roots of the first 64 prime numbers.
 
-The values are simply hard-coded as `(data)` declarations, living at known memory offsets and whose values are supplied in little-endian byte order.
+The values are simply hard-coded within `(data)` declarations, living at known memory offsets and whose values are supplied in little-endian byte order.
+
 For example, the fractional parts of the square roots of the first 16 primes are given as:
 
 ```wast
@@ -50,17 +51,17 @@ In this case, we will call that function `sha256_hash`:
 )
 ```
 
-This function accepts an `i32` argument informing it of how many 512-bit blocks the file hase been broken up into, and returns an `i32` pointer to the memory location at which the final hash value starts.
-It is reasonable to assume that the host environment knows that the return value is of fixed length value, so we return only a pointer rather than a pointer and a length.
+This function accepts an `i32` argument informing it of how many 512-bit blocks the file hase been broken up, and returns an `i32` pointer to the memory location at which the final hash value starts.
+It is reasonable to assume that the host environment knows that the return value is of fixed length, so we need only return a pointer rather than a pointer and a length.
 
 ## Initialisation
 
-To start with, our 8 hash values must initialised to the fractional part of the square roots of the first 8 prime numbers.
-These value were chosen because they can be regarded as truly random numbers (as are the cube roots of the first 64 primes).
+To start with, our 8 hash values must be initialised to the fractional part of the square roots of the first 8 prime numbers.
+These values were chosen because whilst they can be defined deterministically, they are truly random numbers (as are the cube roots of the first 64 primes).
 
 This initialsation can be performed by a single `memory.copy` statement.
 
-We also declare local pointer and local block counter variables.
+We also declare a local pointer variable and a local block counter variable.
 
 ```wast
 (func (export "sha256_hash")
@@ -83,11 +84,11 @@ We also declare local pointer and local block counter variables.
 )
 ```
 
-## Outer Loop in Function `sha256_hash`
+## Outer Loop in Function sha256_hash
 
-We know we must perform the same 2-phase processing on every 64-byte chunk of the file, so at the top level of function `sha256_hash`, we start a loop that iterates as many times as there are chunks in the message.
+We know we must perform the same 2-phase processing on every 64-byte chunk of the file, so at the top level of function `sha256_hash`, we start a loop that iterates as many times as there are chunks in the file.
 
-Within this outer loop, all we need to do is call the private functions `$phase_1` and  `$phase_2`, increment the pointer and counter, then check for loop continuation.
+Within this outer loop, all we need to do is call the private functions `$phase_1` and `$phase_2`, increment the pointer and counter, then check for loop continuation.
 
 Once the outer loop has finished processing the entire file, the final output is simply the concatenation of these 8 hash values.
 
@@ -121,18 +122,20 @@ Once the outer loop has finished processing the entire file, the final output is
 )
 ```
 
-## Function `$phase_1`
+## Function $phase_1
 
 Function `$phase_1` is responsible for building the message digest.
 
-This function contains two loops: this first copies the next 64 bytes of message data into words 0 to 15 of the message digest, then the second loop populates the remaining 48 words (16 to 63) of the message digest.
+This function is a sequence of two loops:
 
-Due to the fact that data must be processed in network byte order, we cannot use the `memory.copy` insteruction.
-Instead, we must use the `i8x16.swizzle` instruction.
-This copies a 128-bit block of data onto the stack, and at the same time, swaps the byte order according to the vector of incdices supplied as the second argument.
+* The first loop copies the next 64 bytes of message data into words 0 to 15 of the message digest
+* The second loop populates the remaining 48 words (16 to 63) of the message digest
 
-This trick is needed due to the fact that almost all computers nowadays use little-endian byte order.
-Therefore we have to reverse the byte order of our data, so that after the CPU has reversed it (into what it thinks is the correct byte order for an `i32` on a little-endian machine), the data appears on the stack in the correct network byte order.
+Due to the fact that the SHA256 algorithm expects data to be processed in network byte order, we cannot use the `memory.copy` instruction.
+Instead, we must swap the data's endianness using the `i8x16.swizzle` instruction.
+This instruction copies a 128-bit block of data onto the stack, and at the same time, swaps the byte order according to the vector of indices supplied as the second argument.
+
+Due to the fact that almost all CPUs nowadays use little-endian byte order, we need to resort to some double bluff trickery to ensure that the data always appears on the stack in the required network byte order.
 
 ```wast
 (func $phase_1
@@ -160,8 +163,8 @@ Therefore we have to reverse the byte order of our data, so that after the CPU h
 
 Now that words 0 to 15 of the message digest have been correctly populated, we can start a second loop to populate the remaining 48 words (16 to 63).
 
-Initially, the second loop inside this function was written to use a hard-coded iteration limit; however, this made the function tricky to unit test.
-Therefore, to make unit testing easier, it turned out to be very convenient to pass the number of loop iterations as a function argument.
+When this second loop was initially written, a hard-coded iteration limit was used; however, this made unit testing tricky because I needed to test just a single iteration of the loop.
+Therefore, it turned out to be very convenient to pass the number of loop iterations as a function argument.
 This then allowed a unit test to be created that performed a single loop iteration without the need to change the function itself.
 
 Now that testing is complete and the coding works, it might be more intuitive to replace this argument with a hard-coded iteration value; however, it does no harm to keep this feature.
@@ -192,9 +195,9 @@ Now that testing is complete and the coding works, it might be more intuitive to
 
 Within this loop, we simply call the function `$gen_msg_digest_word` passing in a pointer to the word we're currently calculating.
 
-## Function `$gen_msg_digest_word`
+## Function $gen_msg_digest_word
 
-The `n`th message digest word is calculated using the four, 32-bit values a word indices -2, -7, -15 and -16.
+The `n`th message digest word is calculated using the four words found at indices `n-2`, `n-7`, `n-15` and `n-16`.
 
 Refer to the [algorithm overview](/chriswhealy/sha256/algorithm-overview/) to see what the `$sigma` function does.
 
@@ -226,10 +229,10 @@ Refer to the [algorithm overview](/chriswhealy/sha256/algorithm-overview/) to se
 )
 ```
 
-## Function `$phase_2`
+## Function $phase_2
 
 Now that the message digest has been prepared, we start the second phase of the processing in which a one-way compression algorithm is applied to each 32-bit word in the message digest.
-Key to this process is a set of 8, `i32` working variables (`a` to `h`).
+Key to this process is a set of 8, `i32` working variables `a` to `h`.
 
 Each iteration of the loop does two things:
 
@@ -279,7 +282,8 @@ Each iteration of the loop does two things:
 
    Again, refer to the [algorithm overview](/chriswhealy/sha256/algorithm-overview/) to see what the `$big_sigma` function does.
 
-* It shunts the values of the working variables down the list, injecting `$temp1` into the new value of `e` and setting the new value of `a` to be `$temp1 + $temp2` rather than rotating the old value of `h` back into `a`.
+* It shunts the values of the working variables down the list, injecting `$temp1` into the new value of `e` and rather than rotating the old value of `h` back into `a`, it sets the new value of `a` to be `$temp1 + $temp2`.
+
     ```
     h = g
     g = f
@@ -292,9 +296,9 @@ Each iteration of the loop does two things:
     ```
 
 When all 64 words of the message digest have been processed, the values of the working variables `a` to `h` are added to the corresponding hash values `h[0]` to `h[7]`.
-Any 32-bit overflows caused by addition (or any other operation for that matter) are ignored.
+Any overflows are simply ignored.
 
-Phase 2 finishes with a new set of 8, 32-bit hash values.
+Phase 2 finishes with a new set of 8, 32-bit hash values in variables `h[0..7]`.
 
 ## Finally
 
