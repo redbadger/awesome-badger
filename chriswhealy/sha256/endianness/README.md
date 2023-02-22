@@ -2,7 +2,7 @@
 
 | Previous | [Top](/chriswhealy/sha256-webassembly) | Next
 |---|---|---
-| [SHA256 Algorithm Overview](/chriswhealy/sha256/endianness/) | WebAssembly Does Not Have A "raw binary" Data Type | [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
+| [SHA256 Algorithm Overview](/chriswhealy/sha256/algorithm-overview/) | WebAssembly Does Not Have A "raw binary" Data Type | [WebAssembly Program Architecture](/chriswhealy/sha256/architecture/)
 
 ## A Fundamental Collision of Concepts
 
