@@ -4,7 +4,7 @@ title:  "Implementing the SHA256 Hash Algorithm in WebAssembly Text"
 date:   2023-02-20 12:00:00 +0000
 category: chriswhealy
 author: Chris Whealy
-excerpt: WebAssembly Text (WAT) is ideally suited for implementing CPU intensive algorithms such as calculating a file's SHA256 hash.  This blog describes not only how I got this algorithm working in WebAssembly Text, but takes a wider view and looks at the areas where improvements could be made both in the performance of the host environment (JavaScript, in this case) and in the overall developer experience of working with WAT.
+excerpt: WebAssembly Text (WAT) is ideally suited for implementing CPU intensive algorithms such as calculating a file's SHA256 hash.  This blog describes not only how I got this algorithm working in WebAssembly Text, but takes a wider view and looks at the areas where improvements could be made in the overall developer experience of working with WAT.
 ---
 
 ## Table of Contents
