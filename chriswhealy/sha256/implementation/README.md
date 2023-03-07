@@ -64,7 +64,7 @@ It is reasonable to assume that the host environment knows that the return value
 To start with, our 8 hash values must be initialised to the fractional part of the square roots of the first 8 prime numbers.
 These values were chosen for two reasons: they can be defined deterministically, and their sequence is truly random (as are the cube roots of the first 64 primes).
 
-This initialsation can be performed by a single `memory.copy` statement.
+This initialisation can be performed by a single `memory.copy` statement.
 
 We also declare a local pointer variable and a local block counter variable.
 
