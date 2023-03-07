@@ -23,7 +23,7 @@ In our case, we are creating a hash value 256 bits long, so that's 1 chance in 2
 All the algorithms in the SHA-2 family start by generating a digest (also known as a "schedule") of a particular length (512 bytes in our case).
 Then, using a one-way compression[^1] algorithm, they generate a unique output value whose bit pattern is highly susceptible to change.
 
-This susceptibility to change is based on the fact that the algorithms exhibit a behaviour known as the [avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect); that is, if a single input bit changes, then each output bit will have a 50% probability of changing.
+This susceptibility to change is based on the fact that the algorithms exhibit a behaviour known as the [avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect); that is, if a single input bit changes, then there is a 50% probability that each output bit will change.
 
 The SHA-2 family of algorithms perform an initial preparation phase, then repeat a 2-phase compression process:
 
