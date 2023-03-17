@@ -8,9 +8,18 @@
 This exercise is not entirely pointless because it explores the area language encoding.
 There needs to be a balance between providing sufficient characters to allow for expressiveness and readability, yet not providing all characters simply because they have a non-zero probability of being used.
 
-Given that most high-level programming languages use English keywords, we naturally expect the encoding alphabet to include all 26 letters of the Roman alphabet in both their upper- and lowercase forms, plus the ten digits `0` to `9` plus a variety of graphics characters, mathematical operators and symbols, and several styles of parenthesis.
+Given that most high-level programming languages use English keywords, we naturally expect the encoding alphabet to include:
 
-This why a regular English keyboard makes provision for around 94 characters; and keyboards for languages that use diacritic letters often have more.
+| Type | Characters | Count
+|---|---|--:
+| The letters of the Roman alphabet | `[a..z][A..Z]`  | 52
+| The digits                        | `[0..9]`        | 10
+| Graphic and currency characters   | `@#%^_\`, `£$€` | 9
+| Punctuation characters            | `!?:;,."'`      | 8
+| Mathematical operators            | `&\|+-*/<>`     | 8
+| Different styles of delimiter     | `(){}[]`        | 6
+
+This why a regular English keyboard makes provision for at least 93 characters; and keyboards for languages that need diacritics often have more.
 
 However, as we reduce the size of our alphabet, we will see a corresponding increase in word length.
 This is simply because in order to represent a unique word using a reduced alphabet, we have to create longer letter sequences.
