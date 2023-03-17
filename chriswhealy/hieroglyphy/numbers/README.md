@@ -2,7 +2,7 @@
 
 | Previous | [Top](/chriswhealy/hieroglyphy) | Next
 |---|---|---
-| [What Have We Achieved So Far?](/chriswhealy/hieroglyphy/checkpoint1/) | Extracting Characters From Keywords | [Tricks With Big Numbers](/chriswhealy/hieroglyphy/numbers/)
+| [Extracting Characters From Keywords](/chriswhealy/hieroglyphy/keywords/) | Tricks With Big Numbers | [So Where Are We Now?](/chriswhealy/hieroglyphy/checkpoint2/)
 
 Now that we have the string representation of all the digits and the letter `'e'`, we can construct strings to represent large numbers such as `'1e100'` and `'1e1000'`.
 We then coerce these strings to numbers to get the numeric values `1e+100` and `Infinity`.

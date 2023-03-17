@@ -102,7 +102,7 @@ Although the encoding for `'a'` derived from `'false'[1]` is the same length as 
 // index is built by concatenating '1' and '4' then coercing the string to an integer
            +!![]+[]                                   // '1'
                         !![]+!![]+!![]+!![]+[]        // '4'
-          (+!![]+[]) + (!![]+!![]+!![]+!![]+[])       // '1' + '4' -> '14'
+          (+!![]+[]) + (!![]+!![]+!![]+!![]+[])       // ('1') + ('4') -> '14'
         +((+!![]+[]) + (!![]+!![]+!![]+!![]+[]))      // +('14') -> 14
 ({}+[])[+((+!![]+[]) + (!![]+!![]+!![]+!![]+[]))]     // '[object Object]'[14] -> ']'
 ```
