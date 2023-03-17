@@ -7,7 +7,7 @@
 
 Now that we have both the integers and their string representations, we can start to derive the encoding for some alphabetic characters:
 
-## `undefined`
+## undefined
 
 ***Q:*** What does JavaScript return if you access a non-existent array element?<br>
 ***A:*** `undefined`
@@ -26,12 +26,12 @@ If we now concatenate this value to an empty list, we can convert the reserved w
 [][+[]] + [] -> 'undefined'
 
 // Place the string in parentheses then perform array element lookup to extract individual characters
-([][+[]]+[])[0]   // 'undefined[0]' -> 'u'
-([][+[]]+[])[1]   // 'undefined[1]' -> 'n'
-([][+[]]+[])[2]   // 'undefined[2]' -> 'd'
-([][+[]]+[])[3]   // 'undefined[3]' -> 'e'
-([][+[]]+[])[4]   // 'undefined[4]' -> 'f'
-([][+[]]+[])[5]   // 'undefined[5]' -> 'i'
+([][+[]]+[])[0]   // 'undefined'[0] -> 'u'
+([][+[]]+[])[1]   // 'undefined'[1] -> 'n'
+([][+[]]+[])[2]   // 'undefined'[2] -> 'd'
+([][+[]]+[])[3]   // 'undefined'[3] -> 'e'
+([][+[]]+[])[4]   // 'undefined'[4] -> 'f'
+([][+[]]+[])[5]   // 'undefined'[5] -> 'i'
 ```
 
 The only thing we need to modify here is the fact that we cannot directly use an integer as the array index.
@@ -39,12 +39,12 @@ So we need to substitute each integer for its encoded representation:
 
 ```javascript
 // Substitute the integer index for the encoded integer
-([][+[]]+[])[+[]]                        // 'undefined[0]' -> 'u'
-([][+[]]+[])[+!![]]                      // 'undefined[1]' -> 'n'
-([][+[]]+[])[!![]+!![]]                  // 'undefined[2]' -> 'd'
-([][+[]]+[])[!![]+!![]+!![]]             // 'undefined[3]' -> 'e'
-([][+[]]+[])[!![]+!![]+!![]+!![]]        // 'undefined[4]' -> 'f'
-([][+[]]+[])[!![]+!![]+!![]+!![]+!![]]   // 'undefined[5]' -> 'i'
+([][+[]]+[])[+[]]                        // 'undefined'[0] -> 'u'
+([][+[]]+[])[+!![]]                      // 'undefined'[1] -> 'n'
+([][+[]]+[])[!![]+!![]]                  // 'undefined'[2] -> 'd'
+([][+[]]+[])[!![]+!![]+!![]]             // 'undefined'[3] -> 'e'
+([][+[]]+[])[!![]+!![]+!![]+!![]]        // 'undefined'[4] -> 'f'
+([][+[]]+[])[!![]+!![]+!![]+!![]+!![]]   // 'undefined'[5] -> 'i'
 ```
 
 ## Booleans
@@ -72,7 +72,7 @@ Let's now repeat the same trick, but this time, extract the characters from the 
 
 In cases where we have multiple ways to encode the same character (so far, we have three ways to encode the letter `'e'`), the shortest encoding will be used.
 
-## Not a Number `NaN`
+## Not a Number: NaN
 
 If we attempt to coerce an empty object `{}` to a number, we get `NaN`, which can then be converted to a string, placed in parentheses and chopped up to give us encodings for the letters `'N'` and `'a'`:
 
@@ -85,7 +85,7 @@ If we attempt to coerce an empty object `{}` to a number, we get `NaN`, which ca
 
 Although the encoding for `'a'` derived from `'false'[1]` is the same length as the encoding derived from `'NaN'[1]`, we'll use the `'NaN'` version as the string from which the character has been obtained is shorter.
 
-## `[object Object]`
+## The Infamous [object Object]
 
 ```javascript
 []+{}                                                 //  [object Object]
