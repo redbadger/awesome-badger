@@ -21,11 +21,11 @@ excerpt: JavaScript is (in)famous for being a highly dynamic language that allow
 # Introduction
 
 The functionality described in this blog is neither new nor is it unique.
-In this case, it is a rewrite of the original [Hieroglyphy](https://github.com/alcuadrado/hieroglyphy) by [Patricio Palladino](https://github.com/alcuadrado/).
-
-All I have done is rewrite and optimise the code as an ES6 module.
+In this case, it is an extensive rewrite and optimisation of the original [Hieroglyphy](https://github.com/alcuadrado/hieroglyphy) by [Patricio Palladino](https://github.com/alcuadrado/).
 
 Here is my version of [Hieroglyphy](https://github.com/ChrisWhealy/hieroglyphy).
+
+[Other variations](https://github.com/aemkei/jsfuck) of this style of app exist that use a minimal alphabet, but in this particular case, a close-to-minimal alphabet has been chosen.
 
 > ***WARNING***<br>
 > I can think of no practical reason why you would ever want to use this library in a real life situation...
