@@ -4,9 +4,11 @@
 |---|---|---
 | [Extracting Characters From Keywords](/chriswhealy/hieroglyphy/keywords/) | Tricks With Big Numbers | [So Where Are We Now?](/chriswhealy/hieroglyphy/checkpoint2/)
 
-Now that we have the string representation of all the digits and the letter `'e'`, we can construct strings to represent large numbers such as `'1e100'` and `'1e1000'`.
-We then coerce these strings to numbers to get the numeric values `1e+100` and `Infinity`.
-Then, by coercing the numbers back to strings, we can obtain the characters `'+'`, `'I'` and `'y'`.
+Now that we have the string representation of all the digits and the letter `'e'`, we can construct strings to represent large numbers such as <code>10<sup>100</sup></code> and <code>10<sup>1000</sup></code>.
+
+We first form the strings `'1e100'` and `'1e1000'`, then coerce these strings to numbers which returns the numeric values `1e+100` and `Infinity` (notice that JavaScript has helpfully included a `'+'` for us).
+
+Then, by coercing `1e+100` and `Infinity` back to strings, we can obtain the characters `'+'`, `'I'` and `'y'`.
 
 ## Plus Sign
 

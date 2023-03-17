@@ -12,7 +12,7 @@ This immediately means that certain functions will automatically be available, a
 17
 ```
 
-## The `toString` Number Base Trick
+## The toString Number Base Trick
 
 The `Number.prototype.toString()` function can take a numeric argument in the range `2` to `36` that specifies the number base into which you'd like your number translated.
 
