@@ -2,11 +2,11 @@
 
 | Previous | [Top](/chriswhealy/hieroglyphy) | Next
 |---|---|---
-| [But Why Would You Even Do This?](/chriswhealy/hieroglyphy/but-why/) | Pulling Ourselves Up By Our Bootstraps | [Pulling Some Strings]](/chriswhealy/hieroglyphy/strings/)
+| [But Why Would You Even Do This?](/chriswhealy/hieroglyphy/but-why/) | Pulling Ourselves Up By Our Bootstraps | [Pulling Some Strings](/chriswhealy/hieroglyphy/strings/)
 
 ## Encoding The Basic Data Types
 
-Using only the characters in our close-to-minimal alphabet, we can immediately represent two basic JavaScript data types:
+Using only the characters in our close-to-minimal alphabet, we can immediately represent two basic JavaScript objects:
 
 * `[]` The empty list, and
 * `{}` The empty object
