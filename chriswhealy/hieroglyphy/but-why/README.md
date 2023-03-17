@@ -17,7 +17,7 @@ Given that most high-level programming languages use English keywords, we natura
 | The digits                        | `[0..9]`        | 10
 | Graphic and currency characters   | `@#%^_\`, `£$€` | 9
 | Punctuation characters            | `!?:;,."'`      | 8
-| Mathematical operators            | `&\|+-*/<>`     | 8
+| Mathematical operators            | `&|+-*/<>`      | 8
 | Different styles of delimiter     | `(){}[]`        | 6
 
 This why a regular English keyboard makes provision for at least 93 characters; and keyboards for languages that need diacritics often have more.
