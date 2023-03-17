@@ -5,7 +5,8 @@
 |---|---|---
 |   | But Why Would You Even Do This? | [Pulling Ourselves Up By Our Bootstraps](/chriswhealy/hieroglyphy/bootstraps/)
 
-This exercise is not entirely pointless because it explores the area language encoding.
+This exercise is not entirely pointless because it explores the area of language encoding.
+
 There needs to be a balance between providing sufficient characters to allow for expressiveness and readability, yet not providing all characters simply because they have a non-zero probability of being used.
 
 Given that most high-level programming languages use English keywords, we naturally expect the encoding alphabet to include:
