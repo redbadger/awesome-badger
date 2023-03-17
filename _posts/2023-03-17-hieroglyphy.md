@@ -4,36 +4,8 @@ title:  "Hieroglyphy: Taking JavaScript Type Coercion to its Illogical Conclusio
 date:   2023-03-17 12:00:00 +0000
 category: chriswhealy
 author: Chris Whealy
-excerpt: JavaScript is (in)famous for being a highly dynamic language that allows a developer to write very "flexible" code.  One language feature that makes a significant contribution to this flexibility is the idea of type coercion; that is, JavaScript will automatically (and silently) transform a value of one type it into a value of a different type.<br>As you can imagine however, the more you explore the language's flexibility, the higher a price you pay in terms of code legibility.<br>Largely for the sake of amusement, this blog takes JavaScript's flexibilty to the most extreme (and illogical) conclusion by providing you with an encoding library that takes a regular JavaScript program as input and returns code that is functionally identical, yet the source code is completely unreadable!
+excerpt: JavaScript is (in)famous for being a highly dynamic language that allows a developer to write very "flexible" code.  One language feature that makes a significant contribution to this flexibility is the idea of type coercion; that is, JavaScript will automatically (and silently) transform a value of one type it into a value of a different type.<br>As you can imagine however, the more you explore the language's flexibility, the higher a price you pay in terms of code legibility.<br>Largely for the sake of amusement, this blog takes JavaScript's flexibility to the most extreme (and illogical) conclusion by providing you with an encoding library that takes a regular JavaScript program as input and returns code that is functionally identical, yet the source code is completely unreadable!
 ---
-
-> ***WARNING***<br>
-> I can think of no practical reason why you would ever want to use this library in a real life situation...
->
-> 🤪
->
-> But that said, the process by which it works is interesting if you really want to understand the inner workings of JavaScript's type coercion behaviour
-
-There has been some investigation into transforming the source code of a JavaScript program using a reduced alphabet, whilst keeping it syntactically valid.
-In other words, the encoded program might no longer be human readable, but can still be `eval`ed or executued.
-
-For example:
-
-```javascript
-$ node
-Welcome to Node.js v16.12.0.
-Type ".help" for more information.
-> eval('(+((+!![]+[])+(!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])))[(!![]+[])[+[]]+([]+{})[+!![]]+([]+([]+{})[([]+{})[!![]+!![]+!![]+!![]+!![]]+([]+{})[+!![]]+([][+[]]+[])[+!![]]+(![]+[])[!![]+!![]+!![]]+(!![]+[])[+[]]+(!![]+[])[+!![]]+([][+[]]+[])[+[]]+([]+{})[!![]+!![]+!![]+!![]+!![]]+(!![]+[])[+[]]+([]+{})[+!![]]+(!![]+[])[+!![]]])[!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]]+(!![]+[])[+[]]+(!![]+[])[+!![]]+([][+[]]+[])[!![]+!![]+!![]+!![]+!![]]+([][+[]]+[])[+!![]]+([]+([]+{})[([]+{})[!![]+!![]+!![]+!![]+!![]]+([]+{})[+!![]]+([][+[]]+[])[+!![]]+(![]+[])[!![]+!![]+!![]]+(!![]+[])[+[]]+(!![]+[])[+!![]]+([][+[]]+[])[+[]]+([]+{})[!![]+!![]+!![]+!![]+!![]]+(!![]+[])[+[]]+([]+{})[+!![]]+(!![]+[])[+!![]]])[+((+!![]+[])+(!![]+!![]+!![]+!![]+[]))]](+((!![]+!![]+!![]+[])+(!![]+!![]+!![]+!![]+!![]+!![]+[])))+(!![]+[])[!![]+!![]+!![]]+(![]+[])[!![]+!![]]+(![]+[])[!![]+!![]]+([]+{})[+!![]]')
-'hello'
->
-```
-
-The functionality described in this blog is neither new nor is it unique.
-In this case, it is a rewrite of the original [Hieroglyphy](https://github.com/alcuadrado/hieroglyphy) by [Patricio Palladino](https://github.com/alcuadrado/).
-
-All I have done is rewrite and optimise the code as an ES6 module.
-
-Here is my version of [Hieroglyphy](https://github.com/ChrisWhealy/hieroglyphy).
 
 # Table of Contents
 
@@ -45,6 +17,38 @@ Here is my version of [Hieroglyphy](https://github.com/ChrisWhealy/hieroglyphy).
 * [Tricks With Big Numbers](/chriswhealy/hieroglyphy/numbers/)
 * [So Where Are We Now?](/chriswhealy/hieroglyphy/checkpoint2/)
 * [Tricks With Functions](/chriswhealy/hieroglyphy/functions/)
+
+# Introduction
+
+The functionality described in this blog is neither new nor is it unique.
+In this case, it is a rewrite of the original [Hieroglyphy](https://github.com/alcuadrado/hieroglyphy) by [Patricio Palladino](https://github.com/alcuadrado/).
+
+All I have done is rewrite and optimise the code as an ES6 module.
+
+Here is my version of [Hieroglyphy](https://github.com/ChrisWhealy/hieroglyphy).
+
+> ***WARNING***<br>
+> I can think of no practical reason why you would ever want to use this library in a real life situation...
+>
+> 🤪
+>
+> But that said, the process by which it works is interesting if you really want to understand the inner workings of JavaScript's type coercion behaviour
+
+# Overview
+
+There has been some investigation into encoding the source code of a JavaScript program such that it uses a reduced alphabet, but remains syntactically valid and executable.
+Irrespective of whether or not the encoded program remains human readable, you must still be able to `eval` or execute it.
+
+For example:
+
+```javascript
+$ node
+Welcome to Node.js v16.12.0.
+Type ".help" for more information.
+> eval('(+((+!![]+[])+(!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])))[(!![]+[])[+[]]+([]+{})[+!![]]+([]+([]+{})[([]+{})[!![]+!![]+!![]+!![]+!![]]+([]+{})[+!![]]+([][+[]]+[])[+!![]]+(![]+[])[!![]+!![]+!![]]+(!![]+[])[+[]]+(!![]+[])[+!![]]+([][+[]]+[])[+[]]+([]+{})[!![]+!![]+!![]+!![]+!![]]+(!![]+[])[+[]]+([]+{})[+!![]]+(!![]+[])[+!![]]])[!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]]+(!![]+[])[+[]]+(!![]+[])[+!![]]+([][+[]]+[])[!![]+!![]+!![]+!![]+!![]]+([][+[]]+[])[+!![]]+([]+([]+{})[([]+{})[!![]+!![]+!![]+!![]+!![]]+([]+{})[+!![]]+([][+[]]+[])[+!![]]+(![]+[])[!![]+!![]+!![]]+(!![]+[])[+[]]+(!![]+[])[+!![]]+([][+[]]+[])[+[]]+([]+{})[!![]+!![]+!![]+!![]+!![]]+(!![]+[])[+[]]+([]+{})[+!![]]+(!![]+[])[+!![]]])[+((+!![]+[])+(!![]+!![]+!![]+!![]+[]))]](+((!![]+!![]+!![]+[])+(!![]+!![]+!![]+!![]+!![]+!![]+[])))+(!![]+[])[!![]+!![]+!![]]+(![]+[])[!![]+!![]]+(![]+[])[!![]+!![]]+([]+{})[+!![]]')
+'hello'
+>
+```
 
 # Room from improvement
 
