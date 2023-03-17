@@ -56,4 +56,4 @@ This library is just a proof of concept; there is plenty of room for improvement
 
 * Ensure that all characters have been encoded using the shortest possible representation
 * Allow some flexibility in the alphabet size to account for different target runtime environments
-* Knowing the specific runtime would allow us to take advantage of features unique to that environment, which in turn, may yield shorter characters encodings
+* Knowing the specific runtime would allow us to take advantage of features unique to that environment, which in turn, may yield shorter character encodings
