@@ -28,11 +28,6 @@ For example, we can convert `17` to a variety of number bases like this:
 (17).toString(8)    // '21'
 (17).toString(9)    // '18'
 (17).toString(10)   // '17'
-```
-
-However, as soon as we specify a number base greater than 10, any single digit greater than 9 but less than the base will be represented as letter of the alphabet:
-
-```javascript
 (17).toString(11)   // '16'
 (17).toString(12)   // '15'
 (17).toString(13)   // '14'
@@ -40,19 +35,31 @@ However, as soon as we specify a number base greater than 10, any single digit g
 (17).toString(15)   // '12'
 (17).toString(16)   // '11'
 (17).toString(17)   // '10'
+```
+
+However, as soon as we specify a number base greater than 10, any number greater than 9 but less than the base will be represented as letter of the alphabet:
+
+```javascript
+(10).toString(16)   // 'a'
+(11).toString(16)   // 'b'
+(12).toString(16)   // 'c'
+(13).toString(16)   // 'd'
+(14).toString(16)   // 'e'
+(15).toString(16)   // 'f'
+(16).toString(17)   // 'g'
 (17).toString(18)   // 'h'
 ```
 
-And presto!  We now have a way of generating all the letters from `'a'` to `'z'` &mdash; of course, this assumes that we first start with sufficient letters to spell the word `'toString'`.
-When we invoke `Number.prototype.toString(<number_base>)` on a number, we need ensure that the number base is large enough to return the desired letter.
+And presto!
+We now have a way of generating all the letters from `'a'` to `'z'` &mdash; of course, this assumes that we first start with sufficient letters to spell the word `'toString'`.
 
 For example, in base 36, 35 is `'z'`.
 
 The only gotcha here is remembering that the number being encoded must be supplied as an integer.
 So, we must encode it as the concatenation of its digits.
-In this example `17` is encoded as `+('1' + '7') -> +('17') -> 17`.
+In this example `17` is encoded as `+('1' + '7') -> +'17' -> 17`.
 
-So using our helper functions `toEnclosedNum` and `concatChars`, the letter `'h'` is encoded like this:
+So using our helper functions `toNum` and `concatChars`, the letter `'h'` is encoded like this:
 
 ```javascript
 const toNum = val => `+(${val})`
@@ -71,7 +78,7 @@ charCache["h"] = (17)["toString"](18)
 
 We can now repeat this trick as many times as needed to fill in the missing lowercase letters in our `charCache`.
 
-## Creating a Function Generator Function
+## Creating a Function That Generates Functions
 
 Here we need to take advantage of the fact that an empty array `[]` is a built-in JavaScript object that has a known set of functions.
 

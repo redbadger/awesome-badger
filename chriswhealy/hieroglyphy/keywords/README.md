@@ -49,7 +49,7 @@ So we need to substitute each integer for its encoded representation:
 
 ## Booleans
 
-Let's now repeat the same trick, but this time, extract the characters from the values `true`, `false`, `NaN` and `[object Object]`.
+Let's now repeat the same trick, but this time, extract the characters from the reserved words `true`, `false`, `NaN` and `[object Object]`.
 
 ```javascript
 ![]                              // Reserved word false
@@ -83,7 +83,7 @@ If we attempt to coerce an empty object `{}` to a number, we get `NaN`, which ca
 (+{}+[])[+!![]]  // 'NaN'[1] -> 'a'
 ```
 
-Although the encoding for `'a'` derived from `'false'[1]` is the same length as the encoding derived from `'NaN'[1]`, we'll use the `'NaN'` version as the string from which the character has been obtained is shorter.
+Although the encoded form of the letter `'a'` derived from `'false'[1]` is the same length as the encoding derived from `'NaN'[1]`, we'll use the `'NaN'` version as the string from which the encoding has been obtained is shorter.
 
 ## The Infamous [object Object]
 

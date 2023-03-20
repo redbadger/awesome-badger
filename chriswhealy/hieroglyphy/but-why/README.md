@@ -7,7 +7,7 @@
 
 This exercise is not entirely pointless because it explores the area of language encoding.
 
-There needs to be a balance between providing sufficient characters to allow for expressiveness and readability, yet not providing all characters simply because they have a non-zero probability of being used.
+When deciding on the size of an encoding alphabet, there needs to be a balance between providing sufficient characters to allow for expressiveness and readability, yet not providing every possible character simply because it has a non-zero probability of being used.
 
 Given that most high-level programming languages use English keywords, we naturally expect the encoding alphabet to include:
 
@@ -17,13 +17,13 @@ Given that most high-level programming languages use English keywords, we natura
 | The digits                        | `[0..9]`        | 10
 | Graphic and currency characters   | `@#%^_\`, `£$€` | 9
 | Punctuation characters            | `!?:;,."'`      | 8
-| Mathematical operators            | `&|+-*/<>`      | 8
+| Mathematical operators            | `&|+-*/=<>`     | 9
 | Different styles of delimiter     | `(){}[]`        | 6
 
-This why a regular English keyboard makes provision for at least 93 characters; and keyboards for languages that need diacritics often have more.
+This why a regular English keyboard makes provision for at least 94 characters; and in languages that need diacritics, their keyboards often have more.
 
-However, as we reduce the size of our alphabet, we will see a corresponding increase in word length.
-This is simply because in order to represent a unique word using a reduced alphabet, we have to create longer letter sequences.
+However, as we reduce the size of our alphabet, we will see a corresponding drop in legibility and an increase in word length.
+This is simply because as the number of letters in your alphabet decreases, so the number of letters needed to represent a unique word increases.
 
 The coding described here takes the concept of alphabet reduction very close to its absolute minimum.
 
@@ -41,7 +41,7 @@ Many alphabets could be chosen here of varying sizes, but just for fun, we're go
 
 > ***FYI:***<br>
 > This 8-character alphabet is close to minimal in size.<br>
-> A minimal alphabet can achieve the same result by dropping the use of curly braces `{}`.
+> A minimal alphabet drops the use of curly braces `{}`.
 
 ## Methodology
 
@@ -50,8 +50,9 @@ Starting from just our set of 8 characters `+!{}[]()`, we proceed as follows:
 * Form the simplest JavaScript objects &mdash; `[]` and `{}`
 * To these objects, apply various combinations of type coercion, Boolean negation and string concatenation
 * If they are not already character strings, coerce the returned values to strings
-* Slice up these strings to extract individual characters from which other commands can be constructed
-* Progressively build up a list of characters until every numeric, alphabetic and graphic character has been encoded
+* Slice up these strings to extract individual characters from which other keywords can then be constructed
 
-Once we have a full range of encoded characters, we are then in a position to "hieroglyphy" an input string.
-The resulting (***very*** long) output can either be turned back into the original JavaScript code by running it through `eval`, or executed directly.
+In this manner, we can progressively build up a full alphabet of encoded characters.
+
+Once we have a full alphabet, we are then in a position to "hieroglyphy" an input string.
+The resulting (***extremely*** long) output can either be turned back into the original JavaScript code by running it through `eval`, or executed directly.
