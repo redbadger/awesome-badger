@@ -55,12 +55,12 @@ In this example `17` is encoded as `+('1' + '7') -> +('17') -> 17`.
 So using our helper functions `toEnclosedNum` and `concatChars`, the letter `'h'` is encoded like this:
 
 ```javascript
-const toEnclosedNum = val => `+(${val})`
+const toNum = val => `+(${val})`
 const concatChars = (...idxs) => idxs.map(idx => charCache[idx]).join("+")
 
 const encToString = concatChars('t', 'o', 'S', 't', 'r', 'i', 'n', 'g')
-const base36 = toEnclosedNum(concatChars(3, 6))
-charCache["h"] = `(${toEnclosedNum(concatChars(1, 7))})[${encToString}](${base36})`
+const base36 = toNum(concatChars(3, 6))
+charCache["h"] = `(${toNum(concatChars(1, 7))})[${encToString}](${base36})`
 ```
 
 In other words, the above assignment translates to asking the following question: how is `17` represented in base `18`; and the answer is `'h'`:
@@ -113,13 +113,15 @@ One restriction here is the fact that we must already have encoded sufficient le
 In the event that we are unable to derive a particular 7-bit character from some returned keyword or string, we can generate an `unescape` function, to which we pass an encoded representation of that character's hex value.
 
 ```javascript
-// functionConstructor = []['sort']['constructor']
-const functionConstructor = `${EMPTY_LIST}[${concatChars('s', 'o', 'r', 't')}][${encConstructor}]`
-export const encodeScript = src => `${functionConstructor}(${encodeString(src)})()`
+const encConstructor = concatChars('c', 'o', 'n', 's', 't', 'r', 'u', 'c', 't', 'o', 'r')
+const encSort = concatChars('s', 'o', 'r', 't')
 
-// unescape = []['sort']['constructor']('return unescape')()
-// unescape = [Function: unescape]
-const unescape = encodeScript("return unescape")
+// Using the function constructor we can build a function that returns a reference to the function we want to call
+// []["sort"]["constructor"](<fn source code>)() -> [Function: <Fn returned by source code>]
+export const encodeScript = src => `${EMPTY_LIST}[${encSort}][${encConstructor}](${encodeString(src)})()`
+
+// []['sort']['constructor']('return unescape')() -> [Function: unescape]
+const unescapeFn = encodeScript("return unescape")
 ```
 
 If we encounter a Unicode character, then we must represent it using the hexadecimal form `\uXXXX`.
