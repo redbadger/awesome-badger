@@ -10,13 +10,13 @@ Now that we have both the integers and their string representations, we can star
 ## undefined
 
 ***Q:*** What does JavaScript return if you access a non-existent array element?<br>
-***A:*** `undefined`
+***A:*** The keyword `undefined`
 
 Using our close-to-minimal alphabet, we can obtain the keyword `undefined` by accessing element `0` of an empty array: `[][0]`.
 
 Further to this, we know that integer `0` can be encoded as `+[]`, so we can get `undefined` from `[][+[]]`.
 
-If we now concatenate this value to an empty list, we can convert the reserved word into the string `'undefined'`, from which we can then extract the individual letters:
+If we now concatenate this value to an empty list, we can convert the keyword `undefined` into the string `'undefined'`, from which we can then extract the individual letters:
 
 ```javascript
 // Access element zero of an empty array
@@ -34,8 +34,8 @@ If we now concatenate this value to an empty list, we can convert the reserved w
 ([][+[]]+[])[5]   // 'undefined'[5] -> 'i'
 ```
 
-The only thing we need to modify here is the fact that we cannot directly use an integer as the array index.
-So we need to substitute each integer for its encoded representation:
+If we have switched off digit encoding, then the above representation is complete.
+However, by default, digit encoding is switched on, so we need to replace the index digits with their encoded representation:
 
 ```javascript
 // Substitute the integer index for the encoded integer
@@ -49,7 +49,7 @@ So we need to substitute each integer for its encoded representation:
 
 ## Booleans
 
-Let's now repeat the same trick, but this time, extract the characters from the reserved words `true`, `false`, `NaN` and `[object Object]`.
+Let's now repeat the same character extraction trick, but this time on the keywords `true`, `false`, `NaN` and the string `[object Object]`.
 
 ```javascript
 ![]                              // Reserved word false
@@ -70,7 +70,7 @@ Let's now repeat the same trick, but this time, extract the characters from the 
 (!![]+[])[+!![]+!![]+!![]]       // 'true'[3] = 'e'
 ```
 
-In cases where we have multiple ways to encode the same character (so far, we have three ways to encode the letter `'e'`), the shortest encoding will be used.
+In cases where we have multiple ways to encode the same character (for example, we have three ways to encode the letter `'e'`), the shortest encoding should be used.
 
 ## Not a Number: NaN
 

@@ -31,9 +31,10 @@ Finally, we can derive integer `1` by performing numeric coercion on `!![]`
 
 ![Coerce Integer One](/chriswhealy/hieroglyphy/img/coerce_1.png)
 
-## Natural Numbers
+## Counting Numbers
 
-We have seen above that when a Boolean value appears in an arithmetic expression, `false` is coerced to `0` and `true` is coerced to `1`.  Knowing this we can derive the natural counting numbers.
+We have seen above that when a Boolean value appears in an arithmetic expression, `false` is coerced to `0` and `true` is coerced to `1`.
+Knowing this we can now derive the counting numbers.
 
 Since `2` is `1 + 1`, we can rewrite `1 + 1` as `true + true` and still get `2`.
 

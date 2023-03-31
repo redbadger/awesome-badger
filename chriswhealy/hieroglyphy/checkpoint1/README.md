@@ -4,7 +4,7 @@
 |---|---|---
 | [Pulling Some Strings](/chriswhealy/hieroglyphy/strings/) | What Have We Achieved So Far? | [Extracting Characters From Keywords](/chriswhealy/hieroglyphy/keywords/)
 
-So far, we are able to encode the 10 digit characters `0` to `9`, so we will place them into a character cache that so far contains:
+So far, we are able to encode the 10 digit characters `'0'` to `'9'`, so we will place them into a character cache that so far contains:
 
 | Character | Derived From | Encoding
 |---|---|---

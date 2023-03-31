@@ -37,7 +37,8 @@ Here is my version of [Hieroglyphy](https://github.com/ChrisWhealy/hieroglyphy).
 # Overview
 
 There has been some investigation into encoding the source code of a JavaScript program such that it uses a reduced alphabet, but remains syntactically valid and executable.
-Irrespective of whether or not the encoded program remains human readable, you must still be able to `eval` or execute it.
+
+The object of the exercise here is not to create a program that remains human readable, but one that can be `eval`ed and executed.
 
 For example:
 
