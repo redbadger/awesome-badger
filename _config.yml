@@ -11,6 +11,7 @@ email: hello@red-badger.com
 description: Assorted thinking (mostly) about technology written by the Badgers.
 baseurl: ""
 url: "https://awesome.red-badger.com/"
+rburl: "https://red-badger.com/"
 permalink: /:categories/:slug
 twitter_username: RedBadgerTeam
 github_username:  redbadger

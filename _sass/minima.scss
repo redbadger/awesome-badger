@@ -29,7 +29,7 @@ $content-width: 1200px !default;
 
 $on-palm: 600px !default;
 $on-laptop: 800px !default;
-
+$small-screen: 767px !default;
 // Use media queries like this:
 // @include media-query($on-palm) {
 //   .wrapper {
@@ -42,9 +42,24 @@ $on-laptop: 800px !default;
     @content;
   }
 }
-
+@mixin media-query-min($device) {
+  @media screen and (min-width: $device) {
+    @content;
+  }
+}
 @mixin relative-font-size($ratio) {
   font-size: $base-font-size * $ratio;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 // Import partials.
