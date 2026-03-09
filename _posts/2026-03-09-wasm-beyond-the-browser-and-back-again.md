@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "WASM: beyond the browser and back again"
-date:   2026-03-09 12:00:00 +0000
+title: 'WASM: beyond the browser and back again'
+date: 2026-03-09 12:00:00 +0000
 category: pataruco
 author: Pedro Martin
 excerpt: WebAssembly is a spectrum from a heavy decision engine in a browser extension to a thin bootstrap layer in a code editor plugin. Two projects, two patterns, one compilation target.
@@ -36,18 +36,19 @@ I first came across WebAssembly through Stu, a colleague, who shared a message a
 
 > On December 5, The World Wide Web Consortium (W3C) announced that the WebAssembly Core Specification is now an official web standard. This makes WebAssembly the fourth language for the web, following HTML, CSS, and JavaScript.
 
-He published on 26th December of 2019
+He published on 26th December 2019
 
 It planted the seed, but at the time it felt like something reserved for game engines and image processing libraries — not the sort of thing I would use day to day.
 
 ## My first encounter: a small language model
 
-My first real hands-on experience with WASM came from an unexpected direction. I was working on a project that involved image recognition from the browser, our client (not the browser, our real human client), as part of a Know Your Client (KYC) process already in place, using a third-party provider that enabled that for them; so part of our job was to integrate with their API.
+My first real experience using WASM happened in an unexpected way. I was working on a project where we needed the browser to recognise images as part of a client’s Know Your Client (KYC) process. We used a third-party service, and my job was to connect our system to their API.
 
-This was my very first time working with WASM in a real project, and I also integrated it with a third-party API and an embedded small language model for image recognition. It was a great learning experience and opened my eyes to the possibilities of WASM in the browser.
-The idea that a machine learning model could run entirely client-side, with no server round-trips, was a lightbulb moment.
+This was my first time using WASM in a real project. I also had to connect it to a third-party API and use a small built-in language model for image recognition. I learned a lot from this and realised how useful WASM can be in the browser.
 
-It demonstrated something fundamental about WASM: it is not just “faster JavaScript”. It is a way to bring entire ecosystems — Rust’s `regex` crate, C’s image processing libraries, Python’s ML models — into environments that previously only spoke JavaScript. That realisation is what led me to reach for Rust and WASM when I needed real logic in my browser extension.
+It was eye-opening to see that a machine learning model could run entirely on the user's computer, without sending information to a server.
+
+This taught me something important about WASM: it’s not just a faster version of JavaScript. WASM allows you to use powerful tools and libraries from other languages, such as Rust, C, and Python, in places that previously supported only JavaScript. That’s why I chose Rust and WASM when I needed more advanced features in my browser extension.
 
 ## The TypeScript interface problem
 
@@ -56,6 +57,7 @@ When you compile Rust to WASM using [`wasm-bindgen`](https://wasm-bindgen.github
 This means you end up maintaining parallel type definitions:
 
 Rust side (`plan.rs`):
+
 ```rust
 #[derive(Serialize)]
 pub struct BypassPlan {
@@ -69,6 +71,7 @@ pub struct BypassPlan {
 ```
 
 TypeScript side (`types.ts`):
+
 ```typescript
 export interface BypassPlan {
   site_name: string;
@@ -81,6 +84,7 @@ export interface BypassPlan {
 ```
 
 The JSON bridge is simple and debuggable — you can inspect the data flowing between Rust and TypeScript in the browser console — but keeping these types in sync is a manual process.
+
 ```mermaid
 sequenceDiagram
     participant Rust as Rust (WASM)
@@ -140,15 +144,15 @@ You might ask: why not just write the matching logic in TypeScript? Three reason
 
 The extension supports a rich set of bypass strategies, all declared in a `sites.json` configuration file:
 
-| Strategy | What it does |
-|---|---|
-| hide | Injects CSS to hide paywall overlays immediately, before the page paints |
-| remove | Deletes DOM elements after the page loads |
-| block_scripts | Intercepts and cancels network requests matching regex patterns |
-| spoof_useragent | Replaces the User-Agent header (e.g. to impersonate Googlebot) |
-| archive | Fetches the article from an archive service and injects the content |
-| json_ld | Extracts article text from embedded JSON-LD structured data |
-| inject_css | Injects custom CSS rules to override paywall styling |
+| Strategy          | What it does                                                             |
+| ----------------- | ------------------------------------------------------------------------ |
+| `hide`            | Injects CSS to hide paywall overlays immediately, before the page paints |
+| `remove`          | Deletes DOM elements after the page loads                                |
+| `block_scripts`   | Intercepts and cancels network requests matching regex patterns          |
+| `spoof_useragent` | Replaces the User-Agent header (e.g. to impersonate Googlebot)           |
+| `archive`         | Fetches the article from an archive service and injects the content      |
+| `json_ld`         | Extracts article text from embedded JSON-LD structured data              |
+| `inject_css`      | Injects custom CSS rules to override paywall styling                     |
 
 Each strategy is declarative — you configure it in JSON, and the Rust engine generates the appropriate plan:
 
@@ -161,10 +165,7 @@ Each strategy is declarative — you configure it in JSON, and the Rust engine g
       "paywall_selector": "teg-page-wall",
       "article_selector": "main"
     },
-    "hide": [
-      "div[class*=\"adComponent\"]",
-      ".wall-overlay"
-    ]
+    "hide": ["div[class*=\"adComponent\"]", ".wall-overlay"]
   }
 }
 ```
@@ -174,16 +175,20 @@ Each strategy is declarative — you configure it in JSON, and the Rust engine g
 Working with the Firefox extension API in MV3 requires careful choreography. The WASM module must be loaded in the background service worker, but MV3's Content Security Policy restricts how you can do this. The key pieces:
 
 1. Declare WASM as a web-accessible resource (`manifest.json`):
+
 ```json
 {
-  "web_accessible_resources": [{
-    "resources": ["pkg/stained_wall_engine_bg.wasm"],
-    "matches": ["<all_urls>"]
-  }]
+  "web_accessible_resources": [
+    {
+      "resources": ["pkg/stained_wall_engine_bg.wasm"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
 ```
 
 2. Allow WASM evaluation in the CSP:
+
 ```json
 {
   "content_security_policy": {
@@ -193,10 +198,11 @@ Working with the Firefox extension API in MV3 requires careful choreography. The
 ```
 
 3. Load the WASM module using `browser.runtime.getURL()`:
+
 ```typescript
-const wasmUrl = browser.runtime.getURL("pkg/stained_wall_engine_bg.wasm");
+const wasmUrl = browser.runtime.getURL('pkg/stained_wall_engine_bg.wasm');
 await init({ module_or_path: wasmUrl });
-const sitesJson = await fetch(browser.runtime.getURL("sites.json"));
+const sitesJson = await fetch(browser.runtime.getURL('sites.json'));
 engine = new Engine(await sitesJson.text());
 ```
 
@@ -214,7 +220,7 @@ MV3's strict CSP means you cannot use `element.innerHTML` to inject content. All
 ```typescript
 // Safe alternative using DOMParser
 const parser = new DOMParser();
-const doc = parser.parseFromString(html, "text/html");
+const doc = parser.parseFromString(html, 'text/html');
 while (doc.body.firstChild) {
   element.appendChild(doc.body.firstChild);
 }
@@ -393,16 +399,16 @@ Both passes run independently, and all diagnostics are reported together, giving
 
 Having built WASM extensions for both platforms, the differences are striking:
 
-| Aspect | Firefox Extension (MV3) | Zed Extension |
-|---|---|---|
-| WASM role | Core logic engine (URL matching, plan generation) | Bootstrap only (binary download and management) |
-| Runtime | Browser's WASM runtime (SpiderMonkey) | Zed's embedded WASM runtime (Wasmtime) |
-| Host APIs | Browser APIs via JavaScript (`browser.*`) | Zed APIs via `zed_extension_api` crate |
-| Communication | JSON over message passing | Language Server Protocol over stdio |
-| Build target | `wasm32-unknown-unknown` via `wasm-pack` | `wasm32-wasip1` via `cargo build` |
-| Security model | CSP + `wasm-unsafe-eval` | WASI sandbox (no file system, no network) |
-| Extension language | Rust (WASM) + TypeScript (browser APIs) | Pure Rust (WASM + native binary) |
-| Update mechanism | Manual rebuild and reload | Zed extension marketplace + GitHub releases |
+| Aspect             | Firefox Extension (MV3)                           | Zed Extension                                   |
+| ------------------ | ------------------------------------------------- | ----------------------------------------------- |
+| WASM role          | Core logic engine (URL matching, plan generation) | Bootstrap only (binary download and management) |
+| Runtime            | Browser's WASM runtime (SpiderMonkey)             | Zed's embedded WASM runtime (Wasmtime)          |
+| Host APIs          | Browser APIs via JavaScript (`browser.*`)         | Zed APIs via `zed_extension_api` crate          |
+| Communication      | JSON over message passing                         | Language Server Protocol over stdio             |
+| Build target       | `wasm32-unknown-unknown` via `wasm-pack`          | `wasm32-wasip1` via `cargo build`               |
+| Security model     | CSP + `wasm-unsafe-eval`                          | WASI sandbox (no file system, no network)       |
+| Extension language | Rust (WASM) + TypeScript (browser APIs)           | Pure Rust (WASM + native binary)                |
+| Update mechanism   | Manual rebuild and reload                         | Zed extension marketplace + GitHub releases     |
 
 The most significant difference is in what the WASM module actually does. In the browser extension, WASM is the brain — it makes decisions that drive the extension's behaviour. In the Zed extension, WASM is the hand — it performs a mechanical task (downloading a binary) and then steps aside.
 
@@ -446,4 +452,4 @@ If you have not tried WASM yet, I would encourage you to start small. Pick a pie
 
 ---
 
-*It is an open source project: [zed-mjml](https://github.com/pataruco/zed-mjml).*
+_It is an open source project: [zed-mjml](https://github.com/pataruco/zed-mjml)._
