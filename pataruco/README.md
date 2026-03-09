@@ -20,8 +20,5 @@ If you want to crack a laugh 🤣, [here](https://www.youtube.com/watch?v=XKZ0tN
 ## Open Source projects
 
 - [Azure SDK for Rust](https://github.com/Azure/azure-sdk-for-rust)
-- [Weather forecast monorepo](https://github.com/pataruco/weather-forecast-monorepo)
-- [Holocron](https://github.com/pataruco/holocron)
-- [Boris](https://github.com/pataruco/boris)
-- [Variable fonts](https://github.com/pataruco/variable-fonts)
-- [SVG Spinner](https://github.com/pataruco/svg-spinner-lab)
+- [MJML for Zed](https://github.com/pataruco/zed-mjml) 
+- [NR2f1 Website](https://github.com/nr2f1/website)
