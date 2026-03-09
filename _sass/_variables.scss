@@ -1,4 +1,4 @@
-@charset "utf-8";
+@use "sass:math";
 
 // Define defaults for each variable.
 
@@ -16,11 +16,18 @@ $background-color: #F8F8F8 !default;
 $brand-color: #FC1D42 !default;
 
 $grey-color: #969696 !default;
-$grey-color-light: lighten($grey-color, 40%) !default;
-$grey-color-dark: darken($grey-color, 25%) !default;
+$grey-color-light: #fcfcfc !default;  // lighten($grey-color, 40%)
+$grey-color-dark: #565656 !default;   // darken($grey-color, 25%)
 
 $border-color: #CCCCCC !default;
 
+// Derived colors (pre-computed for Dart Sass compatibility)
+$brand-color-dark: #7e0216 !default;     // darken($brand-color, 30%)
+$text-color-light: #3f3f3f !default;     // lighten($text-color, 18%)
+$grey-color-lighter: #fff !default;      // lighten($grey-color-light, 6%) — clamped to white
+$grey-color-lightest: #fff !default;     // lighten($grey-color-light, 3%) — clamped to white
+$grey-border-color: #f2f2f2 !default;    // darken($grey-color-light, 4%)
+$grey-border-dark: #dddddd !default;     // darken($grey-color-light, 12%)
 
 $table-text-align: left !default;
 
@@ -30,13 +37,18 @@ $content-width: 1200px !default;
 $on-palm: 600px !default;
 $on-laptop: 800px !default;
 
-// Use media queries like this:
-// @include media-query($on-palm) {
-//   .wrapper {
-//     padding-right: $spacing-unit / 2;
-//     padding-left: $spacing-unit / 2;
-//   }
-// }
+@mixin vertical-rhythm {
+  margin-bottom: math.div($spacing-unit, 2);
+}
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
 @mixin media-query($device) {
   @media screen and (max-width: $device) {
     @content;
@@ -46,8 +58,3 @@ $on-laptop: 800px !default;
 @mixin relative-font-size($ratio) {
   font-size: $base-font-size * $ratio;
 }
-
-// Import partials.
-@import "minima/base",
-"minima/layout",
-"minima/syntax-highlighting";

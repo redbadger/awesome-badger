@@ -1,3 +1,6 @@
+@use "sass:math";
+@use "../variables" as *;
+
 /**
  * Reset some basic elements
  */
@@ -32,9 +35,8 @@ body {
  */
 h1, h2, h3, h4, h5, h6,
 p, blockquote, pre,
-ul, ol, dl, figure,
-%vertical-rhythm {
-  margin-bottom: $spacing-unit / 2;
+ul, ol, dl, figure {
+  @include vertical-rhythm;
 }
 
 /**
@@ -48,7 +50,7 @@ main {
  * Images
  */
 img.footer-logo {
-  padding: $spacing-unit / 6 0;
+  padding: math.div($spacing-unit, 6) 0;
   height: 30px;
 }
 
@@ -101,7 +103,7 @@ a {
   text-decoration: none;
 
   &:visited {
-    color: darken($brand-color, 30%);
+    color: $brand-color-dark;
   }
 
   &:hover {
@@ -124,7 +126,7 @@ a {
 blockquote {
   color: $grey-color;
   border-left: 4px solid $grey-color-light;
-  padding-left: $spacing-unit / 2;
+  padding-left: math.div($spacing-unit, 2);
   @include relative-font-size(1.125);
   letter-spacing: -1px;
   font-style: italic;
@@ -166,30 +168,18 @@ pre {
  * Wrapper
  */
 .wrapper {
-  max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit} * 2));
   max-width: calc(#{$content-width} - (#{$spacing-unit} * 2));
   margin-right: auto;
   margin-left: auto;
   padding-right: $spacing-unit;
   padding-left: $spacing-unit;
-  @extend %clearfix;
+  @include clearfix;
 
   @include media-query($on-laptop) {
-    max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit}));
     max-width: calc(#{$content-width} - (#{$spacing-unit}));
-    padding-right: $spacing-unit / 2;
-    padding-left: $spacing-unit / 2;
+    padding-right: math.div($spacing-unit, 2);
+    padding-left: math.div($spacing-unit, 2);
   }
-}
-
-
-/**
- * Clearfix
- */
-%clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
 }
 
 
@@ -220,24 +210,24 @@ table {
   margin-bottom: $spacing-unit;
   width: 100%;
   text-align: $table-text-align;
-  color: lighten($text-color, 18%);
+  color: $text-color-light;
   border-collapse: collapse;
   border: 1px solid $grey-color-light;
 
   tr {
     &:nth-child(even) {
-      background-color: lighten($grey-color-light, 6%);
+      background-color: $grey-color-lighter;
     }
   }
 
   th, td {
-    padding: ($spacing-unit / 3) ($spacing-unit / 2);
+    padding: math.div($spacing-unit, 3) math.div($spacing-unit, 2);
   }
 
   th {
-    background-color: lighten($grey-color-light, 3%);
-    border: 1px solid darken($grey-color-light, 4%);
-    border-bottom-color: darken($grey-color-light, 12%);
+    background-color: $grey-color-lightest;
+    border: 1px solid $grey-border-color;
+    border-bottom-color: $grey-border-dark;
   }
 
   td {

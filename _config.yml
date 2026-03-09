@@ -24,5 +24,7 @@ copyright: "Red Badger Consulting Ltd"
 logo: /assets/logo-awesome.png
 
 plugins:
-  - jekyll-redirect-from
   - jekyll-feed
+  - jekyll-redirect-from
+  - jekyll-seo-tag
+  - jekyll-sitemap

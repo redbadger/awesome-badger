@@ -3,7 +3,6 @@ _site
 .jekyll-cache
 .jekyll-metadata
 .idea/
-Gemfile.lock
 vendor
 .DS_Store
 .obsidian
