@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Microplatforms - Product Platforms as Code"
+title:  "WASM: beyond the browser and back again"
 date:   2026-03-09 12:00:00 +0000
 category: pataruco
 author: Pedro Martin
