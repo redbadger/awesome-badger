@@ -42,12 +42,12 @@ It planted the seed, but at the time it felt like something reserved for game en
 
 ## My first encounter: a small language model
 
-My first real hands-on experience with WASM came from an unexpected direction. I was working on project that involved image recogition from the browser, our client (no the browser, our real human client) as part of a Know Your Client (KYC) process already in place, using a third party provider that enabled that for them; so part of our job was to integrate with their API.
+My first real hands-on experience with WASM came from an unexpected direction. I was working on a project that involved image recognition from the browser, our client (not the browser, our real human client), as part of a Know Your Client (KYC) process already in place, using a third-party provider that enabled that for them; so part of our job was to integrate with their API.
 
-This was by very first time I had worked with WASM in a real projects and also integrated it with a third party API an an emmbeded small language model for the image recogition. It was a great learning experience and opened my eyes to the possibilities of WASM in the browser.
+This was my very first time working with WASM in a real project, and I also integrated it with a third-party API and an embedded small language model for image recognition. It was a great learning experience and opened my eyes to the possibilities of WASM in the browser.
 The idea that a machine learning model could run entirely client-side, with no server round-trips, was a lightbulb moment.
 
-It demonstrated something fundamental about WASM: it is not just "faster JavaScript". It is a way to bring entire ecosystems — Rust's `regex` crate, C's image processing libraries, Python's ML models — into environments that previously only spoke JavaScript. That realisation is what led me to reach for Rust and WASM when I needed real logic in my browser extension.
+It demonstrated something fundamental about WASM: it is not just “faster JavaScript”. It is a way to bring entire ecosystems — Rust’s `regex` crate, C’s image processing libraries, Python’s ML models — into environments that previously only spoke JavaScript. That realisation is what led me to reach for Rust and WASM when I needed real logic in my browser extension.
 
 ## The TypeScript interface problem
 
@@ -94,9 +94,9 @@ sequenceDiagram
 
 ## Stained Wall: a Firefox extension powered by WASM
 
-As you most you know, I am Veenzuelan and access to the news is often blocked by websites or not reachable from my country. So since I fled, I normally screenshot news articles and then shared them with my people that are still there as a way they can stay informed.
+As you most likely know, I am Venezuelan and access to the news is often blocked by websites or not reachable from my country. Since I fled, I normally screenshot news articles and share them with my people who are still there so they can stay informed.
 
-So of the news outlet I follow have gone to a paid susbcription model, I can't access them from my country either. That's where Stained Wall comes in.
+So, some of the news outlets I follow have gone to a paid subscription model, and I can’t access them from my country either. That’s where Stained Wall comes in.
 
 ### The architecture
 
@@ -241,7 +241,7 @@ This pattern is more verbose but eliminates any risk of XSS and keeps the extens
 </mjml>
 ```
 
-I used to this by hand in Ye Old days, (2015).
+I used to do this by hand in Ye Old days (2015).
 
 ### Why build a Zed extension?
 
@@ -283,14 +283,14 @@ The API provides a set of platform functions that extensions can call:
 - `zed::make_file_executable()` — set the executable bit
 - `zed::set_language_server_installation_status()` — show progress in the UI
 
-### The bootstrap pattern
+### The Zed pattern
 
-Here is where the WASM usage differs fundamentally from Stained Wall. In the browser extension, WASM runs the core logic. In the Zed extension, WASM is just a bootstrap layer. The extension's sole job is to:
+Here is where WASM usage fundamentally differs from Stained Wall. In the browser extension, WASM runs the core logic. In the Zed extension, WASM is just a bootstrap layer. The extension’s sole job is to:
 
-1. Check for the latest release of the `mjml-lsp` binary on GitHub
+1. Check for the latest release of the `mjml-lsp` binary on GitHub.
 2. Download the correct platform-specific binary (macOS arm64, macOS x86_64, Linux x86_64)
 3. Make it executable
-4. Tell Zed where to find it
+4. Tell Zed where to find it.
 
 All the actual work — parsing MJML, validating documents, reporting diagnostics — happens in a native Rust binary that communicates with Zed over the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/).
 
@@ -387,7 +387,7 @@ flowchart TB
     H --> I[Send to editor]
 ```
 
-Both passes run independently and all diagnostics are reported together, giving the developer a complete picture of issues in their MJML document.
+Both passes run independently, and all diagnostics are reported together, giving the developer a complete picture of issues in their MJML document.
 
 ## Differences between Zed and browser extension APIs
 
@@ -404,7 +404,7 @@ Having built WASM extensions for both platforms, the differences are striking:
 | Extension language | Rust (WASM) + TypeScript (browser APIs) | Pure Rust (WASM + native binary) |
 | Update mechanism | Manual rebuild and reload | Zed extension marketplace + GitHub releases |
 
-The most significant difference is in what the WASM module actually does. In the browser extension, WASM is the brain — it makes decisions that drive the extension's behaviour. In the Zed extension, WASM is the hands — it performs a mechanical task (downloading a binary) and then steps aside.
+The most significant difference is in what the WASM module actually does. In the browser extension, WASM is the brain — it makes decisions that drive the extension's behaviour. In the Zed extension, WASM is the hand — it performs a mechanical task (downloading a binary) and then steps aside.
 
 This difference comes down to platform constraints:
 
@@ -432,17 +432,18 @@ graph TB
 
 ## What I learned
 
-Building these two projects taught me that WASM is not a single thing — it is a spectrum of integration patterns. At one end, you have heavy WASM modules that perform substantial computation (like Stained Wall's engine). At the other, you have thin WASM wrappers that exist purely to satisfy a platform's extension format (like the Zed MJML extension).
+Building these two projects taught me that WASM is not a single thing — it is a spectrum of integration patterns. At one end, you have heavy WASM modules that perform substantial computation. At the other end, you have thin WASM wrappers that exist purely to satisfy a platform's extension format (like the Zed MJML extension).
 
-Both are valid uses. The key is understanding what the host platform offers and what it constrains:
+The key is understanding what the host platform offers and what it constrains:
 
 - If the host gives you rich APIs and a JavaScript runtime, lean into WASM for the logic that benefits from Rust's safety and performance.
+
 - If the host gives you a strict sandbox with limited capabilities, use WASM as a bridge to native code where the real work happens.
 
 WASM's portability promise is real, but it is not about running the same code everywhere in the same way. It is about having a safe, sandboxed format that platforms can adopt as their extension mechanism — and then building the right architecture around it.
 
-If you are a web developer who has not tried WASM yet, I would encourage you to start small. Pick a piece of logic that is well-defined and self-contained — a validator, a parser, a matcher — compile it to WASM, and see how it feels. You might be surprised at how natural it is to have Rust and TypeScript working side by side.
+If you have not tried WASM yet, I would encourage you to start small. Pick a piece of logic that is well-defined and self-contained — a validator, a parser, a matcher — compile it to WASM, and see how it feels. You might be surprised at how natural it is to have Rust and TypeScript working side by side.
 
 ---
 
-*Both projects are open source: [stained-wall](https://github.com/pataruco/stained-wall) and [zed-mjml](https://github.com/pataruco/zed-mjml).*
+*It is an open source project: [zed-mjml](https://github.com/pataruco/zed-mjml).*
