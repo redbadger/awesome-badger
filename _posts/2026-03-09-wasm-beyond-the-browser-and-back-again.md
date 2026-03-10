@@ -36,9 +36,7 @@ I first came across WebAssembly through Stu, a colleague, who shared a message a
 
 > On December 5, The World Wide Web Consortium (W3C) announced that the WebAssembly Core Specification is now an official web standard. This makes WebAssembly the fourth language for the web, following HTML, CSS, and JavaScript.
 
-He published on 26th December 2019
-
-It planted the seed, but at the time it felt like something reserved for game engines and image processing libraries — not the sort of thing I would use day to day.
+After sending this message on 26th December 2019, it planted a seed, but it felt like something reserved for game engines and image processing libraries — not the sort of thing I would use day to day.
 
 ## My first encounter: a small language model
 
