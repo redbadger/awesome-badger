@@ -42,7 +42,7 @@ After sending this message on 26th December 2019, it planted a seed, but it felt
 
 My first real experience using WASM happened in an unexpected way. I was working on a project where we needed the browser to recognise images as part of a client’s Know Your Client (KYC) process. We used a third-party service, and my job was to connect our system to their API.
 
-This was my first time using WASM in a real project. I also had to connect it to a third-party API and use a small built-in language model for image recognition. I learned a lot from this and realised how useful WASM can be in the browser.
+This was my first time using WASM in a real project. I also had to connect it to a third-party API and used a small built-in language model for image recognition. I learned a lot from this and realised how useful WASM can be in the browser.
 
 It was eye-opening to see that a machine learning model could run entirely on the user's computer, without sending information to a server.
 
