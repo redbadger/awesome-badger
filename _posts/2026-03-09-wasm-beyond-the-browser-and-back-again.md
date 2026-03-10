@@ -100,7 +100,7 @@ sequenceDiagram
 
 As you most likely know, I am Venezuelan and access to the news is often blocked by websites or not reachable from my country. Since I fled, I normally screenshot news articles and share them with my people who are still there so they can stay informed.
 
-So, some of the news outlets I follow have gone to a paid subscription model, and I can’t access them from my country either. That’s where Stained Wall comes in.
+So, some of the news outlets I follow have gone to a paid subscription model, and I can’t access them from my country either. That’s why I built Stained Wall — a Firefox extension that helps me with that using WASM.
 
 ### The architecture
 
@@ -228,7 +228,7 @@ while (doc.body.firstChild) {
 
 This pattern is more verbose but eliminates any risk of XSS and keeps the extension compliant with MV3's security model.
 
-## Zed MJML: a code editor extension powered by WASM
+## Zed MJML: a code editor extension I built, powered by WASM
 
 ### What is MJML?
 
@@ -249,9 +249,9 @@ This pattern is more verbose but eliminates any risk of XSS and keeps the extens
 
 I used to do this by hand in Ye Old days (2015).
 
-### Why build a Zed extension?
+### Why I built a Zed extension
 
-[Zed](https://zed.dev/) is a modern code editor built in Rust, designed for speed and collaboration. Its extension system uses WASM as the plugin format — every extension is a compiled `.wasm` module that runs in a sandbox. This is where things get interesting and where the contrast with browser extensions becomes clear.
+[Zed](https://zed.dev/) is a modern code editor built in Rust, designed for speed and collaboration. Its extension system uses WASM as the plugin format — every extension is a compiled `.wasm` module that runs in a sandbox. I wanted proper MJML support in my editor, so I built [zed-mjml](https://github.com/pataruco/zed-mjml) — a language server extension that provides diagnostics, validation, and previews. This is where things get interesting and where the contrast with browser extensions becomes clear.
 
 ### The Zed extension API
 
