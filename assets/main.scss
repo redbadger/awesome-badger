@@ -2,5 +2,7 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 
-@import "minima";
-@import "fonts";
+@use "minima/base";
+@use "minima/layout";
+@use "minima/syntax-highlighting";
+@use "fonts";
