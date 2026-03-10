@@ -23,8 +23,15 @@ rss: RSS Feed
 copyright: "Red Badger Consulting Ltd"
 logo: /assets/logo-awesome.png
 
+titles_from_headings:
+  strip_title: true
+
 plugins:
+  - jekyll-default-layout
   - jekyll-feed
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
   - jekyll-redirect-from
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-titles-from-headings
