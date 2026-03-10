@@ -38,63 +38,19 @@ I first came across WebAssembly through Stu, a colleague, who shared a message a
 
 After sending this message on 26th December 2019, it planted a seed, but it felt like something reserved for game engines and image processing libraries — not the sort of thing I would use day to day.
 
+What followed were three separate encounters with WASM, each teaching me something different. First, a machine learning model running entirely in the browser. Then, a Firefox extension where Rust makes decisions and TypeScript executes them. Finally, a Zed editor plugin where WASM is just a thin bootstrap layer. Together, they showed me that WASM is not one thing — it is a spectrum of integration patterns.
+
 ## My first encounter: a small language model
 
-My first real experience using WASM happened in an unexpected way. I was working on a project where we needed the browser to recognise images as part of a client’s Know Your Client (KYC) process. We used a third-party service, and my job was to connect our system to their API.
+My first real experience using WASM happened in an unexpected way. I was working on a project where we needed the browser to recognise images as part of a client’s Know Your Customer (KYC) process. We used a third-party service, and my job was to integrate our system with their API.
 
-This was my first time using WASM in a real project. I also had to connect it to a third-party API and used a small built-in language model for image recognition. I learned a lot from this and realised how useful WASM can be in the browser.
+The third-party SDK shipped a machine learning model compiled to WASM. This model ran entirely in the browser — it could analyse an image of a passport or driving licence and extract the relevant fields, all without sending the image to a server. The WASM module handled the heavy computation (running the ML inference), while JavaScript orchestrated the camera feed and UI.
 
-It was eye-opening to see that a machine learning model could run entirely on the user's computer, without sending information to a server.
+It was eye-opening to see that a machine learning model could run entirely on the user’s computer without communicating with a server.
 
-This taught me something important about WASM: it’s not just a faster version of JavaScript. WASM allows you to use powerful tools and libraries from other languages, such as Rust, C, and Python, in places that previously supported only JavaScript. That’s why I chose Rust and WASM when I needed more advanced features in my browser extension.
+This taught me something important about WASM: it’s not just a faster version of JavaScript. WASM allows you to use powerful tools and libraries from other languages, such as Rust, C, and Python, in places that previously supported only JavaScript. This led me to choose Rust and WASM when I needed more advanced features for my browser extension.
 
-## The TypeScript interface problem
-
-When you compile Rust to WASM using [`wasm-bindgen`](https://wasm-bindgen.github.io/wasm-bindgen/), you get auto-generated TypeScript bindings. But there is a catch: the boundary between Rust and JavaScript is limited to simple types. You cannot pass a rich Rust struct directly to JavaScript. Instead, you serialise to JSON on the Rust side and deserialise on the JavaScript side.
-
-This means you end up maintaining parallel type definitions:
-
-Rust side (`plan.rs`):
-
-```rust
-#[derive(Serialize)]
-pub struct BypassPlan {
-    pub site_name: String,
-    pub hide_selectors: Vec<String>,
-    pub block_script_patterns: Vec<String>,
-    pub spoof_useragent: Option<String>,
-    pub fetch_archive: Option<ArchivePlan>,
-    // ...
-}
-```
-
-TypeScript side (`types.ts`):
-
-```typescript
-export interface BypassPlan {
-  site_name: string;
-  hide_selectors: string[];
-  block_script_patterns: string[];
-  spoof_useragent: string | null;
-  fetch_archive: ArchivePlan | null;
-  // ...
-}
-```
-
-The JSON bridge is simple and debuggable — you can inspect the data flowing between Rust and TypeScript in the browser console — but keeping these types in sync is a manual process.
-
-```mermaid
-sequenceDiagram
-    participant Rust as Rust (WASM)
-    participant JSON as JSON bridge
-    participant TS as TypeScript
-
-    Rust->>JSON: serde_json::to_string(&plan)
-    JSON->>TS: JSON.parse(planJson) as BypassPlan
-    Note over JSON: Simple, debuggable,<br/>but types must stay in sync
-```
-
-## Stained Wall: a Firefox extension powered by WASM
+## Stained Wall: a Firefox extension I built, powered by WASM
 
 As you most likely know, I am Venezuelan and access to the news is often blocked by websites or not reachable from my country. Since I fled, I normally screenshot news articles and share them with my people who are still there so they can stay informed.
 
@@ -225,6 +181,52 @@ while (doc.body.firstChild) {
 ```
 
 This pattern is more verbose but eliminates any risk of XSS and keeps the extension compliant with MV3's security model.
+
+### The TypeScript interface problem
+
+One practical challenge I ran into while building Stained Wall: when you compile Rust to WASM with [`wasm-bindgen`](https://wasm-bindgen.github.io/wasm-bindgen/), you get auto-generated TypeScript bindings. But there is a catch: the boundary between Rust and JavaScript is limited to simple types. You cannot pass a rich Rust struct directly to JavaScript. Instead, you serialise to JSON on the Rust side and deserialise on the JavaScript side.
+
+This means you end up maintaining parallel type definitions:
+
+Rust side (`plan.rs`):
+
+```rust
+#[derive(Serialize)]
+pub struct BypassPlan {
+    pub site_name: String,
+    pub hide_selectors: Vec<String>,
+    pub block_script_patterns: Vec<String>,
+    pub spoof_useragent: Option<String>,
+    pub fetch_archive: Option<ArchivePlan>,
+    // ...
+}
+```
+
+TypeScript side (`types.ts`):
+
+```typescript
+export interface BypassPlan {
+  site_name: string;
+  hide_selectors: string[];
+  block_script_patterns: string[];
+  spoof_useragent: string | null;
+  fetch_archive: ArchivePlan | null;
+  // ...
+}
+```
+
+The JSON bridge is simple and debuggable — you can inspect the data flowing between Rust and TypeScript in the browser console — but keeping these types in sync is a manual process.
+
+```mermaid
+sequenceDiagram
+    participant Rust as Rust (WASM)
+    participant JSON as JSON bridge
+    participant TS as TypeScript
+
+    Rust->>JSON: serde_json::to_string(&plan)
+    JSON->>TS: JSON.parse(planJson) as BypassPlan
+    Note over JSON: Simple, debuggable,<br/>but types must stay in sync
+```
 
 ## Zed MJML: a code editor extension I built, powered by WASM
 
