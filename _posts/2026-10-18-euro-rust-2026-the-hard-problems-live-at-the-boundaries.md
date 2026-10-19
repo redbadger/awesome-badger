@@ -19,11 +19,11 @@ Here are my notes and thoughts from the conference.
 
 Every slow update since follows the same pattern. Mutable references in `const` took about fifty releases because "we are either fixing the tricky cases or banning the tricky cases".
 
-The roadmap now is compile-time reflection and the current design is called "type info". But it turns [`TypeId`](https://doc.rust-lang.org/std/any/struct.TypeId.html) into a main value you can explore during compilation: names, variants, fields, and field types. Once you can do that, you can convert anything into a format for storage, and therefore debug anything, without needing a `derive`.
+The roadmap now is compile-time reflection, and the current design is called "type info". But it turns [`TypeId`](https://doc.rust-lang.org/std/any/struct.TypeId.html) into a main value you can explore during compilation: names, variants, fields, and field types. Once you can do that, you can convert anything into a format for storage, and therefore debug anything, without needing a `derive`.
 
-What was incredible to hear is that coming soon: a JSON config read by the compiler directly into a fixed value on an embedded device.
+What was incredible to hear is that, coming soon, the compiler can read a JSON config directly into a fixed value on an embedded device.
 
-And the feature I keep thinking about is "comptime-only" functions—things that have no runtime result, like allocating memory at compile time and turning the result into a fixed value, or loading an entire asset folder into the binary.
+The feature I keep thinking about is "comptime-only" functions—things with no runtime result, like allocating memory at compile time and turning the result into a fixed value, or loading an entire asset folder into the binary.
 
 ### Benedikt Wiethof & Theophil Spiegeler Castañeda: The future of unmanned systems is built on Rust
 
@@ -31,11 +31,11 @@ A sponsored talk from [Quantum Systems](https://quantum-systems.com/).
 
 They have the following problem: every old ground-control station assumes one operator and one vehicle. Theophil and Benedikt's team is building Mosaic, a ground-control system for multiple operators, vehicles, and stations.
 
-The first version was in C++. It passed its tests but was fragile and then rewrite in Rust started with "basically zero developers" and took twelve to thirteen months.
+The first version was in C++. It passed its tests but was fragile, so they rewrote it in Rust with "basically zero developers", and it took twelve to thirteen months.
 
 The design uses a [hexagonal](https://en.wikipedia.org/wiki/Hexagonal_architecture_%28software%29) core for each station. Vehicles connect through [gRPC](https://grpc.io/) drivers that list their abilities upfront, so the system rejects any mission plan the drone can't handle before take-off. Operators get role-based access from a local identity system. Cores communicate as equals over secure connections using [mTLS](https://en.wikipedia.org/wiki/Mutual_authentication) on [QUIC](https://en.wikipedia.org/wiki/QUIC), so "no leader, no follower", with exactly one owner per entity and read-only copies everywhere else. Video is intentionally compressed and reaches the operator over [WebRTC](https://webrtc.org/) on the final step.
 
-Now, strip away the drones and this is the shape of [Crux](https://redbadger.github.io/crux/), the framework we build at [Red Badger](https://red-badger.com/): a pure core that owns the state and the decisions, side effects pushed out to the edges and capabilities declared rather than assumed. Victor and Stu did that pattern to keep an app testable across iOS, Android and the Web.
+Now, strip away the drones, and this is the shape of [Crux](https://redbadger.github.io/crux/), the framework we build at [Red Badger](https://red-badger.com/): a pure core that owns the state and the decisions, side effects pushed out to the edges and capabilities declared rather than assumed. Victor and Stu did that pattern to keep an app testable across iOS, Android and the Web.
 
 Some patterns are resilient enough to run at military grade.
 
@@ -55,17 +55,17 @@ All these improvements are aimed at Rust [1.101](https://releases.rs/docs/1.101.
 
 ### Timo Bachmann: Rebuilding the Tower of Babel: write your own language server with Tree-sitter
 
-[Timo](https://github.com/tfachmann), who is a robotics researcher at the German Aerospace Center, has to deal with a problem that is wonderfully specific. A colleague developed a process manager by creating his own language and currently the configuration language is being used by thirteen robots and around 200 users, on his words "That's quite a number, but still not enough to allow for tooling.", so all the editors display it in black and white.
+[Timo](https://github.com/tfachmann), a robotics researcher at the German Aerospace Centre, faces a wonderfully specific problem. A colleague developed a process manager by creating his own language. Currently, the configuration language is being used by thirteen robots and around 200 users; in his words, "That's quite a number, but still not enough to allow for tooling.", so all the editors display it in black and white.
 
-The solution is a single [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) consisting of about thirty lines of JavaScript, which serves as the main source of truth; based on it, syntax highlighting is provided, formatting is carried out using [Topiary](https://topiary.tweag.io/), and a language server is built on top of [`tower-lsp-server`](https://crates.io/crates/tower-lsp-server) making syntax tree the server's model.
+The solution is a single [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) consisting of about thirty lines of JavaScript, which serves as the main source of truth; based on it, syntax highlighting is provided, formatting is carried out using [Topiary](https://topiary.tweag.io/), and a language server is built on top of [`tower-lsp-server`](https://crates.io/crates/tower-lsp-server), making the syntax tree the server's model.
 
-The various intelligent feature that you expect in a text editor: hover, diagnostics, completion, go-to-definition, and rename—work by matching the node under the cursor with its parent. Since the keywords are generated when the program is compiled, altering the grammar causes the server to fail during the building process. Which is exactly in the way tehy would expect it to be.
+The various intelligent features you expect in a text editor: hover, diagnostics, completion, go-to-definition, and rename—work by matching the node under the cursor with its parent. Since the keywords are generated when the program is compiled, altering the grammar causes the server to fail during the building process. Which is exactly what they would expect.
 
 I was very interested in this project. I maintain [`zed-mjml`](https://github.com/pataruco/zed-mjml), a Zed extension for [MJML](https://mjml.io), and I [wrote an article](https://pataruco.dev/blog/wasm-beyond-the-browser-and-back-again) about building it back in March 2026. I took the same approach but used shortcuts: I used the `tree-sitter-html` grammar and only prepared the query files since MJML is just HTML with different tag names; and the diagnostics are provided by [`mrml`](https://github.com/jdrouet/mrml), which is an actual MJML parser, not by the syntax tree.
 
 ### Filip Petkovski: Running safely with scissors: lock-free concurrency for maximum throughput
 
-[Filip](https://fpetkovski.github.io/) builds the internal observability platform at Shopify, and the case study was the in-memory buffer of their metrics database where one writer appending at a constant rate and many readers scanning.
+[Filip](https://fpetkovski.github.io/) builds the internal observability platform at Shopify, and the case study is an in-memory buffer in their metrics database, with one writer appending at a constant rate and many readers scanning.
 
 They started with an [`RwLock`](https://doc.rust-lang.org/std/sync/struct.RwLock.html). So when readers scanned ranges of 1,024 entries, the writer degraded, and the readers stalled.
 
@@ -74,11 +74,11 @@ They redesigned with two key principles:
 1. Each memory area has only one writer,
 2. New data is only added at the end.
 
-In a fixed-size array, the array stays in place, and its items never change, so readers don't need a lock; the writer just updates a marker in one step, so **Readers never stop the writer**.
+In a fixed-size array, the array stays in place, and its items never change, so readers don't need a lock; the writer updates a marker in one step, so **Readers never stop the writer**.
 
 Then the part I was interested in. All of this requires `unsafe` code, but "performance should not sacrifice safety."
 
-The system is not checked by the borrow checker, so safety depends on three things working together:
+The borrow checker does not check the system, so safety depends on three things working together:
 
 1. The types (the writer cannot be copied, `push` requires exclusive access, storage is a fixed-size boxed array that cannot grow),
 2. The API (readers cannot change data),
@@ -92,11 +92,11 @@ They talked about **Why image decoders?** saying that:
 
 > The browser doesn't choose the input. The attacker does.
 
-Vulnerability patterns are similar in the way a wrong size calculation followed by a memory copy that trusts it.
+Vulnerability patterns are similar: a wrong-size calculation is followed by a memory copy that trusts it.
 
 So in Rust, **"the bug is still a bug, but it's not an exploitable one."**
 
-They found that working on Google's PNG port was the icebreaker after about two years, mostly spent fixing Chromium's Rust infrastructure rather than decoding PNGs. Just using the [`image`](https://crates.io/crates/image) crate meant they squash so many vulnerabilities.
+They found that working on Google's PNG port was the icebreaker after about two years, mostly spent fixing Chromium's Rust infrastructure rather than decoding PNGs. Just using the [`image`](https://crates.io/crates/image) crate meant they squashed so many vulnerabilities.
 
 ## Day two
 
@@ -108,9 +108,9 @@ He started by stating that:
 
 > Much of what is coming in Rust is most likely being shaped outside the Rust ecosystem.
 
-Most of them from C++ and Python.
+Most of them are from C++ and Python.
 
-The C++ half because legislation and guidelines saying "do not use unsafe languages" (NSA, CISA, the White House and the EU's [Cyber Resilience Act](https://en.wikipedia.org/wiki/Cyber_Resilience_Act)).
+The C++ half is because legislation and guidelines say "do not use unsafe languages" (NSA, CISA, the White House and the EU's [Cyber Resilience Act](https://en.wikipedia.org/wiki/Cyber_Resilience_Act)).
 
 So three responses came in:
 
@@ -150,7 +150,7 @@ What makes it hard in async Rust is that futures can be cancelled at any moment,
 
 > It's okay to say no to [typestate](https://cliffle.com/blog/rust-typestate/) sometimes.
 
-Typestate suits linear flows; But not with bidirectional IO it becomes a mess. Instead: three small enums (`request-progress`, `response-progress`, `commitment`), one durable `ProxyState` that governs them, and a [`select!`](https://docs.rs/tokio/latest/tokio/macro.select.html) loop where the branches only read and the write happens afterwards, outside any `await`.
+Typestate suits linear flows, but bidirectional IO makes it a mess. Instead: three small enums (`request-progress`, `response-progress`, `commitment`), one durable `ProxyState` that governs them, and a [`select!`](https://docs.rs/tokio/latest/tokio/macro.select.html) loop where the branches only read, and the write happens afterwards, outside any `await`.
 
 ### Francois Mockers: Supply chain attacks, and how to protect ourselves
 
@@ -160,7 +160,7 @@ This made me cackle
 
 > As we handle money, it's kind of important not to get attacked
 
-He started `cargo add` with four acts of trust: identity, authenticity, integrity, and the maintainer, and for each, he shows examples of how has been broken.
+He started `cargo add` with four acts of trust: identity, authenticity, integrity, and the maintainer, and for each, he shows examples of how it has been broken.
 
 He advised using:
 
@@ -185,7 +185,7 @@ He also suggested:
 - Pin in `Cargo.lock`, never in `Cargo.toml`.
 - Give Dependabot a seven-day cooldown.
 - Publish only from CI, with [trusted publishing](https://crates.io/docs/trusted-publishing).
-- Longer term: proc macros in a WASM sandbox, the way Zed runs its extensions by theway. I've been on the other side of that sandbox with zed-mjml.
+- Longer term: proc macros in a WASM sandbox, the way Zed runs its extensions, by the way. I've been on the other side of that sandbox with zed-mjml.
 
 He closed with:
 
@@ -193,7 +193,7 @@ He closed with:
 
 ### Albert Lockett: Building a high-performance, thread-per-core, zero-copy OpenTelemetry engine in Rust
 
-[Albert](https://github.com/albertlockett) maintains [OTel Arrow](https://github.com/open-telemetry/otel-arrow) at F5, and the whole talk was one principle several three times:
+[Albert](https://github.com/albertlockett) maintains [OTel Arrow](https://github.com/open-telemetry/otel-arrow) at F5, and the whole talk was one principle several times:
 
 > Telemetry engine's job is throughput per unit of compute, so design around the hardware.
 
